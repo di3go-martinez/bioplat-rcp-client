@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>edu.medicine.bioplat.base.lib</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>lib/BioPlatClienteRico-2.3.0-SNAPSHOT.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Documents%20and%20Settings/diego/.m2/repository/bioplat/BioPlatClienteRico/2.3.0-SNAPSHOT/BioPlatClienteRico-2.3.0-SNAPSHOT.jar</locationURI>
+		</link>
+		<link>
+			<name>lib/BioPlatUtils-1.0.0-20111102.234437-1.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Documents%20and%20Settings/diego/.m2/repository/bioplat/BioPlatUtils/1.0.0-SNAPSHOT/BioPlatUtils-1.0.0-20111102.234437-1.jar</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

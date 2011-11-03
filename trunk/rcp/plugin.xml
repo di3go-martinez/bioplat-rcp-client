@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2007, 2008 Sonatype, Inc.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         id="id1"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="edu.unlp.medicine.bioplat.rcp.application.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="edu.unlp.medicine.bioplat.rcp.application.BioPlatPerspective"
+            id="bioplatrcp.perspective"
+            name="BioPlat Perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorContributor"
+            default="false"
+            icon="resources/icons/biomarker.PNG"
+            id="bio.plat.biomarker.editor"
+            name="%editor.name">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="bio.plat.rcp.actionSet1"
+            label="%actionSet.label"
+            visible="true">
+         <menu
+               id="bio.plat.rcp.biomarker.menu"
+               label="%menu.label">
+            <separator
+                  name="bio.plat.rcp.biomarker.menu.separator">
+            </separator>
+         </menu>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.OpenBiomarkerAction"
+               icon="resources/icons/newBiomarker.PNG"
+               id="bio.plat.rcp.biomarker.actions.new"
+               label="%new.action.label"
+               menubarPath="bio.plat.rcp.biomarker.menu/bio.plat.rcp.biomarker.menu.separator"
+               style="push">
+         </action>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGenAction"
+               id="bio.plat.rcp.biomarker.actions.gen.add"
+               label="Agregar gen"
+               style="push">
+         </action>
+      </actionSet>
+      
+   </extension>
+      
+</plugin>
