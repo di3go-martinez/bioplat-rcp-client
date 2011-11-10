@@ -4,7 +4,7 @@ Bundle-Name: BioPlatRCP
 Bundle-SymbolicName: edu.medicine.bioplat.base.lib;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
  lib/BioPlatClienteRico-2.3.0-SNAPSHOT.jar,
  lib/BioPlatUtils-1.0.0-20111102.234437-1.jar,
@@ -124,7 +124,6 @@ Export-Package: com.google.common.annotations,
  edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri,
  edu.unlp.medicine.domainLogic.optimizations.configuration,
  edu.unlp.medicine.domainLogic.tools,
- edu.unlp.medicine.entity,
  edu.unlp.medicine.entity.arnmPlatform,
  edu.unlp.medicine.entity.arnmPlatform.importer,
  edu.unlp.medicine.entity.biomarker,

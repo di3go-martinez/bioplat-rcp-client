@@ -146,7 +146,7 @@
 	<variableList>
 		<variable>
 			<name>M2_REPO</name>
-			<value>file:/C:/Documents%20and%20Settings/diego/.m2/repository</value>
+			<value>file:/C:/Users/Matias/.m2/repository</value>
 		</variable>
 	</variableList>
 </projectDescription>
