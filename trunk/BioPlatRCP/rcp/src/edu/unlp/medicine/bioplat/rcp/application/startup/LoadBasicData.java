@@ -22,7 +22,7 @@ public class LoadBasicData implements IStartup {
             }
         };
 
-        j.setSystem(true);
+        j.setUser(true);
         j.schedule();
     }
 
