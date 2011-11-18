@@ -11,12 +11,6 @@
 		<maven>3.0</maven>
 	</prerequisites>
 
-	<parent>
-		<groupId>org.sonatype.forge</groupId>
-		<artifactId>forge-parent</artifactId>
-		<version>10</version>
-	</parent>
-
 	<groupId>bioplat</groupId>
 	<artifactId>parent</artifactId>
 	<version>1.1.0-SNAPSHOT</version>
@@ -27,6 +21,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-runtime.version>1.1.0-SNAPSHOT</maven-runtime.version>
 		<tycho-version>0.12.0</tycho-version>
 
 		<!-- eclipse version bioplat is built against -->
@@ -48,6 +43,9 @@
 		</repository> </repositories> -->
 
 
+	<modules>
+		<module>rcp</module>
+	</modules>
 
 	<build>
 		<plugins>
@@ -66,26 +64,8 @@
 					<pomDependencies>consider</pomDependencies>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>maven-osgi-compiler-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<encoding>${project-build-sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>maven-osgi-packaging-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<format>yyyyMMddHHmm</format>
-				</configuration>
-			</plugin>
-			
-			
 		</plugins>
-		
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -142,22 +122,65 @@
 
 		<!-- workaround for https://issues.sonatype.org/browse/TYCHO-562 tycho-source-plugin 
 			chokes on bundles without source folders, so we disable it with marker file -->
-		<!-- <profile> <id>source-bundle</id> <activation> <file> <missing>no-source-bundle.txt</missing> 
-			</file> </activation> <build> <plugins> <plugin> <groupId>org.eclipse.tycho</groupId> 
-			<artifactId>tycho-source-plugin</artifactId> <version>${tycho-version}</version> 
-			<executions> <execution> <id>plugin-source</id> <goals> <goal>plugin-source</goal> 
-			</goals> </execution> </executions> </plugin> </plugins> </build> </profile> -->
-		<!-- <profile> <id>selfhosted-workspace</id> --> <!-- This profile is a convenience meant to help setting up m2e development 
-			workspace. On command line, embedded maven runtime must be built separately, 
-			before m2e-core sources tree. -->
-		<!-- <activation> <property> <name>m2e.version</name> </property> </activation> 
-			<modules> <module>m2e-maven-runtime</module> </modules> </profile> -->
+		<profile>
+			<id>source-bundle</id>
+			<activation>
+				<file>
+					<missing>no-source-bundle.txt</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-source-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<executions>
+							<execution>
+								<id>plugin-source</id>
+								<goals>
+									<goal>plugin-source</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>selfhosted-workspace</id>
+			<!-- This profile is a convenience meant to help setting up m2e development 
+				workspace. On command line, embedded maven runtime must be built separately, 
+				before m2e-core sources tree. -->
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<modules>
+				<module>runtime</module>
+			</modules>
+		</profile>
 	</profiles>
 
+	<developers>
+		<developer>
+			<id>Json</id>
+			<name>John Sonatype</name>
+			<organization>Sonatype Inc.</organization>
+		</developer>
+	</developers>
 
-
-	<modules>
-		<module>rcp</module>
-		<module>base.lib</module>
-	</modules>
+	<!--mailingLists> <mailingList> <name>Users List</name> <subscribe>m2e-users@eclipse.org</subscribe> 
+		<unsubscribe>https://dev.eclipse.org/mailman/listinfo/m2e-users</unsubscribe> 
+		<post>m2e-users@eclipse.org</post> <archive>http://dev.eclipse.org/mhonarc/lists/m2e-users</archive> 
+		</mailingList> </mailingLists -->
+	<dependencies>
+		<!--dependency>
+			<groupId>com.example</groupId>
+			<artifactId>lib</artifactId>
+			<version>${maven-runtime.version}</version>
+		</dependency-->
+	</dependencies>
 </project>
