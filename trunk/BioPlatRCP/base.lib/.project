@@ -11,16 +11,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.pde.ManifestBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.pde.SchemaBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
@@ -31,122 +21,10 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>lib/BioPlatClienteRico-2.3.0-SNAPSHOT.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/bioplat/BioPlatClienteRico/2.3.0-SNAPSHOT/BioPlatClienteRico-2.3.0-SNAPSHOT.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/BioPlatModeloClienteRico-2.3.0-SNAPSHOT.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/bioplat/BioPlatModeloClienteRico/2.3.0-SNAPSHOT/BioPlatModeloClienteRico-2.3.0-SNAPSHOT.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/BioPlatUtils-1.0.0-20111102.234437-1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/bioplat/BioPlatUtils/1.0.0-SNAPSHOT/BioPlatUtils-1.0.0-20111102.234437-1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/c3p0-0.9.1.2.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/commons-collections-3.2.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/commons-lang-2.6.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/dom4j-1.6.1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/guava-10.0.1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/com/google/guava/guava/10.0.1/guava-10.0.1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/h2-1.3.158.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/com/h2database/h2/1.3.158/h2-1.3.158.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/hibernate-c3p0-3.6.6.Final.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/hibernate/hibernate-c3p0/3.6.6.Final/hibernate-c3p0-3.6.6.Final.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/hibernate-commons-annotations-3.2.0.Final.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/hibernate/hibernate-commons-annotations/3.2.0.Final/hibernate-commons-annotations-3.2.0.Final.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/hibernate-core-3.6.6.Final.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/hibernate/hibernate-core/3.6.6.Final/hibernate-core-3.6.6.Final.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/hibernate-infinispan-3.6.6.Final.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/hibernate/hibernate-infinispan/3.6.6.Final/hibernate-infinispan-3.6.6.Final.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/hibernate-jpa-2.0-api-1.0.1.Final.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/infinispan-core-4.2.1.CR1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/infinispan/infinispan-core/4.2.1.CR1/infinispan-core-4.2.1.CR1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/javassist-3.12.1.GA.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/jgroups-2.10.0.GA.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/jgroups/jgroups/2.10.0.GA/jgroups-2.10.0.GA.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/jta-1.1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/javax/transaction/jta/1.1/jta-1.1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/log4j-1.2.16.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/ognl-3.0.2.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/ognl/ognl/3.0.2/ognl-3.0.2.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/slf4j-api-1.6.1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar</locationURI>
-		</link>
-		<link>
-			<name>lib/slf4j-log4j12-1.6.1.jar</name>
-			<type>1</type>
-			<locationURI>M2_REPO/org/slf4j/slf4j-log4j12/1.6.1/slf4j-log4j12-1.6.1.jar</locationURI>
-		</link>
-	</linkedResources>
 	<variableList>
 		<variable>
 			<name>M2_REPO</name>
-			<value>file:/C:/Users/Matias/.m2/repository</value>
+			<value>file:/C:/Documents%20and%20Settings/diego/.m2/repository</value>
 		</variable>
 	</variableList>
 </projectDescription>
