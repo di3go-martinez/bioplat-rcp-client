@@ -78,24 +78,10 @@
          point="org.eclipse.ui.exportWizards">
       <category
             id="edu.medicine.bioplat.rcp.export.biomarker.root"
-            name="Biomarker exports">
-      </category>
-      <category
-            id="cat2"
-            name="To"
-            parentCategory="edu.medicine.bioplat.rcp.export.biomarker.root">
+            name="Biomarker">
       </category>
       <wizard
-            category="edu.medicine.bioplat.rcp.export.biomarker.root/cat2"
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneList"
-            id="edu.medicine.bioplat.rcp.export.biomarker.geneList"
-            name="Export Gene List">
-         <description>
-            Exportación de la lista de genes de un biomarcador
-         </description>
-      </wizard>
-      <wizard
-            category="edu.medicine.bioplat.rcp.export.biomarker.root/cat2"
+            category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFile"
             id="edu.medicine.bioplat.rcp.export.biomarker.file"
             name="Export to file">
