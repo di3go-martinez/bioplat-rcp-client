@@ -10,20 +10,19 @@ import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 
 public class LoadBasicData implements IStartup {
 
-    @Override
-    public void earlyStartup() {
-        Job j = new Job("Initializing...") {
+	@Override
+	public void earlyStartup() {
+		Job j = new Job("Initializing...") {
 
-            @Override
-            protected IStatus run(IProgressMonitor monitor) {
-                monitor.beginTask("Initializing basic data", IProgressMonitor.UNKNOWN);
-                MetaPlat.getInstance().getGeneById("1");
-                return Status.OK_STATUS;
-            }
-        };
-
-        j.setUser(true);
-        j.schedule();
-    }
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Initializing basic data", IProgressMonitor.UNKNOWN);
+				MetaPlat.getInstance().getGeneById("1");
+				return Status.OK_STATUS;
+			}
+		};
+		j.setUser(true);
+		j.schedule();
+	}
 
 }
