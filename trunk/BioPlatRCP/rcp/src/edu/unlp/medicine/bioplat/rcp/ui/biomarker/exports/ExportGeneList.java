@@ -13,42 +13,44 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.acions.Models;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.gene.Gene;
 
+@Deprecated
 public class ExportGeneList extends Wizard implements IExportWizard {
 
-    public ExportGeneList() {
-        // TODO Auto-generated constructor stub
-    }
+	public ExportGeneList() {
+		// TODO Auto-generated constructor stub
+	}
 
-    @Override
-    public void init(IWorkbench workbench, IStructuredSelection selection) {
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
 
-        addPage(new WizardPage("p1") {
+		addPage(new WizardPage("p1") {
 
-            @Override
-            public void createControl(Composite parent) {
-                Label label = new Label(parent, SWT.BORDER);
-                label.setText("exportar genes");
-                setControl(label);
-            }
+			@Override
+			public void createControl(Composite parent) {
+				Label label = new Label(parent, SWT.BORDER);
+				label.setText("exportar genes");
+				setControl(label);
+			}
 
-        });
-    }
+		});
+	}
 
-    private Biomarker b;
+	private Biomarker b;
 
-    @Override
-    public boolean performFinish() {
-        if (b == null) return false;
+	@Override
+	public boolean performFinish() {
+		if (b == null)
+			return false;
 
-        for (Gene g : b.getGenes())
-            System.out.println(g);
+		for (Gene g : b.getGenes())
+			System.out.println(g);
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public boolean canFinish() {
-        b = Models.getInstance().getActiveBiomarker();
-        return b != null;
-    }
+	@Override
+	public boolean canFinish() {
+		b = Models.getInstance().getActiveBiomarker();
+		return b != null;
+	}
 }
