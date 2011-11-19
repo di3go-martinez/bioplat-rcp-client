@@ -381,7 +381,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5,JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor
 Build-Jdk: 1.7.0
 Bundle-Version: 1.0.0.qualifier
-Bnd-LastModified: 1321583897046
+Bnd-LastModified: 1321708838984
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: Librerías básicas
