@@ -51,7 +51,7 @@
             label="%actionSet.label"
             visible="true">
          <menu
-               id="bio.plat.rcp.biomarker.menu"
+               id="bioplat.menu"
                label="%menu.label">
             <separator
                   name="bio.plat.rcp.biomarker.menu.separator">
@@ -62,7 +62,7 @@
                icon="resources/icons/newBiomarker.PNG"
                id="bio.plat.rcp.biomarker.actions.new"
                label="%new.action.label"
-               menubarPath="bio.plat.rcp.biomarker.menu/bio.plat.rcp.biomarker.menu.separator"
+               menubarPath="bioplat.menu/new.menu/additions"
                style="push">
          </action>
          <action
@@ -96,4 +96,16 @@
          id="org.eclipse.ui.views.ProgressView">
    </view>
 </extension>
+      <extension
+            id="product"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="edu.medicine.bioplat.rcp.id1"
+               name="bioplat">
+            <property
+                  name="appName"
+                  value="bioplat">
+            </property>
+         </product>
+      </extension>
 </plugin>
