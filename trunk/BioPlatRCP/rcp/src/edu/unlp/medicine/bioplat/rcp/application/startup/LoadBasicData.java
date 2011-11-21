@@ -12,12 +12,15 @@ public class LoadBasicData implements IStartup {
 
 	@Override
 	public void earlyStartup() {
+		// TODO start in background by default!
 		Job j = new Job("Initializing...") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Initializing basic data", IProgressMonitor.UNKNOWN);
-				MetaPlat.getInstance().getGeneById("1");
+
+				MetaPlat.getInstance().getARNMPLatforms();
+
 				return Status.OK_STATUS;
 			}
 		};
