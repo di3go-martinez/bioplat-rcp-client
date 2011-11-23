@@ -20,6 +20,22 @@
          </run>
       </application>
    </extension>
+      <extension
+            id="product"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="edu.medicine.bioplat.rcp.id1"
+               name="bioplat">
+            <property
+                  name="appName"
+                  value="bioplat">
+            </property>
+            <property
+                  name="preferenceCustomization"
+                  value="preferences.ini">
+            </property>
+         </product>
+      </extension>
    <extension
          point="org.eclipse.ui.startup">
       <startup
@@ -82,9 +98,26 @@
       </category>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFile"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFileWizard"
+            icon="resources/icons/export.PNG"
             id="edu.medicine.bioplat.rcp.export.biomarker.file"
             name="Export to file">
+      </wizard>
+      <wizard
+            category="edu.medicine.bioplat.rcp.export.biomarker.root/"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneXSignatureHeatMapWizard"
+            icon="resources/icons/export.PNG"
+            id="edu.medicine.bioplat.rcp.export.biomarker.file2"
+            name="Export Gene X Signature Heat Map Wizard">
+      </wizard>
+      <wizard
+            class=" edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportJustGeneIdsWizard"
+            icon="resources/icons/export.PNG"
+            id="edu.medicine.bioplat.rcp.export.biomarker.file3"
+            name="Export Just Gene Ids Wizard">
+         <selection
+               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor">
+         </selection>
       </wizard>
    </extension>
       <extension
@@ -96,16 +129,4 @@
          id="org.eclipse.ui.views.ProgressView">
    </view>
 </extension>
-      <extension
-            id="product"
-            point="org.eclipse.core.runtime.products">
-         <product
-               application="edu.medicine.bioplat.rcp.id1"
-               name="bioplat">
-            <property
-                  name="appName"
-                  value="bioplat">
-            </property>
-         </product>
-      </extension>
 </plugin>
