@@ -12,8 +12,7 @@ public class LoadBasicData implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		// TODO start in background by default!
-		Job j = new Job("Initializing...") {
+		new Job("Initializing...") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -23,9 +22,7 @@ public class LoadBasicData implements IStartup {
 
 				return Status.OK_STATUS;
 			}
-		};
-		j.setUser(true);
-		j.schedule();
+		}.schedule();
 	}
 
 }
