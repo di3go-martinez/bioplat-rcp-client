@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BioPlatRCP
+Bundle-SymbolicName: edu.medicine.bioplat.rcp;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding.observable,
+ org.eclipse.ui.forms,
+ edu.medicine.bioplat.base.lib
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
