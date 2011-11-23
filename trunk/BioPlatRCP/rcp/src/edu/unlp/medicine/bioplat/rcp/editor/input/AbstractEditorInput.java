@@ -4,13 +4,22 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+/**
+ * 
+ * Mantiene una referencia al modelo que esta mostrando
+ * 
+ * @author diego
+ * @updatedBy $Author:$ on $Date:$
+ * 
+ * @param <T>
+ *            Tipo del modelo
+ */
 public abstract class AbstractEditorInput<T> implements IEditorInput {
 
-	// FIXME Analizar: el model no tiene que estar en el editorinput, ya que es
-	// un objeto cacheado por la API; en su lugar tendr�a que tener una
+	// TODO Analizar: el model no tiene que estar en el editorinput, ya que es
+	// un objeto cacheado por la API; en su lugar tendría que tener una
 	// referencia
 	private final T model;
-
 
 	public AbstractEditorInput(T model) {
 		this.model = model;
@@ -49,12 +58,5 @@ public abstract class AbstractEditorInput<T> implements IEditorInput {
 	public T model() {
 		return model;
 	}
-
-	// @Override
-	// protected void finalize() throws Throwable {
-	// model = null;
-	// modelr = null;
-	// super.finalize();
-	// }
 
 }
