@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import edu.unlp.medicine.bioplat.rcp.ui.genes.acions.Models;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.gene.Gene;
 

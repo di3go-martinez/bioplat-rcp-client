@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -16,13 +17,20 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import edu.unlp.medicine.bioplat.rcp.ui.genes.acions.Models;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ExportGenesToCSVFileCommand;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-public class ExportToFile extends Wizard implements IExportWizard {
+/**
+ * exportador que tiene como parámetros el separador y el nombre completo del
+ * archivo a escribir
+ * 
+ * @author diego
+ * 
+ */
+public class ExportToFileWizard extends Wizard implements IExportWizard {
 
-	public ExportToFile() {
+	public ExportToFileWizard() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,8 +39,11 @@ public class ExportToFile extends Wizard implements IExportWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		addPage(createWizardPage());
+	}
 
-		addPage(new WizardPage("export to file") {
+	private WizardPage createWizardPage() {
+		return new WizardPage("export to file") {
 			{
 				setPageComplete(false);
 			}
@@ -42,6 +53,8 @@ public class ExportToFile extends Wizard implements IExportWizard {
 
 				Composite c = new Composite(parent, SWT.BORDER);
 				c.setLayout(GridLayoutFactory.fillDefaults().create());
+
+				new CLabel(c, SWT.BOLD).setText("separador:");
 
 				Text separatorHolder = new Text(c, SWT.BORDER);
 				separatorHolder.addModifyListener(new ModifyListener() {
@@ -53,6 +66,7 @@ public class ExportToFile extends Wizard implements IExportWizard {
 				});
 				separatorHolder.setText(",");
 
+				new CLabel(c, SWT.BOLD).setText("archivo:");
 				Text fileHolder = new Text(c, SWT.BORDER);
 				fileHolder.addModifyListener(new ModifyListener() {
 
@@ -68,13 +82,17 @@ public class ExportToFile extends Wizard implements IExportWizard {
 				setControl(c);
 			}
 
-		});
+		};
 	}
 
 	@Override
 	public boolean performFinish() {
 		Biomarker b = Models.getInstance().getActiveBiomarker();
-		new ExportGenesToCSVFileCommand(b, parameters).execute();
+		doFinish(b, parameters);
 		return true;
+	}
+
+	protected void doFinish(Biomarker b, Map<String, String> parameters) {
+		new ExportGenesToCSVFileCommand(b, parameters).execute();
 	}
 }
