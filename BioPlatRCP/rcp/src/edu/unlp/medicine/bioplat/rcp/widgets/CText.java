@@ -22,42 +22,58 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  * @version $Revision:$
  * @updatedBy $Author:$ on $Date:$
  */
-public class CText {
+public class CText implements Widget {
 
-    private Text text;
-    private Binding binding;
+	private Text text;
 
-    CText(Composite parent, AbstractEntity model, String property) {
-        this(parent, model, property, SWT.BORDER);
-    }
+	private Binding binding;
 
-    CText(Composite parent, AbstractEntity model, String property, int style) {
-        text = new Text(parent, SWT.BORDER | style);
+	private String property;
 
-        configureDataBinding(model, property);
+	public CText(Composite parent, AbstractEntity model, String property) {
+		this(parent, model, property, SWT.BORDER);
+	}
 
-        configureDefaults();
-    }
+	CText(Composite parent, AbstractEntity model, String property, int style) {
+		text = new Text(parent, SWT.BORDER | style);
 
-    private void configureDefaults() {
-        text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		configureDataBinding(model, property);
 
-        text.addDisposeListener(new DisposeListener() {
+		configureDefaults();
+	}
 
-            @Override
-            public void widgetDisposed(DisposeEvent e) {
-                DataBindingContextHolder.dataBindingGlobalContext().removeBinding(binding);
-            }
-        });
-    }
+	private void configureDefaults() {
+		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
-    private <T> void configureDataBinding(T model, String property) {
-        final IObservableValue om = BeansObservables.observeValue(model, property);
-        final ISWTObservableValue ot = SWTObservables.observeText(text, SWT.Modify);
-        binding = DataBindingContextHolder.dataBindingGlobalContext().bindValue(ot, om);
-    }
+		text.addDisposeListener(new DisposeListener() {
 
-    public void readOnly(boolean b) {
-        text.setEditable(!b);
-    }
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				removeBinding();
+			}
+		});
+	}
+
+	private void removeBinding() {
+		DataBindingContextHolder.dataBindingGlobalContext().removeBinding(binding);
+		binding.dispose();
+	}
+
+	private void configureDataBinding(AbstractEntity model, String property) {
+		this.property = property;
+		final IObservableValue om = BeansObservables.observeValue(model, property);
+		final ISWTObservableValue ot = SWTObservables.observeText(text, SWT.Modify);
+		binding = DataBindingContextHolder.dataBindingGlobalContext().bindValue(ot, om);
+	}
+
+	@Override
+	public void retarget(AbstractEntity model) {
+		removeBinding();
+		configureDataBinding(model, property);
+	}
+
+	public CText readOnly(boolean b) {
+		text.setEditable(!b);
+		return this;
+	}
 }

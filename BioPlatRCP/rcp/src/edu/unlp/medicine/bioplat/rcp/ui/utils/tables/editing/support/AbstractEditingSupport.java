@@ -18,26 +18,24 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 		this.accesor = accesor;
 	}
 
-
-    protected Accesor accesor() {
-        return this.accesor;
-    }
+	protected Accesor accesor() {
+		return this.accesor;
+	}
 
 	@Override
 	protected boolean canEdit(Object element) {
 		return true; // default
 	}
 
-
 	@Override
 	protected Object getValue(Object element) {
-        return accesor().get(element).toString(); // TODO revisar lo del
-												// toString()
+		return accesor().get(element); // TODO revisar lo del
+										// toString()
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-        accesor().set(element, value);
+		accesor().set(element, value);
 		getViewer().refresh();// necesario porque si no no actualiza la vista
 	}
 
@@ -61,11 +59,11 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 		return ce;
 	}
 
-	    /**
-     * valido siempre por default...
-     * 
-     * @return
-     */
+	/**
+	 * valido siempre por default...
+	 * 
+	 * @return
+	 */
 	protected ICellEditorValidator createCellEditorValidator() {
 		return new ICellEditorValidator() {
 			@Override

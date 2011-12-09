@@ -8,39 +8,47 @@ import org.slf4j.LoggerFactory;
 
 public class OgnlAccesor implements Accesor {
 
-    private static Logger logger = LoggerFactory.getLogger(OgnlAccesor.class);
+	private static Logger logger = LoggerFactory.getLogger(OgnlAccesor.class);
 
 	private String propertyPath;
-
+	// TODO es más rápido el acceso por property path preparseado?
+	private Object parsedPropertyPath;
 
 	private OgnlAccesor(String propertyPath) {
 		this.propertyPath = propertyPath;
+		try {
+			parsedPropertyPath = Ognl.parseExpression(propertyPath);
+		} catch (OgnlException e) {
+			parsedPropertyPath = propertyPath;
+		}
 	}
 
 	public static Accesor createFor(String propertyPath) {
-        return new NullSafeAccesor(new OgnlAccesor(propertyPath), "");
+		return new NullSafeAccesor(new OgnlAccesor(propertyPath), "");
 	}
 
 	@Override
 	public Object get(Object element) {
 		try {
-			return Ognl.getValue(propertyPath, element);
+			return Ognl.getValue(getPropertyPath(), element);
 		} catch (OgnlException e) {
-            logger.error("Accessing to " + propertyPath + " on" + element.getClass(), e);
+			logger.error("Accessing to " + propertyPath + " on" + element.getClass(), e);
 		}
 		return null;
+	}
+
+	private Object getPropertyPath() {
+		return parsedPropertyPath;
 	}
 
 	@Override
 	public void set(Object element, Object value) {
 		try {
-			Ognl.setValue(propertyPath, element, value);
+			Ognl.setValue(getPropertyPath(), element, value);
 		} catch (OgnlException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

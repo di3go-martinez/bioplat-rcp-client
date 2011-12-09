@@ -16,6 +16,12 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
+/**
+ * 
+ * @author diego
+ * @deprecated migrar a handler
+ */
+@Deprecated
 public class PasteGeneAction extends Action {
 	public PasteGeneAction() {
 		setText("Paste!");

@@ -1,4 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.acions;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -10,30 +11,37 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearch;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-//TODO extends y/o implements
+/**
+ * 
+ * @author diego
+ * @deprecated migrar a handler
+ */
+// TODO extends y/o implements
+@Deprecated
 public class AddGeneAction extends Action implements IWorkbenchWindowActionDelegate {
 
-    public AddGeneAction() {
-        setText("Agregar gen");
-    }
+	public AddGeneAction() {
+		setText("Agregar gen");
+	}
 
-    @Override
-    public void run() {
-        Biomarker b = Models.getInstance().getActiveBiomarker();
+	@Override
+	public void run() {
+		Biomarker b = Models.getInstance().getActiveBiomarker();
 
-        if (b == null) return;
+		if (b == null)
+			return;
 
-        GeneSearch dialog = GeneSearch.createDialog();
-        if (dialog.open() == Dialog.OK) {
-            b.addGene(dialog.selectedGene());
-        }
+		GeneSearch dialog = GeneSearch.createDialog();
+		if (dialog.open() == Dialog.OK) {
+			b.addGene(dialog.selectedGene());
+		}
 
-    }
+	}
 
-    @Override
-    public void run(IAction action) {
+	@Override
+	public void run(IAction action) {
 
-        run();
+		run();
 	}
 
 	@Override
