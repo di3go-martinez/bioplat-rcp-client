@@ -3,16 +3,19 @@
 
 <product name="bioplat" uid="bioplat" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="0.1" useFeatures="false" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
       <programArgs>-consoleLog -clean</programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx512m
+      <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms400m -Xmx1g
 -Dosgi.clean=true
 -Dh2.connection.url=jdbc:h2:c://h2/bioplat;AUTO_SERVER=TRUE</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
+
+   <windowImages/>
 
    <splash
       location="edu.medicine.bioplat.rcp"
@@ -26,8 +29,10 @@
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
 
    <plugins>
       <plugin id="com.ibm.icu"/>

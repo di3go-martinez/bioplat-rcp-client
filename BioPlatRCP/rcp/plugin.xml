@@ -8,6 +8,7 @@
 -->
 <?eclipse version="3.0"?>
 <plugin>
+   <extension-point id="editor.operation.contribution" name="Operaciones" schema="schema/contribution.exsd"/>
    <extension
          id="id1"
          point="org.eclipse.core.runtime.applications">
@@ -34,6 +35,18 @@
                   name="preferenceCustomization"
                   value="preferences.ini">
             </property>
+            <property
+                  name="startupForegroundColor"
+                  value="000000">
+            </property>
+            <property
+                  name="startupMessageRect"
+                  value="7,252,445,20">
+            </property>
+            <property
+                  name="startupProgressRect"
+                  value="5,275,445,15">
+            </property>
          </product>
       </extension>
    <extension
@@ -53,11 +66,18 @@
          point="org.eclipse.ui.editors">
       <editor
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor"
-            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorContributor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorActionBarContributor"
             default="false"
             icon="resources/icons/biomarker.PNG"
             id="bio.plat.biomarker.editor"
             name="%editor.name">
+      </editor>
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.ExperimetEditorActionBarContributor"
+            default="false"
+            id="bio.plat.experiment.editor"
+            name="Experiment">
       </editor>
    </extension>
    <extension
@@ -87,9 +107,54 @@
                label="Agregar gen"
                style="push">
          </action>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.OpenExperimentAction"
+               id="bio.plat.rcp.experiment.actions.new"
+               label="Nuevo Experimento"
+               menubarPath="bioplat.menu/new.menu/additions"
+               style="push">
+         </action>
       </actionSet>
       
    </extension>
+      <extension
+      point="org.eclipse.ui.views">
+   <view
+         name="Progress View"
+         category="org.eclipse.ui"
+         class="org.eclipse.ui.ExtensionFactory:progressView"
+         id="org.eclipse.ui.views.ProgressView">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
+         id="edu.medicine.bioplat.rcp.gene.view"
+         name="Gene"
+         restorable="false">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageViewPart"
+         id="edu.medicine.bioplat.rcp.message.view"
+         name="Mensajes"
+         restorable="true">
+   </view>
+</extension>
+      <extension
+            point="org.eclipse.ui.importWizards">
+         <category
+               id="edu.medicine.bioplat.rcp.import.experiment.root"
+               name="Experiment">
+         </category>
+         <wizard
+               category="edu.medicine.bioplat.rcp.import.experiment.root"
+               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
+               id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
+               name="From Standard CSV File">
+         </wizard>
+         <category
+               id="edu.medicine.bioplat.rcp.other"
+               name="Other">
+         </category>
+      </extension>
    <extension
          point="org.eclipse.ui.exportWizards">
       <category
@@ -111,22 +176,25 @@
             name="Export Gene X Signature Heat Map Wizard">
       </wizard>
       <wizard
+            category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class=" edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportJustGeneIdsWizard"
             icon="resources/icons/export.PNG"
             id="edu.medicine.bioplat.rcp.export.biomarker.file3"
             name="Export Just Gene Ids Wizard">
-         <selection
-               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor">
-         </selection>
       </wizard>
+      <category
+            id="edu.medicine.bioplat.rcp.other"
+            name="Other">
+      </category>
    </extension>
-      <extension
-      point="org.eclipse.ui.views">
-   <view
-         name="Progress View"
-         category="org.eclipse.ui"
-         class="org.eclipse.ui.ExtensionFactory:progressView"
-         id="org.eclipse.ui.views.ProgressView">
-   </view>
-</extension>
+   <extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
+      <actionContribution
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+            
+      </actionContribution>
+   </extension>
 </plugin>
