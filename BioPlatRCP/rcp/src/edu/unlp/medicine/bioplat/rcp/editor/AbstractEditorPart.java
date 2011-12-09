@@ -8,6 +8,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,166 +23,201 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.IProgressService;
 
 import edu.unlp.medicine.bioplat.rcp.editor.input.AbstractEditorInput;
-import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.Service;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
- * Implementaci�n abstracta para los editores
+ * Implementaci�n abstracta para los editores
  * 
- * @author Diego Martínez
+ * @author Diego Mart�nez
  * @version $Revision:$
  * @updatedBy $Author:$ on $Date:$
  */
-public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2 {
+public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider {
 
-    private class ForDirtyObserver implements Observer {
+	private class ForDirtyObserver implements Observer {
 
-        @Override
-        public void update(Observable o, Object arg) {
-            firePropertyChange(EditorPart.PROP_DIRTY);
-        }
-    }
+		@Override
+		public void update(Observable o, Object arg) {
+			firePropertyChange(EditorPart.PROP_DIRTY);
+		}
+	}
 
-    public AbstractEditorPart() {
-        addPartPropertyListener(new IPropertyChangeListener() {
+	public AbstractEditorPart() {
+		addPartPropertyListener(new IPropertyChangeListener() {
 
-            @Override
-            public void propertyChange(PropertyChangeEvent event) {
-                System.out.println(event);
-            }
-        });
-    }
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				System.out.println(event);
+			}
+		});
+	}
 
-    private Control focusReceptor;
+	private Control focusReceptor;
 
-    @Override
-    public final void doSave(IProgressMonitor monitor) {
-        try { // TODO reveer
-            getProgressService().run(true, false, new IRunnableWithProgress() {
-                @Override
-                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-                    // TODO Auto-generated method stub
-                    // Save here
-                    monitor.beginTask("Guardando", IProgressMonitor.UNKNOWN);
-                    doSave0();
-                    getEditorInput().model().clear();
-                    monitor.done();
-                }
+	@Override
+	public final void doSave(IProgressMonitor monitor) {
+		try { // TODO reveer
+			getProgressService().run(true, false, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					// TODO Auto-generated method stub
+					// Save here
+					monitor.beginTask("Guardando", IProgressMonitor.UNKNOWN);
+					doSave0();
+					getEditorInput().model().clear();
+					monitor.done();
+				}
 
-            });
-            firePropertyChange(EditorPart.PROP_DIRTY);
+			});
 
-            // firePropertyChange(EditorPart.PROP_TITLE);
-            setPartName(model().toString());
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			firePropertyChange(EditorPart.PROP_DIRTY);
 
-    }
+			// firePropertyChange(EditorPart.PROP_TITLE);
+			setPartName(model().toString());
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    protected void doSave0() {
-        delay(1000);
-        // RepositoryFactory.getRepository().save(model());
-    }
+	}
 
-    private IProgressService getProgressService() {
-        return PlatformUIUtils.activePage().getWorkbenchWindow().getWorkbench().getProgressService();
-    }
+	protected void doSave0() {
+		delay(1000);
+		// RepositoryFactory.getRepository().save(model());
+	}
 
-    private void delay(final int mills) {
-        BusyIndicator.showWhile(null, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(mills);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+	private IProgressService getProgressService() {
+		return Service.INSTANCE.getProgressService();
+	}
 
-            }
-        });
-    }
+	private void delay(final int mills) {
+		BusyIndicator.showWhile(null, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(mills);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 
-    @Override
-    public void doSaveAs() {
-        if (isSaveAsAllowed()) System.err.println("¡'Save as' no está implementado todavía!");
-    }
+			}
+		});
+	}
 
-    @Override
-    public final void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	@Override
+	public void doSaveAs() {
+		if (isSaveAsAllowed())
+			System.err.println("¡'Save as' no está implementado todavía!");
+	}
 
-        // Es obligatorio guardarse tanto el input como el site
-        setInput(input);
-        setSite(site);
-        model().addObserver(new ForDirtyObserver());
-        setPartName(model().toString());
-        // firePropertyChange(PROP_TITLE);
-    }
+	@Override
+	public final void init(IEditorSite site, IEditorInput input) throws PartInitException {
 
-    /**
-     * Está hecho en principio porque no se refrescan las listas en grillas por
-     * ejemplo... sacar cuando funcione correctamente el databinding de
-     * colecciones en el sentido modelo->vista
-     * 
-     * @return
-     * @deprecated
-     */
-    @Deprecated
-    protected Observer createModificationObserver() {
-        return new Observer() {
+		// Es obligatorio guardarse tanto el input como el site
+		setInput(input);
+		setSite(site);
+		model().addObserver(new ForDirtyObserver());
+		setPartName(model().toString());
+		// firePropertyChange(PROP_TITLE);
+		ISelectionProvider sp = createSelectionProvider();
 
-            @Override
-            public void update(Observable o, Object arg) {
-                // do nothing
-            }
-        };
-    }
+		getSite().setSelectionProvider(sp);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public AbstractEditorInput<T> getEditorInput() {
-        return (AbstractEditorInput<T>) super.getEditorInput();
-    }
+	protected ISelectionProvider createSelectionProvider() {
+		return new ISelectionProvider() {
 
-    @Override
-    public final boolean isDirty() {
-        return model().isDirty();
-    }
+			@Override
+			public void setSelection(ISelection selection) {
+				// TODO Auto-generated method stub
 
-    @Override
-    public boolean isSaveAsAllowed() {
-        return false;
-    }
+			}
 
-    @Override
-    public final void createPartControl(Composite parent) {
-        doCreatePartControl((Composite) (focusReceptor = parent));
-        model().addObserver(createModificationObserver());
-    }
+			@Override
+			public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+				// TODO Auto-generated method stub
 
-    protected abstract void doCreatePartControl(Composite parent);
+			}
 
-    @Override
-    public void setFocus() {
-        if (focusReceptor != null) focusReceptor.setFocus();
-    }
+			@Override
+			public ISelection getSelection() {
+				return new StructuredSelection(model());
+			}
 
-    protected T model() {
-        return getEditorInput().model();
-    }
+			@Override
+			public void addSelectionChangedListener(ISelectionChangedListener listener) {
+				// TODO Auto-generated method stub
 
-    protected void focusReceptor(Control c) {
-        this.focusReceptor = c;
-    }
+			}
+		};
+	}
 
-    @Override
-    public int promptToSaveOnClose() {
-        // TODO tener mayor control
-        return ISaveablePart2.DEFAULT;
-    }
+	/**
+	 * Está hecho en principio porque no se refrescan las listas en grillas por
+	 * ejemplo... sacar cuando funcione correctamente el databinding de
+	 * colecciones en el sentido modelo->vista
+	 * 
+	 * @return
+	 * @deprecated
+	 */
+	@Deprecated
+	protected Observer createModificationObserver() {
+		return new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				// do nothing
+			}
+		};
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AbstractEditorInput<T> getEditorInput() {
+		return (AbstractEditorInput<T>) super.getEditorInput();
+	}
+
+	@Override
+	public final boolean isDirty() {
+		return model().isDirty();
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return false;
+	}
+
+	@Override
+	public final void createPartControl(Composite parent) {
+		doCreatePartControl((Composite) (focusReceptor = parent));
+		model().addObserver(createModificationObserver());
+	}
+
+	protected abstract void doCreatePartControl(Composite parent);
+
+	@Override
+	public void setFocus() {
+		if (focusReceptor != null)
+			focusReceptor.setFocus();
+	}
+
+	@Override
+	public T model() {
+		return getEditorInput().model();
+	}
+
+	protected void focusReceptor(Control c) {
+		this.focusReceptor = c;
+	}
+
+	@Override
+	public int promptToSaveOnClose() {
+		// TODO tener mayor control
+		return ISaveablePart2.DEFAULT;
+	}
 
 }
