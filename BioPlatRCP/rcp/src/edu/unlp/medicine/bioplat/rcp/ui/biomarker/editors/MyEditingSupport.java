@@ -5,6 +5,11 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 
+/**
+ * 
+ * @author diego
+ * @deprecated revisar AbstractEditingSupport
+ */
 @Deprecated
 public class MyEditingSupport extends EditingSupport {
 
@@ -27,18 +32,18 @@ public class MyEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-        return null// String.valueOf(((Gene) element).getExpresi�nG�nica())
-        ;
+		return null// String.valueOf(((Gene) element).getExpresi�nG�nica())
+		;
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-        // try {
-        // ((Gene) element).setExpresi�nG�nica(Long.valueOf(value.toString()));
-        // tableViewer.refresh();// necesario porque si no no actualiza la
-        // // vista
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
+		// try {
+		// ((Gene) element).setExpresi�nG�nica(Long.valueOf(value.toString()));
+		// tableViewer.refresh();// necesario porque si no no actualiza la
+		// // vista
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 	}
 }
