@@ -7,7 +7,9 @@ public class BioPlatPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
-		layout.addPlaceholder("org.eclipse.ui.views.ProgressView", IPageLayout.BOTTOM, 0.02f, layout.getEditorArea());
+		layout.addPlaceholder("*view*", IPageLayout.BOTTOM, 0.33f, layout.getEditorArea());
+		// layout.addView(GeneViewPart.id(), IPageLayout.RIGHT, 0.05f,
+		// layout.getEditorArea());
 	}
 
 	public static String id() {

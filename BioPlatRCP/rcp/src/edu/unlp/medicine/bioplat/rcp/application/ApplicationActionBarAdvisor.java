@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.application;
 import static org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -22,6 +23,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IAction saveAction;
 	private IAction preferencesAction;
 	private IAction importAction;
+	private IAction showViewMenuAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -36,6 +38,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		exitAction = doMake(ActionFactory.QUIT, window);
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
+		showViewMenuAction = doMake(ActionFactory.SHOW_VIEW_MENU, window);
 	}
 
 	private IAction doMake(ActionFactory af, IWorkbenchWindow window) {
@@ -46,28 +49,40 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
-		MenuManager mainMenu = new MenuManager("&Bio Plat", BIOPLAT_MENU_ID);
+		MenuManager fileMenu = new MenuManager("&Bio Plat", BIOPLAT_MENU_ID);
 
 		MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
 		// bioplat.menu/new.menu/additions
 		newMenu.add(new Separator(MB_ADDITIONS));
-		mainMenu.add(newMenu);
-		mainMenu.add(saveAction);
+		fileMenu.add(newMenu); // newMenu es submenú de mainMenu
+		fileMenu.add(saveAction);
+		fileMenu.add(new Separator());
+		fileMenu.add(importAction);
+		fileMenu.add(exportAction);
+		fileMenu.add(new Separator());
+		fileMenu.add(exitAction);
 
-		mainMenu.add(new Separator());
+		// MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
+		// windowMenu.add(new Separator(MB_ADDITIONS));
+		// windowMenu.add(new Separator());
+		// windowMenu.add(preferencesAction);
+		// windowMenu.add(showViewMenuAction);
 
-		mainMenu.add(importAction);
-		mainMenu.add(exportAction);
-
-		mainMenu.add(new Separator());
-
-		mainMenu.add(exitAction);
-
-		MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
-		helpMenu.add(aboutAction);
+		// MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
+		// helpMenu.add(aboutAction);
 
 		// top level additions
-		menuBar.add(mainMenu);
+		menuBar.add(fileMenu);
+
+		// utilizado por el contributerClass de los editores
+		menuBar.add(new Separator("entidad.additions"));
+		// menuBar.add(windowMenu);
 		// menuBar.add(helpMenu);
+
+	}
+
+	@Override
+	protected void fillCoolBar(ICoolBarManager coolBar) {
+		coolBar.add(saveAction);
 	}
 }
