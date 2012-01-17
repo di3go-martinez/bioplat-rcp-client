@@ -23,11 +23,6 @@
 		<version>0.0.2-SNAPSHOT</version> </parent> -->
 
 
-	<properties>
-		<tycho-version>0.12.0</tycho-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<!-- <repositories> <repository> <id>eclipse</id> <layout>p2</layout> <url>${eclipse-repo.url}</url> 
 		</repository> <repository> <releases> <enabled>true</enabled> </releases> 
 		<snapshots> <enabled>true</enabled> </snapshots> <id>RSO-public-group</id> 

@@ -3,7 +3,6 @@
 
 <product name="bioplat" uid="bioplat" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -22,17 +21,15 @@
       startupProgressRect="5,275,445,15"
       startupMessageRect="7,252,445,20"
       startupForegroundColor="000000" />
-   <launcher>
+   <launcher name="bioplat">
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="com.ibm.icu"/>

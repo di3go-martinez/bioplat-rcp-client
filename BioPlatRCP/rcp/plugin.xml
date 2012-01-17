@@ -8,7 +8,7 @@
 -->
 <?eclipse version="3.0"?>
 <plugin>
-   <extension-point id="editor.operation.contribution" name="Operaciones" schema="schema/contribution.exsd"/>
+   <extension-point id="editor.operation.contribution" name="%operations.menu.name" schema="schema/contribution.exsd"/>
    <extension
          id="id1"
          point="org.eclipse.core.runtime.applications">
@@ -59,7 +59,7 @@
       <perspective
             class="edu.unlp.medicine.bioplat.rcp.application.BioPlatPerspective"
             id="bioplatrcp.perspective"
-            name="BioPlat Perspective">
+            name="%main.perspective.name">
       </perspective>
    </extension>
    <extension
@@ -76,8 +76,9 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor"
             contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.ExperimetEditorActionBarContributor"
             default="false"
+            icon="resources/icons/experiment.png"
             id="bio.plat.experiment.editor"
-            name="Experiment">
+            name="%experiment.editor.name">
       </editor>
    </extension>
    <extension
@@ -104,14 +105,14 @@
          <action
                class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGeneAction"
                id="bio.plat.rcp.biomarker.actions.gen.add"
-               label="Agregar gen"
+               label="%biomarker.addgen.action.label"
                style="push">
          </action>
          <action
-               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.OpenExperimentAction"
+               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.OpenExperimentAction"
+               icon="resources/icons/experiment.png"
                id="bio.plat.rcp.experiment.actions.new"
-               label="Nuevo Experimento"
-               menubarPath="bioplat.menu/new.menu/additions"
+               label="%experiment.new.action.label"
                style="push">
          </action>
       </actionSet>
@@ -120,7 +121,7 @@
       <extension
       point="org.eclipse.ui.views">
    <view
-         name="Progress View"
+         name="%progress.view.name"
          category="org.eclipse.ui"
          class="org.eclipse.ui.ExtensionFactory:progressView"
          id="org.eclipse.ui.views.ProgressView">
@@ -128,73 +129,98 @@
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
          id="edu.medicine.bioplat.rcp.gene.view"
-         name="Gene"
+         name="%gene.view.name"
          restorable="false">
    </view>
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageViewPart"
          id="edu.medicine.bioplat.rcp.message.view"
-         name="Mensajes"
+         name="%message.view.name"
          restorable="true">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.personas.PersonaViewPart"
+         id="edu.unlp.medicine.bioplat.rcp.personas.persona.view"
+         name="Persona"
+         restorable="false">
    </view>
 </extension>
       <extension
             point="org.eclipse.ui.importWizards">
          <category
                id="edu.medicine.bioplat.rcp.import.experiment.root"
-               name="Experiment">
+               name="%experiment.wizard.category.name">
          </category>
          <wizard
                category="edu.medicine.bioplat.rcp.import.experiment.root"
                class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
                id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
-               name="From Standard CSV File">
+               name="%experiment.csv.file.import.wizard.name">
          </wizard>
          <category
                id="edu.medicine.bioplat.rcp.other"
-               name="Other">
+               name="%experiment.other.category.name">
          </category>
       </extension>
    <extension
          point="org.eclipse.ui.exportWizards">
       <category
             id="edu.medicine.bioplat.rcp.export.biomarker.root"
-            name="Biomarker">
+            name="%biomarker.wizard.category.name">
       </category>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFileWizard"
-            icon="resources/icons/export.PNG"
+            icon="resources/icons/export.png"
             id="edu.medicine.bioplat.rcp.export.biomarker.file"
-            name="Export to file">
+            name="%biomarker.export.to.file.wizard.entry.name">
       </wizard>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneXSignatureHeatMapWizard"
-            icon="resources/icons/export.PNG"
+            icon="resources/icons/export.png"
             id="edu.medicine.bioplat.rcp.export.biomarker.file2"
-            name="Export Gene X Signature Heat Map Wizard">
+            name="%biomarker.export.X.signature.heat.map.wizard.entry.name">
       </wizard>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class=" edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportJustGeneIdsWizard"
-            icon="resources/icons/export.PNG"
+            icon="resources/icons/export.png"
             id="edu.medicine.bioplat.rcp.export.biomarker.file3"
-            name="Export Just Gene Ids Wizard">
+            name="%biomarker.export.just.gene.id.wizard.entry.name">
       </wizard>
       <category
             id="edu.medicine.bioplat.rcp.other"
-            name="Other">
+            name="%biomarker.other.category.name">
+      </category>
+      <category
+            id="edu.medicine.bioplat.rcp.export.biomarker.files"
+            name="Archivo"
+            parentCategory="edu.medicine.bioplat.rcp.export.biomarker.root">
       </category>
    </extension>
    <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
+            caption="Cambiar 0&apos;s..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
-            
       </actionContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage"
+            id="edu.medicine.bioplat.rcp.experimente.general"
+            name="General">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.AbstractPreferenceInitializer1">
+      </initializer>
    </extension>
 </plugin>
