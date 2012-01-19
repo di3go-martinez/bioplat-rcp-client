@@ -62,6 +62,13 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="caption" type="string">
+            <annotation>
+               <documentation>
+                  Nombre a mostrar para la acción
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -70,7 +77,7 @@
          <attribute name="class" type="string">
             <annotation>
                <documentation>
-                  
+                  clase para la cual se quieren filtrar las acciones
                </documentation>
                <appInfo>
                   <meta.attribute kind="java"/>
