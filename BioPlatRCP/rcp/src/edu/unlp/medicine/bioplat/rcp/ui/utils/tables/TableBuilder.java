@@ -9,6 +9,8 @@ import ognl.OgnlException;
 
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -19,10 +21,11 @@ import org.eclipse.swt.widgets.Table;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-public class TableBuilder {
+public class TableBuilder implements TableConfigurer {
 	// TODO que sea no "rezisable"
 	private static final ColumnBuilder HIDDEN_COLUMN = ColumnBuilder.create().resizable(false).editable(false).width(0);
 	// TODO
@@ -185,12 +188,17 @@ public class TableBuilder {
 			@Override
 			public void input(final List newInput) {
 				// TODO se puede optimizar y no sacar todos los elementos si,
-				// reemplazar solo los que cambiaron
+				// reemplazar solo los que cambiaron (?)
 				input.clear();
 				input.addAll(newInput);
 				viewer.refresh(true, true);
 			}
 
+			// @Override
+			// public void input(AbstractEntity model) {
+			// model(model, propertyPath);
+			// viewer.refresh(true, true);
+			// }
 		};
 	}
 
@@ -351,10 +359,37 @@ public class TableBuilder {
 	private InputResolver resolver = new NullInputResolver();
 	private Paging paging;
 
+	private String propertyPath = null;
+
+	/**
+	 * 
+	 * tiene que ser lo último en configurar
+	 * 
+	 * @param model
+	 * @param propertyPath
+	 * @return
+	 */
+	// TODO que no sea si o si el último en configurar
 	public TableBuilder model(AbstractEntity model, String propertyPath) {
+		this.propertyPath = propertyPath;
 		resolver = new OgnlRefreshableInputResolver(model, propertyPath, this);
-		paging = new Paging(model, propertyPath, viewer);
+		paging = new Paging(model, propertyPath, viewer, this);
 		return input(paging.list());
+	}
+
+	// TODO diseñar mejor, hacer un resolver para sacar el ConfigurationScope y
+	// su respectivo getInt
+	private String keyLimit = "asdf_asdf";
+
+	@Override
+	public int limit() {
+		IEclipsePreferences prefs = ConfigurationScope.INSTANCE.getNode(Activator.id());
+		return prefs.getInt(keyLimit, Integer.MAX_VALUE);
+	}
+
+	public TableBuilder keyLimit(String keyLimit) {
+		this.keyLimit = keyLimit;
+		return this;
 	}
 
 }

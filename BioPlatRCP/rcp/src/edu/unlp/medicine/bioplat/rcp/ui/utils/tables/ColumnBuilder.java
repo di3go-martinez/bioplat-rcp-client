@@ -6,8 +6,6 @@ import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -29,25 +27,23 @@ public class ColumnBuilder {
 		return new ColumnBuilder();
 	}
 
-	private CellLabelProvider clp = new ColumnLabelProvider() {
-
-		{
-			addListener(new ILabelProviderListener() {
-
-				@Override
-				public void labelProviderChanged(LabelProviderChangedEvent event) {
-					event.getElement();
-				}
-			});
+	private DataTransformer transformer = new AbstractDataTransformer() {
+		@Override
+		public Object doTransform(Object from) {
+			return from;
 		}
+	};
 
+	private CellLabelProvider clp = new ColumnLabelProvider() {
 		// @Override si extiendo columnLabelProvider por ejemplo
 		@Override
 		public String getText(Object element) {
+			String current;
 			if (accesor != null)
-				return accesor.get(element).toString();
+				current = transformer.transform(accesor.get(element)).toString();
 			else
-				return "";
+				current = "";
+			return current;
 		};
 
 		// TODO colorear! no se ve alineado el texto...
@@ -55,13 +51,12 @@ public class ColumnBuilder {
 
 		// @Override
 		// public void update(ViewerCell cell) {
-		// Object oldValue = ref.get(cell);
+		// Object oldValue = current; // ref.get(cell);
 		// String text = getText(cell.getElement());
-		// if (oldValue != null)
-		// if (!oldValue.equals(text)) {
+		// if (!text.equals(oldValue)) {
 		// cell.setForeground(new Color(cell.getBackground().getDevice(), 255,
 		// 0, 0));
-		// ref.put(cell, text);
+		// // ref.put(cell, text);
 		// }
 		// cell.setText(text);
 		// };
@@ -93,12 +88,12 @@ public class ColumnBuilder {
 
 	private EditingSupport newInstance(Class<? extends EditingSupport> clazz, TableViewer viewer) {
 		try {
-			// TODO revisar... cuando se acomode la clase a recibir deber�a
+			// TODO revisar... cuando se acomode la clase a recibir debería
 			// extender a AbstractEditingSupport
 			if (accesor == null) {
 				return clazz.getConstructor(TableViewer.class).newInstance(viewer);
 			} else {
-				return clazz.getConstructor(TableViewer.class, Accesor.class).newInstance(viewer, accesor);
+				return clazz.getConstructor(TableViewer.class, Accesor.class, ColumnBuilder.class).newInstance(viewer, accesor, this);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -166,14 +161,14 @@ public class ColumnBuilder {
 	}
 
 	/**
-	 * usar width
+	 * usar width con resizable(false) ?
 	 * 
 	 * @param bound
 	 * @return
 	 */
 	@Deprecated
 	public ColumnBuilder bound(int bound) {
-		return width(bound);
+		return width(bound).resizable(false);
 	}
 
 	public ColumnBuilder width(int width) {
@@ -181,6 +176,13 @@ public class ColumnBuilder {
 		return this;
 	}
 
+	/**
+	 * setea el {@link ColumnLabelProvider} que recibe como parámetro el objeto
+	 * que está detrás de la fila
+	 * 
+	 * @param columnLabelProvider
+	 * @return this
+	 */
 	public ColumnBuilder labelprovider(CellLabelProvider columnLabelProvider) {
 		this.clp = columnLabelProvider;
 		return this;
@@ -206,8 +208,8 @@ public class ColumnBuilder {
 		return this;
 	}
 
-	public ColumnBuilder accesor(Accesor mutator) {
-		this.accesor = mutator;
+	public ColumnBuilder accesor(Accesor accesor) {
+		this.accesor = accesor;
 		return this;
 	}
 
@@ -255,6 +257,11 @@ public class ColumnBuilder {
 		return width(20).cellEditorSupport(CheckBoxEditingSupport.class)//
 				.labelprovider(new ColumnLabelProvider() {
 					@Override
+					public String getText(Object element) {
+						return "";
+					}
+
+					@Override
 					public Image getImage(Object element) {
 						if ((Boolean) accesor.get(element))
 							return CHECKED;
@@ -278,6 +285,19 @@ public class ColumnBuilder {
 	 */
 	public ColumnBuilder property(String propertyPath) {
 		return accesor(OgnlAccesor.createFor(propertyPath));
+	}
+
+	public ColumnBuilder transformer(DataTransformer dataTransformer) {
+		this.transformer = dataTransformer;
+		return this;
+	}
+
+	/**
+	 * @internal
+	 * @return el transformer configurado para la columna
+	 */
+	public DataTransformer transformer() {
+		return transformer;
 	}
 
 }

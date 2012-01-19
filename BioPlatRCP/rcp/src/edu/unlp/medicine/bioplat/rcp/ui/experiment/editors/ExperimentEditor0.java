@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -46,7 +47,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		c.setLayout(new GridLayout(4, false));
 		c.setLayoutData(GridDataFactory.fillDefaults().span(1, 2).create());
 		Widgets.createTextWithLabel(c, "Nombre", model(), "name");
-		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes");
+		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes", true);
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
 
 		// ejecuta la creación del input en background...
@@ -62,13 +63,15 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 		});
 
-		TableBuilder tb = TableBuilder.create(container) //
+		TableBuilder tb = TableBuilder.create(container)//
+				.keyLimit(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES)//
 				.model(new AbstractEntity() {
 					public List<ClinicalDataModel> getData() {
 						return inputHolder.value();
 					}
 				}, "data")
 		// .input(inputHolder.value())
+
 		;
 
 		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]")); //

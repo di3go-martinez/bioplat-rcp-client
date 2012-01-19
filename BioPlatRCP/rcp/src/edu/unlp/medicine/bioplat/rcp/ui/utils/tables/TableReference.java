@@ -5,14 +5,17 @@ import java.util.List;
 public interface TableReference {
 
 	/**
-	 * refresco explícito de la tabla
+	 * refresco explï¿½cito de la tabla
 	 */
 	void refresh();
 
 	/**
 	 * 
 	 * @param input
-	 * @beta requiere un mejor análisis
+	 * @beta requiere un mejor anÃ¡lisis
 	 */
 	void input(List input);
+
+	// TODO
+	// void input(AbstractEntity model);
 }

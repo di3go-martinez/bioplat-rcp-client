@@ -51,6 +51,9 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 
 			result.add(ed);
 		}
+
+		// prueba
+		//result.add(new EditorDescription(EditorInputFactory.createDefaultEditorInput(Persona.random()), new PersonaEditor()));
 		return result;
 	}
 

@@ -30,7 +30,7 @@ public class CText implements Widget {
 
 	private String property;
 
-	public CText(Composite parent, AbstractEntity model, String property) {
+	CText(Composite parent, AbstractEntity model, String property) {
 		this(parent, model, property, SWT.BORDER);
 	}
 

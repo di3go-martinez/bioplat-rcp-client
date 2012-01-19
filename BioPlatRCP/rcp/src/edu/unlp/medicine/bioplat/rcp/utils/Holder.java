@@ -7,8 +7,11 @@ public class Holder<T> implements Serializable {
 	private T value;
 
 	public Holder(T initialValue) {
-		super();
 		this.value = initialValue;
+	}
+
+	public Holder() {
+		this(null);
 	}
 
 	public T value() {

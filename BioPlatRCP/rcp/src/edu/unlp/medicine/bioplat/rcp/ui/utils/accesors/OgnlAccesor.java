@@ -6,12 +6,19 @@ import ognl.OgnlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ * Accede a la propiedad de un objeto, propertyPath mediante
+ * 
+ * @author diego
+ * 
+ */
 public class OgnlAccesor implements Accesor {
 
 	private static Logger logger = LoggerFactory.getLogger(OgnlAccesor.class);
 
 	private String propertyPath;
-	// TODO es m·s r·pido el acceso por property path preparseado?
+	// TODO es m√°s r√°pido el acceso por property path preparseado?
 	private Object parsedPropertyPath;
 
 	private OgnlAccesor(String propertyPath) {

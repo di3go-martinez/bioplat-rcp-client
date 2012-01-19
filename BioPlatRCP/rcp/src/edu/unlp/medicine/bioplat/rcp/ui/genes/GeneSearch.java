@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.genes;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -19,29 +20,39 @@ public class GeneSearch extends Dialog {
 		this.model = model;
 	}
 
-	public static GeneSearch createDialog() {
-		GeneSearch gs = new GeneSearch(null, createDefaultGene());
-		return gs;
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Gen a agregar");
 	}
 
-    private static Gene createDefaultGene() {
-        Gene result = new Gene(-1);
-        result.setName("default name");
-        return result;
-    }
+	public static GeneSearch createDialog() {
+		return new GeneSearch(null, createDefaultGene());
+	}
+
+	@Override
+	protected Point getInitialSize() {
+		return new Point(300, 110);
+	}
+
+	private static Gene createDefaultGene() {
+		Gene result = new Gene(-1);
+		result.setName("default name");
+		return result;
+	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = Widgets.createDefaultContainer(parent);
-        container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
-        Widgets.createTextWithLabel(container, "Entrez Id", model, "entrezId");
-        // Widgets.createTextWithLabel(container, "Nombre", model, "name");
+		Widgets.createTextWithLabel(container, "Entrez Id", model, "entrezId");
+		// Widgets.createTextWithLabel(container, "Nombre", model, "name");
 
+		GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 10).generateLayout(container);
 		return container;
 	}
 
 	public Gene selectedGene() {
-        return MetaPlat.getInstance().getGeneByEntrezId(model.getEntrezId());
+		return MetaPlat.getInstance().getGeneByEntrezId(model.getEntrezId());
 	}
 }

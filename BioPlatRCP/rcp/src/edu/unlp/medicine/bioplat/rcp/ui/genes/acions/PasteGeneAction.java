@@ -13,8 +13,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.gene.Gene;
 
 /**
  * 
@@ -30,23 +33,34 @@ public class PasteGeneAction extends Action {
 	@Override
 	public void run() {
 
-		Biomarker b = Models.getInstance().getActiveBiomarker();
-		if (b == null)
-			return;
+		MessageManager mm = MessageManager.INSTANCE;
 
-		mydialog mydialog = new mydialog(null);
+		Biomarker b = Models.getInstance().getActiveBiomarker();
+		if (b == null) {
+			mm.add(Message.warn("No hay biomarcador seleccionado"));
+			return;
+		}
+
+		AddGenDialog mydialog = new AddGenDialog(null);
 		if (mydialog.open() == Dialog.OK)
-			for (String id : mydialog.getids())
-				b.addGene(MetaPlat.getInstance().getGeneById(id));
+			for (String id : mydialog.getids()) {
+				try {
+					final Gene gene = MetaPlat.getInstance().getGeneById(id);
+					b.addGene(gene);
+					mm.add(Message.info("Se agregó el gen: " + gene));
+				} catch (Exception e) {
+					mm.add(Message.error("No se pudo agregar el gen con id: '" + id + "'", e));
+				}
+			}
 
 	}
 }
 
-class mydialog extends Dialog {
+class AddGenDialog extends Dialog {
 
 	private String separator = " ";
 
-	protected mydialog(Shell parentShell) {
+	protected AddGenDialog(Shell parentShell) {
 		super(parentShell);
 
 	}
@@ -69,11 +83,13 @@ class mydialog extends Dialog {
 
 		final Text text = new Text(result, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		text.setToolTipText(getShell().getText());
 		text.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				value = text.getText();
+				value = StringUtils.replace(text.getText(), "\n", " ");
+				value = StringUtils.replace(value, "\r", " ");
 			}
 		});
 		return result;

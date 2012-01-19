@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,9 +10,11 @@ import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -24,6 +27,9 @@ import org.eclipse.ui.IWorkbench;
 
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.FilePathValidator;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ExportGenesToCSVFileCommand;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
@@ -37,13 +43,31 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
 public class ExportToFileWizard extends Wizard implements IExportWizard {
 
 	public ExportToFileWizard() {
+		setNeedsProgressMonitor(true);
 	}
 
 	private Map<String, String> parameters = new HashMap<String, String>();
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if (!check(selection)) {
+			MessageManager.INSTANCE/* .clear() */.add(Message.warn("No hay biomarcador activo")).openView();
+			return;
+		}
 		addPage(createWizardPage());
+	}
+
+	private boolean check(IStructuredSelection selection) {
+		try {
+			selectedBiomarker = (Biomarker) selection.getFirstElement();
+			if (selectedBiomarker == null)
+				selectedBiomarker = Models.getInstance().getActiveBiomarker();
+			return !selection.isEmpty() && selectedBiomarker != null;
+		} catch (ClassCastException cce) {
+			// la selección actual no es un biomarcador
+			return false;
+		}
+
 	}
 
 	private class WizardModel {
@@ -113,12 +137,40 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 	}
 
 	@Override
-	public boolean performFinish() {
-		Biomarker b = Models.getInstance().getActiveBiomarker();
-		doFinish(b, parameters);
-		return true;
+	public final boolean performFinish() {
+		boolean result = true;
+		final Biomarker b = findActiveBiomarker();
+		final Holder<Message> hm = new Holder<Message>();
+		try {
+			getContainer().run(true, false, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					doFinish(b, parameters);
+					hm.hold(Message.info("Exportación realizada con éxito"));
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			hm.hold(Message.error("Se encontraron fallos durante la exportación", e));
+			result = false;
+		}
+		MessageManager.INSTANCE.add(hm.value()).openView();
+		return result;
 	}
 
+	private Biomarker selectedBiomarker;
+
+	private Biomarker findActiveBiomarker() {
+		return selectedBiomarker;
+	}
+
+	/**
+	 * ejecutar la acción de exportación del biomarcador b. <b>es proferible no
+	 * debe modificar la vista desde este método</b>
+	 * 
+	 * @param b
+	 * @param parameters
+	 */
 	protected void doFinish(Biomarker b, Map<String, String> parameters) {
 		new ExportGenesToCSVFileCommand(b, parameters).execute();
 	}

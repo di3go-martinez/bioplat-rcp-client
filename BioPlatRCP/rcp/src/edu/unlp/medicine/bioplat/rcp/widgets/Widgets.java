@@ -41,7 +41,7 @@ public class Widgets {
 	}
 
 	public static Composite createDefaultContainer(Composite parent) {
-		Composite container = new Composite(parent, SWT.BORDER);
+		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		container.setLayout(GridLayoutFactory.fillDefaults().create());
 		return container;

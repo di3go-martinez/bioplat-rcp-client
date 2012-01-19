@@ -64,7 +64,8 @@ public class GeneViewPart extends ViewPart {
 		super.dispose();
 	}
 
-	private ISelectionService getSelectionService() {
+	// TODO mover a un abstract...?
+	protected ISelectionService getSelectionService() {
 		return getSite().getWorkbenchWindow().getSelectionService();
 	}
 

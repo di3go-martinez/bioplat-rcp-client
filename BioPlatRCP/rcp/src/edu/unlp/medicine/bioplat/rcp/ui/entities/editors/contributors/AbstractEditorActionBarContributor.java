@@ -8,11 +8,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorActionBarContributor;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.MessageViewOpenAction;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.DefaultExtensionLoaderRunnable;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.ExtensionPointLoader;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 //TODO no se usa para nada todavía el tipo genérico T, ver si se puede usar para el selectionType por ejemplo
+//TODO agregar configuración en populateMenu, por ejemplo, para agregar una operación al toolbar, al menu (por default)
 public abstract class AbstractEditorActionBarContributor<T> extends EditorActionBarContributor implements ModelProvider {
 
 	/**
@@ -34,20 +36,27 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 		populateByExtensionPoint(mm);
 	}
 
+	/**
+	 * 
+	 * Lee los extension points que se hayan registrado y los procesa
+	 * 
+	 * @param mm
+	 */
 	private void populateByExtensionPoint(final MenuManager mm) {
 		ExtensionPointLoader.create("edu.medicine.bioplat.rcp.editor.operation.contribution").load(new DefaultExtensionLoaderRunnable() {
 			@Override
 			protected void runOn(IConfigurationElement celement) throws Exception {
 				ActionContribution ac = (ActionContribution) celement.createExecutableExtension("class");
 				ac.modelProvider(AbstractEditorActionBarContributor.this);
+				ac.caption(celement.getAttribute("caption"));
 
 				IConfigurationElement[] c = celement.getChildren("selection");
 				final Class<?> configuredSelectionClass = Class.forName(c[0].getAttribute("class"));
-				boolean add = (c.length != 0) && //
+				boolean add = (c.length == 0) || //
 						configuredSelectionClass.isAssignableFrom(getSelectionType());
 
 				if (add)
-					mm.add(ac.action());
+					mm.add(MessageViewOpenAction.wrap(ac.action()));
 			}
 
 		});

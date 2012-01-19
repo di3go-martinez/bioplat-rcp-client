@@ -8,14 +8,17 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 
 public abstract class AbstractEditingSupport extends EditingSupport {
 
 	private Accesor accesor;
+	private ColumnBuilder columnBuilder;
 
-	public AbstractEditingSupport(TableViewer viewer, Accesor accesor) {
+	public AbstractEditingSupport(TableViewer viewer, Accesor accesor, ColumnBuilder cb) {
 		super(viewer);
 		this.accesor = accesor;
+		this.columnBuilder = cb;
 	}
 
 	protected Accesor accesor() {
@@ -28,13 +31,12 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 	}
 
 	@Override
-	protected Object getValue(Object element) {
-		return accesor().get(element); // TODO revisar lo del
-										// toString()
+	protected final Object getValue(Object element) {
+		return columnBuilder.transformer().transform(accesor().get(element));
 	}
 
 	@Override
-	protected void setValue(Object element, Object value) {
+	protected final void setValue(Object element, Object value) {
 		accesor().set(element, value);
 		getViewer().refresh();// necesario porque si no no actualiza la vista
 	}
@@ -60,7 +62,7 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 	}
 
 	/**
-	 * valido siempre por default...
+	 * valido ok siempre por default...
 	 * 
 	 * @return
 	 */

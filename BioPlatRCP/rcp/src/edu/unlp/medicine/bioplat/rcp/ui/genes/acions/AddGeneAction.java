@@ -9,7 +9,10 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearch;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.gene.Gene;
 
 /**
  * 
@@ -26,21 +29,31 @@ public class AddGeneAction extends Action implements IWorkbenchWindowActionDeleg
 
 	@Override
 	public void run() {
+		MessageManager mm = MessageManager.INSTANCE;
+
 		Biomarker b = Models.getInstance().getActiveBiomarker();
 
-		if (b == null)
+		if (b == null) {
+			mm.add(Message.warn("No hay biomarcador seleccionado"));
 			return;
-
-		GeneSearch dialog = GeneSearch.createDialog();
-		if (dialog.open() == Dialog.OK) {
-			b.addGene(dialog.selectedGene());
 		}
 
+		GeneSearch dialog = GeneSearch.createDialog();
+		if (dialog.open() == Dialog.OK)
+			try {
+				final Gene selectedGene = dialog.selectedGene();
+				if (!b.getGenes().contains(selectedGene)) {
+					b.addGene(selectedGene);
+					mm.add(Message.info("Gen agregado"));
+				} else
+					mm.add(Message.warn("El gen " + selectedGene + " ya estaba agregado al biomarcador"));
+			} catch (Exception e) {
+				mm.add(Message.error("No se encontró el gen buscado"));
+			}
 	}
 
 	@Override
 	public void run(IAction action) {
-
 		run();
 	}
 

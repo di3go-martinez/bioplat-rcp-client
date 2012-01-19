@@ -61,6 +61,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 	private static ExecutorService exec = Executors.newFixedThreadPool(1);
 
 	public FileExperimentImport() {
+		setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				try {
 					final Experiment e = holder.get(); // join
-					Display.getDefault().syncExec(new Runnable() {
+					Display.getDefault().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
@@ -125,7 +126,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new WizardPage("Configuración") {
+		addPage(new WizardPage("conf", "Configuración", null) {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -149,11 +150,13 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
-						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
+						Arrays.asList(COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
 
 				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
 						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Estrategia de colapsado")), null);
+
+				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE);
 
 				// TODO parametrizar? deducir? por origen de archivo?
 				new Label(c, SWT.NONE).setText("cfl, cll, snl, efl");
@@ -168,4 +171,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 		});
 	}
 
+	// TODO hacer fluent!
+	// WizardFactory.createWizard().addPage().addPage()
+	// WizardPage.create(WizardPage.class).
 }

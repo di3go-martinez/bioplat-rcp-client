@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+
 /**
- * ENUMERATIVO PARA MANEJO AUTOMÁTICO DE LA INSTANCIA, ETCS.
+ * Enumerativo para manejo automático de la instancia (sic).
  * 
  * @author diego
  * 
@@ -20,12 +22,24 @@ public enum MessageManager {
 		return messages;
 	}
 
-	public void clear() {
+	public MessageManager clear() {
 		messages.clear();
+
+		return this;
 	}
 
-	public void add(Message msg) {
+	public MessageManager add(Message msg) {
 		messages.add(msg);
+		return this;
 	}
 
+	public boolean isThereAnyMessage() {
+		return !getMessages().isEmpty();
+	}
+
+	public MessageManager openView() {
+		// TODO revisar el forzado del setFocus
+		PlatformUIUtils.openView(MessageViewPart.id()).setFocus();
+		return this;
+	}
 }

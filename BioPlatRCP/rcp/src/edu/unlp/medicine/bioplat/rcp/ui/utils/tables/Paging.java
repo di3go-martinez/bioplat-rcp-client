@@ -24,10 +24,12 @@ public class Paging<T> {
 
 	// TODO no es configurable, podría serlo...
 	private int pagesize = 100;
-	private int i = 0;
+	private int currentElementIndex = 0;
 	private List<T> realList = Lists.newArrayList();
 	private Object model;
 	private String propertyPath;
+
+	private TableConfigurer tableConfigurer;
 
 	/**
 	 * 
@@ -35,9 +37,11 @@ public class Paging<T> {
 	 * @param propertyPath
 	 * @param viewer
 	 */
-	public Paging(Object model, String propertyPath, final TableViewer viewer) {
+	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config) {
 		this.model = model;
 		this.propertyPath = propertyPath;
+		this.tableConfigurer = config;
+
 		loadNextPage();// la primera página
 
 		// FIXME no anda cuando se baja con la flecha y no es virtual la table
@@ -88,7 +92,7 @@ public class Paging<T> {
 	}
 
 	private void loadNextPage() {
-		logger.debug("Intentando cargar la página " + realList.size() / pagesize);
+		logger.debug("Intentando cargar la página " + (realList.size() / pagesize) + 1);
 		for (int j = 0; j < pagesize; j++) {
 			T e = findNextElement();
 			if (e != null)
@@ -102,14 +106,20 @@ public class Paging<T> {
 	private T findNextElement() {
 		T result = null;
 		try {
-			result = (T) Ognl.getValue(propertyPath + "[" + i + "]", model);
-			i++;
+			if (currentElementIndex < limit()) { // si entra uno más
+				result = (T) Ognl.getValue(propertyPath + "[" + currentElementIndex + "]", model);
+				currentElementIndex++;
+			}
 		} catch (IndexOutOfBoundsException e) {
 			logger.debug("Se alcanzó el final de la lista");
 		} catch (OgnlException e) {
 			logger.error("Error intentando acceder al elemento", e);
 		}
 		return result;
+	}
+
+	private int limit() {
+		return tableConfigurer.limit();
 	}
 
 	public int pagesize() {
