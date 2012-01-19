@@ -7,6 +7,8 @@ import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -39,6 +41,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
 		showViewMenuAction = doMake(ActionFactory.SHOW_VIEW_MENU, window);
+
 	}
 
 	private IAction doMake(ActionFactory af, IWorkbenchWindow window) {
@@ -49,12 +52,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
+
 		MenuManager fileMenu = new MenuManager("&Bio Plat", BIOPLAT_MENU_ID);
 
-		MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
 		// bioplat.menu/new.menu/additions
+		MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
 		newMenu.add(new Separator(MB_ADDITIONS));
+
 		fileMenu.add(newMenu); // newMenu es submenú de mainMenu
+
 		fileMenu.add(saveAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(importAction);
@@ -62,10 +68,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
-		// MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
-		// windowMenu.add(new Separator(MB_ADDITIONS));
-		// windowMenu.add(new Separator());
-		// windowMenu.add(preferencesAction);
+		MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
+		windowMenu.add(new Separator(MB_ADDITIONS));
+		windowMenu.add(new Separator());
+		windowMenu.add(preferencesAction);
 		// windowMenu.add(showViewMenuAction);
 
 		// MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
@@ -76,13 +82,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		// utilizado por el contributerClass de los editores
 		menuBar.add(new Separator("entidad.additions"));
-		// menuBar.add(windowMenu);
+		menuBar.add(windowMenu);
 		// menuBar.add(helpMenu);
 
 	}
 
 	@Override
 	protected void fillCoolBar(ICoolBarManager coolBar) {
-		coolBar.add(saveAction);
+		ToolBarManager tbm = new ToolBarManager(SWT.FLAT);
+		tbm.add(saveAction);
+		coolBar.add(tbm);
 	}
 }

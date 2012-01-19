@@ -14,7 +14,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static ImageDescriptor imageDescriptorFromPlugin(String imageFilePath) {
-		return imageDescriptorFromPlugin(id(), imageFilePath);
+		ImageDescriptor id = imageDescriptorFromPlugin(id(), imageFilePath);
+		if (id == null)
+			id = imageDescriptorFromPlugin("resources/icons/default.png");
+		return id;
+
 	}
 
 }
