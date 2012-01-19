@@ -27,9 +27,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.Service;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
- * Implementación abstracta para los editores
+ * Implementaciï¿½n abstracta para los editores
  * 
- * @author Diego Martínez
+ * @author Diego Martï¿½nez
  * @version $Revision:$
  * @updatedBy $Author:$ on $Date:$
  */
@@ -206,7 +206,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	}
 
 	@Override
-	public T model() {
+	public final T model() {
 		return getEditorInput().model();
 	}
 
