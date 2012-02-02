@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+
+	<parent>
+		<groupId>bioplat</groupId>
+		<version>2.1.0-SNAPSHOT</version>
+		<artifactId>runtime</artifactId>
+	</parent>
+
+
+	<artifactId>edu.medicine.bioplat.base.lib</artifactId>
+	<packaging>bundle</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>base lib</name>
+	<description>third basic libraries</description>
+	<inceptionYear>20111031</inceptionYear>
+	<!-- <parent> <groupId>bioplat</groupId> <artifactId>parent</artifactId> 
+		<version>0.0.2-SNAPSHOT</version> </parent> -->
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Embed-Dependency>
+							*;scope=compile|runtime
+							<!--;artifactId=!aopalliance|apache-maven|async-http-client|netty|slf4j-api -->
+						</Embed-Dependency>
+						<Embed-Directory>lib</Embed-Directory>
+
+						<_exportcontents>
+							<!--META-INF.plexus;-noimport:=true, -->
+							*
+						</_exportcontents>
+
+						<Import-Package>
+							!*
+						</Import-Package>
+						<!-- Require-Bundle>com.ning.async-http-client;bundle-version="[1.6.3,1.6.4)"</Require-Bundle> -->
+
+						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+
+
+					</instructions>
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>bioplat</groupId>
+			<artifactId>BioPlatModeloClienteRico</artifactId>
+			<version>2.3.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
