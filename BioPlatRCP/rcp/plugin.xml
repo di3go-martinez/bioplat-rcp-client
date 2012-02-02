@@ -215,6 +215,12 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      <actionContribution
+            caption="by.4"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ActionContribution1">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
