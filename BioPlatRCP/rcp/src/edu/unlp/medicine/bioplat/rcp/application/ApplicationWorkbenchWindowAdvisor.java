@@ -6,6 +6,9 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
+import edu.unlp.medicine.bioplat.rcp.ui.entities.SWTUIContext;
+import edu.unlp.medicine.entity.generic.ContextFactory;
+
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -27,5 +30,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowPerspectiveBar(false);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("Bio PLat"); //$NON-NLS-1$
+
+		ContextFactory.set(new SWTUIContext());
 	}
+
 }
