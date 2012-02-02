@@ -92,7 +92,7 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 			});
 			// le seteo valores por default
 			separator.setValue(",");
-			path.setValue("c:/tmp/biomarker");
+			path.setValue("./biomarker");
 		}
 	}
 
