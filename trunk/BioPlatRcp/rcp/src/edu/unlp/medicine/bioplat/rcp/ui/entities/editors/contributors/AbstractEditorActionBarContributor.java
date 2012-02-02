@@ -63,7 +63,8 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 			}
 
 			private IAction wrap(IAction action) {
-				action = AsyncAction.wrap(action);
+				// TODO enable!
+				// action = AsyncAction.wrap(action);
 				action = MessageViewOpenAction.wrap(action);
 
 				return action;
