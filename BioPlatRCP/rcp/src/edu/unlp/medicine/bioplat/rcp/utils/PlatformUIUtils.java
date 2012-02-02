@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.utils;
 
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -43,11 +45,24 @@ public class PlatformUIUtils {
 
 	public static IViewPart openView(String viewId) {
 		try {
+
 			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
 		} catch (PartInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Shell findShell() {
+		Display d = findDisplay();
+		return d.getActiveShell();
+	}
+
+	public static Display findDisplay() {
+		Display d = Display.getCurrent();
+		if (d == null)
+			d = Display.getDefault();
+		return d;
 	}
 }

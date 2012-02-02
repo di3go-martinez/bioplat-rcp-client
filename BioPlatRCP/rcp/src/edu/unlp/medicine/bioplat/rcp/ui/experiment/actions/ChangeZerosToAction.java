@@ -9,6 +9,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractAc
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.ActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -24,7 +26,7 @@ public class ChangeZerosToAction extends AbstractActionContribution<AbstractExpe
 	@Override
 	public void run() {
 
-		IInputValidator validator = new IInputValidator() {
+		final IInputValidator validator = new IInputValidator() {
 
 			@Override
 			public String isValid(String newText) {
@@ -36,18 +38,34 @@ public class ChangeZerosToAction extends AbstractActionContribution<AbstractExpe
 				}
 			}
 		};
-		InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), "Ingrese un valor", "Cambiar " + getValueToSearch() + "s por:", String.valueOf(getValueToSearch()), validator);
-		if (id.open() != Dialog.OK)
-			return;
 
-		Double newValue = Double.parseDouble(id.getValue());
+		final Holder<Double> newValue = new Holder<Double>();
+		final Holder<Boolean> accepted = new Holder<Boolean>(true);
+
+		// FIXME hacer transparente el pedido de ejecución al ui-thread
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				InputDialog id = new InputDialog(PlatformUIUtils.findShell(), "Ingrese un valor", "Cambiar " + getValueToSearch() + "s por:", String.valueOf(getValueToSearch()), validator);
+				if (id.open() != Dialog.OK)
+					accepted.hold(false);
+				else
+					newValue.hold(Double.parseDouble(id.getValue()));
+
+			}
+		});
+
+		if (!accepted.value())
+			return;
 
 		AbstractExperiment e = model();
 		for (Sample s : e.getSamples())
 			for (Gene g : s.getGenes()) {
 				Double expr = s.getExpressionLevelForAGene(g);
 				if (expr == null || expr == getValueToSearch()) {
-					s.setExpressionLevelForAGene(g, newValue);
+					// FIXME no funciona asincrónicamente... si ssi tiene que
+					// estar con el ui-fucking-thread...
+					s.setExpressionLevelForAGene(g, newValue.value());
 					addModification(s, g);
 				}
 			}
