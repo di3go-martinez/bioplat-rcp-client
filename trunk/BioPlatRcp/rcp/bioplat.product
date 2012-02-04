@@ -8,7 +8,7 @@
 
    <launcherArgs>
       <programArgs>-consoleLog -clean</programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms400m -Xmx1g
+      <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms400m -Xmx1500m
 -Dosgi.clean=true
 -Dh2.connection.url=jdbc:h2:c://h2/bioplat;AUTO_SERVER=TRUE</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
