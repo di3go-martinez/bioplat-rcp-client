@@ -22,14 +22,16 @@ public class ActionContribution1 extends AbstractActionContribution<AbstractExpe
 		// TODO Auto-generated constructor stub
 	}
 
+	final static ExecutorService service = Executors.newFixedThreadPool(100);
+
 	@Override
 	public void run() {
-		final ExecutorService service = Executors.newFixedThreadPool(100);
+
 		AbstractExperiment e = model();
 		for (final Sample s : e.getSamples())
 			for (final Gene g : s.getGenes()) {
 
-				service.execute(new Runnable() {
+				service.submit(new Runnable() {
 					@Override
 					public void run() {
 						elUpdate(s, g);
@@ -37,7 +39,7 @@ public class ActionContribution1 extends AbstractActionContribution<AbstractExpe
 				});
 
 			}
-		service.shutdown();
+
 		try {
 			service.awaitTermination(Integer.MAX_VALUE, TimeUnit.DAYS);// "infinito"...
 		} catch (InterruptedException e1) {
@@ -48,12 +50,13 @@ public class ActionContribution1 extends AbstractActionContribution<AbstractExpe
 
 	private void elUpdate(Sample s, Gene g) {
 		Double expr = s.getExpressionLevelForAGene(g);
+		s.setExpressionLevelForAGene(g, expr * 0.4);
 		try {
-			Thread.sleep(new Random().nextInt(1) * 1000l);
+			Thread.sleep(new Random().nextInt(10) * 1000l);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		s.setExpressionLevelForAGene(g, expr * 0.4);
+
 	}
 }
