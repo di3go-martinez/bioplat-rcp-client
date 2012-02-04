@@ -43,15 +43,8 @@ public class PlatformUIUtils {
 		return page;
 	}
 
-	public static IViewPart openView(String viewId) {
-		try {
-
-			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
-		} catch (PartInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	public static void openView(final String viewId) {
+		openView(viewId, true);
 	}
 
 	public static Shell findShell() {
@@ -64,5 +57,29 @@ public class PlatformUIUtils {
 		if (d == null)
 			d = Display.getDefault();
 		return d;
+	}
+
+	public static void openEditor(Object o, String id) {
+		openEditor(EditorInputFactory.createDefaultEditorInput(o), id);
+
+	}
+
+	public static void openView(final String viewId, final boolean forceFocus) {
+		PlatformUIUtils.findDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					IViewPart v = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+					if (forceFocus)
+						v.setFocus();
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+
 	}
 }

@@ -88,11 +88,23 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 	protected Observer createModificationObserver() {
 
 		return new Observer() {
+			private List<ClinicalDataModel> data;
+			private int counter = 0;
 
 			@Override
 			public void update(Observable o, Object arg) {
-				// nada eficiente...
-				List<ClinicalDataModel> data = ClinicalDataModel.create(model());
+				// FIXME nada eficiente crear el modelo cada vez, por eso se
+				// hace un merge...
+				if (counter != 100) // FIXME no actualiza, sino cada 100...
+									// problema:
+									// quedan datos sin actualizar si la
+									// cantidad de datos no es múltiplo de 100
+				{
+					counter++;
+					return;
+				}
+				counter = 0;
+				data = ClinicalDataModel.merge(data, model());
 				tr.input(data);
 			}
 		};
@@ -103,6 +115,14 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 // TableBuilder#input
 class ClinicalDataModel extends AbstractEntity {
 
+	/**
+	 * Usar con cuidado, puede colgar la memoria de la aplicación...
+	 * 
+	 * @see #merge(Experiment)
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public static List<ClinicalDataModel> create(Experiment e) {
 		List<ClinicalDataModel> result = Lists.newArrayList();
 
@@ -120,8 +140,37 @@ class ClinicalDataModel extends AbstractEntity {
 		return result;
 	}
 
-	// columnas: gen columna1 columna2 columna3
+	/**
+	 * 
+	 * 
+	 * @param current
+	 *            es el modelo del experimento transformado, puede ser null, en
+	 *            este caso se crea uno a partir de e (debería pasar solo la
+	 *            primera vez que se invoca)
+	 * @param e
+	 *            es el nuevo experimento
+	 * @return el objeto current actualizado con el experimento e
+	 */
+	public static List<ClinicalDataModel> merge(List<ClinicalDataModel> current, Experiment e) {
+		if (current == null)
+			current = create(e);
+		else {
+			int index0 = 0;
+			for (Gene g : e.getGenes()) {
+				int index1 = 1;
+				ClinicalDataModel cdm = current.get(index0);
+				for (Sample s : e.getSamples()) {
+					if (!cdm.data[index1].equals(e.getExpressionLevelForAGene(s.getName(), g)))
+						cdm.data[index1] = e.getExpressionLevelForAGene(s.getName(), g);
+					index1++;
+				}
+				index0++;
+			}
+		}
+		return current;
+	}
 
+	// columnas: gen columna1 columna2 columna3
 	// [0]=> genid; [1..n]=>expressión génica del sample 1 al n para el gen
 	// data[0]
 	Object[] data;

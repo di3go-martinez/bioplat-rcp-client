@@ -63,9 +63,8 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 		return new Message(text, MessageType.ERROR);
 	}
 
-	// TODO usar la exception para algo
 	public static Message error(String text, Throwable exception) {
-		return error(text);
+		return error(text + ". Causa: " + exception.getCause());
 	}
 
 	// ///

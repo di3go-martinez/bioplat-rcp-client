@@ -43,7 +43,6 @@ import com.google.common.collect.Maps;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.FilePathValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
-import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
@@ -91,11 +90,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 						@Override
 						public void run() {
-							try {
-								PlatformUIUtils.openEditor(EditorInputFactory.createDefaultEditorInput(e), ExperimentEditor.id());
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
 						}
 					});
 				} catch (Exception e) {

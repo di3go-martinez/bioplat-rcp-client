@@ -52,14 +52,24 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
-				<extensions>true</extensions>
+				<extensions>false</extensions>
 			</plugin>
 
-			<plugin>
+			<!--plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
+					<pomDependencies>consider</pomDependencies>
+				</configuration>
+			</plugin-->
+
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<resolver>p2</resolver>
 					<pomDependencies>consider</pomDependencies>
 				</configuration>
 			</plugin>
@@ -176,10 +186,7 @@
 		<post>m2e-users@eclipse.org</post> <archive>http://dev.eclipse.org/mhonarc/lists/m2e-users</archive> 
 		</mailingList> </mailingLists -->
 	<dependencies>
-		<!--dependency>
-			<groupId>com.example</groupId>
-			<artifactId>lib</artifactId>
-			<version>${maven-runtime.version}</version>
-		</dependency-->
+		<!--dependency> <groupId>com.example</groupId> <artifactId>lib</artifactId> 
+			<version>${maven-runtime.version}</version> </dependency -->
 	</dependencies>
 </project>

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1328158856625
+Bnd-LastModified: 1328321856484
 Build-Jdk: 1.7.0
 Built-By: diego
 Bundle-ClassPath: .,lib/BioPlatModeloClienteRico-2.3.0.jar,lib/JRI-1.0.j
@@ -74,42 +74,4 @@ Embedded-Artifacts: lib/BioPlatModeloClienteRico-2.3.0.jar;g="bioplat";a
  ",lib/jsr305-1.3.9.jar;g="com.google.code.findbugs";a="jsr305";v="1.3.9
  ",lib/fastutil-6.4.1.jar;g="it.unimi.dsi";a="fastutil";v="6.4.1"
 Export-Package: .svn
-Ignore-Package: com.sun.jdmk.comm,com.sun.org.apache.xerces.internal.par
- sers,org.apache.lucene.util,javax.swing.tree,java.net,javax.mail.intern
- et,org.apache.tools.ant.taskdefs,javax.naming.spi,org.xml.sax,javax.xml
- .stream,org.apache.lucene.store,org.apache.webdav.lib,javax.validation,
- javax.swing.plaf,javax.swing.filechooser,java.util.zip,java.awt.event,j
- ava.util.concurrent,javax.swing.border,net.sf.cglib.proxy,java.nio.chan
- nels.spi,org.xmlpull.v1,java.util.concurrent.locks,javax.security.auth,
- javax.crypto,org.w3c.dom,javax.naming.event,java.lang.reflect,javax.ima
- geio.metadata,java.awt.font,javax.management.remote,javax.swing.table,j
- avax.xml.transform.stream,java.security.spec,net.sf.cglib.core,org.apac
- he.lucene.search,java.awt.datatransfer,java.sql,java.beans,java.awt.pri
- nt,bsh,javax.jmdns,org.jaxen.dom4j,javax.jms,org.objectweb.asm,java.lan
- g.annotation,javax.imageio.stream,org.bouncycastle.jce.provider,org.rel
- axng.datatype,javax.xml.transform.dom,javax.validation.constraints,java
- x.imageio,java.nio.charset,com.sun.msv.datatype.xsd,java.math,org.gjt.x
- pp,org.apache.tools.ant.types,org.apache.lucene.queryParser,java.applet
- ,com.sun.jdi.connect,org.apache.lucene.document,java.lang.ref,java.bean
- s.beancontext,javax.swing.event,sun.misc,java.util.concurrent.atomic,ja
- va.awt,com.sun.jdi.event,sun.reflect,javax.crypto.spec,java.awt.image.r
- enderable,javax.net,javax.xml.stream.util,java.security.cert,java.rmi,j
- ava.awt.geom,java.lang.instrument,com.sun.jdi.request,java.util.jar,net
- .sf.cglib.reflect,java.lang.management,javax.management,org.apache.comm
- ons.httpclient,org.apache.lucene.index,javax.xml.namespace,javax.servle
- t,org.jaxen.saxpath,javax.swing,org.xml.sax.ext,java.io,javax.net.ssl,j
- ava.lang,net.sf.cglib.beans,javax.xml.transform.sax,javax.validation.me
- tadata,javax.naming,com.ibm.uvm.tools,javax.xml.parsers,javax.imageio.p
- lugins.jpeg,javax.xml.xpath,net.jcip.annotations,javax.security.jacc,ja
- vax.xml.bind.annotation,org.osgi.framework,javax.xml.validation,javax.m
- ail,java.util.logging,org.xml.sax.helpers,org.jaxen.pattern,javax.swing
- .text,java.nio.channels,java.util,org.testng.annotations,org.testng,jav
- a.rmi.server,java.rmi.registry,java.awt.image,org.jaxen,java.util.regex
- ,com.sun.jdi,javax.validation.groups,com.sun.msv.datatype,java.text,jav
- a.nio,org.apache.avalon.framework.logger,javax.xml.bind.annotation.adap
- ters,javax.xml.stream.events,org.apache.tools.ant,java.security,org.apa
- che.lucene.analysis.standard,net.sf.cglib.transform,org.apache.log,java
- x.sql,net.sf.cglib.transform.impl,javax.xml.transform,javax.xml.bind,ja
- vax.servlet.http,org.apache.lucene.analysis
-Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0
