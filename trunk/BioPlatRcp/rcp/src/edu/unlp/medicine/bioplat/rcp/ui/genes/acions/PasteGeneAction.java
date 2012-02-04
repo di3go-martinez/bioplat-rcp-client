@@ -46,8 +46,11 @@ public class PasteGeneAction extends Action {
 			for (String id : mydialog.getids()) {
 				try {
 					final Gene gene = MetaPlat.getInstance().getGeneById(id);
-					b.addGene(gene);
-					mm.add(Message.info("Se agregó el gen: " + gene));
+					if (!b.getGenes().contains(gene)) {
+						b.addGene(gene);
+						mm.add(Message.info("Se agregó el gen: " + gene));
+					} else
+						mm.add(Message.warn("El gen " + gene + " ya estaba agregado al biomarcador"));
 				} catch (Exception e) {
 					mm.add(Message.error("No se pudo agregar el gen con id: '" + id + "'", e));
 				}

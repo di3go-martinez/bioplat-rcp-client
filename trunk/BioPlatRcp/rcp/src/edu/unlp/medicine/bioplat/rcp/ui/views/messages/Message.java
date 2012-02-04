@@ -64,7 +64,10 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 	}
 
 	public static Message error(String text, Throwable exception) {
-		return error(text + ". Causa: " + exception.getCause());
+		String cause = exception.getCause().toString();
+		if (cause != null)
+			text += ". Causa: " + cause;
+		return error(text);
 	}
 
 	// ///
