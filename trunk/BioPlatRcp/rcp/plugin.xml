@@ -196,6 +196,17 @@
             name="%biomarker.export.just.gene.id.wizard.entry.name">
       </wizard>
       <category
+            id="edu.medicine.bioplat.rcp.export.experiment.root"
+            name="%experiment.wizard.category.name">
+      </category>
+      <wizard
+            category="edu.medicine.bioplat.rcp.export.experiment.root/"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentToFileWizard"
+            icon="resources/icons/export.png"
+            id="edu.medicine.bioplat.rcp.export.experiment.file"
+            name="%experiment.export.to.file.wizard.entry.name">
+      </wizard>
+      <category
             id="edu.medicine.bioplat.rcp.other"
             name="%biomarker.other.category.name">
       </category>
