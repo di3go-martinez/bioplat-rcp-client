@@ -20,7 +20,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneral
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
-import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
@@ -29,6 +28,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
+	private List<ClinicalDataModel> data;
 	private TableReference tr;
 
 	@Override
@@ -51,14 +51,13 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
 
 		// ejecuta la creación del input en background...
-		final Holder<List<ClinicalDataModel>> inputHolder = new Holder<List<ClinicalDataModel>>(null);
 
 		// construyo el input para el tablebuilder
 		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 
 			@Override
 			public void run() {
-				inputHolder.hold(ClinicalDataModel.create(model()));
+				data = ClinicalDataModel.create(model());
 			}
 
 		});
@@ -67,7 +66,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 				.keyLimit(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES)//
 				.model(new AbstractEntity() {
 					public List<ClinicalDataModel> getData() {
-						return inputHolder.value();
+						return data;
 					}
 				}, "data")
 		// .input(inputHolder.value())
@@ -76,7 +75,8 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]")); //
 		int index = 1;
-		for (Sample s : model().getSamples())
+		for (Sample s : model().getSamples().subList(0, 15))
+			// TODO externalizar el límite máximo
 			tb.addColumn(ColumnBuilder.create().numeric().title(s.getName()).property("data[" + index++ + "]"));
 
 		tr = tb.build();
@@ -88,22 +88,25 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 	protected Observer createModificationObserver() {
 
 		return new Observer() {
-			private List<ClinicalDataModel> data;
+
 			private int counter = 0;
+			private boolean alwaysUpdate = false;
 
 			@Override
 			public void update(Observable o, Object arg) {
 				// FIXME nada eficiente crear el modelo cada vez, por eso se
 				// hace un merge...
-				if (counter != 50) // FIXME no actualiza, sino cada 100...
-									// problema:
-									// quedan datos sin actualizar si la
-									// cantidad de datos no es múltiplo de 100
-				{
-					counter++;
-					return;
+				if (!alwaysUpdate) {
+					if (counter != 50) // FIXME no actualiza, sino cada 100...
+					// problema:
+					// quedan datos sin actualizar si la
+					// cantidad de datos no es múltiplo de 100
+					{
+						counter++;
+						return;
+					}
+					counter = 0;
 				}
-				counter = 0;
 				data = ClinicalDataModel.merge(data, model());
 				tr.input(data);
 			}
@@ -131,11 +134,14 @@ class ClinicalDataModel extends AbstractEntity {
 			Object[] data = new Object[sampleCount + 1];
 			data[0] = g.getEntrezId();
 			int index = 1;
-			for (Sample s : e.getSamples())
+
+			for (Sample s : e.getSamples()) {
 				// TODO revisar que no sea por name, si no por id...
 				data[index++] = e.getExpressionLevelForAGene(s.getName(), g);
+			}
 
 			result.add(new ClinicalDataModel(data));
+
 		}
 		return result;
 	}
@@ -159,10 +165,13 @@ class ClinicalDataModel extends AbstractEntity {
 			for (Gene g : e.getGenes()) {
 				int index1 = 1;
 				ClinicalDataModel cdm = current.get(index0);
+
 				for (Sample s : e.getSamples()) {
+
 					if (!cdm.data[index1].equals(e.getExpressionLevelForAGene(s.getName(), g)))
 						cdm.data[index1] = e.getExpressionLevelForAGene(s.getName(), g);
 					index1++;
+
 				}
 				index0++;
 			}
