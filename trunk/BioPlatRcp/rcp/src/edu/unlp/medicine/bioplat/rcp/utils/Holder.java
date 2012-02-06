@@ -27,4 +27,8 @@ public class Holder<T> implements Serializable {
 	public String toString() {
 		return "Holding: " + value();
 	}
+
+	public static <T> Holder<T> create(T value) {
+		return new Holder<T>(value);
+	}
 }
