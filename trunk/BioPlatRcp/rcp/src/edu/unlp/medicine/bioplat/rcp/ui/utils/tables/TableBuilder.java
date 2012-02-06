@@ -189,9 +189,15 @@ public class TableBuilder implements TableConfigurer {
 			public void input(final List newInput) {
 				// TODO se puede optimizar y no sacar todos los elementos si,
 				// reemplazar solo los que cambiaron (?)
+				paging.invalidate();
+				paging = new Paging(new Object() {
+					public List getData() {
+						return newInput;
+					}
+				}, "data", viewer, TableBuilder.this, paging);
 				input.clear();
-				input.addAll(newInput);
-				viewer.refresh(true, true);
+				input.addAll(paging.list());
+				viewer.refresh(true, false);
 			}
 
 			// @Override

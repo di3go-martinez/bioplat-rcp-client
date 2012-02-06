@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -31,6 +32,11 @@ public class Paging<T> {
 
 	private TableConfigurer tableConfigurer;
 
+	private boolean virtual;
+	private Object listener;
+
+	private TableViewer viewer;
+
 	/**
 	 * 
 	 * @param model
@@ -44,6 +50,7 @@ public class Paging<T> {
 
 		loadNextPage();// la primera página
 
+		this.viewer = viewer;
 		// FIXME no anda cuando se baja con la flecha y no es virtual la table
 		final Table table = viewer.getTable();
 		final ScrollBar scrollbar = table.getVerticalBar();
@@ -51,8 +58,9 @@ public class Paging<T> {
 		if (scrollbar == null)
 			logger.warn("No se agregará el listener de paginado ya que no está disponible el scrollbar");
 		else {
-			if ((table.getStyle() & SWT.VIRTUAL) == SWT.VIRTUAL) // isVirtual?
-				table.addListener(SWT.SetData, new Listener() {
+			virtual = (table.getStyle() & SWT.VIRTUAL) == SWT.VIRTUAL;
+			if (virtual) {
+				listener = new Listener() {
 					@Override
 					public void handleEvent(Event event) {
 						// TableItem item = (TableItem) event.item;
@@ -61,14 +69,15 @@ public class Paging<T> {
 						// trae la próxima página
 						if (index + 1 >= list().size()) {
 							loadNextPage();
-							viewer.refresh(false, false);
+							viewer.refresh(true, false);
 						}
 						// item.setText(itemStrings [index]);
 						// System.out.println(index);
 					}
-				});
-			else
-				scrollbar.addSelectionListener(new SelectionAdapter() {
+				};
+				table.addListener(SWT.SetData, (Listener) listener);
+			} else {
+				listener = new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if ((scrollbar.getSelection() != 0) && (scrollbar.getMaximum() == (scrollbar.getThumb() + scrollbar.getSelection()))) {
@@ -76,9 +85,19 @@ public class Paging<T> {
 							viewer.refresh();
 						}
 					}
-				});
+				};
+				scrollbar.addSelectionListener((SelectionAdapter) listener);
+			}
 		}
 
+	}
+
+	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config, Paging invalidatedPaging) {
+		this(model, propertyPath, viewer, config);
+		// está cargada la primera página, tengo
+		int cantPages = invalidatedPaging.list().size() / invalidatedPaging.pagesize;
+		for (int i = 1; i < cantPages; i++)
+			loadNextPage();
 	}
 
 	/**
@@ -124,5 +143,17 @@ public class Paging<T> {
 
 	public int pagesize() {
 		return pagesize;
+	}
+
+	/**
+	 * Rompe el objeto Paging. Después de ejecutar este método queda inusable el
+	 * paginado
+	 */
+	public void invalidate() {
+		final Table table = viewer.getTable();
+		if (virtual)
+			table.removeListener(SWT.SetData, (Listener) listener);
+		else
+			table.getVerticalBar().removeSelectionListener((SelectionListener) listener);
 	}
 }
