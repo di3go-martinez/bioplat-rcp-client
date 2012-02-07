@@ -8,8 +8,7 @@ import org.eclipse.swt.widgets.Display;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.generic.Context;
 
-//FIXME el tipo T, no va acá, en la definición de la clase
-public class SWTUIContext<T> implements Context<T> {
+public class SWTUIContext implements Context {
 
 	private Display d;
 
@@ -18,7 +17,7 @@ public class SWTUIContext<T> implements Context<T> {
 	}
 
 	@Override
-	public T run(final Callable<T> caller) {
+	public <T> T run(final Callable<T> caller) {
 
 		d.syncExec(new Runnable() {
 
@@ -37,7 +36,7 @@ public class SWTUIContext<T> implements Context<T> {
 	}
 
 	@Override
-	public Future<T> delayedRun(final Callable<T> caller) {
+	public <T> Future<T> delayedRun(final Callable<T> caller) {
 		d.asyncExec(new Runnable() {
 
 			@Override
