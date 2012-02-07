@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Bioplat Target" sequenceNumber="17">
+<target name="Bioplat Target" sequenceNumber="20">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
 <location path="${M2_REPO}\bioplat\edu.medicine.bioplat.base.lib\1.1.0-SNAPSHOT" type="Directory"/>

@@ -53,6 +53,9 @@
          point="org.eclipse.ui.startup">
       <startup
             class="edu.unlp.medicine.bioplat.rcp.application.startup.LoadBasicData"></startup>
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.SWT_UI_Context_Configurator">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
