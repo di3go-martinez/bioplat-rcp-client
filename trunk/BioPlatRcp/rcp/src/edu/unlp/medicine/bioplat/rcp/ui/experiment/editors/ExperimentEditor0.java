@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -34,14 +37,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 
-		// CTabFolder tf = new CTabFolder(parent, SWT.BOTTOM);
-
-		// CTabItem ti = new CTabItem(tf, SWT.BORDER);
-
-		Composite container = new Composite(parent /* tf */, SWT.BORDER);// Widgets.createDefaultContainer(parent)
-		/*
-		 * ti.setText("Cabecera:"); ti.setControl(container);
-		 */
+		Composite container = new Composite(parent, SWT.BORDER);// Widgets.createDefaultContainer(parent)
 
 		Composite c = new Composite(container, SWT.BORDER);
 		c.setLayout(new GridLayout(4, false));
@@ -50,9 +46,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes", true);
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
 
-		// ejecuta la creación del input en background...
-
-		// construyo el input para el tablebuilder
+		// construyo el input para el tablebuilder en background
 		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 
 			@Override
@@ -75,13 +69,28 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]")); //
 		int index = 1;
-		for (Sample s : model().getSamples().subList(0, 15))
+		final List<Sample> sampleToLoad = resolveSamplesToLoad();
+		for (Sample s : sampleToLoad)
 			// TODO externalizar el límite máximo
 			tb.addColumn(ColumnBuilder.create().numeric().title(s.getName()).property("data[" + index++ + "]"));
 
 		tr = tb.build();
 
 		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(container);
+	}
+
+	private List<Sample> resolveSamplesToLoad() {
+		int max = ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
+		return model().getSamples().subList(0, max - 1);// -1 porque empiezo de
+														// 0
+	}
+
+	private IEclipsePreferences ep;
+
+	private IEclipsePreferences ep() {
+		if (ep == null)
+			ep = ConfigurationScope.INSTANCE.getNode(Activator.id());
+		return ep;
 	}
 
 	@Override
@@ -94,6 +103,10 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 			@Override
 			public void update(Observable o, Object arg) {
+
+				if (!autorefresh())
+					return;
+
 				// FIXME nada eficiente crear el modelo cada vez, por eso se
 				// hace un merge...
 				if (!alwaysUpdate) {
@@ -107,8 +120,13 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 					}
 					counter = 0;
 				}
+
 				data = ClinicalDataModel.merge(data, model());
 				tr.input(data);
+			}
+
+			private boolean autorefresh() {
+				return ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 			}
 		};
 	}
