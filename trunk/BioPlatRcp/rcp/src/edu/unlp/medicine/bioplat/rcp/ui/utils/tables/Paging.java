@@ -39,6 +39,8 @@ public class Paging<T> {
 
 	/**
 	 * 
+	 * Crea un manejador de paginado, muestra la primer página sobre el viewer
+	 * 
 	 * @param model
 	 * @param propertyPath
 	 * @param viewer
@@ -92,17 +94,36 @@ public class Paging<T> {
 
 	}
 
-	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config, Paging invalidatedPaging) {
+	/**
+	 * 
+	 * Crea un objeto paging tomando como base basePaging, por ejemplo para
+	 * cargar la misma cantidad de páginas, etc. Se utiliza ante un cambio de
+	 * modelo o propertyPath por ejemplo.
+	 * 
+	 * @param model
+	 * @param propertyPath
+	 * @param viewer
+	 * @param config
+	 * @param basePaging
+	 */
+	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config, Paging basePaging) {
 		this(model, propertyPath, viewer, config);
-		// está cargada la primera página, tengo
-		int cantPages = invalidatedPaging.list().size() / invalidatedPaging.pagesize;
+		basePaging.unplug();
+		// está cargada la primera página, tengo que cargar una menos
+		int cantPages = basePaging.getCurrentPageNumber();
 		for (int i = 1; i < cantPages; i++)
 			loadNextPage();
+	}
+
+	private int getCurrentPageNumber() {
+		return this.list().size() / this.pagesize;
 	}
 
 	/**
 	 * Lista los elementos que estan cargados en función de la cantidad de
 	 * páginas que se cargaron
+	 * 
+	 * list().list() == list()
 	 * 
 	 * @return
 	 */
@@ -146,10 +167,9 @@ public class Paging<T> {
 	}
 
 	/**
-	 * Rompe el objeto Paging. Después de ejecutar este método queda inusable el
-	 * paginado
+	 * Desengancha los listeners del viewer
 	 */
-	public void invalidate() {
+	private void unplug() {
 		final Table table = viewer.getTable();
 		if (virtual)
 			table.removeListener(SWT.SetData, (Listener) listener);

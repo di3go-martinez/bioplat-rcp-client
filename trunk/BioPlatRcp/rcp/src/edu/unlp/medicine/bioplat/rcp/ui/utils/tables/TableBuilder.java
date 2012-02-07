@@ -187,9 +187,7 @@ public class TableBuilder implements TableConfigurer {
 			 */
 			@Override
 			public void input(final List newInput) {
-				// TODO se puede optimizar y no sacar todos los elementos si,
-				// reemplazar solo los que cambiaron (?)
-				paging.invalidate();
+				// TODO se puede optimizar
 				paging = new Paging(new Object() {
 					public List getData() {
 						return newInput;
@@ -208,160 +206,6 @@ public class TableBuilder implements TableConfigurer {
 		};
 	}
 
-	// /**
-	// * Cada vez que se modifica la lista (agrega o borra elementos) se
-	// refresca
-	// * el viewer
-	// *
-	// * @param list
-	// * @return
-	// */
-	// @SuppressWarnings({ "rawtypes", "unchecked" })
-	// private List listenToChangeList(final List list) {
-	// return new List() {
-	// private List delegatee = list;
-	//
-	// @Override
-	// public int size() {
-	// return delegatee.size();
-	// }
-	//
-	// @Override
-	// public boolean isEmpty() {
-	// return delegatee.isEmpty();
-	// }
-	//
-	// @Override
-	// public boolean contains(Object o) {
-	// return delegatee.contains(o);
-	// }
-	//
-	// @Override
-	// public Iterator iterator() {
-	// viewer.refresh();
-	// return delegatee.iterator();
-	// }
-	//
-	// @Override
-	// public Object[] toArray() {
-	// viewer.refresh();
-	// return delegatee.toArray();
-	// }
-	//
-	// @Override
-	// public Object[] toArray(Object[] a) {
-	// viewer.refresh();
-	// return delegatee.toArray(a);
-	// }
-	//
-	// @Override
-	// public boolean add(Object e) {
-	// boolean added = delegatee.add(e);
-	// viewer.refresh();
-	// return added;
-	// }
-	//
-	// @Override
-	// public boolean remove(Object o) {
-	// boolean removed = delegatee.remove(o);
-	// if (removed)
-	// viewer.refresh();
-	// return removed;
-	// }
-	//
-	// @Override
-	// public boolean containsAll(Collection c) {
-	// return delegatee.containsAll(c);
-	// }
-	//
-	// @Override
-	// public boolean addAll(Collection c) {
-	// boolean addedAll = delegatee.addAll(c);
-	// viewer.refresh();
-	// return addedAll;
-	// }
-	//
-	// @Override
-	// public boolean addAll(int index, Collection c) {
-	// boolean addedAll = delegatee.addAll(index, c);
-	// viewer.refresh();
-	// return addedAll;
-	// }
-	//
-	// @Override
-	// public boolean removeAll(Collection c) {
-	// boolean removedAll = delegatee.removeAll(c);
-	// viewer.refresh();
-	// return removedAll;
-	// }
-	//
-	// @Override
-	// public boolean retainAll(Collection c) {
-	// return delegatee.retainAll(c);
-	// }
-	//
-	// @Override
-	// public void clear() {
-	// delegatee.clear();
-	// viewer.refresh();
-	// }
-	//
-	// @Override
-	// public boolean equals(Object o) {
-	// return delegatee.equals(o);
-	// }
-	//
-	// @Override
-	// public int hashCode() {
-	// return delegatee.hashCode();
-	// }
-	//
-	// @Override
-	// public Object get(int index) {
-	// return delegatee.get(index);
-	// }
-	//
-	// @Override
-	// public Object set(int index, Object element) {
-	// return delegatee.set(index, element);
-	// }
-	//
-	// @Override
-	// public void add(int index, Object element) {
-	// delegatee.add(index, element);
-	// }
-	//
-	// @Override
-	// public Object remove(int index) {
-	// return delegatee.remove(index);
-	// }
-	//
-	// @Override
-	// public int indexOf(Object o) {
-	// return delegatee.indexOf(o);
-	// }
-	//
-	// @Override
-	// public int lastIndexOf(Object o) {
-	// return delegatee.lastIndexOf(o);
-	// }
-	//
-	// @Override
-	// public ListIterator listIterator() {
-	// return delegatee.listIterator();
-	// }
-	//
-	// @Override
-	// public ListIterator listIterator(int index) {
-	// return delegatee.listIterator(index);
-	// }
-	//
-	// @Override
-	// public List subList(int fromIndex, int toIndex) {
-	// return delegatee.subList(fromIndex, toIndex);
-	// }
-	// };
-	// }
 	private InputResolver resolver = new NullInputResolver();
 	private Paging paging;
 
@@ -400,6 +244,12 @@ public class TableBuilder implements TableConfigurer {
 
 }
 
+/**
+ * TODO Analizar bien el caso en el que esto haría falta
+ * 
+ * @author diego
+ * 
+ */
 interface InputResolver {
 	void resolveInput(TableViewer viewer);
 }
