@@ -28,4 +28,7 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	public void caption(String caption) {
 		setText(caption);
 	}
+
+	@Override
+	public abstract void run();
 }
