@@ -45,31 +45,6 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> {
 		Composite subcontainer = Widgets.createDefaultContainer(container);
 		subcontainer.setLayoutData(GridDataFactory.fillDefaults().span(4, 1).grab(true, true).create());
 		createTable(subcontainer);
-
-		// borrar
-		// final Model[] ids = new Model[2];
-		// ids[0] = new Model(1);
-		// ids[1] = new Model(2);
-		//
-		// final Widget c = Widgets.createTextWithLabel(container, "i", ids[0],
-		// "i");
-		//
-		// Button b = new Button(container, SWT.BORDER);
-		// b.setText("retarget");
-		// b.addSelectionListener(new SelectionListener() {
-		// private boolean switchflag = false;
-		//
-		// @Override
-		// public void widgetSelected(SelectionEvent e) {
-		// c.retarget((switchflag) ? ids[0] : ids[1]);
-		// switchflag = !switchflag;
-		// }
-		//
-		// @Override
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		//
-		// }
-		// });
 	}
 
 	/**
