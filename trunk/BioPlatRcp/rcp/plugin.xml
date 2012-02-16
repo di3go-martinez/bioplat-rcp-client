@@ -124,10 +124,11 @@
       <extension
       point="org.eclipse.ui.views">
    <view
-         name="%progress.view.name"
          category="org.eclipse.ui"
          class="org.eclipse.ui.ExtensionFactory:progressView"
-         id="org.eclipse.ui.views.ProgressView">
+         icon="resources/icons/progress.png"
+         id="org.eclipse.ui.views.ProgressView"
+         name="%progress.view.name">
    </view>
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
@@ -137,6 +138,7 @@
    </view>
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageViewPart"
+         icon="resources/icons/messages.png"
          id="edu.medicine.bioplat.rcp.message.view"
          name="%message.view.name"
          restorable="true">
@@ -220,6 +222,26 @@
       </category>
    </extension>
    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="edu.medicine.bioplat.rcp.experimento.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage"
+            id="edu.medicine.bioplat.rcp.experimento.editor"
+            name="Editor">
+      </page>
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.experimento.general"
+            name="Experimentos">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.AbstractPreferenceInitializer1">
+      </initializer>
+   </extension>
+   <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
             caption="Cambiar 0&apos;s..."
@@ -239,27 +261,8 @@
             caption="by.4"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ActionContribution1">
          <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
       </actionContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="edu.medicine.bioplat.rcp.experimento.general"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage"
-            id="edu.medicine.bioplat.rcp.experimento.editor"
-            name="Editor">
-      </page>
-      <page
-            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
-            id="edu.medicine.bioplat.rcp.experimento.general"
-            name="Experimentos">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.AbstractPreferenceInitializer1">
-      </initializer>
    </extension>
 </plugin>
