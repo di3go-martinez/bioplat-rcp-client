@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.application;
 
 import static org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS;
 
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -81,7 +82,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(fileMenu);
 
 		// utilizado por el contributerClass de los editores
-		menuBar.add(new Separator("entidad.additions"));
+		menuBar.add(new GroupMarker("entidad.additions"));
 		menuBar.add(windowMenu);
 		// menuBar.add(helpMenu);
 
@@ -91,6 +92,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		ToolBarManager tbm = new ToolBarManager(SWT.FLAT);
 		tbm.add(saveAction);
+		tbm.add(new Separator(MB_ADDITIONS));
 		coolBar.add(tbm);
 	}
 }
