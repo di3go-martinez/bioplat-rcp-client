@@ -7,6 +7,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -78,6 +79,11 @@ class AddGenDialog extends Dialog {
 		newShell.setText("Pegar los genes separados por '" + separator + "'");
 	}
 
+	@Override
+	protected Point getInitialSize() {
+		return new Point(300, 150);
+	}
+
 	private String value;
 
 	@Override
@@ -92,7 +98,7 @@ class AddGenDialog extends Dialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				value = StringUtils.replace(text.getText(), "\n", " ");
-				value = StringUtils.replace(value, "\r", " ");
+				value = StringUtils.replace(value, "\r", " ").replace("\t", " ");
 			}
 		});
 		return result;
