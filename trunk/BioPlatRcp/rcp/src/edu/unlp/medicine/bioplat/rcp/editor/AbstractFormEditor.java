@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 
@@ -40,10 +41,20 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 
 	@Override
 	protected void addPages() {
-		for (EditorDescription ed : editors)
+		for (final EditorDescription ed : editors)
 			try {
-				int index = addPage(ed.editor(), ed.createEditorInput());
+				final int index = addPage(ed.editor(), ed.createEditorInput());
 				setPageText(index, ed.title());
+
+				// Sincronizo el nombre de la solapa con el nombre del editor
+				// que está conteniendo
+				ed.editor().addPropertyListener(new IPropertyListener() {
+
+					@Override
+					public void propertyChanged(Object source, int propId) {
+						setPageText(index, ed.editor().getTitle());
+					}
+				});
 			} catch (PartInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -9,12 +9,11 @@ public class EditorDescription {
 	private IEditorPart editorPart;
 	private String title = "";
 
-	public EditorDescription(IEditorInput input, IEditorPart editorPart) {
-		this(input, editorPart, editorPart.getTitle()); // agregar un listener
-														// por cambio de título?
+	public EditorDescription(IEditorInput input, final IEditorPart editorPart) {
+		this(input, editorPart, editorPart.getTitle());
 	}
 
-	public EditorDescription(IEditorInput input, IEditorPart editorPart, String title) {
+	public EditorDescription(IEditorInput input, final IEditorPart editorPart, String title) {
 		this.input = input;
 		this.editorPart = editorPart;
 		this.title = title;

@@ -73,8 +73,9 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			firePropertyChange(EditorPart.PROP_DIRTY);
 
+			setPartName(model().id());
 			// firePropertyChange(EditorPart.PROP_TITLE);
-			setPartName(model().toString());
+
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +122,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 		setInput(input);
 		setSite(site);
 		model().addObserver(new ForDirtyObserver());
-		setPartName(model().toString());
+		setPartName(model().id());
 		// firePropertyChange(PROP_TITLE);
 		ISelectionProvider sp = createSelectionProvider();
 
