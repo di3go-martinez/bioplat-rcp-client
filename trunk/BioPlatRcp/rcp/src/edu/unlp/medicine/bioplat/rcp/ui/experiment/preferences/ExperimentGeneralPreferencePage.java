@@ -31,9 +31,9 @@ public class ExperimentGeneralPreferencePage extends FieldEditorPreferencePage i
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new IntegerFieldEditor(EXPERIMENT_GRID_MAX_SAMPLES, "Máximo número de samples en grilla", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(EXPERIMENT_GRID_MAX_GENES, "Máximo número de genes en la grilla", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(EXPERIMENT_GRID_AUTO_REFRESH, "Refresco automático de grilla", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(EXPERIMENT_GRID_MAX_SAMPLES, "Cantidad máxima de samples en grilla", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(EXPERIMENT_GRID_MAX_GENES, "Cantidad máxima de genes en grilla", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(EXPERIMENT_GRID_AUTO_REFRESH, "Refresco inmediato de grilla", getFieldEditorParent()));
 	}
 
 	@Override
