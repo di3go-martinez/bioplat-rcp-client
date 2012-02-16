@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPropertyListener;
 
 import com.google.common.collect.Lists;
 
@@ -14,6 +15,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform;
 import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.gene.Gene;
 
 public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 
@@ -25,12 +27,24 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 
 	}
 
+	private ExperimentEditor0 innerEditor;
+
 	@Override
 	protected List<EditorDescription> createEditors() {
 
 		List<EditorDescription> result = Lists.newArrayList();
 
-		EditorDescription ed = new EditorDescription(getEditorInput(), new ExperimentEditor0(), "Experimento");
+		innerEditor = new ExperimentEditor0();
+		EditorDescription ed = new EditorDescription(getEditorInput(), innerEditor);
+
+		// sincronizo el nombre de la solapa con la primera solapa
+		innerEditor.addPropertyListener(new IPropertyListener() {
+
+			@Override
+			public void propertyChanged(Object source, int propId) {
+				setPartName(innerEditor.getPartName());
+			}
+		});
 
 		result.add(ed);
 
@@ -53,8 +67,14 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 		}
 
 		// prueba
-		//result.add(new EditorDescription(EditorInputFactory.createDefaultEditorInput(Persona.random()), new PersonaEditor()));
+		// result.add(new
+		// EditorDescription(EditorInputFactory.createDefaultEditorInput(Persona.random()),
+		// new PersonaEditor()));
 		return result;
 	}
 
+	public void showGene(Gene selectedGene) {
+		innerEditor.showGene(selectedGene);
+
+	}
 }

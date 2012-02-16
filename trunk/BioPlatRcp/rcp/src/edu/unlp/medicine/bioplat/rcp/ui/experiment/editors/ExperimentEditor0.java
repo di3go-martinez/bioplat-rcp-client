@@ -99,7 +99,6 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		return new Observer() {
 
 			private int counter = 0;
-			private boolean alwaysUpdate = false;
 
 			@Override
 			public void update(Observable o, Object arg) {
@@ -109,17 +108,16 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 				// FIXME nada eficiente crear el modelo cada vez, por eso se
 				// hace un merge...
-				if (!alwaysUpdate) {
-					if (counter != 50) // FIXME no actualiza, sino cada 100...
-					// problema:
-					// quedan datos sin actualizar si la
-					// cantidad de datos no es múltiplo de 100
-					{
-						counter++;
-						return;
-					}
-					counter = 0;
+
+				if (counter != 50) // FIXME no actualiza, sino cada 100...
+				// problema:
+				// quedan datos sin actualizar si la
+				// cantidad de datos no es múltiplo de 100
+				{
+					counter++;
+					return;
 				}
+				counter = 0;
 
 				data = ClinicalDataModel.merge(data, model());
 				tr.input(data);
@@ -129,6 +127,11 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 				return ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 			}
 		};
+	}
+
+	public void showGene(Gene selectedGene) {
+		tr.show(selectedGene);
+
 	}
 }
 
