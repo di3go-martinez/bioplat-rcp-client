@@ -38,7 +38,10 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 	@Override
 	protected final void setValue(Object element, Object value) {
 		accesor().set(element, value);
-		getViewer().refresh();// necesario porque si no no actualiza la vista
+		// necesario porque si no no actualiza la vista
+		// TODO ver qué propiedades de actualización se pueden setear
+		getViewer().update(element, null);
+
 	}
 
 	@Override
