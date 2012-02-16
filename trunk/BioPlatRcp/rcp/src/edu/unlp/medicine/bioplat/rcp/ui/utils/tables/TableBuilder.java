@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -23,11 +26,13 @@ import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
+import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class TableBuilder implements TableConfigurer {
-	// TODO que sea no "rezisable"
+
 	private static final ColumnBuilder HIDDEN_COLUMN = ColumnBuilder.create().resizable(false).editable(false).width(0);
+
 	// TODO
 	private final ColumnBuilder ROW_SELECT_COLUMN = ColumnBuilder.create().checkbox().resizable(false).editable().accesor(new Accesor() {
 
@@ -60,8 +65,10 @@ public class TableBuilder implements TableConfigurer {
 		int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER;
 		if (virtual)
 			style |= SWT.VIRTUAL;
+
 		viewer = new TableViewer(parent, style);
 		viewer.setUseHashlookup(true);
+		viewer.setComparer(new CustomComparer());
 
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true); // TODO configurable
@@ -149,6 +156,11 @@ public class TableBuilder implements TableConfigurer {
 	private TableReference table;
 	private boolean showSelectionColumn = true;
 
+	/**
+	 * Construye la grilla preconfigurada. Esta operación es idempotente
+	 * 
+	 * @return
+	 */
 	public TableReference build() {
 
 		if (built)
@@ -196,6 +208,17 @@ public class TableBuilder implements TableConfigurer {
 				input.clear();
 				input.addAll(paging.list());
 				viewer.refresh(true, false);
+			}
+
+			@Override
+			public ColumnManager columnManager() {
+				return DefaultColumnManager.createOn(TableBuilder.this, this);
+			}
+
+			@Override
+			public void show(Object element) {
+				viewer.setFilters((ViewerFilter[]) Arrays.asList(new MyElementFilter((Gene) element)).toArray());
+
 			}
 
 			// @Override
@@ -314,4 +337,19 @@ class OgnlRefreshableInputResolver implements InputResolver {
 		System.err.println("Not Implemented Yet!");
 	}
 
+}
+
+// TODO que se pueda setear desde afuera?
+class MyElementFilter extends ViewerFilter {
+	private Object filter;
+
+	public MyElementFilter(Object filter) {
+		this.filter = filter;
+	}
+
+	@Override
+	public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+		return element.equals(filter);
+	}
 }

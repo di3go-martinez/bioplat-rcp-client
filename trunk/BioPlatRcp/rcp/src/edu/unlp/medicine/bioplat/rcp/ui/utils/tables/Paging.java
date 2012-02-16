@@ -53,7 +53,7 @@ public class Paging<T> {
 		loadNextPage();// la primera página
 
 		this.viewer = viewer;
-		// FIXME no anda cuando se baja con la flecha y no es virtual la table
+		// FIXME no anda cuando se baja con la flecha y no es virtual la tabla
 		final Table table = viewer.getTable();
 		final ScrollBar scrollbar = table.getVerticalBar();
 
@@ -71,6 +71,9 @@ public class Paging<T> {
 						// trae la próxima página
 						if (index + 1 >= list().size()) {
 							loadNextPage();
+							// TODO no hace falta hacer un refresh de toda la
+							// tabla, y habría que hacer un reveal desde el
+							// último que se estaba viendo
 							viewer.refresh(true, false);
 						}
 						// item.setText(itemStrings [index]);

@@ -18,4 +18,8 @@ public interface TableReference {
 
 	// TODO
 	// void input(AbstractEntity model);
+
+	ColumnManager columnManager();
+
+	void show(Object selectedGene);
 }
