@@ -22,7 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-runtime.version>1.1.0-SNAPSHOT</maven-runtime.version>
-		<tycho-version>0.12.0</tycho-version>
+		<tycho-version>0.14.0</tycho-version>
 		<!-- eclipse version bioplat is built against -->
 		<eclipse-repo.url>http://download.eclipse.org/releases/indigo</eclipse-repo.url>
 	</properties>
@@ -35,11 +35,16 @@
 		</license>
 	</licenses>
 
-	<!-- <repositories> <repository> <id>eclipse</id> <layout>p2</layout> <url>${eclipse-repo.url}</url> 
-		</repository> <repository> <releases> <enabled>true</enabled> </releases> 
-		<snapshots> <enabled>true</enabled> </snapshots> <id>RSO-public-group</id> 
-		<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url> 
-		</repository> </repositories> -->
+	<repositories>
+		<repository>
+			<id>eclipse</id>
+			<layout>p2</layout>
+			<url>${eclipse-repo.url}</url>
+		</repository>
+		<!--<repository> <releases> <enabled>true</enabled> </releases> <snapshots> 
+			<enabled>true</enabled> </snapshots> <id>RSO-public-group</id> <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url> 
+			</repository> -->
+	</repositories>
 
 
 	<modules>
@@ -55,22 +60,25 @@
 				<extensions>false</extensions>
 			</plugin>
 
-			<!--plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<pomDependencies>consider</pomDependencies>
-				</configuration>
-			</plugin-->
+			<!--plugin> <groupId>org.eclipse.tycho</groupId> <artifactId>target-platform-configuration</artifactId> 
+				<version>${tycho-version}</version> <configuration> <pomDependencies>consider</pomDependencies> 
+				</configuration> </plugin -->
 
 			<plugin>
 				<groupId>org.sonatype.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
+				<!--configuration> <resolver>p2</resolver> <pomDependencies>consider</pomDependencies> 
+					</configuration -->
 				<configuration>
-					<resolver>p2</resolver>
-					<pomDependencies>consider</pomDependencies>
+					<target>
+						<artifact>
+							<groupId>bioplat</groupId>
+							<artifactId>edu.medicine.bioplat.rcp</artifactId>
+							<version>0.0.1-SNAPSHOT</version>
+							<classifier>bioplat</classifier>
+						</artifact>
+					</target>
 				</configuration>
 			</plugin>
 		</plugins>
