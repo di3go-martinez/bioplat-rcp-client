@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -9,21 +10,27 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -85,6 +92,23 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 														// 0
 	}
 
+	@Override
+	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
+		Map<Object, IStructuredSelection> selections = Maps.newHashMap();
+
+		List<ClinicalDataModel> l = tr.selectedElements();
+
+		List<Gene> genes = Lists.transform(l, new Function<ClinicalDataModel, Gene>() {
+			@Override
+			public Gene apply(ClinicalDataModel input) {
+				return input.findGene();
+			}
+		});
+
+		selections.put(Constants.GENES, new StructuredSelection(genes));
+		return selections;
+	}
+
 	private IEclipsePreferences ep;
 
 	private IEclipsePreferences ep() {
@@ -109,14 +133,14 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 				// FIXME nada eficiente crear el modelo cada vez, por eso se
 				// hace un merge...
 
-				if (counter != 50) // FIXME no actualiza, sino cada 100...
-				// problema:
-				// quedan datos sin actualizar si la
-				// cantidad de datos no es múltiplo de 100
-				{
-					counter++;
-					return;
-				}
+				// if (counter != 50) // FIXME no actualiza, sino cada 50...
+				// // problema:
+				// // quedan datos sin actualizar si la
+				// // cantidad de datos no es múltiplo de 100
+				// {
+				// counter++;
+				// return;
+				// }
 				counter = 0;
 
 				data = ClinicalDataModel.merge(data, model());
@@ -216,5 +240,9 @@ class ClinicalDataModel extends AbstractEntity {
 	@Override
 	public String toString() {
 		return Arrays.toString(data);
+	}
+
+	public Gene findGene() {
+		return MetaPlat.getInstance().getGeneByEntrezId(Long.parseLong(data[0].toString()));
 	}
 }
