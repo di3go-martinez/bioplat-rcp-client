@@ -4,11 +4,13 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
+import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearch;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -18,6 +20,8 @@ import edu.unlp.medicine.entity.gene.Gene;
  * 
  * @author diego
  * @deprecated migrar a handler
+ * 
+ *             FIXME está mal hecha... se instancia dos veces por editor...
  */
 // TODO extends y/o implements
 @Deprecated
@@ -25,13 +29,15 @@ public class AddGeneAction extends Action implements IWorkbenchWindowActionDeleg
 
 	public AddGeneAction() {
 		setText("Agregar gen");
+
 	}
+
+	// FIXME horrible parche, no debería haber distintas acciones...
+	private static Biomarker b;
 
 	@Override
 	public void run() {
 		MessageManager mm = MessageManager.INSTANCE;
-
-		Biomarker b = Models.getInstance().getActiveBiomarker();
 
 		if (b == null) {
 			mm.add(Message.warn("No hay biomarcador seleccionado"));
@@ -59,7 +65,15 @@ public class AddGeneAction extends Action implements IWorkbenchWindowActionDeleg
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+		if (!selection.isEmpty()) {
+			Object theselection = null;
+			if (selection instanceof MultipleSelection)
+				theselection = ((MultipleSelection) selection).get(Constants.MODEL).getFirstElement();
+			else if (selection instanceof IStructuredSelection)
+				theselection = ((IStructuredSelection) selection).getFirstElement();
+			if (theselection instanceof Biomarker)
+				b = (Biomarker) theselection;
+		}
 
 	}
 

@@ -36,7 +36,7 @@ public class PasteGeneAction extends Action {
 
 		MessageManager mm = MessageManager.INSTANCE;
 
-		Biomarker b = Models.getInstance().getActiveBiomarker();
+		Biomarker b = getActiveBiomarker();
 		if (b == null) {
 			mm.add(Message.warn("No hay biomarcador seleccionado"));
 			return;
@@ -58,6 +58,11 @@ public class PasteGeneAction extends Action {
 			}
 
 	}
+
+	private Biomarker getActiveBiomarker() {
+		return Models.getInstance().getActiveBiomarker();
+	}
+
 }
 
 class AddGenDialog extends Dialog {
