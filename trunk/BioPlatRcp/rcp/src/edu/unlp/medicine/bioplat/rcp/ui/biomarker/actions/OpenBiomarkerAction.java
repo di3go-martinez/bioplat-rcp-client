@@ -2,7 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
@@ -63,11 +63,15 @@ public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISel
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// try {
-		Object firstElement = ((StructuredSelection) selection).getFirstElement();
-		if (firstElement instanceof Biomarker) {
-			Biomarker b = // (Biomarker) Ognl.getValue("biomarker", selection);
-			(Biomarker) firstElement;
-			Models.getInstance().setActiveBiomarker(b);
+		//TODO sacar esto
+		if (selection instanceof IStructuredSelection) {
+			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+			if (firstElement instanceof Biomarker) {
+				Biomarker b = // (Biomarker) Ognl.getValue("biomarker",
+								// selection);
+				(Biomarker) firstElement;
+				Models.getInstance().setActiveBiomarker(b);
+			}
 		}
 		// } catch (OgnlException e) {
 		// e.printStackTrace();
