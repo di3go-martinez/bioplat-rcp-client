@@ -4,6 +4,7 @@ import static org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS;
 
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -12,6 +13,7 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
@@ -26,7 +28,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IAction saveAction;
 	private IAction preferencesAction;
 	private IAction importAction;
-	private IAction showViewMenuAction;
+	private IContributionItem showViewMenuAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -41,8 +43,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		exitAction = doMake(ActionFactory.QUIT, window);
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
-		showViewMenuAction = doMake(ActionFactory.SHOW_VIEW_MENU, window);
-
+		showViewMenuAction = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 	}
 
 	private IAction doMake(ActionFactory af, IWorkbenchWindow window) {
@@ -70,10 +71,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		fileMenu.add(exitAction);
 
 		MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
-		windowMenu.add(new Separator(MB_ADDITIONS));
+		windowMenu.add(new GroupMarker(MB_ADDITIONS));
 		windowMenu.add(new Separator());
+		windowMenu.add(showViewMenuAction);
+
 		windowMenu.add(preferencesAction);
-		// windowMenu.add(showViewMenuAction);
 
 		// MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
 		// helpMenu.add(aboutAction);
