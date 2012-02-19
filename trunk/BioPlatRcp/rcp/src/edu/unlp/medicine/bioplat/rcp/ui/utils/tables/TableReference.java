@@ -2,6 +2,8 @@ package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+
 public interface TableReference {
 
 	/**
@@ -22,4 +24,8 @@ public interface TableReference {
 	ColumnManager columnManager();
 
 	void show(Object selectedGene);
+
+	List selectedElements();
+
+	void addSelectionChangeListener(ISelectionChangedListener listener);
 }

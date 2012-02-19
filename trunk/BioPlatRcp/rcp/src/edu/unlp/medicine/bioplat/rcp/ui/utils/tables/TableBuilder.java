@@ -13,6 +13,7 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -21,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -33,10 +35,9 @@ public class TableBuilder implements TableConfigurer {
 
 	private static final ColumnBuilder HIDDEN_COLUMN = ColumnBuilder.create().resizable(false).editable(false).width(0);
 
+	private Set<Object> selectedElements = Sets.newHashSet();
 	// TODO
 	private final ColumnBuilder ROW_SELECT_COLUMN = ColumnBuilder.create().checkbox().resizable(false).editable().accesor(new Accesor() {
-
-		private Set<Object> selectedElements = Sets.newHashSet();
 
 		@Override
 		public void set(Object element, Object checked) {
@@ -185,6 +186,8 @@ public class TableBuilder implements TableConfigurer {
 
 		return table = new TableReference() {
 
+			private List _listeners;
+
 			@Override
 			public void refresh() {
 				if (!viewer.isBusy()) {
@@ -219,6 +222,16 @@ public class TableBuilder implements TableConfigurer {
 			public void show(Object element) {
 				viewer.setFilters((ViewerFilter[]) Arrays.asList(new MyElementFilter((Gene) element)).toArray());
 
+			}
+
+			@Override
+			public List<?> selectedElements() {
+				return ImmutableList.copyOf(selectedElements);
+			}
+
+			@Override
+			public void addSelectionChangeListener(ISelectionChangedListener listener) {
+				viewer.addSelectionChangedListener(listener);
 			}
 
 			// @Override
