@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.editor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,6 +13,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +25,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.IProgressService;
 
+import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.input.AbstractEditorInput;
 import edu.unlp.medicine.bioplat.rcp.utils.Service;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
@@ -146,7 +150,9 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			@Override
 			public ISelection getSelection() {
-				return new StructuredSelection(model());
+				MultipleSelection cs = new MultipleSelection();
+				cs.put(Constants.MODEL, new StructuredSelection(model())).add(getAdditionalSelections());
+				return cs;
 			}
 
 			@Override
@@ -155,6 +161,10 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			}
 		};
+	}
+
+	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
+		return Collections.emptyMap();
 	}
 
 	/**
