@@ -16,6 +16,9 @@ public class BiomarkerEditorActionBarContributor extends AbstractEditorActionBar
 
 	@Override
 	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
+		// ToolBarManager tbm = new ToolBarManager();
+		// tbm.add(MessageViewOpenAction.wrap(new AddGeneAction()));
+		// coolBarManager.add(tbm);
 
 	}
 
@@ -27,6 +30,7 @@ public class BiomarkerEditorActionBarContributor extends AbstractEditorActionBar
 	@Override
 	protected void populateMenu(IMenuManager menu) {
 		menu.add(MessageViewOpenAction.wrap(new AddGeneAction()));
+
 		menu.add(MessageViewOpenAction.wrap(new PasteGeneAction()));
 	}
 
