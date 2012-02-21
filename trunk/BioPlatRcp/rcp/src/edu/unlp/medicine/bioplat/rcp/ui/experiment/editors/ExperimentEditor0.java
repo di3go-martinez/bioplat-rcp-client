@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +12,16 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.internal.AbstractSelectionService;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -29,6 +34,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneral
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.experiment.Experiment;
@@ -36,9 +42,9 @@ import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
+class ExperimentEditor0 extends AbstractEditorPart<Experiment> implements ISelectionChangedListener {
 
-	private List<ClinicalDataModel> data;
+	private List<ExpressionDataModel> data;
 	private TableReference tr;
 
 	@Override
@@ -49,7 +55,16 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		Composite c = new Composite(container, SWT.BORDER);
 		c.setLayout(new GridLayout(4, false));
 		c.setLayoutData(GridDataFactory.fillDefaults().span(1, 2).create());
-		Widgets.createTextWithLabel(c, "Nombre", model(), "name");
+		Widget w = Widgets.createTextWithLabel(c, "Nombre", model(), "name");
+
+		model().addPropertyChangeListener("name", new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setPartName(evt.getNewValue().toString());
+			}
+		});
+
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes", true);
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
 
@@ -58,7 +73,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 			@Override
 			public void run() {
-				data = ClinicalDataModel.create(model());
+				data = ExpressionDataModel.create(model());
 			}
 
 		});
@@ -66,7 +81,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 		TableBuilder tb = TableBuilder.create(container)//
 				.keyLimit(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES)//
 				.model(new AbstractEntity() {
-					public List<ClinicalDataModel> getData() {
+					public List<ExpressionDataModel> getData() {
 						return data;
 					}
 				}, "data")
@@ -82,8 +97,17 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 			tb.addColumn(ColumnBuilder.create().numeric().title(s.getName()).property("data[" + index++ + "]"));
 
 		tr = tb.build();
-
+		tr.addSelectionChangeListener(this);
 		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(container);
+
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		// FIXME sacar el downcast, avisar a de una manera prolija
+		AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
+		ass.setActivePart(null);
+		ass.setActivePart(this);
 	}
 
 	private List<Sample> resolveSamplesToLoad() {
@@ -96,11 +120,11 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
 		Map<Object, IStructuredSelection> selections = Maps.newHashMap();
 
-		List<ClinicalDataModel> l = tr.selectedElements();
+		List<ExpressionDataModel> l = tr.focusedElements();
 
-		List<Gene> genes = Lists.transform(l, new Function<ClinicalDataModel, Gene>() {
+		List<Gene> genes = Lists.transform(l, new Function<ExpressionDataModel, Gene>() {
 			@Override
-			public Gene apply(ClinicalDataModel input) {
+			public Gene apply(ExpressionDataModel input) {
 				return input.findGene();
 			}
 		});
@@ -143,7 +167,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 				// }
 				counter = 0;
 
-				data = ClinicalDataModel.merge(data, model());
+				data = ExpressionDataModel.merge(data, model());
 				tr.input(data);
 			}
 
@@ -161,7 +185,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> {
 
 // TODO revisar que es obligatorio que extienda abstractEntity... @see
 // TableBuilder#input
-class ClinicalDataModel extends AbstractEntity {
+class ExpressionDataModel extends AbstractEntity {
 
 	/**
 	 * Usar con cuidado, puede colgar la memoria de la aplicación...
@@ -171,8 +195,8 @@ class ClinicalDataModel extends AbstractEntity {
 	 * @param e
 	 * @return
 	 */
-	public static List<ClinicalDataModel> create(Experiment e) {
-		List<ClinicalDataModel> result = Lists.newArrayList();
+	public static List<ExpressionDataModel> create(Experiment e) {
+		List<ExpressionDataModel> result = Lists.newArrayList();
 
 		for (Gene g : e.getGenes()) {
 			final int sampleCount = e.getSamples().size();
@@ -185,7 +209,7 @@ class ClinicalDataModel extends AbstractEntity {
 				data[index++] = e.getExpressionLevelForAGene(s.getName(), g);
 			}
 
-			result.add(new ClinicalDataModel(data));
+			result.add(new ExpressionDataModel(data));
 
 		}
 		return result;
@@ -202,14 +226,14 @@ class ClinicalDataModel extends AbstractEntity {
 	 *            es el nuevo experimento
 	 * @return el objeto current actualizado con el experimento e
 	 */
-	public static List<ClinicalDataModel> merge(List<ClinicalDataModel> current, Experiment e) {
+	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, Experiment e) {
 		if (current == null)
 			current = create(e);
 		else {
 			int index0 = 0;
 			for (Gene g : e.getGenes()) {
 				int index1 = 1;
-				ClinicalDataModel cdm = current.get(index0);
+				ExpressionDataModel cdm = current.get(index0);
 
 				for (Sample s : e.getSamples()) {
 
@@ -233,7 +257,7 @@ class ClinicalDataModel extends AbstractEntity {
 		return data;
 	}
 
-	public ClinicalDataModel(Object[] data) {
+	public ExpressionDataModel(Object[] data) {
 		this.data = data;
 	}
 
@@ -243,6 +267,7 @@ class ClinicalDataModel extends AbstractEntity {
 	}
 
 	public Gene findGene() {
-		return MetaPlat.getInstance().getGeneByEntrezId(Long.parseLong(data[0].toString()));
+		final long id = Long.parseLong(data[0].toString());
+		return MetaPlat.getInstance().getGeneByEntrezId(id);
 	}
 }

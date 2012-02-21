@@ -32,6 +32,8 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 	@Override
 	protected List<EditorDescription> createEditors() {
 
+		final Experiment experiment = model();
+
 		List<EditorDescription> result = Lists.newArrayList();
 
 		innerEditor = new ExperimentEditor0();
@@ -48,8 +50,11 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 
 		result.add(ed);
 
-		Experiment experiment = model();
-		ARNmPlatform p = experiment.getArnMlatform();
+		// Agrego la clinical data
+		result.add(new EditorDescription(getEditorInput(), new ExperimentClinicalData()));
+
+		// Agrego la plataforma
+		ARNmPlatform p = experiment.getArnmPlatform();
 		// TODO definir...
 		if (p != null) { // si hay plataforma creo la solapa correspondiente
 			IEditorInput i = EditorInputFactory.createDefaultEditorInput(p);
