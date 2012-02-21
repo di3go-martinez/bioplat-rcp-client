@@ -33,7 +33,6 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 	protected List<EditorDescription> createEditors() {
 
 		final Experiment experiment = model();
-
 		List<EditorDescription> result = Lists.newArrayList();
 
 		innerEditor = new ExperimentEditor0();
