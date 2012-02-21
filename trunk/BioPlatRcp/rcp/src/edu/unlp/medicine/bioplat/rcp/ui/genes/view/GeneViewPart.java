@@ -23,11 +23,16 @@ import edu.unlp.medicine.entity.gene.Gene;
 
 public class GeneViewPart extends ViewPart {
 
-	private static final String REST_URL_NCBI = "http://www.ncbi.nlm.nih.gov/gene/?term=";
+	private static final String GEN_HOLDER = "{genId}";
+	private static final String REST_URL_NCBI = "http://www.ncbi.nlm.nih.gov/gene/?term=" + GEN_HOLDER;
 
 	public static String id() {
 		return "edu.medicine.bioplat.rcp.gene.view";
 	}
+
+	// private Cache<String, String> genBrowserCache =
+	// CacheBuilder.newBuilder().expireAfterAccess(10,
+	// TimeUnit.MINUTES).build();
 
 	private ISelectionListener listener;
 
@@ -107,19 +112,11 @@ public class GeneViewPart extends ViewPart {
 
 		c.setVisible(gene != null);
 
-		if (gene != null) {
-			if (!ws.isEmpty()) {
-				for (Widget w : ws)
-					w.retarget(gene);
-
-				browser.setUrl(makeRestUrl(gene));
-			} else {
-				ws.add(Widgets.createTextWithLabel(c, "nombre", gene, "name", true));
-				browser = new Browser(c, SWT.BORDER);
-				browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
-				browser.setUrl(makeRestUrl(gene));
-			}
-		}
+		if (gene != null)
+			if (viewBuilt())
+				refreshView(gene);
+			else
+				buildView(gene);
 
 		// FIXME no se repinta bien la primera vez que aparece si no se crea el
 		// composite container, se fuerza con el -1
@@ -130,8 +127,57 @@ public class GeneViewPart extends ViewPart {
 
 	}
 
+	private boolean viewBuilt() {
+		return !ws.isEmpty();
+	}
+
+	private void refreshView(Gene gene) {
+		for (Widget w : ws)
+			w.retarget(gene);
+
+		seturl(makeRestUrl(gene));
+		setPartName(gene.toString());
+	}
+
+	private void buildView(Gene gene) {
+		ws.add(Widgets.createTextWithLabel(c, "nombre", gene, "name", true));
+
+		// TODO separar en solapas
+		browser = new Browser(c, SWT.BORDER);
+		browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
+
+		final String url = makeRestUrl(gene);
+		seturl(url);
+
+		// browser.addProgressListener(new ProgressListener() {
+		//
+		// @Override
+		// public void completed(ProgressEvent event) {
+		// // TODO que no cachee las páginas cargadas con error...
+		// // genBrowserCache.put(browser.getUrl(), browser.getText());
+		// }
+		//
+		// @Override
+		// public void changed(ProgressEvent event) {
+		//
+		// }
+		// });
+
+		setPartName(gene.toString());
+	}
+
+	private void seturl(final String url) {
+		// TODO hacer uso de la cache String html =
+		// genBrowserCache.getIfPresent(url);
+
+		// if (html == null)
+		browser.setUrl(url);
+		// else
+		// browser.setText(html, false);
+	}
+
 	private String makeRestUrl(Gene input) {
-		return REST_URL_NCBI + input.getEntrezId();
+		return REST_URL_NCBI.replace(GEN_HOLDER, input.getEntrezIdAsString());
 	}
 
 	@Override
