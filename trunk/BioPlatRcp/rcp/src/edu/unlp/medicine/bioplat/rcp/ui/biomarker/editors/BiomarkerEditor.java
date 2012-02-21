@@ -57,12 +57,6 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 	}
 
-	@Override
-	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
-		final IStructuredSelection element = new StructuredSelection(tr.selectedElements());
-		return ImmutableMap.of((Object) Constants.GENES, element);
-	}
-
 	private void createTable(Composite parent) {
 
 		final TableBuilder tb = TableBuilder.create(parent).input(model().getGenes());
@@ -91,8 +85,14 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	}
 
 	@Override
+	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
+		final IStructuredSelection element = new StructuredSelection(tr.focusedElements());
+		return ImmutableMap.of((Object) Constants.GENES, element);
+	}
+
+	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		//FIXME sacar el downcast, avisar a de una manera prolija
+		// FIXME sacar el downcast, avisar a de una manera prolija
 		AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
 		ass.setActivePart(null);
 		ass.setActivePart(this);
