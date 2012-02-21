@@ -27,5 +27,7 @@ public interface TableReference {
 
 	List selectedElements();
 
+	List focusedElements();
+	
 	void addSelectionChangeListener(ISelectionChangedListener listener);
 }

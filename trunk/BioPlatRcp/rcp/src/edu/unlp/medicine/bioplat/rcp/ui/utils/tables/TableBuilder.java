@@ -21,7 +21,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -56,7 +58,7 @@ public class TableBuilder implements TableConfigurer {
 	private TableViewer viewer;
 
 	// TODO revisar.... usar input resolver?
-	private List<?> input;
+	private List<?> input = Lists.newArrayList();
 	private Class<? extends AbstractEntity> inputClass;
 
 	private TableBuilder(Composite parent, boolean virtual) {
@@ -186,8 +188,6 @@ public class TableBuilder implements TableConfigurer {
 
 		return table = new TableReference() {
 
-			private List _listeners;
-
 			@Override
 			public void refresh() {
 				if (!viewer.isBusy()) {
@@ -227,6 +227,19 @@ public class TableBuilder implements TableConfigurer {
 			@Override
 			public List<?> selectedElements() {
 				return ImmutableList.copyOf(selectedElements);
+			}
+
+			public List<?> focusedElements() {
+				TableItem[] items = viewer.getTable().getSelection();
+				List result = Lists.transform(Arrays.asList(items), new Function<TableItem, Object>() {
+
+					@Override
+					public Object apply(TableItem input) {
+						return input.getData();
+					}
+				});
+				return result;
+
 			}
 
 			@Override
