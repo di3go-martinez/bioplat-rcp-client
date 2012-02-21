@@ -73,7 +73,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
 		windowMenu.add(new GroupMarker(MB_ADDITIONS));
 		windowMenu.add(new Separator());
-		windowMenu.add(showViewMenuAction);
+
+		IMenuManager m = new MenuManager("Vistas");
+		m.add(showViewMenuAction);
+		windowMenu.add(m);
 
 		windowMenu.add(preferencesAction);
 
