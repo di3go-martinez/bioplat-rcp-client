@@ -29,6 +29,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IAction preferencesAction;
 	private IAction importAction;
 	private IContributionItem showViewMenuAction;
+	private IAction newWizard;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -43,7 +44,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		exitAction = doMake(ActionFactory.QUIT, window);
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
+		newWizard = doMake(ActionFactory.NEW_WIZARD_DROP_DOWN, window);
+
 		showViewMenuAction = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
+
 	}
 
 	private IAction doMake(ActionFactory af, IWorkbenchWindow window) {
@@ -58,10 +62,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		MenuManager fileMenu = new MenuManager("&Bio Plat", BIOPLAT_MENU_ID);
 
 		// bioplat.menu/new.menu/additions
-		MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
-		newMenu.add(new Separator(MB_ADDITIONS));
+		// MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
+		// newMenu.add(new Separator(MB_ADDITIONS));
+		// fileMenu.add(newMenu); // newMenu es submenú de mainMenu
 
-		fileMenu.add(newMenu); // newMenu es submenú de mainMenu
+		fileMenu.add(newWizard);
 
 		fileMenu.add(saveAction);
 		fileMenu.add(new Separator());
