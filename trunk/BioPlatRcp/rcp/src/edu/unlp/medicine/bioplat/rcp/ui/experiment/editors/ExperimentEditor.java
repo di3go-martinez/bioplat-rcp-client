@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPropertyListener;
@@ -11,7 +12,9 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform;
 import edu.unlp.medicine.entity.experiment.Experiment;
@@ -77,8 +80,23 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 		return result;
 	}
 
+	// ???
 	public void showGene(Gene selectedGene) {
 		innerEditor.showGene(selectedGene);
-
 	}
+
+	static int getSampleCountToLoad() {
+		int max = ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
+		return max;
+	}
+
+	// TODO sacar de acá
+	private static IEclipsePreferences ep;
+
+	static IEclipsePreferences ep() {
+		if (ep == null)
+			ep = PlatformUtils.preferences();
+		return ep;
+	}
+
 }

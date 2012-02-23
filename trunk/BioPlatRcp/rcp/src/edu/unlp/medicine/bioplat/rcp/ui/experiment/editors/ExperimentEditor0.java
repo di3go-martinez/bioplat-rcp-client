@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -27,7 +25,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
@@ -111,9 +108,9 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> implements ISelec
 	}
 
 	private List<Sample> resolveSamplesToLoad() {
-		int max = ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
+		int max = ExperimentEditor.getSampleCountToLoad();
 		return model().getSamples().subList(0, max - 1);// -1 porque empiezo de
-														// 0
+														// // 0
 	}
 
 	@Override
@@ -131,14 +128,6 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> implements ISelec
 
 		selections.put(Constants.GENES, new StructuredSelection(genes));
 		return selections;
-	}
-
-	private IEclipsePreferences ep;
-
-	private IEclipsePreferences ep() {
-		if (ep == null)
-			ep = ConfigurationScope.INSTANCE.getNode(Activator.id());
-		return ep;
 	}
 
 	@Override
@@ -172,7 +161,7 @@ class ExperimentEditor0 extends AbstractEditorPart<Experiment> implements ISelec
 			}
 
 			private boolean autorefresh() {
-				return ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
+				return ExperimentEditor.ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 			}
 		};
 	}

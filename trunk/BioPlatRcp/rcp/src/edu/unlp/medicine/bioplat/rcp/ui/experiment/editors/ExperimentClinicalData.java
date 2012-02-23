@@ -23,13 +23,18 @@ public class ExperimentClinicalData extends AbstractEditorPart<Experiment> {
 
 		tb.addColumn(ColumnBuilder.create().property("data[0]"));
 		int index = 1;
-		for (Sample s : model().getSamples())
+		for (Sample s : resolveSamplesToLoad())
 			tb.addColumn(ColumnBuilder.create().title(s.getName()).property("data[" + index++ + "]"));
 
 		tb.build();
 
 		setPartName("Clinical Data");
 		yaseteado = true;
+	}
+
+	private List<Sample> resolveSamplesToLoad() {
+		int count = ExperimentEditor.getSampleCountToLoad();
+		return model().getSamples().subList(0, count);
 	}
 
 	// FIXME revisar por qué se actualiza este editor cuando se guarda el editor
