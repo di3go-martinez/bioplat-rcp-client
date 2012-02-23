@@ -2,11 +2,16 @@ package edu.unlp.medicine.bioplat.rcp.ui.genes.view;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.ProgressEvent;
+import org.eclipse.swt.browser.ProgressListener;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
@@ -17,6 +22,8 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalGeneInformationPage;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -92,9 +99,11 @@ public class GeneViewPart extends ViewPart {
 		return getSite().getWorkbenchWindow().getSelectionService();
 	}
 
-	private Composite c;
+	private Composite container;
 	private List<Widget> ws = Lists.newArrayList();
-	private Browser browser;
+	private List<Browser> browsers = Lists.newArrayList();
+	// urls rest configuradas, contiene variables seguramente ej el id del gen
+	private String[] $variableUrls;
 
 	private void updateComposite(Composite parent, Gene gene) {
 
@@ -104,13 +113,13 @@ public class GeneViewPart extends ViewPart {
 		// c = new PageBook(parent, SWT.BORDER);
 		// c.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
-		if (c == null) {
-			c = Widgets.createDefaultContainer(parent);
-			c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		if (container == null) {
+			container = Widgets.createDefaultContainer(parent);
+			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
 		}
 
-		c.setVisible(gene != null);
+		container.setVisible(gene != null);
 
 		if (gene != null)
 			if (viewBuilt())
@@ -135,19 +144,59 @@ public class GeneViewPart extends ViewPart {
 		for (Widget w : ws)
 			w.retarget(gene);
 
-		seturl(makeRestUrl(gene));
+		for (String resturl : $variableUrls)
+			seturl(convertRestUrl(resturl, gene));
 		setPartName(gene.toString());
 	}
 
 	private void buildView(Gene gene) {
-		ws.add(Widgets.createTextWithLabel(c, "nombre", gene, "name", true));
+		ws.add(Widgets.createTextWithLabel(container, "nombre", gene, "name", true));
 
-		// TODO separar en solapas
-		browser = new Browser(c, SWT.BORDER);
-		browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
+		buildBrowsers(gene);
 
-		final String url = makeRestUrl(gene);
-		seturl(url);
+		setPartName(gene.toString());
+	}
+
+	private void buildBrowsers(Gene gene) {
+
+		String urls = PlatformUtils.preferences().get(ExternalGeneInformationPage.URLS, "");
+
+		if (urls.isEmpty())
+			return;
+
+		CTabFolder t = new CTabFolder(container, SWT.BORDER);
+		t.setLayout(GridLayoutFactory.fillDefaults().create());
+		t.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
+
+		$variableUrls = StringUtils.split(urls, '|');
+
+		for (String url : $variableUrls) {
+			final Browser browser = new Browser(t, SWT.BORDER);
+			browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
+			final String realurl = convertRestUrl(url, gene);
+			seturl(browser, realurl);
+			browsers.add(browser);
+
+			// agrego el tab contendor
+			final CTabItem i = new CTabItem(t, SWT.NONE);
+			i.setControl(browser);
+			i.setText(realurl);
+
+			browser.addProgressListener(new ProgressListener() {
+
+				@Override
+				public void completed(ProgressEvent event) {
+					i.setText(((Browser) event.widget).getUrl());
+				}
+
+				@Override
+				public void changed(ProgressEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+
+		}
 
 		// browser.addProgressListener(new ProgressListener() {
 		//
@@ -162,11 +211,9 @@ public class GeneViewPart extends ViewPart {
 		//
 		// }
 		// });
-
-		setPartName(gene.toString());
 	}
 
-	private void seturl(final String url) {
+	private void seturl(Browser browser, final String url) {
 		// TODO hacer uso de la cache String html =
 		// genBrowserCache.getIfPresent(url);
 
@@ -176,8 +223,24 @@ public class GeneViewPart extends ViewPart {
 		// browser.setText(html, false);
 	}
 
+	/**
+	 * Configura las urls de todos los browsers abiertos
+	 * 
+	 * @param url
+	 */
+	private void seturl(final String url) {
+		for (Browser browser : browsers) {
+			seturl(browser, url);
+		}
+	}
+
+	@Deprecated
 	private String makeRestUrl(Gene input) {
 		return REST_URL_NCBI.replace(GEN_HOLDER, input.getEntrezIdAsString());
+	}
+
+	private String convertRestUrl(String restUrl, Gene input) {
+		return restUrl.replace(GEN_HOLDER, input.getEntrezIdAsString());
 	}
 
 	@Override
