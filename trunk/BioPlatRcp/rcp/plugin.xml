@@ -224,6 +224,11 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.experimento.general"
+            name="Experiments">
+      </page>
+      <page
             category="edu.medicine.bioplat.rcp.experimento.general"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage"
             id="edu.medicine.bioplat.rcp.experimento.editor"
@@ -231,8 +236,14 @@
       </page>
       <page
             class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
-            id="edu.medicine.bioplat.rcp.experimento.general"
-            name="Experimentos">
+            id="edu.medicine.bioplat.rcp.genes.general"
+            name="Genes">
+      </page>
+      <page
+            category="edu.medicine.bioplat.rcp.genes.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalGeneInformationPage"
+            id="edu.medicine.bioplat.rcp.genes.external"
+            name="External Information">
       </page>
    </extension>
    <extension
@@ -264,5 +275,36 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="edu.medicine.bioplat.rcp.Factory1"
+            class="edu.medicine.bioplat.rcp.AdapterFactory1">
+         <adapter
+               type="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </adapter>
+      </factory>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+         
+    <category
+          name="Biomarcador"
+          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards">
+    </category>
+    
+	
+ 	<wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
+        icon="resources/icons/newBiomarker.PNG"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Biomarcador vacío">
+       <description>Nuevo biomarcador vacío</description>
+	</wizard>
+   
    </extension>
 </plugin>
