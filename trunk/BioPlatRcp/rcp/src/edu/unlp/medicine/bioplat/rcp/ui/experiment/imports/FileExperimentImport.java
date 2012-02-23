@@ -46,6 +46,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredVal
 import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromFileExperimentDescriptor;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.FromFileExperimentFactory;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -80,7 +81,8 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 					public Experiment call() throws Exception {
 						Monitor m = Monitors.adapt(progressMonitor);
 						// FIXME completar el parametrizar bien
-						return new FromFileExperimentFactory(filePath, 1, 2, 3, 4, "\t", collapseStrategy).monitor(m).createExperiment();
+
+						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, 1, 2, 3, 4, "\t", collapseStrategy)).monitor(m).createExperiment();
 					}
 				});
 
