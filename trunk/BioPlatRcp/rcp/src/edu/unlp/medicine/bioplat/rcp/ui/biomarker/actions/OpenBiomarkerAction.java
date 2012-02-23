@@ -21,6 +21,7 @@ import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
  * @author diego
  * 
  */
+@Deprecated
 // TODO implementar el ISelectionListener en otro lado, si es necesario
 public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISelectionListener {
 
@@ -31,7 +32,7 @@ public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISel
 	}
 
 	private Biomarker createBiomarker() {
-		Biomarker b = new EditedBiomarker();
+		Biomarker b = new EditedBiomarker("");
 		// GeneSearch gs = GeneSearch.createDialog();
 		// if (gs.open() == Dialog.OK) b.addGene(gs.selectedGene());
 
@@ -63,7 +64,7 @@ public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISel
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// try {
-		//TODO sacar esto
+		// TODO sacar esto
 		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 			if (firstElement instanceof Biomarker) {
