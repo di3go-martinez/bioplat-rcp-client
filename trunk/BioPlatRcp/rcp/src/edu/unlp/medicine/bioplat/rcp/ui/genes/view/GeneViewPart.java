@@ -146,7 +146,11 @@ public class GeneViewPart extends ViewPart {
 
 		for (String resturl : $variableUrls)
 			seturl(convertRestUrl(resturl, gene));
-		setPartName(gene.toString());
+		updateTitle(gene);
+	}
+
+	private void updateTitle(Gene gene) {
+		setPartName("Gen:" + gene);
 	}
 
 	private void buildView(Gene gene) {
@@ -154,7 +158,7 @@ public class GeneViewPart extends ViewPart {
 
 		buildBrowsers(gene);
 
-		setPartName(gene.toString());
+		updateTitle(gene);
 	}
 
 	private void buildBrowsers(Gene gene) {
