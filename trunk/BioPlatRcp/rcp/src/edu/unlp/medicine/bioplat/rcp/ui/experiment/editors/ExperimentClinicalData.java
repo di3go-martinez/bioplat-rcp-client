@@ -2,6 +2,9 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
 import java.util.List;
 
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.collect.Lists;
@@ -9,17 +12,21 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
-import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-public class ExperimentClinicalData extends AbstractEditorPart<Experiment> {
+public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 		List<ClinicalDataModel> model = makeModel(model());
 
-		TableBuilder tb = TableBuilder.create(parent).input(model);
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		GridLayoutFactory.fillDefaults().margins(10, 10).applyTo(container);
+
+		TableBuilder tb = TableBuilder.create(container).input(model);
 
 		tb.addColumn(ColumnBuilder.create().property("data[0]"));
 		int index = 1;
@@ -48,7 +55,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<Experiment> {
 
 	}
 
-	private List<ClinicalDataModel> makeModel(Experiment model) {
+	private List<ClinicalDataModel> makeModel(AbstractExperiment model) {
 		return ClinicalDataModel.create(model);
 	}
 }
@@ -65,7 +72,7 @@ class ClinicalDataModel extends AbstractEntity {
 		this.data = data;
 	}
 
-	public static List<ClinicalDataModel> create(Experiment e) {
+	public static List<ClinicalDataModel> create(AbstractExperiment e) {
 		List<ClinicalDataModel> result = Lists.newArrayList();
 
 		// el nombre del atributo

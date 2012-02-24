@@ -17,10 +17,10 @@ import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform;
-import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.gene.Gene;
 
-public class ExperimentEditor extends AbstractFormEditor<Experiment> {
+public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 
 	public static String id() {
 		return "bio.plat.experiment.editor";
@@ -35,7 +35,7 @@ public class ExperimentEditor extends AbstractFormEditor<Experiment> {
 	@Override
 	protected List<EditorDescription> createEditors() {
 
-		final Experiment experiment = model();
+		final AbstractExperiment experiment = model();
 		List<EditorDescription> result = Lists.newArrayList();
 
 		innerEditor = new ExperimentEditor0();

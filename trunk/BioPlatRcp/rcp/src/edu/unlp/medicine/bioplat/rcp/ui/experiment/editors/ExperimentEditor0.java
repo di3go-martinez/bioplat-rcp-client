@@ -34,12 +34,13 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
+import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-class ExperimentEditor0 extends AbstractEditorPart<Experiment> implements ISelectionChangedListener {
+class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implements ISelectionChangedListener {
 
 	private List<ExpressionDataModel> data;
 	private TableReference tr;
@@ -184,7 +185,7 @@ class ExpressionDataModel extends AbstractEntity {
 	 * @param e
 	 * @return
 	 */
-	public static List<ExpressionDataModel> create(Experiment e) {
+	public static List<ExpressionDataModel> create(AbstractExperiment e) {
 		List<ExpressionDataModel> result = Lists.newArrayList();
 
 		for (Gene g : e.getGenes()) {
@@ -215,7 +216,7 @@ class ExpressionDataModel extends AbstractEntity {
 	 *            es el nuevo experimento
 	 * @return el objeto current actualizado con el experimento e
 	 */
-	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, Experiment e) {
+	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e) {
 		if (current == null)
 			current = create(e);
 		else {
