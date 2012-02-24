@@ -275,6 +275,13 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      <actionContribution
+            caption="Aplicar experimento"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperiment">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
