@@ -59,7 +59,7 @@ public class TableBuilder implements TableConfigurer {
 
 	// TODO revisar.... usar input resolver?
 	private List<?> input = Lists.newArrayList();
-	private Class<? extends AbstractEntity> inputClass;
+	private Class<?> inputClass;
 
 	private TableBuilder(Composite parent, boolean virtual) {
 		// SWT.VIRTUAL tira error cuando se quiere editar un item.... ver
@@ -119,7 +119,7 @@ public class TableBuilder implements TableConfigurer {
 	 * @param klazz
 	 * @return
 	 */
-	private <T> TableBuilder input(List<T> input, Class<? extends AbstractEntity> klazz) {
+	private <T> TableBuilder input(List<T> input, Class<?> klazz) {
 		// ObservableListContentProvider provider = new
 		// ObservableListContentProvider();
 		// viewer.setContentProvider(provider);
@@ -133,9 +133,10 @@ public class TableBuilder implements TableConfigurer {
 		return this;
 	}
 
-	// TODO es necesario que sea un AbstractEntity... debería ser opcional...
-	public <T extends AbstractEntity> TableBuilder input(List<T> input) {
-		return input(input, AbstractEntity.class);
+	// borrar... TODO es necesario que sea un AbstractEntity... debería ser
+	// opcional...
+	public <T> TableBuilder input(List<T> input) {
+		return input(input, Object.class);
 	}
 
 	public TableBuilder hideSelectionColumn() {
@@ -229,6 +230,7 @@ public class TableBuilder implements TableConfigurer {
 				return ImmutableList.copyOf(selectedElements);
 			}
 
+			@Override
 			public List<?> focusedElements() {
 				TableItem[] items = viewer.getTable().getSelection();
 				List result = Lists.transform(Arrays.asList(items), new Function<TableItem, Object>() {
