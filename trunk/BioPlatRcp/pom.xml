@@ -49,6 +49,7 @@
 
 	<modules>
 		<module>rcp</module>
+		<module>platform</module>
 	</modules>
 
 	<build>
