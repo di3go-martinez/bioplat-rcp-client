@@ -15,7 +15,7 @@ import org.eclipse.ui.INewWizard;
 
 import com.google.common.collect.Lists;
 
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
@@ -35,7 +35,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard implements INewWi
 	@Override
 	public boolean performFinish() {
 		Biomarker b = new EditedBiomarker(model().value(NAME_K).toString());
-		PlatformUIUtils.openEditor(b, BiomarkerEditor.id());
+		PlatformUIUtils.openEditor(b, EditorsId.biomarkerEditorId());
 
 		return true;
 	}
