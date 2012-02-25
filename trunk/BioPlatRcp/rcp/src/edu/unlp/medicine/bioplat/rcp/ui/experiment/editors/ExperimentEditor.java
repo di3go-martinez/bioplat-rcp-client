@@ -39,9 +39,11 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		List<EditorDescription> result = Lists.newArrayList();
 
 		innerEditor = new ExperimentEditor0();
-		EditorDescription ed = new EditorDescription(getEditorInput(), innerEditor);
+		// TODO revisar el title, por qué lo pone vacío al principio sino le
+		// mando el model.id?...
+		EditorDescription ed = new EditorDescription(getEditorInput(), innerEditor, getEditorInput().model().id());
 
-		// sincronizo el nombre de la solapa con la primera solapa
+		// sincronizo el nombre del editor con la primera solapa
 		innerEditor.addPropertyListener(new IPropertyListener() {
 
 			@Override
@@ -52,8 +54,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 
 		result.add(ed);
 
-		// Agrego la clinical data
-		result.add(new EditorDescription(getEditorInput(), new ExperimentClinicalData()));
+		result.add(new EditorDescription(getEditorInput(), new ExperimentClinicalData(false), "Clinical Data"));
 
 		// Agrego la plataforma
 		ARNmPlatform p = experiment.getArnmPlatform();

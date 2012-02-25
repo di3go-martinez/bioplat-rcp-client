@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +31,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Experiment;
@@ -54,14 +54,22 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		c.setLayout(new GridLayout(4, false));
 		c.setLayoutData(GridDataFactory.fillDefaults().span(1, 2).create());
 		Widget w = Widgets.createTextWithLabel(c, "Nombre", model(), "name");
-
-		model().addPropertyChangeListener("name", new PropertyChangeListener() {
+		w.addModificationListener(new ModificationListener() {
 
 			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				setPartName(evt.getNewValue().toString());
+			public void modify(ModificationTextEvent event) {
+				setPartName(event.getNewText());
+
 			}
 		});
+		// model().addPropertyChangeListener("name", new
+		// PropertyChangeListener() {
+		//
+		// @Override
+		// public void propertyChange(PropertyChangeEvent evt) {
+		// setPartName(evt.getNewValue().toString());
+		// }
+		// });
 
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes", true);
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
@@ -97,7 +105,6 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		tr = tb.build();
 		tr.addSelectionChangeListener(this);
 		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(container);
-
 	}
 
 	@Override

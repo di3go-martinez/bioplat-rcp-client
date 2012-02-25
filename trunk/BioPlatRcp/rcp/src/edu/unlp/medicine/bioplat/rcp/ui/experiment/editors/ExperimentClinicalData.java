@@ -18,6 +18,10 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
+	public ExperimentClinicalData(boolean updatableTitle) {
+		super(updatableTitle);
+	}
+
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 		List<ClinicalDataModel> model = makeModel(model());
@@ -36,7 +40,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		tb.build();
 
 		setPartName("Clinical Data");
-		yaseteado = true;
+		// yaseteado = true;
 	}
 
 	private List<Sample> resolveSamplesToLoad() {
@@ -44,16 +48,17 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		return model().getSamples().subList(0, count);
 	}
 
-	// FIXME revisar por qué se actualiza este editor cuando se guarda el editor
-	// contenedor.
-	private boolean yaseteado = false;
-
-	@Override
-	protected void setPartName(String partName) {
-		if (!yaseteado)
-			super.setPartName(partName);
-
-	}
+	// // FIXME revisar por qué se actualiza este editor cuando se guarda el
+	// editor
+	// // contenedor.
+	// private boolean yaseteado = false;
+	//
+	// @Override
+	// protected void setPartName(String partName) {
+	// if (!yaseteado)
+	// super.setPartName(partName);
+	//
+	// }
 
 	private List<ClinicalDataModel> makeModel(AbstractExperiment model) {
 		return ClinicalDataModel.create(model);
