@@ -8,20 +8,22 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.MultiPageBiomarkerEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
-import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ApplyExperimentsOnMetasignatureCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
-public class ApplyExperiment extends AbstractActionContribution<Biomarker> {
+public class ApplyExperimentActionContribution extends AbstractActionContribution<Biomarker> {
 
 	@Override
 	public void run() {
@@ -30,10 +32,22 @@ public class ApplyExperiment extends AbstractActionContribution<Biomarker> {
 			@Override
 			public boolean performFinish() {
 				try {
-					final Experiment experiment = ((List<Experiment>) model().get(PagesDescriptors.SELECTED)).get(0);
-					FromMemoryExperimentDescriptor d = new FromMemoryExperimentDescriptor(experiment);
-					new ApplyExperimentsOnMetasignatureCommand(ApplyExperiment.this.model(), Arrays.asList(new ValidationConfig(d, false, 1, "", "", null, 1, false))).execute();
-					PlatformUIUtils.openEditor(ApplyExperiment.this.model().getExperimentsApplied().get(0), ExperimentEditor.id());
+					List<Experiment> experiments = ((List<Experiment>) model().get(PagesDescriptors.SELECTED));
+					for (Experiment experiment : experiments) {
+						FromMemoryExperimentDescriptor d = new FromMemoryExperimentDescriptor(experiment);
+						new ApplyExperimentsOnMetasignatureCommand(ApplyExperimentActionContribution.this.model(), Arrays.asList(new ValidationConfig(d, false, 1, "", "", null, 1, false))).execute();
+
+						// FIXME hacer un poquito más generico con una
+						// interface MultipageEditor#addPage(Editor, Input,
+						// [title])...
+						MultiPageBiomarkerEditor multipleEditor = (MultiPageBiomarkerEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+
+						final ExperimentAppliedToAMetasignature appliedExperiment = ApplyExperimentActionContribution.this.model().getExperimentsApplied().get(0);
+						multipleEditor.addEditorPage(new ExperimentEditor(), EditorInputFactory.createDefaultEditorInput(appliedExperiment));
+
+						// PlatformUIUtils.openEditor(appliedExperiment,
+						// ExperimentEditor.id());
+					}
 					return true;
 				} catch (Exception e) {
 					// TODO hacer excepciones más específicas
@@ -48,7 +62,6 @@ public class ApplyExperiment extends AbstractActionContribution<Biomarker> {
 
 			@Override
 			protected List<WizardPageDescriptor> createPagesDescriptors() {
-
 				return Arrays.asList(PagesDescriptors.experimentsWPD());
 			}
 		};
