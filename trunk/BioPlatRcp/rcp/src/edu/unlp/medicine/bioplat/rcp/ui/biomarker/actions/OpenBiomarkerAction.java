@@ -9,7 +9,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
@@ -28,7 +28,7 @@ public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISel
 	@Override
 	public void run(IAction action) {
 		Biomarker b = createBiomarker();
-		PlatformUIUtils.openEditor(EditorInputFactory.createDefaultEditorInput(b), BiomarkerEditor.id());
+		PlatformUIUtils.openEditor(EditorInputFactory.createDefaultEditorInput(b), EditorsId.biomarkerEditorId());
 	}
 
 	private Biomarker createBiomarker() {
