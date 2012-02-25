@@ -2,7 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.utils;
 
 import org.eclipse.ui.IEditorInput;
 
-import edu.unlp.medicine.bioplat.rcp.editor.input.DefaultEditorInput;
+import edu.unlp.medicine.bioplat.rcp.internal.editor.input.DefaultEditorInput;
 
 public class EditorInputFactory {
 	private EditorInputFactory() {
@@ -13,9 +13,3 @@ public class EditorInputFactory {
 	}
 
 }
-
-
-
-
-
-
