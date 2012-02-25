@@ -23,13 +23,27 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener {
 
 	public static String id() {
 		return "bio.plat.biomarker.editor"; //$NON-NLS-1$
+	}
+
+	private boolean autoUpdateTitle = true;
+
+	public BiomarkerEditor(boolean autoUpdateTitle) {
+		super(autoUpdateTitle);
+		this.autoUpdateTitle = autoUpdateTitle;
+	}
+
+	public BiomarkerEditor() {
+		this(true);
 	}
 
 	@Override
@@ -44,7 +58,16 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		// un biomarcador activo de esta manera.
 		Models.getInstance().setActiveBiomarker(model());
 
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_name_label, model, "name");
+		Widget w = Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_name_label, model, "name");
+		// TODO mover a la superclase
+		if (autoUpdateTitle)
+			w.addModificationListener(new ModificationListener() {
+
+				@Override
+				public void modify(ModificationTextEvent event) {
+					setPartName(event.getNewText());
+				}
+			});
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_gene_count_label, model, "geneCount", true);
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_author_label, model, "author");
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_original_gene_count_label, model, "originalNumberOfGenes", true);
