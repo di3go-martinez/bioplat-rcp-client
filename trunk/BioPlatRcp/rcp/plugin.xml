@@ -68,11 +68,11 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerEditor"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.MultiPageBiomarkerEditor"
             contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorActionBarContributor"
             default="false"
             icon="resources/icons/biomarker.PNG"
-            id="bio.plat.biomarker.editor"
+            id="edu.unlp.medicine.biomarker.editor.multipage"
             name="%editor.name">
       </editor>
       <editor
@@ -277,7 +277,7 @@
       </actionContribution>
       <actionContribution
             caption="Aplicar experimento"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperiment">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
