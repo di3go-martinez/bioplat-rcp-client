@@ -48,6 +48,10 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	}
 
 	public AbstractEditorPart() {
+		this(true);
+	}
+
+	public AbstractEditorPart(boolean updatableTitle) {
 		addPartPropertyListener(new IPropertyChangeListener() {
 
 			@Override
@@ -55,9 +59,14 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 				System.out.println(event);
 			}
 		});
+		this.updatableTitle = updatableTitle;
 	}
 
 	private Control focusReceptor;
+
+	// por ejemplo cuando se usa como contendor de un multipleEditor @see
+	// MultiPageBiomarkerEditor
+	private boolean updatableTitle = true;
 
 	@Override
 	public final void doSave(IProgressMonitor monitor) {
@@ -77,7 +86,8 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			firePropertyChange(EditorPart.PROP_DIRTY);
 
-			setPartName(model().id());
+			if (updatableTitle)
+				setPartName(model().id());
 			// firePropertyChange(EditorPart.PROP_TITLE);
 
 		} catch (InvocationTargetException e) {
@@ -148,7 +158,6 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			}
 
-			
 			@Override
 			public ISelection getSelection() {
 				MultipleSelection cs = new MultipleSelection();
