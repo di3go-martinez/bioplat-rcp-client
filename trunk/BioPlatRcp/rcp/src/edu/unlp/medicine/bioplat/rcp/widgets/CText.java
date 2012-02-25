@@ -1,5 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.widgets;
 
+import java.util.Collection;
+import java.util.EventListener;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -9,9 +12,16 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
@@ -76,4 +86,20 @@ public class CText implements Widget {
 		text.setEditable(!b);
 		return this;
 	}
+
+	@Override
+	public void addModificationListener(final ModificationListener listener) {
+		final ModifyListener modifyListener = new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent event) {
+				listener.modify(new ModificationTextEvent(event));
+			}
+		};
+		Collection<EventListener> l = listeners.get(ModificationListener.class);
+		l.add(modifyListener);
+		text.addModifyListener(modifyListener);
+	}
+
+	private Multimap<Class<?>, EventListener> listeners = ArrayListMultimap.create();
 }
