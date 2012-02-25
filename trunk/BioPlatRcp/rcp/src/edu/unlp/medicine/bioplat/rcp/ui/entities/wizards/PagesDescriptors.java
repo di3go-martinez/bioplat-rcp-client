@@ -64,7 +64,7 @@ public class PagesDescriptors {
 				}
 
 				Composite container = new Composite(parent, SWT.BORDER);
-				final TableReference tr = TableBuilder.create(container).input(editors)//
+				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//
 						.addColumn(ColumnBuilder.create().title("Experimentos cargados").property("name"))//
 						.build();
 				tr.addSelectionChangeListener(new ISelectionChangedListener() {
