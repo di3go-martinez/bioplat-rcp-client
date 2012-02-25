@@ -61,6 +61,8 @@ public class TableBuilder implements TableConfigurer {
 	private List<?> input = Lists.newArrayList();
 	private Class<?> inputClass;
 
+	private boolean viewTableLines = true;
+
 	private TableBuilder(Composite parent, boolean virtual) {
 		// SWT.VIRTUAL tira error cuando se quiere editar un item.... ver
 		// javadoc de TableViewer...
@@ -75,7 +77,7 @@ public class TableBuilder implements TableConfigurer {
 
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true); // TODO configurable
-		table.setLinesVisible(true); // TODO configurable
+		table.setLinesVisible(viewTableLines);
 
 		// viewer.setContentProvider(new ArrayContentProvider());
 		// Make the selection available to other views
@@ -90,12 +92,6 @@ public class TableBuilder implements TableConfigurer {
 
 	private Table getTable() {
 		return viewer.getTable();
-	}
-
-	// TODO revisar
-	public TableBuilder hideTableLines() {
-		getTable().setLinesVisible(false);
-		return this;
 	}
 
 	public static TableBuilder create(Composite container) {
@@ -133,10 +129,13 @@ public class TableBuilder implements TableConfigurer {
 		return this;
 	}
 
-	// borrar... TODO es necesario que sea un AbstractEntity... debería ser
-	// opcional...
 	public <T> TableBuilder input(List<T> input) {
 		return input(input, Object.class);
+	}
+
+	public TableBuilder hideTableLines() {
+		viewTableLines = false;
+		return this;
 	}
 
 	public TableBuilder hideSelectionColumn() {
@@ -184,6 +183,8 @@ public class TableBuilder implements TableConfigurer {
 
 		viewer.refresh(true);
 		viewer.setComparator(new MyViewerComparator());
+
+		viewer.getTable().setLinesVisible(viewTableLines);
 
 		built = true;
 
