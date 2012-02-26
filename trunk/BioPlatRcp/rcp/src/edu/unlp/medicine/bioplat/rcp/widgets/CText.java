@@ -3,7 +3,6 @@ package edu.unlp.medicine.bioplat.rcp.widgets;
 import java.util.Collection;
 import java.util.EventListener;
 
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -21,8 +20,8 @@ import org.eclipse.swt.widgets.Text;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
@@ -103,4 +102,15 @@ public class CText implements Widget {
 	}
 
 	private Multimap<Class<?>, EventListener> listeners = ArrayListMultimap.create();
+
+	@Override
+	public Widget readOnly() {
+		return readOnly(true);
+	}
+
+	@Override
+	public Widget setLayoutData(Object layoutData) {
+		text.setLayoutData(layoutData);
+		return this;
+	}
 }
