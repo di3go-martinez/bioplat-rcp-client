@@ -29,7 +29,6 @@ import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-
 public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener {
 
 	public static String id() {
@@ -51,7 +50,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	protected void doCreatePartControl(Composite parent) {
 
 		Composite container = Widgets.createDefaultContainer(parent);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).margins(10, 10).create());
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).equalWidth(true).margins(10, 10).create());
 
 		Biomarker model = model();
 
@@ -69,11 +68,16 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 					setPartName(event.getNewText());
 				}
 			});
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_gene_count_label, model, "geneCount", true);
+		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_gene_count_label, model, "geneCount").readOnly();
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_author_label, model, "author");
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_original_gene_count_label, model, "originalNumberOfGenes", true);
+		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_original_gene_count_label, model, "originalNumberOfGenes").readOnly();
 		Widgets.createMultiTextWithLabel(container, Messages.BiomarkerEditor_description_label, model, "description");
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_significance_value, model, "significanceValue.pvalue", true);
+		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_significance_value, model, "significanceValue.pvalue").readOnly();
+
+		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_david_URL, model, "davidURLForFunctionalAnalysis").readOnly()//
+		// .setLayoutData(GridDataFactory.fillDefaults().span(3,
+		// 1).align(GridData.CENTER, GridData.FILL).grab(true, false).create())
+		;
 
 		Composite subcontainer = Widgets.createDefaultContainer(container);
 		subcontainer.setLayoutData(GridDataFactory.fillDefaults().span(4, 1).grab(true, true).create());
