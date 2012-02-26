@@ -11,6 +11,7 @@ public class Messages extends NLS {
 	public static String BiomarkerEditor_gene_count_label;
 	public static String BiomarkerEditor_name_label;
 	public static String BiomarkerEditor_significance_value;
+	public static String BiomarkerEditor_david_URL;
 
 	static {
 		// initialize resource bundle
