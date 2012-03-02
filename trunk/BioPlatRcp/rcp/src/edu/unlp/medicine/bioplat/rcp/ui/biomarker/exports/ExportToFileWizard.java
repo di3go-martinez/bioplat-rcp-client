@@ -50,19 +50,19 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		if (!check(selection)) {
+		if (!validate(selection)) {
 			MessageManager.INSTANCE/* .clear() */.add(Message.warn("No hay biomarcador activo")).openView();
 			return;
 		}
 		addPage(createWizardPage());
 	}
 
-	private boolean check(IStructuredSelection selection) {
+	private boolean validate(IStructuredSelection selection) {
 		try {
 			selectedBiomarker = (Biomarker) selection.getFirstElement();
 			if (selectedBiomarker == null)
 				selectedBiomarker = Models.getInstance().getActiveBiomarker();
-			return !selection.isEmpty() && selectedBiomarker != null;
+			return selectedBiomarker != null;
 		} catch (ClassCastException cce) {
 			// la selección actual no es un biomarcador
 			return false;
