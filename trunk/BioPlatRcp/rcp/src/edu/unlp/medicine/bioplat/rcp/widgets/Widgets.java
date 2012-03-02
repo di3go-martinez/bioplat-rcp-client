@@ -72,4 +72,5 @@ public class Widgets {
 		createLabel(parent, label);
 		new CList(parent, model, property, SWT.BORDER);
 	}
+
 }

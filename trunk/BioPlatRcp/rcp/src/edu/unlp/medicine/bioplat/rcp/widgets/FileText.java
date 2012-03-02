@@ -2,8 +2,10 @@ package edu.unlp.medicine.bioplat.rcp.widgets;
 
 import java.util.Map;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -20,10 +22,13 @@ public class FileText {
 
 	public FileText(Composite parent, int style) {
 		Composite c = new Composite(parent, SWT.NONE);
+		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
 
 		fd = new FileDialog(parent.getShell());
 
 		text = new Text(c, SWT.BORDER);
+		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
 		b = new Button(c, SWT.NONE);
 		b.setText("...");
 		b.addSelectionListener(new SelectionAdapter() {
@@ -34,7 +39,6 @@ public class FileText {
 			}
 		});
 
-		GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
 	}
 
 	public Control textControl() {
@@ -53,5 +57,10 @@ public class FileText {
 		fd.setFilterExtensions(filters.keySet().toArray(EMPTY_STRING_ARRAY));
 		fd.setFilterNames(filters.values().toArray(EMPTY_STRING_ARRAY));
 		return this;
+	}
+
+	public static void create(Composite c) {
+		new CLabel(c, SWT.NONE).setText("Archivo:");
+		new FileText(c, SWT.NONE);
 	}
 }
