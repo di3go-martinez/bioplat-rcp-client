@@ -198,7 +198,7 @@ public class ColumnBuilder {
 		return this;
 	}
 
-	public ColumnBuilder centeredText() {
+	public ColumnBuilder centered() {
 		align(SWT.CENTER);
 		return this;
 	}

@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 public interface TableReference {
 
 	/**
-	 * refresco expl�cito de la tabla
+	 * refresco explícito de la tabla
 	 */
 	void refresh();
 
@@ -28,6 +28,6 @@ public interface TableReference {
 	List selectedElements();
 
 	List focusedElements();
-	
+
 	void addSelectionChangeListener(ISelectionChangedListener listener);
 }
