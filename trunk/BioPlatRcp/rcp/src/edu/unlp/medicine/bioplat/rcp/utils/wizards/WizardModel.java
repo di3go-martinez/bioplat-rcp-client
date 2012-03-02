@@ -1,9 +1,12 @@
 package edu.unlp.medicine.bioplat.rcp.utils.wizards;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class WizardModel {
@@ -16,11 +19,31 @@ public class WizardModel {
 		return this;
 	}
 
+	public WizardModel add(String key) {
+		return add(key, new WritableValue());
+	}
+
 	public <T> T value(final String key) {
-		return (T) valueHolder(key).getValue();
+		IObservableValue ov = valueHolder(key);
+		if (ov != null)
+			return (T) ov.getValue();
+		return (T) commonValues.get(key);
+	}
+
+	public List<String> keys() {
+		List<String> result = Lists.newArrayList(values.keySet());
+		result.addAll(commonValues.keySet());
+		return result;
 	}
 
 	public IObservableValue valueHolder(String key) {
+		// TODO!! probar para ver si se puede resolver el realm.... sin estar
+		// dentro para hacer el cálculo del si entrar o no...
+		// Shell shell = new Shell(Display.getCurrent());
+		// Realm realm = SWTObservables.getRealm(shell.getDisplay());
+
+		// if (!values.containsKey(key))
+		// throw new RuntimeException("No se agregó el observable para " + key);
 		return values.get(key);
 	}
 
