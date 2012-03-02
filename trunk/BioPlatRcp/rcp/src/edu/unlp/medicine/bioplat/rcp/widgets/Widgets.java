@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.widgets;
 
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
