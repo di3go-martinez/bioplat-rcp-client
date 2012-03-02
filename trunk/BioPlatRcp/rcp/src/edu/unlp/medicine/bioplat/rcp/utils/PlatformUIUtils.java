@@ -11,6 +11,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+//TODO ejecutar en el contexto del ui-thread
 public class PlatformUIUtils {
 	private PlatformUIUtils() {
 		// TODO Auto-generated constructor stub
@@ -48,8 +49,18 @@ public class PlatformUIUtils {
 	}
 
 	public static Shell findShell() {
-		Display d = findDisplay();
-		return d.getActiveShell();
+		final Holder<Shell> result = Holder.create();
+
+		Display.getDefault().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				Display d = findDisplay();
+				result.hold(d.getActiveShell());
+			}
+		});
+
+		return result.value();
 	}
 
 	public static Display findDisplay() {
