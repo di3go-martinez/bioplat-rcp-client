@@ -9,7 +9,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
 
@@ -22,8 +21,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
+import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class CreateEmptyBiomarkerWizard extends AbstractWizard implements INewWizard {
+public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implements INewWizard {
 
 	private static final String NAME_K = "Name";
 
@@ -33,11 +33,20 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard implements INewWi
 	}
 
 	@Override
-	public boolean performFinish() {
-		Biomarker b = new EditedBiomarker(model().value(NAME_K).toString());
-		PlatformUIUtils.openEditor(b, EditorsId.biomarkerEditorId());
+	protected void configureParamenters() {
+		name = model().value(NAME_K).toString();
+	}
 
-		return true;
+	private String name = "";
+
+	@Override
+	public Biomarker backgroundProcess(Monitor m) {
+		return new EditedBiomarker(name);
+	}
+
+	@Override
+	protected void doInUI(Biomarker result) throws Exception {
+		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
 	}
 
 	@Override
@@ -47,17 +56,22 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard implements INewWi
 		result.add(new WizardPageDescriptor("Configuración") {
 
 			@Override
-			public Control create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = new Composite(parent, SWT.NONE);
 				new CLabel(c, SWT.BOLD).setText("Nombre:");
 				Text nameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(nameHolder, SWT.Modify), model().valueHolder(NAME_K));
-				GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(c);
+				GridLayoutFactory.swtDefaults().numColumns(1).margins(5, 5).generateLayout(c);
 				return c;
 			}
 		});
 
 		return result;
+	}
+
+	@Override
+	protected String getTaskName() {
+		return "Creando un biomarcador vacío";
 	}
 
 }
