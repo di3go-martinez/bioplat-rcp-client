@@ -31,7 +31,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private WizardModel model = createWizardModel();
 
-	protected WizardModel model() {
+	protected WizardModel wizardModel() {
 		return model;
 	}
 
@@ -54,11 +54,16 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				@Override
 				public void createControl(Composite parent) {
 					WizardPageSupport.create(this, dbc);
-					Composite control = pd.create(parent, dbc, model());
+					Composite control = pd.create(this, parent, dbc, wizardModel());
 
 					// TODO revisar si va siempre por default.
 					GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(control);
 					setControl(control);
+				}
+
+				@Override
+				public boolean isPageComplete() {
+					return pd.isPageComplete(wizardModel());
 				}
 			});
 		}

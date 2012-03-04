@@ -3,6 +3,8 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -13,6 +15,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -27,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -55,7 +59,7 @@ public class PagesDescriptors {
 		return new WizardPageDescriptor("Cluster") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				return new Composite(parent, SWT.NONE);
 			}
 		};
@@ -72,7 +76,7 @@ public class PagesDescriptors {
 		return new WizardPageDescriptor("Experimentos") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
+			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 				List<AbstractExperiment> editors = Lists.newArrayList();
 				for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
 					for (IWorkbenchPage page : window.getPages()) {
@@ -94,11 +98,22 @@ public class PagesDescriptors {
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
 						wmodel.set(SELECTED, tr.selectedElements());
+						wp.setPageComplete(isPageComplete(wmodel));
 					}
 				});
 
 				GridLayoutFactory.fillDefaults().margins(10, 10).applyTo(container);
 				return container;
+			}
+
+			@Override
+			public boolean isPageComplete(@Nullable WizardModel model) {
+				if (model == null)
+					return false;
+				List<?> l = model.value(SELECTED);
+				if (l == null)
+					return false;
+				return !l.isEmpty();
 			}
 		};
 	}
@@ -107,7 +122,7 @@ public class PagesDescriptors {
 		return new WizardPageDescriptor("Configuración") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 				Composite result = new Composite(parent, SWT.None);
 
 				Button check = new Button(result, SWT.CHECK);
@@ -128,9 +143,6 @@ public class PagesDescriptors {
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(AttributeTypeEnum.values());
 
-				IObservableValue selectedAttribute = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
-				dbc.bindValue(selectedAttribute, wmodel.valueHolder(VALIDATION_TYPE));
-
 				new Label(result, SWT.NONE).setText("Statistical Significance Test:");
 				final ComboViewer detail = new ComboViewer(result, SWT.BORDER | SWT.READ_ONLY);
 				detail.setContentProvider(new ArrayContentProvider());
@@ -141,21 +153,28 @@ public class PagesDescriptors {
 					public void selectionChanged(SelectionChangedEvent event) {
 						ComboViewer csc = (ComboViewer) event.getSource();
 						AttributeTypeEnum ate = (AttributeTypeEnum) ((StructuredSelection) csc.getSelection()).getFirstElement();
-
-						detail.setInput(ate.getStatisticsSignificanceTestsThatCouldBeAppliedToThisType());
+						if (ate != null)
+							detail.setInput(ate.getStatisticsSignificanceTestsThatCouldBeAppliedToThisType());
 					}
 				});
+				// bind value del "maestro", notar el listener de selección
+				IObservableValue collapseStrategySelected = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
+				dbc.bindValue(collapseStrategySelected, wmodel.valueHolder(VALIDATION_TYPE), UpdateStrategies.nonNull("Validation Type"), UpdateStrategies.nullStrategy());
+				// bind value del "detalle"
 				IObservableValue selectedStatisticalValue = ViewersObservables.observeSingleSelection(detail);
-				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE));
+				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE), UpdateStrategies.nonNull("Statistical Value"), UpdateStrategies.nullStrategy());
+
+				// hook para ejecutar el
 
 				ComboViewer cv = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList("OS_Months", "recurrence", "timeUntilEventOccured"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 
 				cv = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", "OS_Event", "status"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 
 				return result;
 			}
+
 		};
 	}
 

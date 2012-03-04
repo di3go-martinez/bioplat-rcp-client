@@ -111,6 +111,10 @@ public class Paging<T> {
 	 */
 	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config, Paging basePaging) {
 		this(model, propertyPath, viewer, config);
+		if (basePaging == null) {
+			logger.warn("Intentando replicar un paging que no existía; no se replicará");
+			return;
+		}
 		basePaging.unplug();
 		// está cargada la primera página, tengo que cargar una menos
 		int cantPages = basePaging.getCurrentPageNumber();

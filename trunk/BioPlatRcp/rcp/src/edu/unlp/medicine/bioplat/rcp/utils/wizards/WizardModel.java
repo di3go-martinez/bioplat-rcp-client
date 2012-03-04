@@ -53,7 +53,13 @@ public class WizardModel {
 		return this;
 	}
 
-	// TODO analizar...
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 * @deprecated usar value(key)
+	 */
+	@Deprecated
 	public Object get(String key) {
 		return get(key, null);
 	}

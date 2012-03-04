@@ -9,6 +9,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -47,7 +48,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard {
 		return new WizardPageDescriptor("Providers") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 
 				Composite container = new Composite(parent, SWT.NONE);
 
@@ -86,7 +87,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard {
 		return new WizardPageDescriptor("Filter") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = new Composite(parent, SWT.NONE);
 				new Label(c, SWT.NONE).setText("Organismo:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
@@ -109,7 +110,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard {
 		return new WizardPageDescriptor("Algorithms") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = new Composite(parent, SWT.NONE);
 				new Label(c, SWT.NONE).setText("Algoritmo:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);

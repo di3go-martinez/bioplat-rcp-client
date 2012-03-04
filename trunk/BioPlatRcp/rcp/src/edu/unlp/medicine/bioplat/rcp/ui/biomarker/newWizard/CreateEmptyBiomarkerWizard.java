@@ -6,6 +6,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
@@ -13,7 +14,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.INewWizard;
 
 import com.google.common.collect.Lists;
-
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
@@ -35,7 +35,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 
 	@Override
 	protected void configureParamenters() {
-		name = model().value(NAME_K).toString();
+		name = wizardModel().value(NAME_K).toString();
 	}
 
 	private String name = "";
@@ -57,11 +57,11 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 		result.add(new WizardPageDescriptor("Configuración") {
 
 			@Override
-			public Composite create(Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = new Composite(parent, SWT.NONE);
 				new CLabel(c, SWT.BOLD).setText("Nombre:");
 				Text nameHolder = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(nameHolder, SWT.Modify), model().valueHolder(NAME_K));
+				dbc.bindValue(SWTObservables.observeText(nameHolder, SWT.Modify), wizardModel().valueHolder(NAME_K));
 				GridLayoutFactory.swtDefaults().numColumns(1).margins(5, 5).generateLayout(c);
 				return c;
 			}

@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -42,11 +43,11 @@ import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class ValidationConfigsDialog extends Dialog {
+public class ValidationConfigsDialog extends TitleAreaDialog {
 
 	protected ValidationConfigsDialog(Shell parentShell, Biomarker biomarker) {
 		super(parentShell);
-		this.model = biomarker;
+		this.biomarker = biomarker;
 
 		// TODO mejorar
 		experimentsWizard = createExperimentSelectorWizard();
@@ -57,23 +58,54 @@ public class ValidationConfigsDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(400, 400);
+		return new Point(500, 500);
+	}
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Configurar y aplicar experimentos");
 	}
 
 	private final List<ValidationConfig> data = Lists.newArrayList();
 
 	@Override
-	protected Control createContents(Composite parent) {
-		Composite c = Widgets.createDefaultContainer(parent);
+	protected Control createDialogArea(Composite parent) {
+
+		Composite container = (Composite) super.createDialogArea(parent);
+		Composite c = Widgets.createDefaultContainer(container);
+		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 
 		tr = TableBuilder.create(c)//
+				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("experimentToValidate.name").title("experiment"))//
+				.addColumn(ColumnBuilder.create().property("shouldGenerateCluster").checkbox().centered().width(20).title("cluster?"))//
 				.addColumn(ColumnBuilder.create().property("numberOfClusters").title("clusters"))//
+				.addColumn(ColumnBuilder.create().property("numberOfTimesToRepeatTheCluster").title("times"))//
 				.addColumn(ColumnBuilder.create().property("statisticsSignificanceTest.friendlyName").title("Statistics Significance Test"))//
+				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation"))//
+				.addColumn(ColumnBuilder.create().property("secondAttribtueNameToDoTheValidation"))//
+
 				.input(data).build();
 
-		Button add = new Button(c, SWT.FLAT);
-		add.setText("Agregar aplicación ");
+		// Composite buttons = new Composite(c, SWT.BORDER);
+		// buttons.setLayout(GridLayoutFactory.fillDefaults().create());
+		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
+		// true).create());
+
+		setMessage("Configuración de experimentos a aplicar");
+		return container;
+	}
+
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		parent.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
+		Composite c = new Composite(parent, SWT.None);
+		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
+		Button add = new Button(c, SWT.NONE);
+		// add.setLayoutData(GridDataFactory.fillDefaults().grab(true,
+		// true).align(SWT.END, SWT.END).create());
+		add.setText("+");
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -83,35 +115,33 @@ public class ValidationConfigsDialog extends Dialog {
 				wd.open();
 			}
 		});
+		super.createButtonsForButtonBar(c);
 
-		Button b = new Button(c, SWT.FLAT);
-		b.setText("Apply");
-		b.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent evt) {
-				// TODO mejorar...
-				for (ApplyExperimentsOnMetasignatureCommand command : applyCommands) {
-					try {
-						command.execute();
-						MessageManager.INSTANCE.add(Message.info("Comando aplicado exitósamente"));
-					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Falló la aplicación del experimento", e));
-					}
-				}
-
-			}
-		});
-
-		return c;
 	}
 
-	private Biomarker model;
+	@Override
+	protected void okPressed() {
+		int count = 0;
+		for (ApplyExperimentsOnMetasignatureCommand command : applyCommands) {
+			try {
+				command.execute();
+				count++;
+			} catch (Exception e) {
+				MessageManager.INSTANCE.add(Message.error("Falló la aplicación del experimento", e));
+			}
+		}
+		String s = (count == 1) ? "" : "s";
+		MessageManager.INSTANCE.add(Message.info(count + " comando" + s + " aplicado" + s + " exitósamente"));
+		close();
+	}
+
+	private Biomarker biomarker;
 	private AbstractWizard<?> experimentsWizard;
 	private WizardDialog wd;
 	private TableReference tr;
 
-	private Biomarker findModel() {
-		return model;
+	private Biomarker findBiomarker() {
+		return biomarker;
 	}
 
 	private List<ApplyExperimentsOnMetasignatureCommand> applyCommands = Lists.newArrayList();
@@ -121,10 +151,8 @@ public class ValidationConfigsDialog extends Dialog {
 
 			@Override
 			public List<AbstractExperimentDescriptor> backgroundProcess(Monitor feedback) throws ExperimentBuildingException {
-				List<Experiment> experiments = ((List<Experiment>) model().get(PagesDescriptors.SELECTED));
+				List<Experiment> experiments = ((List<Experiment>) wizardModel().value(PagesDescriptors.SELECTED));
 
-				// TODO hacer para los otros sources (archivo, InSilicoDB,
-				// etc)
 				return Lists.transform(experiments, new Function<Experiment, AbstractExperimentDescriptor>() {
 
 					@Override
@@ -132,24 +160,25 @@ public class ValidationConfigsDialog extends Dialog {
 						return new FromMemoryExperimentDescriptor(input);
 					}
 				});
+				// TODO hacer para los otros sources (archivo, InSilicoDB, etc)
 			}
 
 			@Override
 			protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
 
-				boolean shouldGenerateCluster = model().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
-				int numberOfClusters = model().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-				String attributeNameToValidation = model().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
-				String secondAttributeNameToDoTheValidation = model().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
-				IStatisticsSignificanceTest statisticsSignificanceTest = model().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
-				int numberOfTimesToRepeatTheCluster = model().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
-				boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = model().value(PagesDescriptors.REMOVE_GENES_IN_BIOMARKER);
+				boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
+				int numberOfClusters = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+				String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
+				String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
+				IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
+				int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
+				boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_BIOMARKER);
 
 				for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 					final ValidationConfig validationConfig = new ValidationConfig(aed, shouldGenerateCluster, numberOfClusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
-					applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findModel(), Arrays.asList(validationConfig)));
+					applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Arrays.asList(validationConfig)));
 
 					// FIXME hacer un poquito más generico con una
 					// interface MultipageEditor#addPage(Editor, Input,
@@ -163,10 +192,6 @@ public class ValidationConfigsDialog extends Dialog {
 					// multipleEditor.addEditorPage(new ExperimentEditor(),
 					// EditorInputFactory.createDefaultEditorInput(appliedExperiment));
 
-					// old... PlatformUIUtils.openEditor(appliedExperiment,
-					// ExperimentEditor.id());
-
-					// TODO sacar, esto es provisorio
 					data.add(validationConfig);
 					tr.refresh();
 				}

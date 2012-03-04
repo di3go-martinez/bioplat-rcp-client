@@ -85,7 +85,7 @@ public class TableBuilder implements TableConfigurer {
 
 		// Layout the viewer
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		gridData.horizontalSpan = 2;
+		gridData.horizontalSpan = 1;
 		viewer.getControl().setLayoutData(gridData);
 
 	}
@@ -378,7 +378,6 @@ class MyElementFilter extends ViewerFilter {
 
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
-
 		return element.equals(filter);
 	}
 }

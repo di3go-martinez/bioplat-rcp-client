@@ -29,13 +29,13 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 
 			@Override
 			public void propertyChanged(Object arg0, int arg1) {
-				if (arg0 instanceof BiomarkerEditor) // TODO revisar que siempre
-														// es un biomarker
-														// editor el arg0
+				// TODO revisar que siempre es un biomarker editor el arg0
+				if (arg0 instanceof BiomarkerEditor)
 					setPartName(((BiomarkerEditor) arg0).model().id());
 			}
 		});
 		result.add(new EditorDescription(input, editor, "General"));
+		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(), "Applied Experiments"));
 
 		return result;
 	}
