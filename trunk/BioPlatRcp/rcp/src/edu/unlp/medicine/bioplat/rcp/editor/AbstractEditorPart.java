@@ -31,12 +31,14 @@ import edu.unlp.medicine.bioplat.rcp.utils.Service;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
- * Implementaci�n abstracta para los editores
+ * Implementación abstracta para los editores
  * 
  * @author Diego Mart�nez
  * @version $Revision:$
  * @updatedBy $Author:$ on $Date:$
  */
+// FIXME al extender esta clase se intenta redefinir el método model, el cual NO
+// SE DEBE extender!! BORRARLO DE LAS SUBCLASES QUE INTENTEN EXTENDERLO
 public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider {
 
 	private class ForDirtyObserver implements Observer {
