@@ -83,6 +83,14 @@
             id="bio.plat.experiment.editor"
             name="%experiment.editor.name">
       </editor>
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.AppliedExperimetEditorActionBarContributor"
+            default="false"
+            icon="resources/icons/applied.experiment.png"
+            id="bio.plat.applied.experiment.editor"
+            name="%applied.experiment.editor.name">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.actionSets">
@@ -312,6 +320,17 @@
         name="Biomarcador vacío">
        <description>Nuevo biomarcador vacío</description>
 	</wizard>
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.GenerateMetasignatureWizard"
+        icon="resources/icons/generateMetasignature.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
+        name="Generar biomarcador">
+     <description>
+        Nuevo biomarcador vacío
+     </description>
+  </wizard>
    
    </extension>
 </plugin>
