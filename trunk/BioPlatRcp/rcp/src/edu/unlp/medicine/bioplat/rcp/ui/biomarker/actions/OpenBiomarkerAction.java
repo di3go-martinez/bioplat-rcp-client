@@ -8,6 +8,8 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
@@ -24,6 +26,7 @@ import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 @Deprecated
 // TODO implementar el ISelectionListener en otro lado, si es necesario
 public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISelectionListener {
+	private Logger logger = LoggerFactory.getLogger(OpenBiomarkerAction.class);
 
 	@Override
 	public void run(IAction action) {
@@ -41,7 +44,7 @@ public class OpenBiomarkerAction implements IWorkbenchWindowActionDelegate, ISel
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		System.out.println(OpenBiomarkerAction.class + " says selectionChanged! current selection: " + selection);
+		logger.debug("selection changed: " + selection);
 	}
 
 	@Override
