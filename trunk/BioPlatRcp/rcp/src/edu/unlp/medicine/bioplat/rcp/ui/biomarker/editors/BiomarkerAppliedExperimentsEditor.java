@@ -24,6 +24,10 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 	private TableReference tr;
 
+	public BiomarkerAppliedExperimentsEditor(boolean autoUpdatableTitle) {
+		super(autoUpdatableTitle);
+	}
+
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 		Composite c = new Composite(parent, SWT.NONE);
