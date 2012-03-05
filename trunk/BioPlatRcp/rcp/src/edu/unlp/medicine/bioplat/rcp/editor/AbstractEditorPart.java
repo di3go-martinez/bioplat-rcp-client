@@ -24,6 +24,8 @@ import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.IProgressService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.input.AbstractEditorInput;
@@ -40,6 +42,8 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 // FIXME al extender esta clase se intenta redefinir el método model, el cual NO
 // SE DEBE extender!! BORRARLO DE LAS SUBCLASES QUE INTENTEN EXTENDERLO
 public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider {
+
+	private static Logger logger = LoggerFactory.getLogger(AbstractEditorPart.class);
 
 	private class ForDirtyObserver implements Observer {
 
@@ -103,7 +107,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	}
 
 	protected void doSave0() {
-		delay(1000);
+		delay(500);
 		// RepositoryFactory.getRepository().save(model());
 	}
 
@@ -216,8 +220,12 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 	@Override
 	public final void createPartControl(Composite parent) {
-		doCreatePartControl((Composite) (focusReceptor = parent));
-		model().addObserver(createModificationObserver());
+		try {
+			doCreatePartControl((Composite) (focusReceptor = parent));
+			model().addObserver(createModificationObserver());
+		} catch (Exception e) {
+			logger.error("Error creando el editor " + this, e);
+		}
 	}
 
 	protected abstract void doCreatePartControl(Composite parent);
