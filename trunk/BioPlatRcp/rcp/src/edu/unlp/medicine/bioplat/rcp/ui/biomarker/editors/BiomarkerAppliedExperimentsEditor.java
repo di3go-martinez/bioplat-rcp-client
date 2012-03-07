@@ -57,8 +57,6 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				for (Object o : tr.selectedElements())
-					// TODO abrir el editor de experimentos aplicados, cuando
-					// esté creado...
 					PlatformUIUtils.openEditor(o, AppliedExperimentEditor.id());
 			}
 		});

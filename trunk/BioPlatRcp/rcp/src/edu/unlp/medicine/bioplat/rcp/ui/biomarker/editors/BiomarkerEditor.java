@@ -50,7 +50,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	protected void doCreatePartControl(Composite parent) {
 
 		Composite container = Widgets.createDefaultContainer(parent);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).equalWidth(true).margins(10, 10).create());
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).equalWidth(false).margins(10, 10).create());
 
 		Biomarker model = model();
 
