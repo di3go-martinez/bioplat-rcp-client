@@ -112,7 +112,7 @@ public class Paging<T> {
 	public Paging(Object model, String propertyPath, final TableViewer viewer, TableConfigurer config, Paging basePaging) {
 		this(model, propertyPath, viewer, config);
 		if (basePaging == null) {
-			logger.warn("Intentando replicar un paging que no existía; no se replicará");
+			logger.warn("Se inicializó un nuevo paging ya que el que se intenta replicar no existe...");
 			return;
 		}
 		basePaging.unplug();

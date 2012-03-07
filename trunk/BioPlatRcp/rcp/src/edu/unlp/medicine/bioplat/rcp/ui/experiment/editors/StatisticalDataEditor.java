@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import java.util.concurrent.Callable;
+
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -25,26 +27,43 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 		Composite container = toolkit.createComposite(parent);
 		container.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
 
-		ExperimentAppliedToAMetasignature experiment = model();
-		// TODO parametrizar y hacer un expandable por test
-		createExpandable(container, experiment);
+		final ExperimentAppliedToAMetasignature experiment = model();
+
+		createExpandable(container, experiment, "Script For Dooing The Cluster", new Callable<String>() {
+
+			@Override
+			public String call() throws Exception {
+				return experiment.getScriptForDoingTheCluster();
+			}
+		});
+
+		createExpandable(container, experiment, "LogRankTestChiSqured", new Callable<String>() {
+
+			@Override
+			public String call() throws Exception {
+				return experiment.generateScript4LogRankTestChiSqured();
+			}
+		});
+
 	}
 
-	private void createExpandable(final Composite parent, ExperimentAppliedToAMetasignature experiment) {
-		final ExpandableComposite ec = toolkit.createExpandableComposite(parent, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+	private void createExpandable(final Composite parent, ExperimentAppliedToAMetasignature experiment, String title, Callable<String> scriptGenerator) {
+		final ExpandableComposite ec = toolkit.createExpandableComposite(parent, ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT/*
+																																				 * TREE_NODE
+																																				 */);
 
-		ec.setText("LogRankTestChiSqured");
+		ec.setText(title);
 
 		Composite client = toolkit.createComposite(ec);
 		client.setLayout(GridLayoutFactory.fillDefaults().create());
 
-		String script_LogRankTestChiSqured = "Couldn't generate the script...";
+		String $script = "Couldn't generate the script...";
 		try {
-			script_LogRankTestChiSqured = experiment.generateScript4LogRankTestChiSqured();
+			$script = scriptGenerator.call();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		toolkit.createLabel(client, script_LogRankTestChiSqured, SWT.WRAP);
+		toolkit.createLabel(client, $script, SWT.WRAP);
 
 		ec.setClient(client);
 		ec.addExpansionListener(new ExpansionAdapter() {

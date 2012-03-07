@@ -35,4 +35,5 @@ public class UpdateStrategies {
 	public static UpdateValueStrategy nullStrategy() {
 		return null;
 	}
+
 }

@@ -70,8 +70,8 @@ public class PlatformUIUtils {
 		return d;
 	}
 
-	public static void openEditor(Object o, String id) {
-		openEditor(EditorInputFactory.createDefaultEditorInput(o), id);
+	public static IEditorPart openEditor(Object o, String id) {
+		return openEditor(EditorInputFactory.createDefaultEditorInput(o), id);
 
 	}
 
