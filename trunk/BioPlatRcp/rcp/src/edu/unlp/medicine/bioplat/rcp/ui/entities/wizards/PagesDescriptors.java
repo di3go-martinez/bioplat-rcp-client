@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class PagesDescriptors {
 
 				Composite container = new Composite(parent, SWT.BORDER);
 				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//
-						.addColumn(ColumnBuilder.create().title("Experimentos cargados").property("name"))//
+						.addColumn(ColumnBuilder.create().title("Experimentos cargados").width(50).property("name"))//
 						.build();
 				tr.addSelectionChangeListener(new ISelectionChangedListener() {
 

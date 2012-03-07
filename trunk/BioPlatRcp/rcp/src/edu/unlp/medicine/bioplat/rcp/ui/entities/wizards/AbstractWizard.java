@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 
-
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -15,6 +14,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -29,6 +29,10 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWizard {
+
+	public AbstractWizard() {
+
+	}
 
 	private WizardModel model = createWizardModel();
 
@@ -64,10 +68,20 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean isPageComplete() {
-					return pd.isPageComplete(wizardModel());
+
+					return pd.isPageComplete(/* this? */wizardModel());
 				}
+
 			});
 		}
+	}
+
+	@Override
+	public boolean canFinish() {
+		for (IWizardPage page : getPages())
+			if (page.getErrorMessage() != null)
+				return false;
+		return super.canFinish();
 	}
 
 	protected abstract List<WizardPageDescriptor> createPagesDescriptors();
