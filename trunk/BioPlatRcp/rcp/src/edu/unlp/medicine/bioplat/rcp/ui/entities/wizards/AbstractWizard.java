@@ -47,22 +47,23 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 */
 	protected WizardModel createWizardModel() {
 		return new WizardModel();
-	}
+	} 
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		final DataBindingContext dbc = new DataBindingContext();
 
 		for (final WizardPageDescriptor pd : createPagesDescriptors()) {
 			addPage(new WizardPage(pd.getPageName()) {
 
 				@Override
 				public void createControl(Composite parent) {
+					final DataBindingContext dbc = new DataBindingContext();
+
 					WizardPageSupport.create(this, dbc);
 					Composite control = pd.create(this, parent, dbc, wizardModel());
 
 					// TODO revisar si va siempre por default.
-					GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(control);
+					GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(control);
 					setControl(control);
 				}
 
