@@ -4,7 +4,7 @@ import org.eclipse.jface.action.IAction;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 
-public interface ActionContribution {
+public interface ActionContribution<T> {
 
 	/**
 	 * 
@@ -13,7 +13,7 @@ public interface ActionContribution {
 	 * @param modelProvider
 	 *            Colaborador que sabe como resolver el modelo
 	 */
-	void modelProvider(ModelProvider modelProvider);
+	void modelProvider(ModelProvider<T> modelProvider);
 
 	/**
 	 * @deprecated migrar a comandos

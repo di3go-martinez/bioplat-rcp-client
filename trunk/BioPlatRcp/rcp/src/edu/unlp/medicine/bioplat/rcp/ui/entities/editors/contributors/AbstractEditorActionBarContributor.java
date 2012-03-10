@@ -12,12 +12,11 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.MessageViewOpenAction;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.DefaultExtensionLoaderRunnable;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.ExtensionPointLoader;
-import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 //TODO no se usa para nada todavía el tipo genérico T, ver si se puede usar para el selectionType por ejemplo
 //TODO agregar configuración en populateMenu, por ejemplo, para agregar una operación al toolbar, al menu (por default)
 //TODO agregar método para permitir la ejecución en el threadui...
-public abstract class AbstractEditorActionBarContributor<T> extends EditorActionBarContributor implements ModelProvider {
+public abstract class AbstractEditorActionBarContributor<T> extends EditorActionBarContributor implements ModelProvider<T> {
 
 	/**
 	 * Se agregan las operaciones a realizar sobre una entidad al menu
@@ -90,10 +89,10 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 	 * @return
 	 */
 	@Override
-	public <T extends AbstractEntity> T model() {
+	public T model() {
 		final IEditorPart activeEditor = getPage().getActiveEditor();
 		Assert.isNotNull(activeEditor, "Early attempt to access to editor. It is not created yet.");
-		return ((ModelProvider) activeEditor).model();
+		return ((ModelProvider<T>) activeEditor).model();
 	}
 
 }

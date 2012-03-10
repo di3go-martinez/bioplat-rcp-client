@@ -6,9 +6,9 @@ import org.eclipse.jface.action.IAction;
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-public abstract class AbstractActionContribution<T extends AbstractEntity> extends Action implements ActionContribution {
+public abstract class AbstractActionContribution<T extends AbstractEntity> extends Action implements ActionContribution<T> {
 
-	private ModelProvider modelProvider;
+	private ModelProvider<T> modelProvider;
 
 	@Override
 	public IAction action() {
@@ -16,7 +16,7 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	}
 
 	@Override
-	public void modelProvider(ModelProvider modelProvider) {
+	public void modelProvider(ModelProvider<T> modelProvider) {
 		this.modelProvider = modelProvider;
 	}
 
