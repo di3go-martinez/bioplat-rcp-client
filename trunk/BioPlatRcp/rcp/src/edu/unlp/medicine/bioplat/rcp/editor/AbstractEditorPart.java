@@ -41,7 +41,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  */
 // FIXME al extender esta clase se intenta redefinir el método model, el cual NO
 // SE DEBE extender!! BORRARLO DE LAS SUBCLASES QUE INTENTEN EXTENDERLO
-public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider {
+public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider<T> {
 
 	private static Logger logger = LoggerFactory.getLogger(AbstractEditorPart.class);
 
