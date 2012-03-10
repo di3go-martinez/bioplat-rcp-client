@@ -16,7 +16,7 @@ import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
 
 //TODO generalizar de cualquier valor a cualquier otro o por operación por ejemplo un valor que se calcule
-public class ChangeZerosToAction extends AbstractActionContribution<AbstractExperiment> implements ActionContribution {
+public class ChangeZerosToAction extends AbstractActionContribution<AbstractExperiment> implements ActionContribution<AbstractExperiment> {
 
 	public ChangeZerosToAction() {
 
