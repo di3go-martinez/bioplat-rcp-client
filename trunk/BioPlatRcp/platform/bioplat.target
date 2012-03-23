@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Bioplat Target" sequenceNumber="35">
+<target name="Bioplat Target" sequenceNumber="51">
 <locations>
 <location path="${M2_REPO}\bioplat\edu.medicine.bioplat.base.lib\1.1.0-SNAPSHOT" type="Directory"/>
-<location path="${DROPBOX_HOME}/m2repo/eclipse/target" type="Directory"/>
+<location path="${DROPBOX_HOME}/m2repo/eclipse/target.all" type="Directory"/>
+<location path="${DROPBOX_HOME}/m2repo/eclipse/" type="Directory"/>
 </locations>
 <environment>
-<os>win32</os>
-<ws>win32</ws>
 <arch>x86</arch>
-<nl>es_AR</nl>
+<nl>en_GB</nl>
 </environment>
 <launcherArgs>
-<vmArgs>-Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx512m</vmArgs>
+<vmArgs>-Dosgi.requiredJavaVersion=1.5 -Xms100m -Xmx1g</vmArgs>
 </launcherArgs>
 </target>
