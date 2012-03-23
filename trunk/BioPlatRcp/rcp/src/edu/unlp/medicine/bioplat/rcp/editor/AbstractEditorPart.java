@@ -35,12 +35,10 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 /**
  * Implementación abstracta para los editores
  * 
- * @author Diego Mart�nez
+ * @author Diego Martínez
  * @version $Revision:$
  * @updatedBy $Author:$ on $Date:$
  */
-// FIXME al extender esta clase se intenta redefinir el método model, el cual NO
-// SE DEBE extender!! BORRARLO DE LAS SUBCLASES QUE INTENTEN EXTENDERLO
 public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider<T> {
 
 	private static Logger logger = LoggerFactory.getLogger(AbstractEditorPart.class);
@@ -251,4 +249,28 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 		return ISaveablePart2.DEFAULT;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) // quicktest
+			return true;
+
+		if (!(obj instanceof AbstractEditorInput)) // or obj is null
+			return false;
+
+		try {
+			// TODO revisar mejor... problema con los editores que están
+			// contenidos en otros editores... ya está resuelto esto, no?
+			AbstractEditorPart<?> another = (AbstractEditorPart<?>) obj;
+			return getClass().equals(another.getClass()) && this.getEditorInput().equals(another.getEditorInput());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	// FIXME no está bien implementado
+	@Override
+	public int hashCode() {
+		return getEditorInput().hashCode();
+	}
 }
