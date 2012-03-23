@@ -71,8 +71,10 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// }
 		// });
 
-		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes", true);
+		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes").readOnly();
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
+
+		Widgets.createTextWithLabel(c, "Samples", model(), "sampleCount").readOnly();
 
 		// construyo el input para el tablebuilder en background
 		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {

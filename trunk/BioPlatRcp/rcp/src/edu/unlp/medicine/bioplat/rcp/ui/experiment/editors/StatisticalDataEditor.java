@@ -31,7 +31,7 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 
 		final ExperimentAppliedToAMetasignature experiment = model();
 
-		createExpandable(container, "Script For Dooing The Cluster", new CompositeGenerator(toolkit) {
+		createExpandable(container, "Script For Doing The Cluster", new CompositeGenerator(toolkit) {
 
 			@Override
 			protected void fill(Composite c) throws Exception {
@@ -53,12 +53,11 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 				try {
 					script = experiment.generateScript4LogRankTestChiSqured();
 					style |= SWT.V_SCROLL | SWT.MULTI;
+					toolkit.createText(container, script, style);
 				} catch (Exception e) {
 					script = "Couldn't generate the script...";
+					toolkit.createLabel(container, script, style);
 				}
-
-				toolkit.createText(container, script, style);
-
 			}
 		});
 
