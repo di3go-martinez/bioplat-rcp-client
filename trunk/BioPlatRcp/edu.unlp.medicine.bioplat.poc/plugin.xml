@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   
+   
+   <extension  point="org.eclipse.ui.views">
+   <view
+         class="edu.unlp.medicine.bioplat.poc.rcp.personas.PersonaViewPart"
+         id="edu.unlp.medicine.bioplat.rcp.personas.persona.view"
+         name="Persona"
+         restorable="false">
+   </view>
+  </extension>
+   
+   <extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
+      <actionContribution
+            caption="Poc Dummy Contribution"
+            class="edu.unlp.medicine.bioplat.poc.DummyActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.generic.AbstractEntity">
+         </selection>
+      </actionContribution>
+   </extension>
+
+</plugin>
