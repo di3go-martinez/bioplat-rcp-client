@@ -12,7 +12,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
@@ -23,11 +26,15 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.TextEditing
 
 public class ColumnBuilder {
 
+	private static final Logger logger = LoggerFactory.getLogger(ColumnBuilder.class);
+
+	private Menu popup;
+
 	public static ColumnBuilder create() {
 		return new ColumnBuilder();
 	}
 
-	private DataTransformer transformer = new AbstractDataTransformer() {
+	private DataTransformer<Object, Object> transformer = new AbstractDataTransformer<Object, Object>() {
 		@Override
 		public Object doTransform(Object from) {
 			return from;
@@ -75,15 +82,27 @@ public class ColumnBuilder {
 	private boolean resizable = true;
 
 	/**
+	 * 
+	 * Construye la columna en un viewer y en una posición
+	 * 
 	 * @internal
 	 * @param viewer
 	 * @param index
 	 */
 	void build(TableViewer viewer, int index) {
+		initialize(viewer);
+
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
 		tvc.setLabelProvider(clp);
 		if (editingSupport != null && editable)
 			tvc.setEditingSupport(newInstance(editingSupport, viewer));
+	}
+
+	private void initialize(TableViewer viewer) {
+		if (popup != null)
+			return;
+		popup = new Menu(viewer.getTable().getShell(), SWT.POP_UP);
+
 	}
 
 	private EditingSupport newInstance(Class<? extends EditingSupport> clazz, TableViewer viewer) {
@@ -269,6 +288,11 @@ public class ColumnBuilder {
 							return UNCHECKED;
 					}
 				});
+	}
+
+	public ColumnBuilder createButton(String text/* , Executable e */) {
+		logger.warn("TODO...");
+		return this;
 	}
 
 	public ColumnBuilder resizable(boolean b) {

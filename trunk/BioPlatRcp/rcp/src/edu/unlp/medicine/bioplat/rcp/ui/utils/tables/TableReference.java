@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.swt.widgets.Table;
 
 public interface TableReference {
 
@@ -21,13 +22,23 @@ public interface TableReference {
 	// TODO
 	// void input(AbstractEntity model);
 
+	void add(Object element);
+
 	ColumnManager columnManager();
 
-	void show(Object selectedGene);
+	void show(Object element);
 
 	List selectedElements();
 
 	List focusedElements();
 
 	void addSelectionChangeListener(ISelectionChangedListener listener);
+
+	/**
+	 * Da acceso a la tabla interna.... usar solo en casos que se requiera algún
+	 * detalle particular
+	 * 
+	 * @return
+	 */
+	Table getTable();
 }

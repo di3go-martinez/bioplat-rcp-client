@@ -1,22 +1,23 @@
 package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 
+import org.eclipse.jface.viewers.TableViewer;
+import org.jboss.util.NotImplementedException;
+
 public class DefaultColumnManager implements ColumnManager {
 
-	private TableReference tableRef;
-	private TableBuilder tbuilder;
+	private TableViewer tableViewer;
 
-	public DefaultColumnManager(TableBuilder tableBuilder, TableReference tableRef) {
-		this.tableRef = tableRef;
-		this.tbuilder = tableBuilder;
-	}
-
-	public static DefaultColumnManager createOn(TableBuilder tb, TableReference tableReference) {
-		return new DefaultColumnManager(tb, tableReference);
+	public DefaultColumnManager(TableViewer tableViewer) {
+		this.tableViewer = tableViewer;
 	}
 
 	@Override
 	public void remove(String columnId) {
+		throw new NotImplementedException();
+	}
 
+	public static ColumnManager createOn(TableViewer viewer) {
+		return new DefaultColumnManager(viewer);
 	}
 
 }

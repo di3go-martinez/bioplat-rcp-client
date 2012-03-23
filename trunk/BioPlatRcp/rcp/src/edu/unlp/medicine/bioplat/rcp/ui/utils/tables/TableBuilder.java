@@ -61,6 +61,8 @@ public class TableBuilder implements TableConfigurer {
 	private List<?> input = Lists.newArrayList();
 	private Class<?> inputClass;
 
+	private WritableList realInput;
+
 	private boolean viewTableLines = true;
 
 	private TableBuilder(Composite parent, boolean virtual) {
@@ -170,8 +172,8 @@ public class TableBuilder implements TableConfigurer {
 			return table;
 
 		// agrego el input al viewer con soporte para databinding
-		WritableList wl = new WritableList(input, inputClass);
-		ViewerSupport.bind(viewer, wl, BeanProperties.value(""));
+		realInput = new WritableList(input, inputClass);
+		ViewerSupport.bind(viewer, realInput, BeanProperties.value(""));
 
 		int columnCount = 0;
 
@@ -188,6 +190,7 @@ public class TableBuilder implements TableConfigurer {
 
 		built = true;
 
+		// TODO sacar a una clase afuera...
 		return table = new TableReference() {
 
 			@Override
@@ -217,13 +220,18 @@ public class TableBuilder implements TableConfigurer {
 
 			@Override
 			public ColumnManager columnManager() {
-				return DefaultColumnManager.createOn(TableBuilder.this, this);
+				return DefaultColumnManager.createOn(viewer);
 			}
 
 			@Override
 			public void show(Object element) {
 				viewer.setFilters((ViewerFilter[]) Arrays.asList(new MyElementFilter((Gene) element)).toArray());
 
+			}
+
+			@Override
+			public void add(Object element) {
+				realInput.add(element);
 			}
 
 			@Override
@@ -248,6 +256,11 @@ public class TableBuilder implements TableConfigurer {
 			@Override
 			public void addSelectionChangeListener(ISelectionChangedListener listener) {
 				viewer.addSelectionChangedListener(listener);
+			}
+
+			@Override
+			public Table getTable() {
+				return viewer.getTable();
 			}
 
 			// @Override
