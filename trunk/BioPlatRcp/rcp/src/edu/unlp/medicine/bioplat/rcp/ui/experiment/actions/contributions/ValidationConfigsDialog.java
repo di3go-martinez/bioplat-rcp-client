@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -19,7 +20,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import com.google.common.base.Function;
+import com.google.common.collect.DiscreteDomains;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ranges;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
@@ -167,7 +170,8 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 			protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
 
 				boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
-				int numberOfClusters = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+				// numberOfCluster puede ser un rango
+				String numberOfClusters = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 				String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
 				String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
 				IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
@@ -176,33 +180,54 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 
 				for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
-					final ValidationConfig validationConfig = new ValidationConfig(aed, shouldGenerateCluster, numberOfClusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+					for (Integer clusters : calculateRange(numberOfClusters)) {
+						final ValidationConfig validationConfig = new ValidationConfig(aed, shouldGenerateCluster, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
-					applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Arrays.asList(validationConfig)));
+						applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Arrays.asList(validationConfig)));
 
-					// FIXME hacer un poquito más generico con una
-					// interface MultipageEditor#addPage(Editor, Input,
-					// [title])...
-					// MultiPageBiomarkerEditor multipleEditor =
-					// (MultiPageBiomarkerEditor)
-					// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-					//
-					// final ExperimentAppliedToAMetasignature appliedExperiment
-					// = findModel().getExperimentApplied(ae);
-					// multipleEditor.addEditorPage(new ExperimentEditor(),
-					// EditorInputFactory.createDefaultEditorInput(appliedExperiment));
+						// FIXME hacer un poquito más generico con una
+						// interface MultipageEditor#addPage(Editor, Input,
+						// [title])...
+						// MultiPageBiomarkerEditor multipleEditor =
+						// (MultiPageBiomarkerEditor)
+						// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+						//
+						// final ExperimentAppliedToAMetasignature
+						// appliedExperiment
+						// = findModel().getExperimentApplied(ae);
+						// multipleEditor.addEditorPage(new ExperimentEditor(),
+						// EditorInputFactory.createDefaultEditorInput(appliedExperiment));
 
-					data.add(validationConfig);
+						data.add(validationConfig);
+					}
 					tr.refresh();
 				}
 
+			}
+
+			/**
+			 * 
+			 * @param numberOfClusters
+			 *            un string que representa un rango VÁLIDO (4..5) o un
+			 *            número
+			 * @return
+			 * @see PagesDescriptors#configurationPage()
+			 */
+			private Set<Integer> calculateRange(String numberOfClusters) {
+				// si es un número armo un rango de ese número hasta ese número,
+				// que a es equivalente
+				if (!numberOfClusters.contains(".."))
+					numberOfClusters = numberOfClusters + ".." + numberOfClusters;
+				String[] r = numberOfClusters.split("\\.\\.");
+				return Ranges.closed(new Integer(r[0]), new Integer(r[1])).asSet(DiscreteDomains.integers());
 			}
 
 			@Override
 			protected WizardModel createWizardModel() {
 				return new WizardModel()//
 						.add(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE, new WritableValue(true, Boolean.class))//
-						.add(PagesDescriptors.NUMBER_OF_CLUSTERS, new WritableValue(2, Integer.class))//
+						// el "número" de clusters puede ser un rango
+						.add(PagesDescriptors.NUMBER_OF_CLUSTERS, new WritableValue("2..3", String.class))//
 						.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new WritableValue(10, Integer.class))//
 						.add(PagesDescriptors.VALIDATION_TYPE)//
 						.add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null, AttributeTypeEnum.class))//
@@ -224,5 +249,4 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		};
 		return w;
 	}
-
 }
