@@ -59,4 +59,22 @@ public abstract class AbstractEditorInput<T> implements IEditorInput {
 		return model;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj instanceof AbstractEditorInput) {
+			AbstractEditorInput another = (AbstractEditorInput) obj;
+			return model.equals(another.model);
+		}
+		return false;
+
+	}
+
+	//FIXME no está bien implementado
+	@Override
+	public int hashCode() {
+
+		return model.hashCode();
+	}
+
 }
