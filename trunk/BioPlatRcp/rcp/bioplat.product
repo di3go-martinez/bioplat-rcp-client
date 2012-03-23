@@ -3,7 +3,6 @@
 
 <product name="bioplat" uid="bioplat" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -29,15 +28,14 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="edu.medicine.bioplat.base.lib"/>
       <plugin id="edu.medicine.bioplat.rcp"/>
+      <plugin id="edu.unlp.medicine.bioplat.poc"/>
       <plugin id="javax.servlet"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
