@@ -6,7 +6,11 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -132,7 +136,7 @@ public class PagesDescriptors {
 
 				new Label(result, SWT.NONE).setText("Number of clusters:");
 				Text t = new Text(result, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS));
+				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
 
 				new Label(result, SWT.NONE).setText("Times to repeat de k-means clustering (& keep the best):");
 				Text t2 = new Text(result, SWT.BORDER);
@@ -173,6 +177,20 @@ public class PagesDescriptors {
 				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 
 				return result;
+			}
+
+			private UpdateValueStrategy uvsNumberOfClusters() {
+				return new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+
+					@Override
+					public IStatus validate(Object value) {
+						if (value.toString().matches("\\d+..\\d+") || value.toString().matches("\\d+")) {
+							return ValidationStatus.ok();
+						} else
+							return ValidationStatus.error("'" + value + "'" + " no es un rango o número valido");
+					}
+
+				});
 			}
 
 		};
