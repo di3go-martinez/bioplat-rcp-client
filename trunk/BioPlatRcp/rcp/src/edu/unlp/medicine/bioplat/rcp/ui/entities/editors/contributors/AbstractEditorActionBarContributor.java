@@ -13,9 +13,10 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.MessageViewOpenAction;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.DefaultExtensionLoaderRunnable;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.extension.points.ExtensionPointLoader;
 
-//TODO no se usa para nada todavía el tipo genérico T, ver si se puede usar para el selectionType por ejemplo
+//TODO Ver si se puede usar para el selectionType por ejemplo
 //TODO agregar configuración en populateMenu, por ejemplo, para agregar una operación al toolbar, al menu (por default)
-//TODO agregar método para permitir la ejecución en el threadui...
+//TODO agregar método para permitir la ejecución en el threadui... ?¿
+//TODO agregado de otras opciones para las acciones, como por ejemplo imágenes
 public abstract class AbstractEditorActionBarContributor<T> extends EditorActionBarContributor implements ModelProvider<T> {
 
 	/**
@@ -48,7 +49,7 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 		ExtensionPointLoader.create("edu.medicine.bioplat.rcp.editor.operation.contribution").load(new DefaultExtensionLoaderRunnable() {
 			@Override
 			protected void runOn(IConfigurationElement celement) throws Exception {
-				ActionContribution ac = (ActionContribution) celement.createExecutableExtension("class");
+				ActionContribution<T> ac = (ActionContribution<T>) celement.createExecutableExtension("class");
 				ac.modelProvider(AbstractEditorActionBarContributor.this);
 				ac.caption(celement.getAttribute("caption"));
 
