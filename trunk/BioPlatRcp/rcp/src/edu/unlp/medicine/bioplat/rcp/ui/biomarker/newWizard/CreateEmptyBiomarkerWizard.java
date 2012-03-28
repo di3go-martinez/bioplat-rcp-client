@@ -34,7 +34,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	}
 
 	@Override
-	protected void configureParamenters() {
+	protected void configureParameters() {
 		name = wizardModel().value(NAME_K).toString();
 	}
 
