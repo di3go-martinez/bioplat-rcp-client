@@ -103,7 +103,7 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 	}
 
 	private WizardPage createWizardPage() {
-		return new WizardPage("export to file") {
+		return new WizardPage("Export to file") {
 			{
 				setPageComplete(false);
 			}
