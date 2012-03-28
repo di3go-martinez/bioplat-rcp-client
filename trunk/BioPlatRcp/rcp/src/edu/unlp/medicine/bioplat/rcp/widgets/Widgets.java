@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.widgets;
 
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -41,6 +40,15 @@ public class Widgets {
 		return new CText(container, model, property).readOnly(readOnly);
 	}
 
+	/**
+	 * Crea un composite, con grab a ambos lados y una columna + defaults
+	 * 
+	 * @param parent
+	 * @return
+	 * 
+	 * @see GridDataFactory#fillDefaults()
+	 * @see GridLayoutFactory#fillDefaults()
+	 */
 	public static Composite createDefaultContainer(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
