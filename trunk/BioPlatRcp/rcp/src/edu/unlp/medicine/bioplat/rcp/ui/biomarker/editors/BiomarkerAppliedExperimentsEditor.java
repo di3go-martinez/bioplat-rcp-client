@@ -13,11 +13,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -96,6 +98,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 					// creo las nuevas columnas
 					new TableColumn(table, SWT.NONE, newBaseColumnIndex).setWidth(50);
 					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1).setWidth(50);
+					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2).setWidth(50);
 					// ok, ya inicializado
 					initialize = false;
 				}
@@ -105,22 +108,48 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 				for (int i = 0; i < items.length; i++) {
 
 					final ExperimentAppliedToAMetasignature exp = eas.get(i);
-
-					TableEditor editor = new TableEditor(table);
-					Button b = createOpenEditorButton(exp, table, "open", AppliedExperimentEditor.id());
+					TableEditor editor;
+					editor = new TableEditor(table);
+					Button c = createOpenEditorButton(exp, table, "open", AppliedExperimentEditor.id());
 					editor.grabHorizontal = true;
-					editor.setEditor(b, items[i], newBaseColumnIndex);
+					// editor.minimumHeight = 100;
+					editor.setEditor(c, items[i], newBaseColumnIndex);
+
+					// createAndConfigureEditor(table, c, items[i],
+					// newBaseColumnIndex).minimumHeight = 100;
 
 					editor = new TableEditor(table);
 					try {
-						b = createOpenEditorButton(exp.getOriginalExperiment(), table, "original", EditorsId.experimentEditorId());
+						c = createOpenEditorButton(exp.getOriginalExperiment(), table, "original", EditorsId.experimentEditorId());
 						editor.grabHorizontal = true;
-						editor.setEditor(b, items[i], newBaseColumnIndex + 1);
+						editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 					} catch (ExperimentBuildingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+
+					editor = new TableEditor(table);
+					c = new Button(table, SWT.FLAT);
+					c.setText("Mev");
+					c.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							new MevWizard(exp).open(true);
+						}
+					});
+					editor.grabHorizontal = true;
+					editor.setEditor(c, items[i], newBaseColumnIndex + 2);
+					// createAndConfigureEditor(table, c, items[i],
+					// newBaseColumnIndex + 2);
+
 				}
+			}
+
+			private TableEditor createAndConfigureEditor(Table t, Control c, TableItem ti, int index) {
+				TableEditor editor = new TableEditor(t);
+				editor.grabHorizontal = true;
+				editor.setEditor(t, ti, index);
+				return editor;
 			}
 
 			private Button createOpenEditorButton(final Object o, Composite parent, String label, final String editorId) {
