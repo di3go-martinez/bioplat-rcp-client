@@ -2,8 +2,6 @@ package edu.unlp.medicine.bioplat.rcp.utils;
 
 import java.io.Serializable;
 
-import org.eclipse.swt.widgets.Shell;
-
 public class Holder<T> implements Serializable {
 	private static final long serialVersionUID = -4487158007728361793L;
 	private T value;
@@ -34,7 +32,7 @@ public class Holder<T> implements Serializable {
 		return new Holder<T>(value);
 	}
 
-	public static Holder<Shell> create() {
+	public static <T> Holder<T> create() {
 		return create(null);
 	}
 }
