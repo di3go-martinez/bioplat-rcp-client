@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -10,6 +11,10 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -18,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -28,6 +34,11 @@ import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
+
+	private static final Image ascimg = Activator.imageDescriptorFromPlugin("resources/icons/asc.png").createImage();
+	private static final Image descimg = Activator.imageDescriptorFromPlugin("resources/icons/desc.png").createImage();
+
+	private static final String CLINICAL_DATA = "Clinical Data";
 
 	public ExperimentClinicalData(boolean updatableTitle) {
 		super(updatableTitle);
@@ -49,9 +60,13 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 		final TableReference tr = tb.build();
 
-		ComboViewer c = new ComboViewer(container);
-		c.setContentProvider(ArrayContentProvider.getInstance());
-		c.setInput(Collections2.transform(model, new Function<ClinicalDataModel, String>() {
+		Composite sorterContainer = new Composite(container, SWT.BORDER);
+		sorterContainer.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
+		final ComboViewer cv = new ComboViewer(sorterContainer);
+		cv.setContentProvider(ArrayContentProvider.getInstance());
+
+		// transformo la lista model en una lista de nombres de atributo.
+		cv.setInput(Collections2.transform(model, new Function<ClinicalDataModel, String>() {
 
 			@Override
 			public String apply(ClinicalDataModel input) {
@@ -59,42 +74,76 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 			}
 		}));
 
-		c.addSelectionChangedListener(new ISelectionChangedListener() {
-
+		final Button toggleSorter = new Button(sorterContainer, SWT.TOGGLE | SWT.FLAT);
+		// toggleSorter.setSize(new Point(20, 20));
+		toggleSorter.setImage(ascimg);
+		toggleSorter.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				// TODO revisar, documentar, porque no se entiende....
-				Table t = tr.getTable();
-
-				// Coincide el orden por eso se usa el índice de selección
-				int selectionIndex = ((ComboViewer) event.getSource()).getCombo().getSelectionIndex();
-				TableItem ti = t.getItem(selectionIndex);
-				ClinicalDataModel cdm = (ClinicalDataModel) ti.getData();
-				CellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, ExperimentEditor.getSampleCountToLoad() + 1);
-				CellData[] original = new CellData[sorted.length];
-				System.arraycopy(sorted, 0, original, 0, sorted.length);
-				Arrays.sort(sorted);
-
-				int[] newOrder = new int[t.getColumnCount()];
-				newOrder[0] = 0; // la primera columna no se ordena, es fija es
-									// la de selección
-				newOrder[1] = 1; // la segunda tampoco se ordena es la columna
-									// de nombre de atributo
-
-				final List<CellData> originalAsList = Arrays.asList(original);
-				// 2 porque son dos fijas
-				for (int i = 2; i < sorted.length + 2; i++) {
-					int newIndex = originalAsList.indexOf(sorted[i - 2]) + 2;
-					newOrder[i] = newIndex;
-
-				}
-				t.setColumnOrder(newOrder);
-
+			public void widgetSelected(SelectionEvent e) {
+				if (toggleSorter.getImage() == ascimg)
+					toggleSorter.setImage(descimg);
+				else
+					toggleSorter.setImage(ascimg);
+				resort(tr, cv, toggleSorter);
 			}
 		});
-		setPartName("Clinical Data");
+
+		cv.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				resort(tr, cv, toggleSorter);
+			}
+
+		});
+		setPartName(CLINICAL_DATA);
 	}
 
+	// TODO mejorar los parámetros pasados al método, que sean los datos no los
+	// widgets...
+	private void resort(final TableReference tr, ComboViewer cv, Button b) {
+		Table t = tr.getTable();
+
+		// Coincide el orden de los atributos en las grillas, por eso se usa el
+		// índice de selección
+		int selectionIndex = cv.getCombo().getSelectionIndex();
+		if (selectionIndex == -1)
+			return;
+		TableItem ti = t.getItem(selectionIndex);
+		ClinicalDataModel cdm = (ClinicalDataModel) ti.getData();
+
+		// sorted es la colección donde quedarán los datos ordenados
+		CellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, ExperimentEditor.getSampleCountToLoad() + 1);
+		// original es como están los datos (des)ordenados actualmente
+		CellData[] original = new CellData[sorted.length];
+
+		System.arraycopy(sorted, 0, original, 0, sorted.length);
+
+		// el método sort esta bien optimizado, @see javadoc
+		Arrays.sort(sorted);
+		if (b.getImage() == descimg)
+			Arrays.sort(sorted, Collections.reverseOrder());
+
+		// calculo el nuevo orden de los elementos, de acuerdo a como
+		// quedaron ordenados
+		int[] newOrder = new int[t.getColumnCount()];
+		newOrder[0] = 0; // la primera columna no se ordena, es fija es
+							// la de selección
+		newOrder[1] = 1; // la segunda tampoco se ordena es la columna
+							// de nombre de atributo
+
+		final List<CellData> originalAsList = Arrays.asList(original);
+		// · voy buscando los elementos en orden de sorted, y poniendo
+		// su índice en la colección newOrder, la cual se usara para
+		// indicarle a la tabla como ordenar las columnas
+		// · 2 porque son dos fijas
+		for (int i = 2; i < sorted.length + 2; i++) {
+			int newIndex = originalAsList.indexOf(sorted[i - 2]) + 2;
+			newOrder[i] = newIndex;
+		}
+		t.setColumnOrder(newOrder);
+	}
+
+	// /
 	/**
 	 * 
 	 * @return el subconjunto "inicial" de samples a cargar en la grilla; la
@@ -249,8 +298,8 @@ class CellData implements Accesor, Comparable<CellData> {
 
 	@Override
 	public int compareTo(CellData o) {
-		Integer thisValue = new Integer(getValue().toString());
-		Integer otherValue = new Integer(o.getValue().toString());
+		Float thisValue = new Float(getValue().toString());
+		Float otherValue = new Float(o.getValue().toString());
 
 		return thisValue.compareTo(otherValue);
 	}
