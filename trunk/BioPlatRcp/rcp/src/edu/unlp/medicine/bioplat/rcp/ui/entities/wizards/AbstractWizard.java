@@ -12,14 +12,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PlatformUI;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
@@ -28,6 +32,17 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
+/**
+ * 
+ * 
+ * Mantiene el modelo del wizard, crea las páginas del wizard a partir de los
+ * descriptores configurados
+ * 
+ * @author diego
+ * 
+ * @param <T>
+ * @see #createWizardmodel
+ */
 public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWizard {
 
 	public AbstractWizard() {
@@ -47,7 +62,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 */
 	protected WizardModel createWizardModel() {
 		return new WizardModel();
-	} 
+	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -77,6 +92,29 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		}
 	}
 
+	/**
+	 * 
+	 * @param shouldBlock
+	 * @return devuelve el resultado del open del diálogo
+	 */
+	public int open(boolean shouldBlock) {
+		Dialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
+
+		this.init(PlatformUI.getWorkbench());
+		d.setBlockOnOpen(shouldBlock);
+		return d.open();
+	}
+
+	/**
+	 * inicializa el wizard sin selección actual
+	 * 
+	 * @param workbench
+	 */
+	// TODO conseguir la selección actual
+	public void init(IWorkbench workbench) {
+		this.init(workbench, StructuredSelection.EMPTY);
+	}
+
 	@Override
 	public boolean canFinish() {
 		for (IWizardPage page : getPages())
@@ -94,7 +132,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 		MessageManager.INSTANCE.clear();
 
-		configureParamenters();
+		configureParameters();
 
 		Job j = new Job(getTaskName()) {
 
@@ -146,13 +184,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 */
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
 	// realm que va
-	protected void configureParamenters() {
+	protected void configureParameters() {
 	}
 
 	/**
 	 * Procesamiento fuera del ui-thread <b>no se puede modificar la vista
 	 * directamente</b> tiene que estar contextualizada o explícitamente con
-	 * Display.[a]syncExec()
+	 * Display.[a]syncExec() <br>
+	 * Se tiene acceso al wizardModel()
+	 * 
 	 * 
 	 * @param monitor
 	 *            puede ser una barra de progreso donde se va indicando el esta
@@ -163,7 +203,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	/**
 	 * procesa dentro del ui-thread, permitiendo ejecutar código que interactúe
-	 * con este. por ejemplo abrir un editor.
+	 * con este, es definitiva, con la vista. por ejemplo abrir un editor.
 	 * 
 	 * @param result
 	 *            es el resultado de {@link #backgroundProcess(Monitor)}
