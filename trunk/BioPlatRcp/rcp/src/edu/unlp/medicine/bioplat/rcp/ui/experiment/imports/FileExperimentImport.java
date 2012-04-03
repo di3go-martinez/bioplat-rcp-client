@@ -133,10 +133,11 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				Composite c = new Composite(parent, SWT.NONE);
 
-				new Label(c, SWT.NONE).setText("Archivo:");
+				new Label(c, SWT.NONE).setText("File:");
 				FileText filePath = new FileText(c, SWT.BORDER);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.csv", "CSV File");
+				filters.put("All", "*");
 				filePath.setFilter(filters);
 
 				dbc.bindValue(SWTObservables.observeText(filePath.textControl(), SWT.Modify), wm.filePath, //
