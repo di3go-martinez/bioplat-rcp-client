@@ -18,6 +18,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.internal.AbstractSelectionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -42,6 +44,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implements ISelectionChangedListener {
 
+	private static final Logger logger = LoggerFactory.getLogger(ExperimentEditor0.class);
 	private List<ExpressionDataModel> data;
 	private TableReference tr;
 
@@ -89,6 +92,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		TableBuilder tb = TableBuilder.create(container)//
 				.keyLimit(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES)//
 				.model(new AbstractEntity() {
+					@SuppressWarnings("unused")
+					// sí es used, por reflection...
 					public List<ExpressionDataModel> getData() {
 						return data;
 					}
@@ -101,7 +106,6 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
-			// TODO externalizar el límite máximo
 			tb.addColumn(ColumnBuilder.create().numeric().title(s.getName()).property("data[" + index++ + "]"));
 
 		tr = tb.build();
@@ -123,6 +127,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 														// // 0
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
 		Map<Object, IStructuredSelection> selections = Maps.newHashMap();
@@ -137,6 +142,17 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		});
 
 		selections.put(Constants.GENES, new StructuredSelection(genes));
+
+		l = tr.selectedElements();
+		genes = Lists.transform(l, new Function<ExpressionDataModel, Gene>() {
+
+			@Override
+			public Gene apply(ExpressionDataModel edm) {
+				return edm.findGene();
+			}
+		});
+
+		selections.put(Constants.SELECTED_GENES, new StructuredSelection(genes));
 		return selections;
 	}
 
@@ -145,13 +161,20 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 		return new Observer() {
 
-			private int counter = 0;
+			// uso para indicar que el autorefresh esta desactivado
+			private boolean logged = false;
+
+			// private int counter = 0;
 
 			@Override
 			public void update(Observable o, Object arg) {
 
-				if (!autorefresh())
+				if (!autorefresh() && !logged) {
+					logger.warn("El autorefresh de la grilla está desactivado");
+					logged = true;
 					return;
+				}
+				logged = false;
 
 				// FIXME nada eficiente crear el modelo cada vez, por eso se
 				// hace un merge...
@@ -164,7 +187,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 				// counter++;
 				// return;
 				// }
-				counter = 0;
+				// counter = 0;
 
 				data = ExpressionDataModel.merge(data, model());
 				tr.input(data);
@@ -226,7 +249,10 @@ class ExpressionDataModel extends AbstractEntity {
 	 * @return el objeto current actualizado con el experimento e
 	 */
 	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e) {
-		if (current == null)
+		// TODO mejorar implementación: contempla el caso que se haya removido
+		// genes o incluso agregado...
+		if (current == null //
+				|| current.size() != e.getGenes().size())
 			current = create(e);
 		else {
 			int index0 = 0;
