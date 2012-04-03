@@ -75,9 +75,11 @@ public class MessageViewPart extends ViewPart {
 					}
 				})) //
 				.addColumn(ColumnBuilder.create().property("createdAt").transformer(new AbstractDataTransformer<Date, String>() {
+					private final DateFormat df = DateFormat.getInstance();
+
 					@Override
 					public String doTransform(Date fecha) {
-						return DateFormat.getInstance().format(fecha);
+						return df.format(fecha);
 					}
 				})) //
 				.addColumn(ColumnBuilder.create().property("text").width(450)) //
