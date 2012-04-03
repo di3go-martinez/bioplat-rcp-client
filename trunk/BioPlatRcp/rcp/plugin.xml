@@ -284,6 +284,18 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
       </actionContribution>
+      <actionContribution
+            caption="Remove Selected Genes"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveSelectedGenesActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Keep Selected Genes Only"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlySelectedGenesAC">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
