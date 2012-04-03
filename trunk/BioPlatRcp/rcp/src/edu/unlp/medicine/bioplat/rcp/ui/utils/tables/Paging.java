@@ -26,13 +26,18 @@ public class Paging<T> {
 	// TODO no es configurable, podría serlo...
 	private int pagesize = 100;
 	private int currentElementIndex = 0;
+
+	// lista de elementos cargados
 	private List<T> realList = Lists.newArrayList();
+
 	private Object model;
 	private String propertyPath;
 
 	private TableConfigurer tableConfigurer;
 
 	private boolean virtual;
+
+	// listener para decidir el cargado de páginas
 	private Object listener;
 
 	private TableViewer viewer;
@@ -81,13 +86,13 @@ public class Paging<T> {
 					}
 				};
 				table.addListener(SWT.SetData, (Listener) listener);
-			} else {
+			} else {// !virtual
 				listener = new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if ((scrollbar.getSelection() != 0) && (scrollbar.getMaximum() == (scrollbar.getThumb() + scrollbar.getSelection()))) {
 							loadNextPage();
-							viewer.refresh();
+							viewer.refresh(true, false);
 						}
 					}
 				};
@@ -120,6 +125,7 @@ public class Paging<T> {
 		int cantPages = basePaging.getCurrentPageNumber();
 		for (int i = 1; i < cantPages; i++)
 			loadNextPage();
+
 	}
 
 	private int getCurrentPageNumber() {
