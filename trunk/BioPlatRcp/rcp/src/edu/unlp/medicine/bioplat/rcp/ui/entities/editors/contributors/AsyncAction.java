@@ -18,8 +18,8 @@ public class AsyncAction {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							// Cambiar el IAction y delegar el uso del monitor,
-							// para así sacar el UNKNOWN
+							// TODO Cambiar el IAction y delegar el uso del
+							// monitor, para así sacar el UNKNOWN
 							monitor.beginTask("Procesando...", IProgressMonitor.UNKNOWN);
 							targetAction.run();
 						} finally {
