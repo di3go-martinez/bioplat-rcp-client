@@ -103,7 +103,8 @@ public class GeneViewPart extends ViewPart {
 	private List<Widget> ws = Lists.newArrayList();
 	private List<Browser> browsers = Lists.newArrayList();
 	// urls rest configuradas, contiene variables seguramente ej el id del gen
-	private String[] $variableUrls;
+	//Agrego la de NCBI por default
+	private String[] $variableUrls = new String[] { REST_URL_NCBI };
 
 	private void updateComposite(Composite parent, Gene gene) {
 
@@ -166,7 +167,7 @@ public class GeneViewPart extends ViewPart {
 		String urls = PlatformUtils.preferences().get(ExternalGeneInformationPage.URLS, "");
 
 		if (urls.isEmpty())
-			return;
+			PlatformUtils.preferences().put(ExternalGeneInformationPage.URLS, StringUtils.join($variableUrls, '|'));
 
 		CTabFolder t = new CTabFolder(container, SWT.BORDER);
 		t.setLayout(GridLayoutFactory.fillDefaults().create());
