@@ -45,7 +45,7 @@ public class PlatformUIUtils {
 	}
 
 	public static void openView(final String viewId) {
-		openView(viewId, true);
+		openView(viewId, false);
 	}
 
 	public static Shell findShell() {
@@ -76,14 +76,23 @@ public class PlatformUIUtils {
 	}
 
 	public static void openView(final String viewId, final boolean forceFocus) {
-		PlatformUIUtils.findDisplay().asyncExec(new Runnable() {
+		// al abrir la vista se lleva el foco... no debería, por eso se le
+		// devuelve al editor que estaba activo... si era una vista la que
+		// estaba activa, qué pasa? uhmmm
+
+		PlatformUIUtils.findDisplay().syncExec(new Runnable() {
 
 			@Override
 			public void run() {
+				final IEditorPart editor = org.eclipse.ui.PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 				try {
 					IViewPart v = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+					// FIXME no va el forceFocus...
 					if (forceFocus)
 						v.setFocus();
+					if (editor != null)
+						editor.setFocus();
+
 				} catch (PartInitException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
