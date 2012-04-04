@@ -24,7 +24,17 @@ public interface TableReference {
 
 	void add(Object element);
 
+	@Deprecated
 	ColumnManager columnManager();
+
+	/**
+	 * borra una fila de la tabla
+	 * 
+	 * @param data
+	 */
+	void remove(Object data);
+
+	void removeSelected();
 
 	void show(Object element);
 

@@ -75,15 +75,18 @@ public class Paging<T> {
 						// si el index se acerca al último de los elementos se
 						// trae la próxima página
 						if (index + 1 >= list().size()) {
+
 							loadNextPage();
 							// TODO no hace falta hacer un refresh de toda la
-							// tabla, y habría que hacer un reveal desde el
+							// tabla, y habría que hacer un update desde el
 							// último que se estaba viendo
 							viewer.refresh(true, false);
+
 						}
 						// item.setText(itemStrings [index]);
 						// System.out.println(index);
 					}
+
 				};
 				table.addListener(SWT.SetData, (Listener) listener);
 			} else {// !virtual
@@ -91,6 +94,10 @@ public class Paging<T> {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if ((scrollbar.getSelection() != 0) && (scrollbar.getMaximum() == (scrollbar.getThumb() + scrollbar.getSelection()))) {
+							// se asume que la lista donde se carga la próxima
+							// página es la que está siendo "apuntada" por el
+							// viewer
+
 							loadNextPage();
 							viewer.refresh(true, false);
 						}
@@ -100,6 +107,19 @@ public class Paging<T> {
 			}
 		}
 
+	}
+
+	/**
+	 * Retorna el último elemento de la lista
+	 * 
+	 * @return el último elemento de la lista o null si la lista está vacía
+	 */
+	private Object lastElement() {
+		int size = list().size();
+		if (size == 0)
+			return null;
+		else
+			return list().get(size - 1);
 	}
 
 	/**

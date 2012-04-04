@@ -22,6 +22,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -34,6 +36,8 @@ import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class TableBuilder implements TableConfigurer {
+
+	private final static Logger logger = LoggerFactory.getLogger(TableBuilder.class);
 
 	private static final ColumnBuilder HIDDEN_COLUMN = ColumnBuilder.create().resizable(false).editable(false).width(0);
 
@@ -131,6 +135,14 @@ public class TableBuilder implements TableConfigurer {
 		return this;
 	}
 
+	/**
+	 * Se recomienda usar model+propertyPath
+	 * 
+	 * @param input
+	 * @return
+	 * @deprecated Se recomienda usar model+propertyPath
+	 */
+	@Deprecated
 	public <T> TableBuilder input(List<T> input) {
 		return input(input, Object.class);
 	}
@@ -202,24 +214,52 @@ public class TableBuilder implements TableConfigurer {
 			}
 
 			/**
-			 * <b>Funciona solamente si se configuró el table builder con la
-			 * opción input()</b>
+			 * <b>si el input fue configurado se requerirá que tenga una
+			 * newInput, si no es porque la tabla fue configurada con un
+			 * modelo</b>
 			 */
 			@Override
 			public void input(final List newInput) {
-				// TODO se puede optimizar
-				paging = new Paging(new Object() {
-					public List getData() {
-						return newInput;
-					}
-				}, "data", viewer, TableBuilder.this, paging);
-				input.clear();
-				input.addAll(paging.list());
+				// si el model es null es porque la input fue configurada
+				// "estáticamente", se usa newInput
+				if (model == null)
+					//
+					paging = new Paging(new Object() {
+						@SuppressWarnings("unused")
+						public List getData() {
+							return newInput;
+						}
+					}, "data", viewer, TableBuilder.this, paging);
+
+				else
+					// TODO es necesario recrear el paging?
+					paging = new Paging(model, propertyPath, viewer, TableBuilder.this, paging);
+
+				// input.clear();
+				// input.addAll(paging.list());
+
+				viewer.setInput(realInput = new WritableList(input = paging.list(), inputClass));
 				viewer.refresh(true, false);
+
+				refreshSelectedElements();
+
 			}
 
+			private void refreshSelectedElements() {
+				List<Object> toRemove = Lists.newArrayList();
+				for (Object element : selectedElements)
+					if (!input.contains(element))
+						toRemove.add(element);
+				selectedElements.removeAll(toRemove);
+				// TODO no hace falta un refresh();, no?
+			}
+
+			/**
+			 * no se está usando
+			 */
 			@Override
 			public ColumnManager columnManager() {
+				logger.debug("sacar comentario, ahora se usa!");
 				return DefaultColumnManager.createOn(viewer);
 			}
 
@@ -263,6 +303,18 @@ public class TableBuilder implements TableConfigurer {
 				return viewer.getTable();
 			}
 
+			@Override
+			public void remove(Object element) {
+				viewer.remove(element);
+				selectedElements.remove(element);
+			}
+
+			@Override
+			public void removeSelected() {
+				for (Object elemtent : selectedElements())
+					remove(elemtent);
+			}
+
 			// @Override
 			// public void input(AbstractEntity model) {
 			// model(model, propertyPath);
@@ -276,6 +328,8 @@ public class TableBuilder implements TableConfigurer {
 
 	private String propertyPath = null;
 
+	private AbstractEntity model;
+
 	/**
 	 * 
 	 * tiene que ser lo último en configurar
@@ -287,9 +341,10 @@ public class TableBuilder implements TableConfigurer {
 	// TODO que no sea si o si el último en configurar
 	public TableBuilder model(AbstractEntity model, String propertyPath) {
 		this.propertyPath = propertyPath;
+		this.model = model;
 		resolver = new OgnlRefreshableInputResolver(model, propertyPath, this);
 		paging = new Paging(model, propertyPath, viewer, this);
-		return input(paging.list());
+		return input(paging.list(), Object.class);
 	}
 
 	// TODO diseñar mejor, hacer un resolver para sacar el ConfigurationScope y
