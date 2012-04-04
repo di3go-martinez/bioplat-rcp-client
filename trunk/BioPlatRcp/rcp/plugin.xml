@@ -296,6 +296,19 @@
          <selection
                class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
       </actionContribution>
+      <actionContribution
+            caption="Borrar genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Mantener sólo..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
