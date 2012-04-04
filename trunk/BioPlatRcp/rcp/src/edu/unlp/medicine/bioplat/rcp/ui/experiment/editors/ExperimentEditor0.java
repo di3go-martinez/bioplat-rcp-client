@@ -31,6 +31,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneral
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
@@ -169,9 +171,12 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 			@Override
 			public void update(Observable o, Object arg) {
 
-				if (!autorefresh() && !logged) {
-					logger.warn("El autorefresh de la grilla está desactivado");
-					logged = true;
+				if (!autorefresh()) {
+					if (!logged) {
+						MessageManager.INSTANCE.add(Message.warn("El autorefresh de la grilla está desactivado."));
+						logger.warn("El autorefresh de la grilla está desactivado.");
+						logged = true;
+					}
 					return;
 				}
 				logged = false;
