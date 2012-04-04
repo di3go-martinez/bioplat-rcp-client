@@ -29,6 +29,11 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 		setText(caption);
 	}
 
+	/**
+	 * Corre por fuera del thread ui, así que para levantar un diálogo por
+	 * ejemplo se deberá pedir explicitamente el thread correspondiente
+	 */
 	@Override
 	public abstract void run();
+
 }
