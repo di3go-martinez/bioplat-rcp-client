@@ -183,7 +183,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 					for (Integer clusters : calculateRange(numberOfClusters)) {
 						final ValidationConfig validationConfig = new ValidationConfig(aed, shouldGenerateCluster, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
-						applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Arrays.asList(validationConfig)));
+						applyCommands.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 						// FIXME hacer un poquito más generico con una
 						// interface MultipageEditor#addPage(Editor, Input,
