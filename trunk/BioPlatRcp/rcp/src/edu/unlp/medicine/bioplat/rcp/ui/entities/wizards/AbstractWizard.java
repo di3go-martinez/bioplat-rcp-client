@@ -68,7 +68,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 
 		for (final WizardPageDescriptor pd : createPagesDescriptors()) {
-			addPage(new WizardPage(pd.getPageName()) {
+			addPage(new WizardPage(pd.getPageName(), pd.getTitle(), pd.getImageDescriptor()) {
 
 				@Override
 				public void createControl(Composite parent) {

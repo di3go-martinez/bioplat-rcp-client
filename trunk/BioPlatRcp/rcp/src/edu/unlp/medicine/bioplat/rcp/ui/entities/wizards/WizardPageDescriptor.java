@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 import javax.annotation.Nullable;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -10,10 +11,19 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 
 public abstract class WizardPageDescriptor {
 
+	private static final ImageDescriptor DEFAULT = ImageDescriptor.getMissingImageDescriptor();
 	private String name;
+	private String title;
+	private ImageDescriptor imageDescriptor;
+
+	public WizardPageDescriptor(String name, String title, ImageDescriptor imageDescriptor) {
+		this.name = name;
+		this.title = title;
+		this.imageDescriptor = imageDescriptor;
+	}
 
 	public WizardPageDescriptor(String name) {
-		this.name = name;
+		this(name, name, DEFAULT);
 	}
 
 	public String getPageName() {
@@ -47,6 +57,16 @@ public abstract class WizardPageDescriptor {
 
 	public boolean isPageComplete(WizardModel model) {
 		return true;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public ImageDescriptor getImageDescriptor() {
+		if (imageDescriptor == null)
+			imageDescriptor = DEFAULT;
+		return imageDescriptor;
 	}
 
 }

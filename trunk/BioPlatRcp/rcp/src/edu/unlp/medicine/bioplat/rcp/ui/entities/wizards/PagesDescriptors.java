@@ -75,7 +75,7 @@ public class PagesDescriptors {
 	 * 
 	 * @return
 	 */
-	// TODO agregar desde distintas fuentas, inSilico e archivo
+	// TODO agregar desde distintas fuentes, inSilico e archivo
 	public static WizardPageDescriptor experimentsWPD() {
 		return new WizardPageDescriptor("Experimentos") {
 
@@ -86,8 +86,8 @@ public class PagesDescriptors {
 					for (IWorkbenchPage page : window.getPages()) {
 						for (IEditorReference editor : page.getEditorReferences()) {
 							IEditorPart ed = editor.getEditor(false);
-							ModelProvider e;
-							if (ed instanceof ModelProvider && (e = (ModelProvider) ed).model() instanceof AbstractExperiment)
+							ModelProvider<?> e;
+							if (ed instanceof ModelProvider && (e = (ModelProvider<?>) ed).model() instanceof AbstractExperiment)
 								editors.add((AbstractExperiment) e.model());
 						}
 					}
@@ -169,7 +169,6 @@ public class PagesDescriptors {
 				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE), UpdateStrategies.nonNull("Statistical Value"), UpdateStrategies.nullStrategy());
 
 				// hook para ejecutar el
-
 				ComboViewer cv = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList("OS_Months", "recurrence", "timeUntilEventOccured"));
 				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 
