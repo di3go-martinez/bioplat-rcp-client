@@ -1,21 +1,13 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.acions;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
+import edu.unlp.medicine.bioplat.rcp.ui.genes.dialogs.GenesInputDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -42,7 +34,7 @@ public class PasteGeneAction extends Action {
 			return;
 		}
 
-		AddGenDialog mydialog = new AddGenDialog(null);
+		GenesInputDialog mydialog = new GenesInputDialog(PlatformUIUtils.findShell());
 		if (mydialog.open() == Dialog.OK)
 			for (String id : mydialog.getids()) {
 				try {
@@ -61,52 +53,6 @@ public class PasteGeneAction extends Action {
 
 	private Biomarker getActiveBiomarker() {
 		return Models.getInstance().getActiveBiomarker();
-	}
-
-}
-
-class AddGenDialog extends Dialog {
-
-	private String separator = " ";
-
-	protected AddGenDialog(Shell parentShell) {
-		super(parentShell);
-
-	}
-
-	public String[] getids() {
-		return StringUtils.split(value, separator);
-	}
-
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Pegar los genes separados por '" + separator + "'");
-	}
-
-	@Override
-	protected Point getInitialSize() {
-		return new Point(300, 150);
-	}
-
-	private String value;
-
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite result = (Composite) super.createDialogArea(parent);
-
-		final Text text = new Text(result, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
-		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-		text.setToolTipText(getShell().getText());
-		text.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				value = StringUtils.replace(text.getText(), "\n", " ");
-				value = StringUtils.replace(value, "\r", " ").replace("\t", " ");
-			}
-		});
-		return result;
 	}
 
 }
