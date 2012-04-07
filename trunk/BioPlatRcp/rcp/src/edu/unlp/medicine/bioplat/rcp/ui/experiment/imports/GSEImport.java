@@ -39,6 +39,8 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class GSEImport extends Wizard implements IImportWizard {
 
+	private static final String PAGE_NAME = "GSE";
+
 	public GSEImport() {
 	}
 
@@ -58,7 +60,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage("GSE", "Indicar la url del experimento a importar", null) {
+		return new WizardPage(PAGE_NAME, "Indicar la url del experimento a importar", null) {
 
 			@Override
 			public void createControl(Composite parent) {

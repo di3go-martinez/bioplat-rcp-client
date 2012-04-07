@@ -172,7 +172,7 @@
                category="edu.medicine.bioplat.rcp.import.experiment.root"
                class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
                id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
-               name="GSE">
+               name="Import from InSilico using GSE">
          </wizard>
       </extension>
    <extension
