@@ -1,5 +1,9 @@
 package edu.unlp.medicine.bioplat.rcp.utils;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
@@ -10,6 +14,11 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
+import edu.unlp.medicine.bioplat.rcp.application.Activator;
 
 //TODO ejecutar en el contexto del ui-thread
 public class PlatformUIUtils {
@@ -101,5 +110,23 @@ public class PlatformUIUtils {
 			}
 		});
 
+	}
+
+	private static Cache<String, Image> imagesCache = CacheBuilder.newBuilder().build();
+
+	public static Image findImage(final String imagename) {
+		try {
+			return imagesCache.get(imagename, new Callable<Image>() {
+
+				@Override
+				public Image call() throws Exception {
+					return Activator.imageDescriptorFromPlugin(imagename).createImage();
+				}
+			});
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			// default.png existe...
+			return findImage("default.png");
+		}
 	}
 }
