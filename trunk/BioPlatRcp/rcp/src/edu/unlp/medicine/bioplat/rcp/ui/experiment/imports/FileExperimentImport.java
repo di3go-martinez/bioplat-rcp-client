@@ -70,6 +70,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 		// deben ser accedidas desde el "Realm"
 		final String filePath = str(wm.filePath);
 		final String collapseStrategy = str(wm.collapseStrategy);
+		final int[] lines = split(str(wm.lines));
 
 		Job j = new Job("Importando experimento") {
 
@@ -80,9 +81,8 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 					@Override
 					public Experiment call() throws Exception {
 						Monitor m = Monitors.adapt(progressMonitor);
-						// FIXME completar el parametrizar bien
 
-						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, 1, 2, 3, 4, "\t", collapseStrategy)).monitor(m).createExperiment();
+						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, lines[0], lines[1], lines[2], lines[3], "\t", collapseStrategy)).monitor(m).createExperiment();
 					}
 				});
 
@@ -110,6 +110,14 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 		return true;
 	}
 
+	private int[] split(String str) {
+		int[] result = new int[4];
+		String[] input = str.split(",");
+		for (int i = 0; i < 4; i++)
+			result[i] = Integer.valueOf(input[i].trim());
+		return result;
+	}
+
 	private static String str(IObservableValue valueHolder) {
 		return valueHolder.getValue().toString();
 	}
@@ -119,6 +127,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 	private class WizardModel {
 		IObservableValue filePath = WritableValue.withValueType(File.class);
 		IObservableValue collapseStrategy = WritableValue.withValueType(String.class);
+		IObservableValue lines = WritableValue.withValueType(String.class);
 	}
 
 	@Override
@@ -137,7 +146,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				FileText filePath = new FileText(c, SWT.BORDER);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.csv", "CSV File");
-				filters.put("All", "*");
+				filters.put("*", "All");
 				filePath.setFilter(filters);
 
 				dbc.bindValue(SWTObservables.observeText(filePath.textControl(), SWT.Modify), wm.filePath, //
@@ -156,10 +165,9 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE);
 
-				// TODO parametrizar? deducir? por origen de archivo?
 				new Label(c, SWT.NONE).setText("cfl, cll, snl, efl");
 				Text t = new Text(c, SWT.BORDER);
-				t.setEnabled(false);
+				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.lines);
 				t.setText("1, 2, 3, 4");
 
 				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
