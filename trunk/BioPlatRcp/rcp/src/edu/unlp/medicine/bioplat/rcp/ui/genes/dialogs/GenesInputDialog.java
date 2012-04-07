@@ -37,6 +37,25 @@ public class GenesInputDialog extends Dialog {
 		this(PlatformUIUtils.findShell());
 	}
 
+	/**
+	 * Setea los genes como si fueran ingresados
+	 * 
+	 * @param genes
+	 * @return
+	 */
+	public GenesInputDialog genes(List<Gene> genes) {
+		StringBuilder $value = new StringBuilder();
+		for (Gene gene : genes) {
+			$value.append(gene.getEntrezId() + "\n");
+		}
+		setValue($value.toString());
+		return this;
+	}
+
+	private void setValue(String _value) {
+		value = _value;
+	}
+
 	public List<Gene> genes() {
 		List<Gene> result = Lists.newArrayList();
 		for (String id : getids())
@@ -66,7 +85,7 @@ public class GenesInputDialog extends Dialog {
 		return new Point(300, 150);
 	}
 
-	private String value;
+	private String value = "";
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -83,6 +102,7 @@ public class GenesInputDialog extends Dialog {
 				value = StringUtils.replace(value, "\r", " ").replace("\t", " ");
 			}
 		});
+		text.setText(value);
 		return result;
 	}
 
