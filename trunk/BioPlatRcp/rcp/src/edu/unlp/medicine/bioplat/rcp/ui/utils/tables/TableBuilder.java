@@ -197,7 +197,6 @@ public class TableBuilder implements TableConfigurer {
 
 		viewer.refresh(true);
 		viewer.setComparator(new MyViewerComparator());
-
 		viewer.getTable().setLinesVisible(viewTableLines);
 
 		built = true;
