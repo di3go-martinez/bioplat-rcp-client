@@ -101,7 +101,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 					}
 				}, "data")
 		// .input(inputHolder.value())
-		;
+ 		;
 
 		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]"));
 		int index = 1;
