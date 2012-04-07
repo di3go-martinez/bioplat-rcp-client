@@ -79,7 +79,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes").readOnly();
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
 
-		Widgets.createTextWithLabel(c, "Samples", model(), "sampleCount").readOnly();
+		Widgets.createTextWithLabel(c, "Samples", model(), "numberOfSamples").readOnly();
 
 		// construyo el input para el tablebuilder en background
 		BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
@@ -101,14 +101,15 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 					}
 				}, "data")
 		// .input(inputHolder.value())
-
 		;
 
-		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]")); //
+		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]"));
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
-			tb.addColumn(ColumnBuilder.create().numeric().title(s.getName()).property("data[" + index++ + "]"));
+			tb.addColumn( //
+			ColumnBuilder.create().numeric().title(s.getName()). //
+					property("data[" + index++ + "]").addHeadeMenuItemDescriptor(new RemoveColumnDescriptor(model())));
 
 		tr = tb.build();
 		tr.addSelectionChangeListener(this);
