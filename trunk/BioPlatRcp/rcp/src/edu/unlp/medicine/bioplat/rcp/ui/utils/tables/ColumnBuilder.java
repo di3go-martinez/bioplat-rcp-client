@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -12,10 +14,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
@@ -23,12 +26,12 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.CheckBoxEditingSupport;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.NumberEditingSupport;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.TextEditingSupport;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuConfigurer;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemDescriptor;
 
 public class ColumnBuilder {
 
 	private static final Logger logger = LoggerFactory.getLogger(ColumnBuilder.class);
-
-	private Menu popup;
 
 	public static ColumnBuilder create() {
 		return new ColumnBuilder();
@@ -90,19 +93,14 @@ public class ColumnBuilder {
 	 * @param index
 	 */
 	void build(TableViewer viewer, int index) {
-		initialize(viewer);
 
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
+
+		new MenuConfigurer(viewer).configure(tvc, this);
+
 		tvc.setLabelProvider(clp);
 		if (editingSupport != null && editable)
 			tvc.setEditingSupport(newInstance(editingSupport, viewer));
-	}
-
-	private void initialize(TableViewer viewer) {
-		if (popup != null)
-			return;
-		popup = new Menu(viewer.getTable().getShell(), SWT.POP_UP);
-
 	}
 
 	private EditingSupport newInstance(Class<? extends EditingSupport> clazz, TableViewer viewer) {
@@ -322,6 +320,24 @@ public class ColumnBuilder {
 	 */
 	public DataTransformer transformer() {
 		return transformer;
+	}
+
+	// NOTE: sirve para antes de estar build... luego ya no se actualiza (al
+	// menos, por ahora)
+	private List<MenuItemDescriptor> headersMenuDescriptors = Lists.newArrayList();
+
+	public List<MenuItemDescriptor> headerMenuItemDescriptors() {
+		return headersMenuDescriptors;
+	}
+
+	public ColumnBuilder addHeadeMenuItemDescriptor(MenuItemDescriptor... descriptors) {
+		headersMenuDescriptors.addAll(Arrays.asList(descriptors));
+		return this;
+	}
+
+	public ColumnBuilder removeHeaderMenuItemsDescriptor(MenuItemDescriptor... descriptors) {
+		headersMenuDescriptors.removeAll(Arrays.asList(descriptors));
+		return this;
 	}
 
 }
