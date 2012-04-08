@@ -17,6 +17,8 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -167,8 +169,18 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				new Label(c, SWT.NONE).setText("cfl, cll, snl, efl");
 				Text t = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.lines);
-				t.setText("1, 2, 3, 4");
+				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.lines, new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+
+					@Override
+					public IStatus validate(Object value) {
+						String l = value.toString();
+						if (l.matches("\\d+,\\d+,\\d+,\\d+"))
+							return ValidationStatus.ok();
+						else
+							return ValidationStatus.error("Formato no válido: ###,###,###,###");
+					}
+				}), null);
+				t.setText("1,2,3,4");
 
 				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
 				setControl(c);
@@ -176,7 +188,6 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 			}
 		});
 	}
-
 	// TODO hacer fluent!
 	// WizardFactory.createWizard().addPage().addPage()
 	// WizardPage.create(WizardPage.class).
