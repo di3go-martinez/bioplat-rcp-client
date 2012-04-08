@@ -3,6 +3,8 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -17,28 +19,30 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
-	private static final Image ascimg = Activator.imageDescriptorFromPlugin("resources/icons/asc.png").createImage();
-	private static final Image descimg = Activator.imageDescriptorFromPlugin("resources/icons/desc.png").createImage();
+	private static final Image ascimg = PlatformUIUtils.findImage("asc.png"); 
+	private static final Image descimg = PlatformUIUtils.findImage("desc.png");
 
 	private static final String CLINICAL_DATA = "Clinical Data";
+	private TableReference tr;
 
 	public ExperimentClinicalData(boolean updatableTitle) {
 		super(updatableTitle);
@@ -58,7 +62,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		for (Sample s : resolveSamplesToLoad())
 			tb.addColumn(ColumnBuilder.create().title(s.getName()).editable().numeric().property("data[" + index++ + "].value"));
 
-		final TableReference tr = tb.build();
+		tr = tb.build();
 
 		Composite sorterContainer = new Composite(container, SWT.BORDER);
 		sorterContainer.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
@@ -158,6 +162,31 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 	private List<ClinicalDataModel> makeModel(AbstractExperiment model) {
 		return ClinicalDataModel.create(model);
 	}
+
+	@Override
+	protected Observer createModificationObserver() {
+
+		return new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				// FIXME PARCHE PARA QUE SE BORREN LOS SAMPLES QUE SE BORRAN EN
+				// LA OTRA SOLAPA,
+				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
+				// TABLEREFENCE CON EL MODELO
+				Table t = tr.getTable();
+
+				for (TableColumn tc : t.getColumns()) {
+					String columnName = tc.getText();
+					if (columnName.startsWith("GSM") && !model().getSampleNames().contains(columnName)) {
+						tc.setWidth(0);
+						tc.setResizable(false);
+					}
+				}
+			}
+		};
+	}
+
 }
 
 class ClinicalDataModel extends AbstractEntity {
