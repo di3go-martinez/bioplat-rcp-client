@@ -15,11 +15,11 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.RemoveSamplesCommand;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 
-public class RemoveColumnDescriptor implements MenuItemDescriptor {
+public class RemoveSampleColumnDescriptor implements MenuItemDescriptor {
 
 	private AbstractExperiment experiment;
 
-	public RemoveColumnDescriptor(AbstractExperiment experiment) {
+	public RemoveSampleColumnDescriptor(AbstractExperiment experiment) {
 		this.experiment = experiment;
 	}
 
@@ -35,6 +35,7 @@ public class RemoveColumnDescriptor implements MenuItemDescriptor {
 				if (MessageDialog.openConfirm(PlatformUIUtils.findShell(), "", "¿Confirma el borrado de " + columnId + "?")) {
 					// Borro del modelo
 					new RemoveSamplesCommand(experiment, Arrays.asList(columnId)).execute();
+
 					// "Borro" de la vista; SWT no proveé un mecanismo para
 					// borrar columnas
 					column.getColumn().setWidth(0);
