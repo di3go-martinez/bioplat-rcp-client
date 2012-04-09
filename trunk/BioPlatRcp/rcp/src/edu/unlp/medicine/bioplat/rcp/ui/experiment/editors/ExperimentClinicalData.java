@@ -38,7 +38,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
-	private static final Image ascimg = PlatformUIUtils.findImage("asc.png"); 
+	private static final Image ascimg = PlatformUIUtils.findImage("asc.png");
 	private static final Image descimg = PlatformUIUtils.findImage("desc.png");
 
 	private static final String CLINICAL_DATA = "Clinical Data";
@@ -175,14 +175,20 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
 				// TABLEREFENCE CON EL MODELO
 				Table t = tr.getTable();
-
+				// boolean reloadModel = false;
 				for (TableColumn tc : t.getColumns()) {
 					String columnName = tc.getText();
 					if (columnName.startsWith("GSM") && !model().getSampleNames().contains(columnName)) {
 						tc.setWidth(0);
 						tc.setResizable(false);
+						// reloadModel = true;
 					}
 				}
+				// TODO analizar mejor porque si tengo la columna "oculta" y
+				// recargo el modelo voy a perder una referencia a un sample o y
+				// si no la oculto: no se actualiza el header...
+				// if (reloadModel)
+				// tr.input(ClinicalDataModel.create(model()));
 			}
 		};
 	}
@@ -280,7 +286,14 @@ class CustomCellDataBuilder {
 	}
 }
 
+/**
+ * 
+ * @author diego
+ * @deprecated migrar a {@link CustomCellDataBuilder}
+ */
+@Deprecated
 class CellData implements Accesor, Comparable<CellData> {
+	private static final String _DEFAULT = "0";
 	private AbstractExperiment experiment;
 	private String attributeName;
 	private String sampleId;
@@ -308,7 +321,10 @@ class CellData implements Accesor, Comparable<CellData> {
 	public Object get(Object element) {
 		if (experiment == null)
 			return text;
-		return experiment.getClinicalAttribute(sampleId, attributeName);
+		if (experiment.getSampleNames().contains(sampleId))
+			return experiment.getClinicalAttribute(sampleId, attributeName);
+		else
+			return _DEFAULT;
 	}
 
 	@Override
