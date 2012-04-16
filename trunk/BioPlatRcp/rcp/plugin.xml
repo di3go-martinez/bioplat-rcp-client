@@ -257,57 +257,47 @@
    <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
-            caption="Cambiar 0&apos;s..."
+            caption="Change 0&apos;s"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
       <actionContribution
-            caption="AbsoluteValue"
+            caption="Absolute Value"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      
       <actionContribution
-            caption="by.4"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ActionContribution1">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Aplicar experimento"
+            caption="Apply Experiment"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
       </actionContribution>
+      
       <actionContribution
-            caption="Remove Selected Genes"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveSelectedGenesActionContribution">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
-      </actionContribution>
-      <actionContribution
-            caption="Keep Selected Genes Only"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlySelectedGenesAC">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
-      </actionContribution>
-      <actionContribution
-            caption="Borrar genes..."
+            caption="Delete Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Mantener sólo..."
+            caption="Keep Only Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution">
          <selection
-               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Apply Logarithm"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
       </actionContribution>
    </extension>
    <extension
