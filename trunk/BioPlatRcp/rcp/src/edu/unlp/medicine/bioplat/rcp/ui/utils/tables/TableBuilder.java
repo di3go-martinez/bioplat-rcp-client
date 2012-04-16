@@ -32,6 +32,7 @@ import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
@@ -206,10 +207,17 @@ public class TableBuilder implements TableConfigurer {
 
 			@Override
 			public void refresh() {
-				if (!viewer.isBusy()) {
-					resolver.resolveInput(viewer);
-					viewer.refresh();
-				}
+				PlatformUIUtils.findDisplay().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						if (!viewer.isBusy()) {
+							resolver.resolveInput(viewer);
+							viewer.refresh();
+						}
+					}
+				});
+
 			}
 
 			/**
@@ -322,6 +330,8 @@ public class TableBuilder implements TableConfigurer {
 		};
 	}
 
+	// TODO analizar el InputResolver... ya no va más... no?
+	@Deprecated
 	private InputResolver resolver = new NullInputResolver();
 	private Paging paging;
 
