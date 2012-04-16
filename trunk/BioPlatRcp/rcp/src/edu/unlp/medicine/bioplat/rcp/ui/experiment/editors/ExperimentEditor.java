@@ -86,9 +86,15 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		innerEditor.showGene(selectedGene);
 	}
 
+	/**
+	 * 
+	 * La cantidad de samples a cargar en la vista se configuran desde las
+	 * preferencias de la aplicación
+	 * 
+	 * @return la cantidad de samples a cargar en la vista
+	 */
 	static int getSampleCountToLoad() {
-		int max = ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
-		return max;
+		return ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
 	}
 
 	// TODO sacar de acá

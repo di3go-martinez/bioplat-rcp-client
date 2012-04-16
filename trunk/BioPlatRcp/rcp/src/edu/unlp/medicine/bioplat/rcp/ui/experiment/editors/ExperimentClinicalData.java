@@ -34,7 +34,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
-import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
@@ -175,6 +174,10 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
 				// TABLEREFENCE CON EL MODELO
 				Table t = tr.getTable();
+
+				if (t.isDisposed())
+					return;
+
 				// boolean reloadModel = false;
 				for (TableColumn tc : t.getColumns()) {
 					String columnName = tc.getText();
@@ -195,7 +198,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 }
 
-class ClinicalDataModel extends AbstractEntity {
+class ClinicalDataModel /* extends AbstractEntity */{
 
 	private CellData[] data;
 
@@ -225,6 +228,8 @@ class ClinicalDataModel extends AbstractEntity {
 		// el nombre del atributo
 		for (String a : e.getClinicalAttributeNames()) {
 			// uno más para que entre
+			// FIXME notar que está cargando todos los samples y no solamente
+			// los que está mostrando... si da problemas de performance acomodar
 			CellData[] rowData = new CellData[e.getSamples().size() + 1];
 			int index = 0;
 			rowData[index++] = CellData.constant(a);
@@ -235,54 +240,6 @@ class ClinicalDataModel extends AbstractEntity {
 		}
 
 		return result;
-	}
-}
-
-interface CellValueResolver {
-	void doSet(Object value);
-
-	Object doGet();
-}
-
-class CustomCellData {
-	private CellValueResolver resolver;
-
-	public CustomCellData(CellValueResolver resolver) {
-		this.resolver = resolver;
-	}
-
-	public void setValue(Object value) {
-		resolver.doSet(value);
-	}
-
-	public Object getValue() {
-		return resolver.doGet();
-	}
-}
-
-class CustomCellDataBuilder {
-	private CustomCellDataBuilder() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public static CustomCellData create(CellValueResolver resolver) {
-		return new CustomCellData(resolver);
-	}
-
-	public static CustomCellData constant(final Object constantValue) {
-		return new CustomCellData(new CellValueResolver() {
-
-			@Override
-			public void doSet(Object value) {
-				// nothing, it's CONSTANT!
-
-			}
-
-			@Override
-			public Object doGet() {
-				return constantValue;
-			}
-		});
 	}
 }
 

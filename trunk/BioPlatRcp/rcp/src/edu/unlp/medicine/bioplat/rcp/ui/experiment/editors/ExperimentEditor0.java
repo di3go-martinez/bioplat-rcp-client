@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -33,6 +35,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
@@ -107,6 +111,9 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
 			tb.addColumn( //
+			// FIXME el property deja estático el valor que va a tener la
+			// columna, si esta es removida: muestra un valor que esta
+			// desafasado y no es correcto... migrar a CustomCellData????!
 			ColumnBuilder.create().numeric().title(s.getName()). //
 					property("data[" + index++ + "]").addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
@@ -118,6 +125,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		// FIXME sacar el downcast, avisar a de una manera prolija
+		// TODO Para qué era esto....???
 		AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
 		ass.setActivePart(null);
 		ass.setActivePart(this);
@@ -125,8 +133,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 	private List<Sample> resolveSamplesToLoad() {
 		int max = ExperimentEditor.getSampleCountToLoad();
-		return model().getSamples().subList(0, max - 1);// -1 porque empiezo de
-														// // 0
+		return model().getSamples().subList(0, max);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,9 +141,9 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
 		Map<Object, IStructuredSelection> selections = Maps.newHashMap();
 
-		List<ExpressionDataModel> l = tr.focusedElements();
+		List<ExpressionDataModel> elements = tr.focusedElements();
 
-		List<Gene> genes = Lists.transform(l, new Function<ExpressionDataModel, Gene>() {
+		List<Gene> genes = Lists.transform(elements, new Function<ExpressionDataModel, Gene>() {
 			@Override
 			public Gene apply(ExpressionDataModel input) {
 				return input.findGene();
@@ -145,8 +152,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 		selections.put(Constants.GENES, new StructuredSelection(genes));
 
-		l = tr.selectedElements();
-		genes = Lists.transform(l, new Function<ExpressionDataModel, Gene>() {
+		elements = tr.selectedElements();
+		genes = Lists.transform(elements, new Function<ExpressionDataModel, Gene>() {
 
 			@Override
 			public Gene apply(ExpressionDataModel edm) {
@@ -158,8 +165,56 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		return selections;
 	}
 
+	private ExecutorService exec = Executors.newFixedThreadPool(1);
+
+	private boolean isEditorOpen() {
+		return editorOpen;
+	}
+
+	private boolean editorOpen = true;
+
+	@Override
+	public void dispose() {
+		editorOpen = false;
+		super.dispose();
+	}
+
 	@Override
 	protected Observer createModificationObserver() {
+
+		final Object lock = new Object();
+		final Holder<Boolean> changed = Holder.create(false);
+		// table view refresher
+		new Thread() {
+			@Override
+			public void run() {
+
+				while (isEditorOpen()) {
+					PlatformUIUtils.findDisplay().syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							synchronized (lock) {
+								if (changed.value()) {
+									tr.input(data);
+									changed.hold(false);
+								}
+							}
+						}
+					});
+					sleep();
+				}
+			}
+
+			private void sleep() {
+				try {
+					Thread.sleep(500);// TODO hacer configurable (de quedar)
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
 
 		return new Observer() {
 
@@ -172,30 +227,30 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 			public void update(Observable o, Object arg) {
 
 				if (!autorefresh()) {
-					if (!logged) {
-						MessageManager.INSTANCE.add(Message.warn("El autorefresh de la grilla está desactivado."));
-						logger.warn("El autorefresh de la grilla está desactivado.");
-						logged = true;
-					}
+					warnAutoRefresh();
 					return;
 				}
 				logged = false;
 
-				// FIXME nada eficiente crear el modelo cada vez, por eso se
-				// hace un merge...
+				exec.submit(new Runnable() {
 
-				// if (counter != 50) // FIXME no actualiza, sino cada 50...
-				// // problema:
-				// // quedan datos sin actualizar si la
-				// // cantidad de datos no es múltiplo de 100
-				// {
-				// counter++;
-				// return;
-				// }
-				// counter = 0;
+					@Override
+					public void run() {
+						synchronized (lock) {
+							data = ExpressionDataModel.merge(data, model(), changed);
+						}
 
-				data = ExpressionDataModel.merge(data, model());
-				tr.input(data);
+					}
+				});
+
+			}
+
+			private void warnAutoRefresh() {
+				if (!logged) {
+					MessageManager.INSTANCE.add(Message.warn("El autorefresh de la grilla está desactivado."));
+					logger.warn("El autorefresh de la grilla está desactivado.");
+					logged = true;
+				}
 			}
 
 			private boolean autorefresh() {
@@ -208,11 +263,10 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		tr.show(selectedGene);
 
 	}
+
 }
 
-// TODO revisar que es obligatorio que extienda abstractEntity... @see
-// TableBuilder#input
-class ExpressionDataModel extends AbstractEntity {
+class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 
 	/**
 	 * Usar con cuidado, puede colgar la memoria de la aplicación...
@@ -226,13 +280,15 @@ class ExpressionDataModel extends AbstractEntity {
 		List<ExpressionDataModel> result = Lists.newArrayList();
 
 		for (Gene g : e.getGenes()) {
-			final int sampleCount = e.getSamples().size();
+			final int sampleCount = ExperimentEditor.getSampleCountToLoad();// e.getSamples().size();
 			Object[] data = new Object[sampleCount + 1];
 			data[0] = g.getEntrezId();
 			int index = 1;
 
-			for (Sample s : e.getSamples()) {
-				// TODO revisar que no sea por name, si no por id...
+			List<Sample> samples = e.getSamples();
+			for (int i = 0; i < sampleCount && i < samples.size(); i++) {
+				Sample s = samples.get(i); // TODO revisar que no sea por name,
+											// sino por id...
 				data[index++] = e.getExpressionLevelForAGene(s.getName(), g);
 			}
 
@@ -251,24 +307,32 @@ class ExpressionDataModel extends AbstractEntity {
 	 *            primera vez que se invoca)
 	 * @param e
 	 *            es el nuevo experimento
+	 * @param changed
+	 *            indica si el merge produjo cambios o no //TODO revisar mejor
+	 *            como devolver esta situación...
 	 * @return el objeto current actualizado con el experimento e
 	 */
-	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e) {
+	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e, Holder<Boolean> changed) {
 		// TODO mejorar implementación: contempla el caso que se haya removido
 		// genes o incluso agregado...
 		if (current == null //
-				|| current.size() != e.getGenes().size())
+				|| current.size() != e.getGenes().size()) {
 			current = create(e);
-		else {
+			changed.hold(true);
+		} else {
 			int index0 = 0;
 			for (Gene g : e.getGenes()) {
 				int index1 = 1;
 				ExpressionDataModel cdm = current.get(index0);
 
-				for (Sample s : e.getSamples()) {
+				List<Sample> samples = e.getSamples();
+				for (int i = 0; i < ExperimentEditor.getSampleCountToLoad(); i++) {
 
-					if (!cdm.data[index1].equals(e.getExpressionLevelForAGene(s.getName(), g)))
+					Sample s = samples.get(i);
+					if (!cdm.data[index1].equals(e.getExpressionLevelForAGene(s.getName(), g))) {
 						cdm.data[index1] = e.getExpressionLevelForAGene(s.getName(), g);
+						changed.hold(true);
+					}
 					index1++;
 
 				}
@@ -281,7 +345,7 @@ class ExpressionDataModel extends AbstractEntity {
 	// columnas: gen columna1 columna2 columna3
 	// [0]=> genid; [1..n]=>expressión génica del sample 1 al n para el gen
 	// data[0]
-	Object[] data;
+	private Object[] data;
 
 	public Object[] getData() {
 		return data;
@@ -299,5 +363,21 @@ class ExpressionDataModel extends AbstractEntity {
 	public Gene findGene() {
 		final long id = Long.parseLong(data[0].toString());
 		return MetaPlat.getInstance().getGeneByEntrezId(id);
+	}
+
+	@Override
+	public int hashCode() {
+		return 32 * data.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof ExpressionDataModel) {
+			ExpressionDataModel other = (ExpressionDataModel) obj;
+			return Arrays.equals(this.data, other.data);
+		}
+		return false;
 	}
 }
