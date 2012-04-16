@@ -42,15 +42,12 @@ public class MessageViewPart extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		Action action = new Action("") {
-			{
-				setImageDescriptor(Activator.imageDescriptorFromPlugin("resources/icons/clear.png"));
-			}
+		Action action = new Action("Limpiar", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
 
 			@Override
 			public void run() {
 				MessageManager.INSTANCE.clear();
-				tr.refresh();
+				refresh();
 			}
 		};
 		IActionBars actionBars = getViewSite().getActionBars();
@@ -92,6 +89,10 @@ public class MessageViewPart extends ViewPart {
 
 	@Override
 	public void setFocus() {
+		refresh();
+	}
+
+	public void refresh() {
 		tr.refresh();
 	}
 

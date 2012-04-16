@@ -30,9 +30,14 @@ public enum MessageManager {
 
 	public MessageManager add(Message msg) {
 		messages.add(msg);
-		// openView();// abre la vista cuando se agrega un mensaje//TODO
-		// analizar si siempre o cuando es un error...
+		refresh();
 		return this;
+	}
+
+	private void refresh() {
+		MessageViewPart view = PlatformUIUtils.findView(MessageViewPart.id());
+		if (view != null)
+			view.refresh();
 	}
 
 	public boolean isThereAnyMessage() {
@@ -40,8 +45,8 @@ public enum MessageManager {
 	}
 
 	public MessageManager openView() {
-		// TODO revisar el forzado del setFocus
-		PlatformUIUtils.openView(MessageViewPart.id(), true);
+		PlatformUIUtils.openView(MessageViewPart.id());
 		return this;
 	}
+
 }
