@@ -63,8 +63,6 @@ public class ChangeZerosToAction extends AbstractActionContribution<AbstractExpe
 			for (Gene g : s.getGenes()) {
 				Double expr = s.getExpressionLevelForAGene(g);
 				if (expr == null || expr == getValueToSearch()) {
-					// FIXME no funciona asincrónicamente... si ssi tiene que
-					// estar con el ui-fucking-thread...
 					s.setExpressionLevelForAGene(g, newValue.value());
 					addModification(s, g);
 				}
@@ -72,6 +70,7 @@ public class ChangeZerosToAction extends AbstractActionContribution<AbstractExpe
 
 	}
 
+	// TODO Generalizar
 	protected double getValueToSearch() {
 		return 0.0;
 	}
