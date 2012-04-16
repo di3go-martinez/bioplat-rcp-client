@@ -134,7 +134,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 					c.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
-							new MevWizard(exp).open(true);
+							new MevWizard(exp).blockOnOpen().open();
 						}
 					});
 					editor.grabHorizontal = true;
