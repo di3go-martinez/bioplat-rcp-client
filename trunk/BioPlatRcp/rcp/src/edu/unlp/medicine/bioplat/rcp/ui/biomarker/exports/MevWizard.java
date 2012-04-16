@@ -26,11 +26,8 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class MevWizard extends AbstractWizard<Void> {
 	private static final String INCLUDE_EXPRESSION_DATA = "INCLUDE_EXPRESSION_DATA";
-
 	private static final String INCLUDE_HEADER = "INCLUDE_HEADER";
-
 	private static final String INCLUDE_CLINICAL_DATA = "INCLUDE_CLINICAL_DATA";
-
 	private static final String FILE_NAME = "FILE_NAME";
 
 	private AbstractExperiment experiment;
