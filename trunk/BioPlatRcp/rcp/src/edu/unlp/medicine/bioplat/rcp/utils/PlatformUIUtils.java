@@ -94,22 +94,40 @@ public class PlatformUIUtils {
 			@Override
 			public void run() {
 				final IEditorPart editor = org.eclipse.ui.PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				try {
-					IViewPart v = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
-					// FIXME no va el forceFocus...
-					if (forceFocus)
-						v.setFocus();
-					if (editor != null)
-						editor.setFocus();
+				// try {
+				IViewPart v = findView(viewId);// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+				// FIXME no va el forceFocus...
+				if (forceFocus)
+					v.setFocus();
+				if (editor != null)
+					editor.setFocus();
 
-				} catch (PartInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				// } catch (PartInitException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 
 			}
 		});
 
+	}
+
+	/**
+	 * 
+	 * @param viewId
+	 * @return retorna la vista o null si la misma no se encuentra o está
+	 *         cerrada.
+	 */
+	public static <T extends IViewPart> T findView(final String viewId) {
+		final Holder<T> holder = Holder.create();
+		PlatformUIUtils.findDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				holder.hold((T) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(viewId));
+			}
+		});
+		return holder.value();
 	}
 
 	private static Cache<String, Image> imagesCache = CacheBuilder.newBuilder().build();
