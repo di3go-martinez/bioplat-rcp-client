@@ -224,4 +224,7 @@
 		<!--dependency> <groupId>com.example</groupId> <artifactId>lib</artifactId> 
 			<version>${maven-runtime.version}</version> </dependency -->
 	</dependencies>
+	<scm>
+		<url>http://riouxsvn.com/svn/bioplat04/trunk/BioPlatRcp</url>
+	</scm>
 </project>
