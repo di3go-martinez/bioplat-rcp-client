@@ -92,16 +92,26 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		}
 	}
 
+	private boolean blockOnOpen = true;
+
+	public AbstractWizard<T> blockOnOpen(boolean block) {
+		blockOnOpen = block;
+		return this;
+	}
+
+	public AbstractWizard<T> blockOnOpen() {
+		return blockOnOpen(true);
+	}
+
 	/**
 	 * 
-	 * @param shouldBlock
 	 * @return devuelve el resultado del open del diálogo
 	 */
-	public int open(boolean shouldBlock) {
+	public int open() {
 		Dialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
 
 		this.init(PlatformUI.getWorkbench());
-		d.setBlockOnOpen(shouldBlock);
+		d.setBlockOnOpen(blockOnOpen);
 		return d.open();
 	}
 
@@ -179,7 +189,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	/**
 	 * Permite configurar los parámetros dentro del Realm/ui-thread, el cual es
-	 * necesario para poder acceder a los valores del model...
+	 * necesario para poder acceder a los valores del model.
 	 * 
 	 */
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
@@ -191,8 +201,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 * Procesamiento fuera del ui-thread <b>no se puede modificar la vista
 	 * directamente</b> tiene que estar contextualizada o explícitamente con
 	 * Display.[a]syncExec() <br>
-	 * Se tiene acceso al wizardModel()
+	 * <b>No</b> Se tiene acceso al wizardModel() directamente, para eso usar
+	 * {@link #configureParameters()}
 	 * 
+	 * @see configureParameters()
 	 * 
 	 * @param monitor
 	 *            puede ser una barra de progreso donde se va indicando el esta
@@ -202,7 +214,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	protected abstract T backgroundProcess(Monitor monitor) throws Exception;
 
 	/**
-	 * procesa dentro del ui-thread, permitiendo ejecutar código que interactúe
+	 * Procesa dentro del ui-thread, permitiendo ejecutar código que interactúe
 	 * con este, es definitiva, con la vista. por ejemplo abrir un editor.
 	 * 
 	 * @param result
