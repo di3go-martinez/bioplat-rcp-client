@@ -89,7 +89,9 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 
 	/**
 	 * Corre por fuera del thread ui, así que para levantar un diálogo por
-	 * ejemplo se deberá pedir explicitamente el thread correspondiente
+	 * ejemplo se deberá pedir explicitamente el thread correspondiente; como
+	 * consecuencia de lo anterior, este método corre por fuera del Realm (para
+	 * estar dentro hay que hacerlo explícitamente)
 	 */
 	@Override
 	public abstract void run();
