@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -100,7 +102,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// .input(inputHolder.value())
 		;
 
-		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value"));
+		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value.entrezId"))//
+				.addColumn(ColumnBuilder.create().title("Nombre").property("data[0].value.name").editable());
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
@@ -237,8 +240,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 						synchronized (lock) {
 							// FIXME no va más esto?.... cómo queda ahora la
 							// performance?....
-							// data = ExpressionDataModel.merge(data, model(),
-							// changed);
+							data = ExpressionDataModel.checkGenes(data, model());
 							changed.hold(true);
 						}
 
@@ -286,7 +288,7 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 		for (Gene g : e.getGenes()) {
 			final int sampleCount = ExperimentEditor.getSampleCountToLoad();// e.getSamples().size();
 			CustomCellData[] data = new CustomCellData[sampleCount + 1];
-			data[0] = CustomCellDataBuilder.constant(g.getEntrezId());
+			data[0] = CustomCellDataBuilder.constant(g);
 			int index = 1;
 
 			List<Sample> samples = e.getSamples();
@@ -299,6 +301,19 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 
 		}
 		return result;
+	}
+
+	public static List<ExpressionDataModel> checkGenes(List<ExpressionDataModel> current, final AbstractExperiment model) {
+		if (current.size() != model.getGenes().size())
+			current = Lists.newArrayList(Collections2.filter(current, new Predicate<ExpressionDataModel>() {
+
+				@Override
+				public boolean apply(ExpressionDataModel edm) {
+					return model.containsGene(edm.findGene());
+				}
+			}));
+
+		return current;
 	}
 
 	/**
@@ -315,7 +330,8 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 	 *            como devolver esta situación...
 	 * @return el objeto current actualizado con el experimento e
 	 */
-	public static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e, Holder<Boolean> changed) {
+	@Deprecated
+	private static List<ExpressionDataModel> merge(List<ExpressionDataModel> current, AbstractExperiment e, Holder<Boolean> changed) {
 		// TODO mejorar implementación: contempla el caso que se haya removido
 		// genes o incluso agregado...
 		if (current == null //
