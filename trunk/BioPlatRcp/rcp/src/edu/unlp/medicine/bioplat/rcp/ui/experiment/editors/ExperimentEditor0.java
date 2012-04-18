@@ -33,6 +33,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneral
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellData;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
@@ -71,14 +73,6 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 			}
 		});
-		// model().addPropertyChangeListener("name", new
-		// PropertyChangeListener() {
-		//
-		// @Override
-		// public void propertyChange(PropertyChangeEvent evt) {
-		// setPartName(evt.getNewValue().toString());
-		// }
-		// });
 
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes").readOnly();
 		Widgets.createTextWithLabel(c, "Autor", model(), "author");
@@ -106,7 +100,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// .input(inputHolder.value())
 		;
 
-		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0]"));
+		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value"));
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
@@ -114,8 +108,9 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 			// FIXME el property deja estático el valor que va a tener la
 			// columna, si esta es removida: muestra un valor que esta
 			// desafasado y no es correcto... migrar a CustomCellData????!
-			ColumnBuilder.create().numeric().title(s.getName()). //
-					property("data[" + index++ + "]").addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
+			ColumnBuilder.create().numeric().title(s.getName()) //
+					.property("data[" + index++ + "].value")//
+					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
 		tr = tb.build();
 		tr.addSelectionChangeListener(this);
@@ -143,26 +138,29 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 		List<ExpressionDataModel> elements = tr.focusedElements();
 
-		List<Gene> genes = Lists.transform(elements, new Function<ExpressionDataModel, Gene>() {
-			@Override
-			public Gene apply(ExpressionDataModel input) {
-				return input.findGene();
-			}
-		});
+		List<Gene> genes = Lists.transform(elements, toGene());
 
 		selections.put(Constants.GENES, new StructuredSelection(genes));
 
 		elements = tr.selectedElements();
-		genes = Lists.transform(elements, new Function<ExpressionDataModel, Gene>() {
+		genes = Lists.transform(elements, toGene());
+
+		selections.put(Constants.SELECTED_GENES, new StructuredSelection(genes));
+		return selections;
+	}
+
+	/**
+	 * 
+	 * @return una función {@link ExpressionDataModel} :-> {@link Gene}
+	 */
+	private Function<ExpressionDataModel, Gene> toGene() {
+		return new Function<ExpressionDataModel, Gene>() {
 
 			@Override
 			public Gene apply(ExpressionDataModel edm) {
 				return edm.findGene();
 			}
-		});
-
-		selections.put(Constants.SELECTED_GENES, new StructuredSelection(genes));
-		return selections;
+		};
 	}
 
 	private ExecutorService exec = Executors.newFixedThreadPool(1);
@@ -208,7 +206,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 			private void sleep() {
 				try {
-					Thread.sleep(500);// TODO hacer configurable (de quedar)
+					Thread.sleep(1000);// TODO hacer configurable (de quedar)
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -237,11 +235,17 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 					@Override
 					public void run() {
 						synchronized (lock) {
-							data = ExpressionDataModel.merge(data, model(), changed);
+							// FIXME no va más esto?.... cómo queda ahora la
+							// performance?....
+							// data = ExpressionDataModel.merge(data, model(),
+							// changed);
+							changed.hold(true);
 						}
 
 					}
 				});
+
+				ExperimentEditor.checkColumns(tr, model());
 
 			}
 
@@ -281,15 +285,14 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 
 		for (Gene g : e.getGenes()) {
 			final int sampleCount = ExperimentEditor.getSampleCountToLoad();// e.getSamples().size();
-			Object[] data = new Object[sampleCount + 1];
-			data[0] = g.getEntrezId();
+			CustomCellData[] data = new CustomCellData[sampleCount + 1];
+			data[0] = CustomCellDataBuilder.constant(g.getEntrezId());
 			int index = 1;
 
 			List<Sample> samples = e.getSamples();
 			for (int i = 0; i < sampleCount && i < samples.size(); i++) {
-				Sample s = samples.get(i); // TODO revisar que no sea por name,
-											// sino por id...
-				data[index++] = e.getExpressionLevelForAGene(s.getName(), g);
+				Sample s = samples.get(i);
+				data[index++] = CustomCellDataBuilder.create(new ExpressionLevelResolver(e, s, g));
 			}
 
 			result.add(new ExpressionDataModel(data));
@@ -329,8 +332,10 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 				for (int i = 0; i < ExperimentEditor.getSampleCountToLoad(); i++) {
 
 					Sample s = samples.get(i);
-					if (!cdm.data[index1].equals(e.getExpressionLevelForAGene(s.getName(), g))) {
-						cdm.data[index1] = e.getExpressionLevelForAGene(s.getName(), g);
+					// TODO revisar bien el equals....
+					if (!cdm.data[index1].equals(CustomCellDataBuilder.constant(e.getExpressionLevelForAGene(s.getName(), g)))) {
+						cdm.data[index1] = CustomCellDataBuilder.create(new ExpressionLevelResolver(e, s, g)); // e.getExpressionLevelForAGene(s.getName(),
+																												// g);
 						changed.hold(true);
 					}
 					index1++;
@@ -345,13 +350,13 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 	// columnas: gen columna1 columna2 columna3
 	// [0]=> genid; [1..n]=>expressión génica del sample 1 al n para el gen
 	// data[0]
-	private Object[] data;
+	private CustomCellData[] data;
 
-	public Object[] getData() {
+	public CustomCellData[] getData() {
 		return data;
 	}
 
-	public ExpressionDataModel(Object[] data) {
+	public ExpressionDataModel(CustomCellData[] data) {
 		this.data = data;
 	}
 
@@ -361,7 +366,7 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 	}
 
 	public Gene findGene() {
-		final long id = Long.parseLong(data[0].toString());
+		final long id = Long.parseLong(data[0].getValue().toString());
 		return MetaPlat.getInstance().getGeneByEntrezId(id);
 	}
 

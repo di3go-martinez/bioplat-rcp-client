@@ -19,7 +19,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.google.common.base.Function;
@@ -31,6 +30,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
@@ -59,7 +59,8 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		tb.addColumn(ColumnBuilder.create().property("data[0].value"));
 		int index = 1;
 		for (Sample s : resolveSamplesToLoad())
-			tb.addColumn(ColumnBuilder.create().title(s.getName()).editable().numeric().property("data[" + index++ + "].value"));
+			tb.addColumn(ColumnBuilder.create().title(s.getName()).editable().numeric().property("data[" + index++ + "].value")//
+					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
 		tr = tb.build();
 
@@ -175,27 +176,14 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// TABLEREFENCE CON EL MODELO
 				Table t = tr.getTable();
 
-				if (t.isDisposed())
-					return;
+				// if (t.isDisposed())
+				// return;
 
-				// boolean reloadModel = false;
-				for (TableColumn tc : t.getColumns()) {
-					String columnName = tc.getText();
-					if (columnName.startsWith("GSM") && !model().getSampleNames().contains(columnName)) {
-						tc.setWidth(0);
-						tc.setResizable(false);
-						// reloadModel = true;
-					}
-				}
-				// TODO analizar mejor porque si tengo la columna "oculta" y
-				// recargo el modelo voy a perder una referencia a un sample o y
-				// si no la oculto: no se actualiza el header...
-				// if (reloadModel)
-				// tr.input(ClinicalDataModel.create(model()));
+				ExperimentEditor.checkColumns(tr, model());
 			}
+
 		};
 	}
-
 }
 
 class ClinicalDataModel /* extends AbstractEntity */{

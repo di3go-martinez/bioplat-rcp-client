@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPropertyListener;
 
@@ -13,6 +14,7 @@ import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -106,4 +108,27 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		return ep;
 	}
 
+	/**
+	 * 
+	 * Se chequea que las columnas de samples que está mostrando la tr
+	 * corresponden al model, sino se sacan.
+	 * 
+	 * 
+	 * @param tr
+	 *            TableRef
+	 * @param model
+	 *            experimento
+	 */
+	// TODO ¿implementar el agregado?
+	static <T extends AbstractExperiment> void checkColumns(TableReference tr, T model) {
+		for (TableColumn tc : tr.getTable().getColumns()) {
+			String columnName = tc.getText();
+			if (columnName.startsWith("GSM") && !model.getSampleNames().contains(columnName)) {
+				tc.setWidth(0);
+				tc.setResizable(false);
+				// reloadModel = true;
+			}
+		}
+
+	}
 }
