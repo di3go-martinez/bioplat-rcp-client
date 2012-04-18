@@ -103,7 +103,7 @@ public class GeneViewPart extends ViewPart {
 	private List<Widget> ws = Lists.newArrayList();
 	private List<Browser> browsers = Lists.newArrayList();
 	// urls rest configuradas, contiene variables seguramente ej el id del gen
-	//Agrego la de NCBI por default
+	// Agrego la de NCBI por default
 	private String[] $variableUrls = new String[] { REST_URL_NCBI };
 
 	private void updateComposite(Composite parent, Gene gene) {
@@ -166,11 +166,13 @@ public class GeneViewPart extends ViewPart {
 
 		String urls = PlatformUtils.preferences().get(ExternalGeneInformationPage.URLS, "");
 
-		if (urls.isEmpty())
-			PlatformUtils.preferences().put(ExternalGeneInformationPage.URLS, StringUtils.join($variableUrls, '|'));
+		if (urls.isEmpty()) {
+			urls = StringUtils.join($variableUrls, '|');
+			PlatformUtils.preferences().put(ExternalGeneInformationPage.URLS, urls);
+		}
 
 		CTabFolder t = new CTabFolder(container, SWT.BORDER);
-		t.setLayout(GridLayoutFactory.fillDefaults().create());
+		t.setLayout(GridLayoutFactory.swtDefaults().create());
 		t.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 
 		$variableUrls = StringUtils.split(urls, '|');
@@ -183,20 +185,20 @@ public class GeneViewPart extends ViewPart {
 			browsers.add(browser);
 
 			// agrego el tab contendor
-			final CTabItem i = new CTabItem(t, SWT.NONE);
-			i.setControl(browser);
-			i.setText(realurl);
+			final CTabItem tab = new CTabItem(t, SWT.NONE);
+			tab.setControl(browser);
+			tab.setText(realurl);
 
 			browser.addProgressListener(new ProgressListener() {
 
 				@Override
 				public void completed(ProgressEvent event) {
-					i.setText(((Browser) event.widget).getUrl());
+					tab.setText(((Browser) event.widget).getUrl());
+
 				}
 
 				@Override
 				public void changed(ProgressEvent event) {
-					// TODO Auto-generated method stub
 
 				}
 			});
