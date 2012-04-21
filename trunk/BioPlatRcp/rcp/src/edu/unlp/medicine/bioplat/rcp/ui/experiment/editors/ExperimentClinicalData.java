@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -26,10 +27,10 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellData;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
@@ -59,7 +60,8 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		tb.addColumn(ColumnBuilder.create().property("data[0].value"));
 		int index = 1;
 		for (Sample s : resolveSamplesToLoad())
-			tb.addColumn(ColumnBuilder.create().title(s.getName()).editable().numeric().property("data[" + index++ + "].value")//
+			// TODO numeric()?
+			tb.addColumn(ColumnBuilder.create().title(s.getName()).editable().property("data[" + index++ + "].value")//
 					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
 		tr = tb.build();
@@ -116,14 +118,14 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		ClinicalDataModel cdm = (ClinicalDataModel) ti.getData();
 
 		// sorted es la colección donde quedarán los datos ordenados
-		CellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, ExperimentEditor.getSampleCountToLoad() + 1);
+		CustomCellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, ExperimentEditor.getSampleCountToLoad() + 1);
 		// original es como están los datos (des)ordenados actualmente
-		CellData[] original = new CellData[sorted.length];
+		CustomCellData[] original = new CustomCellData[sorted.length];
 
 		System.arraycopy(sorted, 0, original, 0, sorted.length);
 
 		// el método sort esta bien optimizado, @see javadoc
-		Arrays.sort(sorted);
+		Arrays.sort(sorted, getComparator());
 		if (b.getImage() == descimg)
 			Arrays.sort(sorted, Collections.reverseOrder());
 
@@ -135,7 +137,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		newOrder[1] = 1; // la segunda tampoco se ordena es la columna
 							// de nombre de atributo
 
-		final List<CellData> originalAsList = Arrays.asList(original);
+		final List<CustomCellData> originalAsList = Arrays.asList(original);
 		// · voy buscando los elementos en orden de sorted, y poniendo
 		// su índice en la colección newOrder, la cual se usara para
 		// indicarle a la tabla como ordenar las columnas
@@ -145,6 +147,22 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 			newOrder[i] = newIndex;
 		}
 		t.setColumnOrder(newOrder);
+	}
+
+	// Comparador para ordenar las celdas
+	private Comparator<? super CustomCellData> getComparator() {
+		return new Comparator<CustomCellData>() {
+
+			@Override
+			public int compare(CustomCellData o1, CustomCellData o2) {
+				Float thisValue = new Float(o1.getValue().toString());
+				Float otherValue = new Float(o2.getValue().toString());
+
+				return thisValue.compareTo(otherValue);
+
+			};
+
+		};
 	}
 
 	// /
@@ -180,21 +198,22 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// return;
 
 				ExperimentEditor.checkColumns(tr, model());
+
 			}
 
 		};
 	}
 }
 
-class ClinicalDataModel /* extends AbstractEntity */{
+class ClinicalDataModel {
 
-	private CellData[] data;
+	private CustomCellData[] data;
 
-	public CellData[] getData() {
+	public CustomCellData[] getData() {
 		return data;
 	}
 
-	private ClinicalDataModel(CellData[] data) {
+	private ClinicalDataModel(CustomCellData[] data) {
 		this.data = data;
 	}
 
@@ -218,79 +237,15 @@ class ClinicalDataModel /* extends AbstractEntity */{
 			// uno más para que entre
 			// FIXME notar que está cargando todos los samples y no solamente
 			// los que está mostrando... si da problemas de performance acomodar
-			CellData[] rowData = new CellData[e.getSamples().size() + 1];
+			CustomCellData[] rowData = new CustomCellData[e.getSamples().size() + 1];
 			int index = 0;
-			rowData[index++] = CellData.constant(a);
+			rowData[index++] = CustomCellDataBuilder.constant(a);
 			for (Sample s : e.getSamples())
-				rowData[index++] = CellData.create(e, a, s.getName());
+				rowData[index++] = CustomCellDataBuilder.create(new ExpClinicalDataResolver(e, a, s));
 			result.add(new ClinicalDataModel(rowData));
 
 		}
 
 		return result;
-	}
-}
-
-/**
- * 
- * @author diego
- * @deprecated migrar a {@link CustomCellDataBuilder}
- */
-@Deprecated
-class CellData implements Accesor, Comparable<CellData> {
-	private static final String _DEFAULT = "0";
-	private AbstractExperiment experiment;
-	private String attributeName;
-	private String sampleId;
-	private String text;
-
-	static CellData create(AbstractExperiment e, String attributeName, String sampleId) {
-		return new CellData(e, attributeName, sampleId);
-	}
-
-	static CellData constant(String text) {
-		return new CellData(text);
-	}
-
-	private CellData(AbstractExperiment e, String attributeName, String sampleId) {
-		this.experiment = e;
-		this.attributeName = attributeName;
-		this.sampleId = sampleId;
-	}
-
-	private CellData(String text) {
-		this.text = text;
-	}
-
-	@Override
-	public Object get(Object element) {
-		if (experiment == null)
-			return text;
-		if (experiment.getSampleNames().contains(sampleId))
-			return experiment.getClinicalAttribute(sampleId, attributeName);
-		else
-			return _DEFAULT;
-	}
-
-	@Override
-	public void set(Object element, Object value) {
-		if (experiment != null)
-			experiment.setClinicalAttribute(sampleId, attributeName, value.toString());
-	}
-
-	public void setValue(Object e) {
-		set(null, e);
-	}
-
-	public Object getValue() {
-		return get(null);
-	}
-
-	@Override
-	public int compareTo(CellData o) {
-		Float thisValue = new Float(getValue().toString());
-		Float otherValue = new Float(o.getValue().toString());
-
-		return thisValue.compareTo(otherValue);
 	}
 }
