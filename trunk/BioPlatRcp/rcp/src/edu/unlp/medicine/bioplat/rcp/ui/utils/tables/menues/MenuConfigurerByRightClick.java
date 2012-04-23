@@ -21,12 +21,13 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
  * @author diego
  * 
  */
-public class MenuConfigurer implements IMenuConfigurer {
+//FIXME no se puede implementar correctamente, por limitaciones propias y ajenas
+public class MenuConfigurerByRightClick implements IMenuConfigurer {
 
 	private TableViewer viewer;
 	private Menu tableHeaderPopup;
 
-	public MenuConfigurer(TableViewer viewer) {
+	public MenuConfigurerByRightClick(TableViewer viewer) {
 		this.viewer = viewer;
 	}
 
@@ -40,6 +41,7 @@ public class MenuConfigurer implements IMenuConfigurer {
 	 *            es el constructor de la columna, contiene, entre otros, la
 	 *            lista de items de menú a agregar
 	 */
+	@Override
 	public void configure(final TableViewerColumn tvc, ColumnBuilder columnBuilder) {
 
 		// modularizar y hacer configurable desde afuera
@@ -47,6 +49,11 @@ public class MenuConfigurer implements IMenuConfigurer {
 
 		final Shell shell = innerTable.getParent().getShell();
 		final Display display = shell.getDisplay();
+
+		// Le pongo que por default el click haga el orden de la columna
+		TableColumn column = tvc.getColumn();
+		int colNumber = innerTable.indexOf(column);
+		column.addSelectionListener(columnBuilder.getSelectionSorterAdapter(viewer, column, colNumber));
 
 		tableHeaderPopup = new Menu(shell, SWT.POP_UP);
 		// TODO soporte para remover los listeners en caso de ser necesario...
@@ -109,6 +116,8 @@ public class MenuConfigurer implements IMenuConfigurer {
 	 *            columna a chequear
 	 * @return true si el click se realizó sobre la columna <cede>tvc</code>
 	 */
+	// FIXME si la grilla tiene un scrollbar horizontal deja de tener sentido
+	// esta implementación
 	private boolean isOverColumn(Table table, Display display, Point mouse, TableViewerColumn tvc) {
 		Point pt = display.map(null, table, mouse);
 		int base = 0;

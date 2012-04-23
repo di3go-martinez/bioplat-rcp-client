@@ -4,7 +4,7 @@ import org.eclipse.swt.events.SelectionListener;
 
 /**
  * 
- * @author diego
+ * @author Diego Martínez
  * @see MenuItemContribution
  */
 // TODO analizar si vale la pena....
