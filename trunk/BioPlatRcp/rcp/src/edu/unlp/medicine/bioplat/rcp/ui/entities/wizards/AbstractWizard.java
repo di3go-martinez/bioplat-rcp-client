@@ -38,7 +38,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * Mantiene el modelo del wizard, crea las páginas del wizard a partir de los
  * descriptores configurados
  * 
- * @author diego
+ * @author Diego Martínez
  * 
  * @param <T>
  * @see #createWizardmodel
@@ -67,6 +67,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 
+		if (initialized)
+			return;
+		initialized = true;
 		for (final WizardPageDescriptor pd : createPagesDescriptors()) {
 			addPage(new WizardPage(pd.getPageName(), pd.getTitle(), pd.getImageDescriptor()) {
 
@@ -77,14 +80,18 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					WizardPageSupport.create(this, dbc);
 					Composite control = pd.create(this, parent, dbc, wizardModel());
 
-					// TODO revisar si va siempre por default.
-					GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(control);
+					fillDefaultsIfNecesary(control);
+
 					setControl(control);
+				}
+
+				private void fillDefaultsIfNecesary(Composite control) {
+					if (control.getLayout() == null)
+						GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(control);
 				}
 
 				@Override
 				public boolean isPageComplete() {
-
 					return pd.isPageComplete(/* this? */wizardModel());
 				}
 
@@ -103,16 +110,19 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		return blockOnOpen(true);
 	}
 
+	private boolean initialized = false;
+
 	/**
 	 * 
-	 * @return devuelve el resultado del open del diálogo
+	 * @return devuelve el resultado del open del diálogo, true si se cerró ok y
+	 *         false si se canceló la operaciòn
 	 */
-	public int open() {
+	public boolean open() {
 		Dialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
 
 		this.init(PlatformUI.getWorkbench());
 		d.setBlockOnOpen(blockOnOpen);
-		return d.open();
+		return d.open() == Dialog.OK;
 	}
 
 	/**
@@ -137,6 +147,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private static ExecutorService exec = Executors.newFixedThreadPool(1);
 
+	// TODO refactor
 	@Override
 	public boolean performFinish() {
 
@@ -149,6 +160,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			@Override
 			protected IStatus run(final IProgressMonitor progressMonitor) {
 
+				progressMonitor.beginTask(getTaskName(), IProgressMonitor.UNKNOWN);
+
 				final Future<T> holder = exec.submit(new Callable<T>() {
 					@Override
 					public T call() throws Exception {
@@ -158,13 +171,21 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				});
 
+				T o = null;
+				try {
+					o = holder.get(); // join
+				} catch (Exception e) {
+					e.printStackTrace();
+					MessageManager.INSTANCE.add(Message.error("¡Error inesperado!", e));
+				}
+
+				final T oo = o;
 				PlatformUIUtils.findDisplay().syncExec(new Runnable() {
 
 					@Override
 					public void run() {
 						try {
-							final T o = holder.get(); // join
-							doInUI(o);
+							doInUI(oo);
 							MessageManager.INSTANCE.add(Message.info("¡Operación realizada con éxito!"));
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -173,6 +194,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					}
 				});
 
+				progressMonitor.done();
 				return Status.OK_STATUS;
 			}
 

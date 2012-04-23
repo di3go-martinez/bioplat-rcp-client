@@ -9,6 +9,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 
+/**
+ * @author Diego Martínez
+ */
 public abstract class WizardPageDescriptor {
 
 	private static final ImageDescriptor DEFAULT = ImageDescriptor.getMissingImageDescriptor();
@@ -55,10 +58,6 @@ public abstract class WizardPageDescriptor {
 		return "Wizard page " + getPageName();
 	}
 
-	public boolean isPageComplete(WizardModel model) {
-		return true;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -67,6 +66,10 @@ public abstract class WizardPageDescriptor {
 		if (imageDescriptor == null)
 			imageDescriptor = DEFAULT;
 		return imageDescriptor;
+	}
+
+	public boolean isPageComplete(WizardModel model) {
+		return true;
 	}
 
 }
