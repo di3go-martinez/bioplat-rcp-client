@@ -151,6 +151,13 @@
          name="%message.view.name"
          restorable="true">
    </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.PSOResultViewPart"
+         icon="resources/icons/pso.png"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.result.view"
+         name="PSO Result"
+         restorable="false">
+   </view>
 </extension>
       <extension
             point="org.eclipse.ui.importWizards">
@@ -296,7 +303,14 @@
             caption="Apply Logarithm"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC">
          <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+               class="edu.unlp.medicine.entity.experiment.Experiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="PSO..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
       </actionContribution>
    </extension>
