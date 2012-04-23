@@ -84,6 +84,7 @@ public class PlatformUIUtils {
 
 	}
 
+	// TODO actualizar comentarios!
 	public static void openView(final String viewId, final boolean forceFocus) {
 		// al abrir la vista se lleva el foco... no debería, por eso se le
 		// devuelve al editor que estaba activo... si era una vista la que
@@ -93,19 +94,24 @@ public class PlatformUIUtils {
 
 			@Override
 			public void run() {
-				final IEditorPart editor = org.eclipse.ui.PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				// try {
-				IViewPart v = findView(viewId);// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
-				// FIXME no va el forceFocus...
-				if (forceFocus)
-					v.setFocus();
-				if (editor != null)
-					editor.setFocus();
+				// final IEditorPart editor =
+				// org.eclipse.ui.PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				try {
+					// TODO Revisar mejro... no siempre debe abrirse la vista si
+					// no se encuentra abierta.....
+					IViewPart v = findView(viewId);
+					if (v == null)
+						v = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+					// FIXME no va el forceFocus...
+					// if (forceFocus)
+					// v.setFocus();
+					// if (editor != null)
+					// editor.setFocus();
 
-				// } catch (PartInitException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		});
