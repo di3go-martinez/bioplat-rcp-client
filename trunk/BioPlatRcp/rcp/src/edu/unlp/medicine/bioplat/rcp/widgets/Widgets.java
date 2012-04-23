@@ -50,9 +50,13 @@ public class Widgets {
 	 * @see GridLayoutFactory#fillDefaults()
 	 */
 	public static Composite createDefaultContainer(Composite parent) {
+		return createDefaultContainer(parent, 1);
+	}
+
+	public static Composite createDefaultContainer(Composite parent, int numColumns) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-		container.setLayout(GridLayoutFactory.fillDefaults().create());
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(numColumns).create());
 		return container;
 	}
 
@@ -80,6 +84,11 @@ public class Widgets {
 	public static void createTextListWithLabel(Composite parent, String label, Biomarker model, String property) {
 		createLabel(parent, label);
 		new CList(parent, model, property, SWT.BORDER);
+	}
+
+	public static void retarget(AbstractEntity newmodel, Widget... widgets) {
+		for (Widget w : widgets)
+			w.retarget(newmodel);
 	}
 
 }
