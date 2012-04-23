@@ -26,7 +26,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.CheckBoxEditingSupport;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.NumberEditingSupport;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.editing.support.TextEditingSupport;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuConfigurer;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemDescriptor;
 
 public class ColumnBuilder {
@@ -94,9 +93,12 @@ public class ColumnBuilder {
 	 */
 	void build(TableViewer viewer, int index) {
 
+		//TODO No todas las columnas son ordenable, por ahora si...
+		addHeadeMenuItemDescriptor(new ToggleSortColumnMenuItemDescriptor(this, viewer));
+
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
 
-		new MenuConfigurer(viewer).configure(tvc, this);
+		new MenuConfigurerByHeaderSelection(viewer).configure(tvc, this);
 
 		tvc.setLabelProvider(clp);
 		if (editingSupport != null && editable)
@@ -125,6 +127,18 @@ public class ColumnBuilder {
 	// TODO analizar un mejor default
 	private Comparator comparator = ComparatorUtils.naturalComparator();
 
+	private boolean moveable = true;
+
+	public ColumnBuilder moveable() {
+		moveable = true;
+		return this;
+	}
+
+	public ColumnBuilder fixed() {
+		moveable = false;
+		return this;
+	}
+
 	/**
 	 * El título por default es el propertypath... problema la
 	 * internacionalización
@@ -145,13 +159,23 @@ public class ColumnBuilder {
 		column.setText(title);
 		column.setWidth(bound);
 		column.setResizable(resizable);
-		column.setMoveable(true);// TODO
-		column.addSelectionListener(getSelectionAdapter(viewer, column, colNumber));
+		column.setMoveable(moveable);
 		return viewerColumn;
 
 	}
 
-	private SelectionAdapter getSelectionAdapter(final TableViewer viewer, final TableColumn column, final int index) {
+	/**
+	 * 
+	 * 
+	 * 
+	 * <b>inner use</b>
+	 * 
+	 * @param viewer
+	 * @param column
+	 * @param index
+	 * @return Un listener para ordenar columnas por default
+	 */
+	public SelectionAdapter getSelectionSorterAdapter(final TableViewer viewer, final TableColumn column, final int index) {
 		SelectionAdapter selectionAdapter = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -332,7 +356,8 @@ public class ColumnBuilder {
 
 	public ColumnBuilder addHeadeMenuItemDescriptor(MenuItemDescriptor... descriptors) {
 		headersMenuDescriptors.addAll(Arrays.asList(descriptors));
-		return this;
+		return this.fixed(); // TODO sacar el fixed cuano ande bien lo del menú
+								// en las columnas...
 	}
 
 	public ColumnBuilder removeHeaderMenuItemsDescriptor(MenuItemDescriptor... descriptors) {

@@ -4,7 +4,12 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Table;
-
+/**
+ * 
+ * Referencia a una grilla
+ * 
+ * @author diego martínez
+ */
 public interface TableReference {
 
 	/**
@@ -51,4 +56,5 @@ public interface TableReference {
 	 * @return
 	 */
 	Table getTable();
+
 }
