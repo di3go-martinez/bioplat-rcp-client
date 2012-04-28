@@ -1,14 +1,12 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -22,24 +20,31 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.domainLogic.ext.experimentCommands.ExperimentFromInSilicoDBImporter;
 import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class GSEImport extends Wizard implements IImportWizard {
 
 	private static final String PAGE_NAME = "GSE";
+	private static Logger logger = LoggerFactory.getLogger(GSEImport.class);
 
 	public GSEImport() {
 	}
@@ -56,11 +61,14 @@ public class GSEImport extends Wizard implements IImportWizard {
 	}
 
 	private WizardModel createWizardModel() {
-		return new WizardModel().add("URL", new WritableValue("http://", URL.class));
+		final WizardModel wizardModel = new WizardModel();
+		wizardModel.add("importClinicalData", new WritableValue(false, Boolean.class));
+		wizardModel.add("normalized", new WritableValue(false, Boolean.class));
+		return wizardModel.add("GSE", new WritableValue("GSE4635", String.class));
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage(PAGE_NAME, "Indicar la url del experimento a importar", null) {
+		return new WizardPage(PAGE_NAME, "Indicar el experimento a importar", null) {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -70,11 +78,27 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				Composite c = new Composite(parent, SWT.BORDER);
 
-				new CLabel(c, SWT.BOLD).setText("URL:");
+				new CLabel(c, SWT.BOLD).setText("GSE:");
 
-				Text urlHolder = new Text(c, SWT.BORDER);
+				Text gseHolder = new Text(c, SWT.BORDER);
 
-				dbc.bindValue(SWTObservables.observeText(urlHolder, SWT.Modify), model().valueHolder("URL"));
+				Button clinicalDataHolder = new Button(c, SWT.CHECK);
+
+				// clinicalDataHolder.setText("Import Clinical Data");
+
+				clinicalDataHolder.setText("Importar datos clinicos");
+
+				Button normalizedHolder = new Button(c, SWT.CHECK);
+
+				// normalizedHolder.setText("Normalized (FRMA)");
+
+				normalizedHolder.setText("Normalizado (FRMA)");
+
+				dbc.bindValue(SWTObservables.observeText(gseHolder, SWT.Modify), model().valueHolder("GSE"), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("GSE")), null);
+
+				dbc.bindValue(SWTObservables.observeSelection(clinicalDataHolder), model().valueHolder("importClinicalData"));
+
+				dbc.bindValue(SWTObservables.observeSelection(normalizedHolder), model().valueHolder("normalized"));
 
 				GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(c);
 				setControl(c);
@@ -116,7 +140,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 						}
 					});
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Creation of experiments", e);
 					MessageManager.INSTANCE.add(Message.error("Falló el importador", e));
 					return Status.CANCEL_STATUS;
 				}
@@ -142,18 +166,25 @@ public class GSEImport extends Wizard implements IImportWizard {
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
 	// realm que va
 	private void configureParamenters() {
-		try {
-			url = new URL(model().value("URL").toString());
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		}
+		this.gse = this.model().value("GSE").toString();
+		this.normalized = this.model().value("normalized");
+		this.importClinicalData = this.model().value("importClinicalData");
 	}
 
-	private URL url;
+	private String gse;
+	private Boolean normalized;
+	private Boolean importClinicalData;
 
 	private Experiment execute(Monitor m) {
-		throw new NotImplementedException("Falta obtener el experimento desde " + url);
+		ExperimentFromInSilicoDBImporter importer = new ExperimentFromInSilicoDBImporter(this.gse, this.importClinicalData, this.normalized);
+		Experiment experiment = null;
+		try {
+			experiment = importer.execute();
+		} catch (ExperimentBuildingException e) {
+			logger.error("Experiment Building Exception:", e);
+		}
+
+		return experiment;
 
 	}
-
 }
