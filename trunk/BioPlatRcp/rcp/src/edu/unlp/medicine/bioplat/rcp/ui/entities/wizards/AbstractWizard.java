@@ -118,10 +118,13 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *         false si se canceló la operaciòn
 	 */
 	public boolean open() {
-		Dialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
+		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
 
 		this.init(PlatformUI.getWorkbench());
 		d.setBlockOnOpen(blockOnOpen);
+
+		// TODO resolver con scrollbars
+		d.setPageSize(400, 450);
 		return d.open() == Dialog.OK;
 	}
 
