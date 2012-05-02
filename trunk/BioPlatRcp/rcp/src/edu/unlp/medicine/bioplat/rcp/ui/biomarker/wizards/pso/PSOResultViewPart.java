@@ -23,9 +23,7 @@ public class PSOResultViewPart extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-
 		createContents(parent);
-
 	}
 
 	private void createContents(Composite parent) {
@@ -39,7 +37,7 @@ public class PSOResultViewPart extends ViewPart {
 
 		tref = TableBuilder.create(container).hideSelectionColumn().input(list) //
 				.addColumn(ColumnBuilder.create().property("name").title("Name"))//
-				.addColumn(ColumnBuilder.create().numeric().property("fitness").title("Fitness"))//
+				.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
 				.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"))//
 				.build();
 	}
