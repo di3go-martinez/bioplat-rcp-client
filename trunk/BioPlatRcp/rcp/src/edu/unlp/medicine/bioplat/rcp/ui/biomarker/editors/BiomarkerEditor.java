@@ -74,7 +74,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		Widgets.createMultiTextWithLabel(container, Messages.BiomarkerEditor_description_label, model, "description");
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_significance_value, model, "significanceValue.pvalue").readOnly();
 
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_david_URL, model, "davidURLForFunctionalAnalysis").readOnly()//
+		// Widgets.createTextWithLabel(container,
+		// Messages.BiomarkerEditor_david_URL, model,
+		// "davidURLForFunctionalAnalysis").readOnly()//
 		// .setLayoutData(GridDataFactory.fillDefaults().span(3,
 		// 1).align(GridData.CENTER, GridData.FILL).grab(true, false).create())
 		;

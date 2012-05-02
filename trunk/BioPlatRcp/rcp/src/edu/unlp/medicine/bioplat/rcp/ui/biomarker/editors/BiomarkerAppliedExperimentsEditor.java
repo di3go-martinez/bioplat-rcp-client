@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.nls.Messages;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
@@ -66,7 +67,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 		bc.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.END));
 
 		Button b = new Button(bc, SWT.NONE);
-		b.setText("Abrir seleccionados");
+		b.setText(Messages.open_selected);
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

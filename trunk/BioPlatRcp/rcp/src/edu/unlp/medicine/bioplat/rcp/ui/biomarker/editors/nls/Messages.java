@@ -13,6 +13,8 @@ public class Messages extends NLS {
 	public static String BiomarkerEditor_significance_value;
 	public static String BiomarkerEditor_david_URL;
 
+	public static String open_selected;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
