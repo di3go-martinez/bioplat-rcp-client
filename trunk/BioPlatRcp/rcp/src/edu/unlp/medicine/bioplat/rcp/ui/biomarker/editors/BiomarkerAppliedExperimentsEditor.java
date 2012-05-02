@@ -83,7 +83,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 		return new Observer() {
 
 			// indica si se tiene que inicializar
-			private Boolean initialize = true;
+			private Boolean mustinitialize = true;
 			// índice de la columna a la cual se le agregan las nuevas columnas
 			private Integer newBaseColumnIndex;
 
@@ -94,14 +94,14 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 				// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 				Table table = tr.getTable();
-				if (initialize) {
+				if (mustinitialize) {
 					newBaseColumnIndex = table.getColumnCount();
 					// creo las nuevas columnas
 					new TableColumn(table, SWT.NONE, newBaseColumnIndex).setWidth(50);
 					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1).setWidth(50);
 					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2).setWidth(50);
 					// ok, ya inicializado
-					initialize = false;
+					mustinitialize = false;
 				}
 				// para cada item de agrega el table editor
 				// FIXME no es necesario pisar los que ya están creados...
