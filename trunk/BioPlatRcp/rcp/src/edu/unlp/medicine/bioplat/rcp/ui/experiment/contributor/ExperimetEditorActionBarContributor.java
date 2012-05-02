@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IEditorPart;
 
@@ -21,17 +20,17 @@ public class ExperimetEditorActionBarContributor extends AbstractEditorActionBar
 	@Override
 	protected void populateMenu(IMenuManager menu) {
 
-//		menu.add(new Action() {
-//			@Override
-//			public void run() {
-//				doRun();
-//			}
-//
-//			@Override
-//			public String getText() {
-//				return "find...";
-//			}
-//		});
+		// menu.add(new Action() {
+		// @Override
+		// public void run() {
+		// doRun();
+		// }
+		//
+		// @Override
+		// public String getText() {
+		// return "find...";
+		// }
+		// });
 
 	}
 
