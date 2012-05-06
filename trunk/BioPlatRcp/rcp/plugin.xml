@@ -47,6 +47,10 @@
                   name="startupProgressRect"
                   value="5,275,445,15">
             </property>
+            <property
+                  name="windowImages"
+                  value="resources/icons/window/adn.16x16.png,resources/icons/window/adn.32x32.png,resources/icons/window/adn.48x48.png,resources/icons/window/adn.64x64.png,resources/icons/window/adn.128x128.png">
+            </property>
          </product>
       </extension>
    <extension
@@ -264,15 +268,29 @@
    <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
+            caption="Add Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGenesAC"
+            image="resources/icons/plus.png"
+            imagepath="resources/icons/checked.gif"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
             caption="Change 0&apos;s"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
       <actionContribution
             caption="Absolute Value"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue"
+            image="resources/icons/absolutevalue.png"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
@@ -280,7 +298,8 @@
       
       <actionContribution
             caption="Apply Experiment"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -288,27 +307,32 @@
       
       <actionContribution
             caption="Delete Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution"
+            image="resources/icons/removeItem.gif"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
       <actionContribution
             caption="Keep Only Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
       </actionContribution>
       <actionContribution
             caption="Apply Logarithm"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC">
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.Experiment">
          </selection>
       </actionContribution>
       <actionContribution
             caption="PSO..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution">
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
+            onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -354,6 +378,36 @@
         Nuevo biomarcador vacío
      </description>
   </wizard>
-   
    </extension>
+   
+   <!--extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="edu.unlp.medicine.bioplat.rcp.intro">
+      </intro>
+      <introProductBinding
+            introId="edu.unlp.medicine.bioplat.rcp.intro"
+            productId="edu.medicine.bioplat.rcp.product">
+      </introProductBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="edu.medicine.bioplat.rcp.introConfigId"
+            introId="edu.unlp.medicine.bioplat.rcp.intro">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx"
+                  style="content/shared.css">
+            </implementation>
+         </presentation>
+      </config>
+   </extension-->
+   
+ 
 </plugin>
