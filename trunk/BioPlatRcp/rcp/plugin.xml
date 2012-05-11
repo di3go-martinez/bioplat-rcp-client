@@ -185,6 +185,12 @@
                id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
                name="Import from InSilico using GSE">
          </wizard>
+         <wizard
+               category="edu.medicine.bioplat.rcp.import.experiment.root"
+               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
+               id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
+               name="Cel File">
+         </wizard>
       </extension>
    <extension
          point="org.eclipse.ui.exportWizards">
