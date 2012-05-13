@@ -184,7 +184,10 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	/**
 	 * Está hecho en principio porque no se refrescan las listas en grillas por
 	 * ejemplo... sacar cuando funcione correctamente el databinding de
-	 * colecciones en el sentido modelo->vista
+	 * colecciones en el sentido modelo->vista<br/>
+	 * 
+	 * <b> Cada vez menos deprecado porque se está usando para otras cosas
+	 * además de la ya mencionada y para lo que, en principio, fue pensado<b>
 	 * 
 	 * @return
 	 * @deprecated
@@ -226,6 +229,10 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 		}
 	}
 
+	/**
+	 * @see #createPartControl(Composite)
+	 * @param parent
+	 */
 	protected abstract void doCreatePartControl(Composite parent);
 
 	@Override
@@ -271,6 +278,6 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	// FIXME no está bien implementado
 	@Override
 	public int hashCode() {
-		return getEditorInput().hashCode();
+		return getEditorInput().hashCode() * 31;
 	}
 }
