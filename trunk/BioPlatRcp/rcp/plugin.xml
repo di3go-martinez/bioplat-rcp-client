@@ -144,6 +144,7 @@
    </view>
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
+         icon="resources/icons/default.png"
          id="edu.medicine.bioplat.rcp.gene.view"
          name="%gene.view.name"
          restorable="false">
@@ -321,6 +322,15 @@
          </selection>
       </actionContribution>
       <actionContribution
+            caption="Remove Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
+            image="resources/icons/removeItem.gif"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+      </actionContribution>
+      <actionContribution
             caption="Keep Only Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
             onMenu="true">
@@ -338,6 +348,7 @@
       <actionContribution
             caption="PSO..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
+            image="resources/icons/pso.png"
             onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
@@ -376,7 +387,7 @@
   <wizard
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
-        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.GenerateMetasignatureWizard"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
         icon="resources/icons/generateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
         name="Generar biomarcador">
