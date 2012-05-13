@@ -19,6 +19,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
+import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
@@ -46,7 +47,7 @@ public class MevWizard extends AbstractWizard<Void> {
 				Composite container = new Composite(parent, SWT.NONE);
 
 				new Label(container, SWT.NONE).setText("File: ");
-				FileText ft = new FileText(container, SWT.NONE);
+				TextWithSelectionButton ft = new FileText(container);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME));
 
 				Button check = new Button(container, SWT.CHECK);
