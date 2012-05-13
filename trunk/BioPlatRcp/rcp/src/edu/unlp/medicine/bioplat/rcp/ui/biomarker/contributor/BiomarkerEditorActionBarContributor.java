@@ -1,26 +1,24 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor;
 
-import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 
-import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.MessageViewOpenAction;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractEditorActionBarContributor;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGeneAction;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.acions.PasteGeneAction;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 public class BiomarkerEditorActionBarContributor extends AbstractEditorActionBarContributor<Biomarker> {
 
+	// private static final IAction ADD_GENES = MessageViewOpenAction.wrap(new
+	// PasteGeneAction());
+
 	public BiomarkerEditorActionBarContributor() {
 	}
 
-	@Override
-	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
-		// ToolBarManager tbm = new ToolBarManager();
-		// tbm.add(MessageViewOpenAction.wrap(new AddGeneAction()));
-		// coolBarManager.add(tbm);
-
-	}
+	// @Override
+	// public void contributeToCoolBar(ICoolBarManager coolBarManager) {
+	// ToolBarManager tbm = new ToolBarManager();
+	// tbm.add(ADD_GENES);
+	// coolBarManager.add(tbm);
+	// }
 
 	@Override
 	protected Class<?> getSelectionType() {
@@ -29,9 +27,8 @@ public class BiomarkerEditorActionBarContributor extends AbstractEditorActionBar
 
 	@Override
 	protected void populateMenu(IMenuManager menu) {
-		menu.add(MessageViewOpenAction.wrap(new AddGeneAction()));
-
-		menu.add(MessageViewOpenAction.wrap(new PasteGeneAction()));
+		// menu.add(MessageViewOpenAction.wrap(new AddGeneAction()));
+		// menu.add(ADD_GENES);
 	}
 
 }
