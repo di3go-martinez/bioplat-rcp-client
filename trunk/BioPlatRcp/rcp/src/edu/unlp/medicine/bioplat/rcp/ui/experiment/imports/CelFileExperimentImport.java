@@ -2,32 +2,44 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
-import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.domainLogic.ext.experimentCommands.ExperimentFromCelFileImporter;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.ENUM_NORMALIZATION_METHOD;
+import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class CelFileExperimentImport extends AbstractWizard<Void> {
+	/**
+	 * Logger Object
+	 */
+	private static Logger logger = LoggerFactory.getLogger(CelFileExperimentImport.class);
+
 	private static final String FILE_NAME = "FILE_NAME";
 	private static final String RMA = "RMA";
 	private static final String FRMA = "FRMA";
 
-	private AbstractExperiment experiment;
 	private String filename;
 	private Boolean rma, frma;
 
@@ -41,8 +53,11 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 				Composite container = new Composite(parent, SWT.NONE);
 
 				new Label(container, SWT.NONE).setText("File: ");
-				FileText ft = new FileText(container, SWT.NONE);
-				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME));
+				FileText ft = new FileText(container, SWT.BORDER);
+				Map<String, String> filters = Maps.newHashMap();
+				filters.put("*.cel", "CEL File");
+				ft.setFilter(filters);
+				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("CEL File")), null);
 
 				Button check = new Button(container, SWT.RADIO);
 				check.setText("FRMA");
@@ -52,7 +67,7 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 				check.setText("RMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(RMA));
 
-				GridLayoutFactory.fillDefaults().numColumns(2).applyTo(container);
+				// GridLayoutFactory.fillDefaults().numColumns(2).applyTo(container);
 				return container;
 			}
 		};
@@ -67,11 +82,23 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		// ExportExperimentCommand command = new
-		// ExportExperimentCommand(experiment, filename, includeClinicalData,
-		// includeHeader, includeExpressionData, '\t', "\t");
-		// command.execute();
+		ExperimentFromCelFileImporter importer = new ExperimentFromCelFileImporter(this.filename, getNormalizationMethod());
+		Experiment experiment = null;
+		try {
+			experiment = importer.execute();
+		} catch (ExperimentBuildingException e) {
+			logger.error("Experiment Building Exception:", e);
+		}
+
 		return null;
+	}
+
+	private ENUM_NORMALIZATION_METHOD getNormalizationMethod() {
+		ENUM_NORMALIZATION_METHOD method = ENUM_NORMALIZATION_METHOD.FRMA;
+		if (this.rma) {
+			method = ENUM_NORMALIZATION_METHOD.RMA;
+		}
+		return method;
 	}
 
 	@Override

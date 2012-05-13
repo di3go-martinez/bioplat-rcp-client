@@ -90,7 +90,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				Button normalizedHolder = new Button(c, SWT.CHECK);
 
-				// normalizedHolder.setText("Normalized (FRMA)");
+				// normalizedHolder.setText("Normalized (FRMA) ");
 
 				normalizedHolder.setText("Normalizado (FRMA)");
 
