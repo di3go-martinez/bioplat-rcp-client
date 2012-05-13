@@ -50,4 +50,13 @@ public class MultipleSelection implements ISelection {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("MultipleSelection { ");
+		for (Entry<Object, IStructuredSelection> s : selections.entrySet())
+			sb.append(s.getKey() + " => " + s.getValue() + "; ");
+		sb.replace(sb.length() - 2, sb.length(), " }");
+		return sb.toString();
+	}
+
 }
