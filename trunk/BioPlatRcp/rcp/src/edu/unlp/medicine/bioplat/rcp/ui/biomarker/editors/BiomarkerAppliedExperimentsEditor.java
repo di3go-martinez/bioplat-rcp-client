@@ -10,7 +10,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,7 +18,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.nls.Messages;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
@@ -61,22 +59,22 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 	}
 
-	@Deprecated
-	private void createButtonPart(Composite parent) {
-		Composite bc = new Composite(parent, SWT.NONE);
-		bc.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.END));
-
-		Button b = new Button(bc, SWT.NONE);
-		b.setText(Messages.open_selected);
-		b.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				for (Object o : tr.selectedElements())
-					PlatformUIUtils.openEditor(o, AppliedExperimentEditor.id());
-			}
-		});
-
-	}
+	// @Deprecated
+	// private void createButtonPart(Composite parent) {
+	// Composite bc = new Composite(parent, SWT.NONE);
+	// bc.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.END));
+	//
+	// Button b = new Button(bc, SWT.NONE);
+	// b.setText(Messages.open_selected);
+	// b.addSelectionListener(new SelectionAdapter() {
+	// @Override
+	// public void widgetSelected(SelectionEvent e) {
+	// for (Object o : tr.selectedElements())
+	// PlatformUIUtils.openEditor(o, AppliedExperimentEditor.id());
+	// }
+	// });
+	//
+	// }
 
 	@Override
 	protected Observer createModificationObserver() {
