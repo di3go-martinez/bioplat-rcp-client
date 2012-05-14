@@ -27,7 +27,8 @@ public class FileText extends TextWithSelectionButton {
 
 	@Override
 	protected FileDialog createDialog(Composite parent) {
-		return new FileDialog(parent.getShell());
+		fd = new FileDialog(parent.getShell());
+		return fd;
 	}
 
 	/**
