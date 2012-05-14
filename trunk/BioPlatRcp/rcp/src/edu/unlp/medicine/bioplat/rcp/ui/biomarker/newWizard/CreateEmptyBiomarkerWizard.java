@@ -30,7 +30,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 
 	@Override
 	protected WizardModel createWizardModel() {
-		return new WizardModel().add(NAME_K, new WritableValue("Nuevo biomarcador vacío", String.class));
+		return new WizardModel().add(NAME_K, new WritableValue("noname", String.class));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 
 	@Override
 	protected String getTaskName() {
-		return "Creando un biomarcador vacío";
+		return "Creating an empty biomarker";
 	}
 
 }
