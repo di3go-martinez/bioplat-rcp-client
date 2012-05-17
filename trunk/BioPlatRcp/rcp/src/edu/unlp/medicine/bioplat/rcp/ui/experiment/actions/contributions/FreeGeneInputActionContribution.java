@@ -10,12 +10,14 @@ import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.dialogs.GenesInputDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
-import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.gene.Gene;
+import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-public abstract class FreeGeneInputActionContribution extends AbstractActionContribution<Experiment> {
+public abstract class FreeGeneInputActionContribution<T extends AbstractEntity> extends AbstractActionContribution<T> {
 	private static Logger logger = LoggerFactory.getLogger(FreeGeneInputActionContribution.class);
 
 	private static final List<Gene> EMPTY = Collections.emptyList();
@@ -44,9 +46,11 @@ public abstract class FreeGeneInputActionContribution extends AbstractActionCont
 
 			});
 
-			final List<Gene> value = holder.value();
-			if (!value.isEmpty())
-				executeOn(value);
+			final List<Gene> genes = holder.value();
+			if (!genes.isEmpty())
+				executeOn(genes);
+			else
+				MessageManager.INSTANCE.add(Message.warn("There is no selected genes"));
 		} catch (NullPointerException npe) {
 			logger.warn("nullpointer en la acción, catcheado apropósito");
 		}
