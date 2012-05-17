@@ -102,15 +102,15 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// .input(inputHolder.value())
 		;
 
-		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value.entrezId"))//
-				.addColumn(ColumnBuilder.create().title("Nombre").property("data[0].value.name").editable());
+		// data[0] es porque ahí está el gen, ver ExpressionDataModel
+		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value.entrezId")//
+				.addHeadeMenuItemDescriptor(new ShowColumnMenuItemDescriptor(this, "Name", "name"), new ShowColumnMenuItemDescriptor(this, "Alternative Ids", "alternativeIds")))//
+				.addColumn(ColumnBuilder.create().title("Nombre").id("name").property("data[0].value.name").hidden().fixed())//
+				.addColumn(ColumnBuilder.create().title("Alternative Ids").id("alternativeIds").property("data[0].value.alternativeIds").hidden().fixed());
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
 			tb.addColumn( //
-			// FIXME el property deja estático el valor que va a tener la
-			// columna, si esta es removida: muestra un valor que esta
-			// desafasado y no es correcto... migrar a CustomCellData????!
 			ColumnBuilder.create().numeric().title(s.getName()) //
 					.property("data[" + index++ + "].value")//
 					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
@@ -143,6 +143,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 		List<Gene> genes = Lists.transform(elements, toGene());
 
+		// pongo los genes con foco no necesariamente los que están
+		// seleccionados
 		selections.put(Constants.GENES, new StructuredSelection(genes));
 
 		elements = tr.selectedElements();
@@ -154,7 +156,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 	/**
 	 * 
-	 * @return una función {@link ExpressionDataModel} :-> {@link Gene}
+	 * @return una función {@link ExpressionDataModel} ::> {@link Gene}
 	 */
 	private Function<ExpressionDataModel, Gene> toGene() {
 		return new Function<ExpressionDataModel, Gene>() {
@@ -183,6 +185,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 	@Override
 	protected Observer createModificationObserver() {
 
+		// TODO analizar si hace falta el lock ahora...
 		final Object lock = new Object();
 		final Holder<Boolean> changed = Holder.create(false);
 		// table view refresher
@@ -253,8 +256,9 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 			private void warnAutoRefresh() {
 				if (!logged) {
-					MessageManager.INSTANCE.add(Message.warn("El autorefresh de la grilla está desactivado."));
-					logger.warn("El autorefresh de la grilla está desactivado.");
+					final String msg = "The grid autorefreshing is disabled";
+					MessageManager.INSTANCE.add(Message.warn(msg));
+					logger.warn(msg);
 					logged = true;
 				}
 			}
@@ -268,6 +272,14 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 	public void showGene(Gene selectedGene) {
 		tr.show(selectedGene);
 
+	}
+
+	/**
+	 * @internal
+	 * @return
+	 */
+	public TableReference tableref() {
+		return tr;
 	}
 
 }
