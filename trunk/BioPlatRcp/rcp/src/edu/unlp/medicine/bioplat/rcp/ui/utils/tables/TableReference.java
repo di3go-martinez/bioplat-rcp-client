@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+
 /**
  * 
  * Referencia a una grilla
@@ -56,5 +58,7 @@ public interface TableReference {
 	 * @return
 	 */
 	Table getTable();
+
+	TableColumn column(String id);
 
 }
