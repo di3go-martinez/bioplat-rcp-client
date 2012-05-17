@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWindowListener;
@@ -78,6 +79,11 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 		this.modelProvider = modelProvider;
 	}
 
+	@Override
+	public void image(ImageDescriptor image) {
+		action().setImageDescriptor(image);
+	}
+
 	protected T model() {
 		return modelProvider.model();
 	}
@@ -96,4 +102,23 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	@Override
 	public abstract void run();
 
+	private boolean onMenu, onToolbar;
+
+	@Override
+	public void onMenu(Boolean b) {
+		this.onMenu = b;
+	}
+
+	public boolean onMenu() {
+		return onMenu;
+	}
+
+	public boolean onToolbar() {
+		return this.onToolbar;
+	}
+
+	@Override
+	public void onToolbar(Boolean b) {
+		this.onToolbar = b;
+	}
 }

@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 
@@ -22,4 +23,14 @@ public interface ActionContribution<T> {
 	IAction action();
 
 	void caption(String caption);
+
+	void image(ImageDescriptor image);
+
+	void onMenu(Boolean present);
+
+	boolean onMenu();
+
+	void onToolbar(Boolean present);
+
+	boolean onToolbar();
 }
