@@ -166,17 +166,22 @@ public class Paging<T> {
 
 	private void loadNextPage() {
 		logger.debug("Intentando cargar la página " + (realList.size() / pagesize) + 1);
-		for (int j = 0; j < pagesize; j++) {
-			T e = findNextElement();
-			if (e != null)
-				realList.add(e);
+		try {
+			for (int j = 0; j < pagesize; j++) {
+				T e = findNextElement();
+				if (e != null)
+					realList.add(e);
+			}
+		} catch (EndOfListException e) {
+			logger.debug("Se alcanzó el final de la lista");
 		}
 	}
 
 	/**
 	 * @return el próximo elemento o null si no hay
+	 * @throws EndOfListException
 	 */
-	private T findNextElement() {
+	private T findNextElement() throws EndOfListException {
 		T result = null;
 		try {
 			if (currentElementIndex < limit()) { // si entra uno más
@@ -184,9 +189,9 @@ public class Paging<T> {
 				currentElementIndex++;
 			}
 		} catch (IndexOutOfBoundsException e) {
-			logger.debug("Se alcanzó el final de la lista");
+			throw new EndOfListException();
 		} catch (OgnlException e) {
-			logger.error("Error intentando acceder al elemento", e);
+			logger.error("Error intentando acceder al elemento de la lista " + model + "." + propertyPath + "[" + currentElementIndex + "]", e);
 		}
 		return result;
 	}
@@ -208,5 +213,9 @@ public class Paging<T> {
 			table.removeListener(SWT.SetData, (Listener) listener);
 		else
 			table.getVerticalBar().removeSelectionListener((SelectionListener) listener);
+	}
+
+	private static class EndOfListException extends Exception {
+		private static final long serialVersionUID = 1L;
 	}
 }
