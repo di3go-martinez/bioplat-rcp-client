@@ -192,7 +192,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// LA OTRA SOLAPA,
 				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
 				// TABLEREFENCE CON EL MODELO
-				Table t = tr.getTable();
+				// Table t = tr.getTable();
 
 				// if (t.isDisposed())
 				// return;
