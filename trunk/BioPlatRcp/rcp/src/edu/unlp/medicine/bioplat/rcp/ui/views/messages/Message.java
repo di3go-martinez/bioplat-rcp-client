@@ -3,6 +3,8 @@ package edu.unlp.medicine.bioplat.rcp.ui.views.messages;
 import java.util.Date;
 
 import org.eclipse.ui.ISharedImages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
@@ -16,6 +18,9 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  */
 // FIXME sacar el extends cuando se pueda...
 public class Message extends AbstractEntity implements Comparable<Message> {
+
+	private static Logger logger = LoggerFactory.getLogger(Message.class);
+
 	public static enum MessageType {
 
 		INFO(ISharedImages.IMG_OBJS_INFO_TSK), WARN(ISharedImages.IMG_OBJS_WARN_TSK), ERROR(ISharedImages.IMG_OBJS_ERROR_TSK);
@@ -28,6 +33,12 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 
 		public String getIconName() {
 			return image;
+		}
+
+		public void checkRequiresView(MessageManager messageManager) {
+			if (this.equals(ERROR))
+				messageManager.openView();
+
 		}
 	}
 
@@ -49,6 +60,7 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 		this.message = message;
 		this.type = type;
 		this.createdAt = new Date();
+		logger.info("(" + type + ")" + message);
 	}
 
 	public static Message info(String text) {
@@ -64,6 +76,7 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 	}
 
 	public static Message error(String text, Throwable exception) {
+		logger.error(text, exception);
 		Throwable cause = exception.getCause();
 		if (cause != null)
 			text += ". Causa: " + cause;
@@ -86,5 +99,10 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 	@Override
 	public int compareTo(Message o) {
 		return this.getType().compareTo(o.getType());
+	}
+
+	public void checkRequiresView(MessageManager messageManager) {
+		getType().checkRequiresView(messageManager);
+
 	}
 }

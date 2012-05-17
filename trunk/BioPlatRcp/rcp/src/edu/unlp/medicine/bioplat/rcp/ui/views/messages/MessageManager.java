@@ -9,7 +9,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 /**
  * Enumerativo para manejo automático de la instancia (sic).
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 
@@ -30,6 +30,7 @@ public enum MessageManager {
 
 	public MessageManager add(Message msg) {
 		messages.add(msg);
+		msg.checkRequiresView(this);
 		refresh();
 		return this;
 	}

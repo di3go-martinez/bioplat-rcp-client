@@ -24,7 +24,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 /**
  * Vista de mensajes
  * 
- * @author diego
+ * @author diego matínez
  * 
  */
 public class MessageViewPart extends ViewPart {
