@@ -14,13 +14,13 @@ import edu.unlp.medicine.entity.gene.Gene;
 
 /**
  * 
- * @author diego
- * @deprecated migrar a handler
+ * @author diego martínez
+ * @deprecated migrar a handler o action contribution
  */
 @Deprecated
 public class PasteGeneAction extends Action {
 	public PasteGeneAction() {
-		setText("Paste!");
+		setText("Add Genes...");
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class PasteGeneAction extends Action {
 
 		Biomarker b = getActiveBiomarker();
 		if (b == null) {
-			mm.add(Message.warn("No hay biomarcador seleccionado"));
+			mm.add(Message.warn("There is no biomarker selected"));
 			return;
 		}
 
@@ -41,11 +41,11 @@ public class PasteGeneAction extends Action {
 					final Gene gene = MetaPlat.getInstance().getGeneById(id);
 					if (!b.getGenes().contains(gene)) {
 						b.addGene(gene);
-						mm.add(Message.info("Se agregó el gen: " + gene));
+						mm.add(Message.info("Gene " + gene + " added."));
 					} else
-						mm.add(Message.warn("El gen " + gene + " ya estaba agregado al biomarcador"));
+						mm.add(Message.warn("The gene " + gene + " is already in the biomarker"));
 				} catch (Exception e) {
-					mm.add(Message.error("No se pudo agregar el gen con id: '" + id + "'", e));
+					mm.add(Message.error("Couldnt add the gene with id '" + id + "'", e));
 				}
 			}
 
