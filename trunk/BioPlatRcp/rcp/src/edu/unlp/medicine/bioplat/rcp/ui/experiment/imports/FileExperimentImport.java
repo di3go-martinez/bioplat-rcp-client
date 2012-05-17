@@ -21,7 +21,6 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
@@ -101,7 +100,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 					e.printStackTrace();
 				}
 
-				return Status.OK_STATUS;
+				return ValidationStatus.ok();
 			}
 
 		};
@@ -145,7 +144,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				Composite c = new Composite(parent, SWT.NONE);
 
 				new Label(c, SWT.NONE).setText("File:");
-				FileText filePath = new FileText(c, SWT.BORDER);
+				FileText filePath = new FileText(c, SWT.NONE);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.csv", "CSV File");
 				filters.put("*", "All");
