@@ -60,6 +60,9 @@
       <startup
             class="edu.unlp.medicine.bioplat.rcp.application.startup.SWT_UI_Context_Configurator">
       </startup>
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.StartupRserve">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
