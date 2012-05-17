@@ -28,7 +28,7 @@ public class ExternalGeneInformationPage extends FieldEditorPreferencePage imple
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new StringFieldEditor(URLS, "Ingresar urls separados por | (usar {genId})", getFieldEditorParent()));
+		addField(new StringFieldEditor(URLS, "Ingresar urls separados por '|'\nSe pueden usar las siguientes variables:\n\t{genId}, {genName}, {ensemblId})\n", getFieldEditorParent()));
 	}
 
 	@Override
