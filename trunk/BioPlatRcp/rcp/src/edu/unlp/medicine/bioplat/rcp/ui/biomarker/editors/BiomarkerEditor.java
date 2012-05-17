@@ -89,7 +89,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 	private void createTable(Composite parent) {
 
-		final TableBuilder tb = TableBuilder.create(parent).input(model().getGenes());
+		final TableBuilder tb = TableBuilder.createVirtual(parent)//
+				.model(model(), "genes");
+		// .input(model().getGenes());
 
 		tb.addColumn(ColumnBuilder.create().numeric().property("entrezId").title("entrezId"))//
 				.addColumn(ColumnBuilder.create().editable().title("Nombre").centered().accesor(OgnlAccesor.createFor("name")))//
@@ -109,7 +111,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 			@Override
 			public void update(Observable o, Object arg) {
-				tr.refresh();
+				// tr.refresh();
+				tr.input(null);
 			}
 		};
 	}
@@ -117,7 +120,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	@Override
 	protected Map<Object, IStructuredSelection> getAdditionalSelections() {
 		final IStructuredSelection element = new StructuredSelection(tr.focusedElements());
-		return ImmutableMap.of((Object) Constants.GENES, element);
+		final IStructuredSelection element1 = new StructuredSelection(tr.selectedElements());
+		return ImmutableMap.of((Object) Constants.GENES, element, Constants.SELECTED_GENES, element1);
 	}
 
 	@Override
