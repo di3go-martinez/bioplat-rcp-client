@@ -41,9 +41,14 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 
 public class PagesDescriptors {
+
+	private static final String OS_EVENT = "OS_Event";
+
+	private static final String OS_MONTHS = "OS_Months";
 
 	// clave para el wizardModel que indica la lista de elementos seleccionados.
 	// Es un common value, no un IObservableValue...
@@ -169,11 +174,22 @@ public class PagesDescriptors {
 				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE), UpdateStrategies.nonNull("Statistical Value"), UpdateStrategies.nullStrategy());
 
 				// hook para ejecutar el
-				ComboViewer cv = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList("OS_Months", "recurrence", "timeUntilEventOccured"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
+				ComboViewer validationAttrName = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, "recurrence", "timeUntilEventOccured"));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 
-				cv = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", "OS_Event", "status"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
+				ComboViewer validationAttrName2 = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", OS_EVENT, "status"));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
+
+				// set defaults values después de haber hecho los bindings
+				collapseStrategyCombo.setSelection(new StructuredSelection(AttributeTypeEnum.NUMERIC));
+
+				final List<IStatisticsSignificanceTest> s = AttributeTypeEnum.NUMERIC.getStatisticsSignificanceTestsThatCouldBeAppliedToThisType();
+				if (!s.isEmpty())
+					detail.setSelection(new StructuredSelection(s.get(0)));
+
+				validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
+
+				validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
 
 				return result;
 			}
