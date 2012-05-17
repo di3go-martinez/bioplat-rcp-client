@@ -3,7 +3,10 @@ package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -21,6 +24,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
@@ -174,6 +179,8 @@ public class TableBuilder implements TableConfigurer {
 	private TableReference table;
 	private boolean showSelectionColumn = true;
 
+	private Map<String, TableColumnReference> columnsHolder = Maps.newHashMap();
+
 	/**
 	 * Construye la grilla preconfigurada. Esta operación es idempotente
 	 * 
@@ -193,8 +200,10 @@ public class TableBuilder implements TableConfigurer {
 		if (showSelectionColumn)
 			ROW_SELECT_COLUMN.build(viewer, columnCount++);
 
-		for (ColumnBuilder cb : columns)
-			cb.build(viewer, columnCount++);
+		for (ColumnBuilder cb : columns) {
+			TableColumnReference tcr = cb.build(viewer, columnCount++);
+			columnsHolder.put(tcr.id(), tcr);
+		}
 
 		viewer.refresh(true);
 		viewer.setComparator(new MyViewerComparator());
@@ -221,12 +230,19 @@ public class TableBuilder implements TableConfigurer {
 			}
 
 			/**
+			 * 
 			 * <b>si el input fue configurado se requerirá que tenga una
 			 * newInput, si no es porque la tabla fue configurada con un
 			 * modelo</b>
+			 * 
+			 * @param newInput
+			 *            puede ser null, si es null será necesario que la tabla
+			 *            haya sido construída con model()
+			 * @see TableBuilder#model()
 			 */
+			// TODO acomodar la desprolijidad del newInput=null
 			@Override
-			public void input(final List newInput) {
+			public void input(@Nullable final List newInput) {
 				// si el model es null es porque la input fue configurada
 				// "estáticamente", se usa newInput
 				if (model == null)
@@ -322,11 +338,22 @@ public class TableBuilder implements TableConfigurer {
 					remove(elemtent);
 			}
 
+			@Override
+			public TableColumn column(String id) {
+				final TableColumnReference tableColumnReference = columnsHolder.get(id);
+				if (tableColumnReference == null) {
+					logger.error("La columna '" + id + "' no existe...");
+					return null;
+				}
+				return tableColumnReference.column();
+			}
+
 			// @Override
 			// public void input(AbstractEntity model) {
 			// model(model, propertyPath);
 			// viewer.refresh(true, true);
 			// }
+
 		};
 	}
 
@@ -341,13 +368,14 @@ public class TableBuilder implements TableConfigurer {
 
 	/**
 	 * 
-	 * tiene que ser lo último en configurar
+	 * <b>tiene que ser lo último en configurar</b>
 	 * 
 	 * @param model
 	 * @param propertyPath
 	 * @return
 	 */
 	// TODO que no sea si o si el último en configurar
+	// TODO ¿por qué obliga a que sea un AbstractEntity?
 	public TableBuilder model(AbstractEntity model, String propertyPath) {
 		this.propertyPath = propertyPath;
 		this.model = model;
