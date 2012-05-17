@@ -53,6 +53,6 @@ public class GeneSearch extends Dialog {
 	}
 
 	public Gene selectedGene() {
-		return MetaPlat.getInstance().getGeneByEntrezId(model.getEntrezId());
+		return MetaPlat.getInstance().findGene(String.valueOf(model.getEntrezId()));
 	}
 }
