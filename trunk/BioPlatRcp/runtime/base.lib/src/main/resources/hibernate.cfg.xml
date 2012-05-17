@@ -42,6 +42,7 @@
 		<property name="hbm2ddl.auto">validate</property>
 
 		<mapping class="edu.unlp.medicine.entity.gene.Gene" />
+		<mapping class="edu.unlp.medicine.entity.arnmPlatform.sonda.Sonda" />
 		<mapping class="edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform" />
 
 	</session-factory>
