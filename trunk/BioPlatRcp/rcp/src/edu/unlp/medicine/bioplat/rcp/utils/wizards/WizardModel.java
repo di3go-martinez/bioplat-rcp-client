@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -64,7 +66,12 @@ public class WizardModel {
 
 		// if (!values.containsKey(key))
 		// throw new RuntimeException("No se agregó el observable para " + key);
-		return values.get(key);
+		final IObservableValue iObservableValue = values.get(key);
+		// TODO analizar de agregarlos por default (add(key))... igualmente
+		// tirar el warning... pros y constras
+		if (iObservableValue == null)
+			logger.warn("The holder for the key " + key + " is null");
+		return iObservableValue;
 	}
 
 	// TODO analizar...
@@ -92,4 +99,15 @@ public class WizardModel {
 		return result;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Wizard Model {  ");
+		for (String key : keys())
+			sb.append(key).append(" => ").append(value(key)).append(", ");
+		sb.replace(sb.length() - 2, sb.length(), " }");
+		return sb.toString();
+
+	}
+
+	private static Logger logger = LoggerFactory.getLogger(WizardModel.class);
 }
