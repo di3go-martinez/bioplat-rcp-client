@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.domainLogic.framework.exceptions.GeneNotFoundByIdException;
@@ -106,7 +107,21 @@ public class GenesInputDialog extends Dialog {
 		return result;
 	}
 
+	/**
+	 * Abre el diálogo y retorna si este fue aceptado o no, true o false
+	 * respectivamente
+	 * 
+	 * @return
+	 */
 	public boolean accepted() {
-		return open() == Dialog.OK;
+		final Holder<Boolean> result = Holder.create();
+		PlatformUIUtils.findDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				result.hold(open() == Dialog.OK);
+			}
+		});
+		return result.value();
 	}
 }
