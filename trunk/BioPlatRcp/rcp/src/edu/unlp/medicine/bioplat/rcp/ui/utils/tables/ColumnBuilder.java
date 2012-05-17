@@ -91,9 +91,9 @@ public class ColumnBuilder {
 	 * @param viewer
 	 * @param index
 	 */
-	void build(TableViewer viewer, int index) {
+	TableColumnReference build(TableViewer viewer, int index) {
 
-		//TODO No todas las columnas son ordenable, por ahora si...
+		// TODO No todas las columnas son ordenable, por ahora si...
 		addHeadeMenuItemDescriptor(new ToggleSortColumnMenuItemDescriptor(this, viewer));
 
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
@@ -103,6 +103,9 @@ public class ColumnBuilder {
 		tvc.setLabelProvider(clp);
 		if (editingSupport != null && editable)
 			tvc.setEditingSupport(newInstance(editingSupport, viewer));
+
+		return new TableColumnRef(columnId, tvc);
+
 	}
 
 	private EditingSupport newInstance(Class<? extends EditingSupport> clazz, TableViewer viewer) {
@@ -129,6 +132,9 @@ public class ColumnBuilder {
 
 	private boolean moveable = true;
 
+	// indica el id de la columna, por default es el property path
+	private String columnId;
+
 	public ColumnBuilder moveable() {
 		moveable = true;
 		return this;
@@ -136,6 +142,11 @@ public class ColumnBuilder {
 
 	public ColumnBuilder fixed() {
 		moveable = false;
+		return this;
+	}
+
+	public ColumnBuilder id(String id) {
+		columnId = id;
 		return this;
 	}
 
@@ -330,6 +341,8 @@ public class ColumnBuilder {
 	 * @return
 	 */
 	public ColumnBuilder property(String propertyPath) {
+		if (columnId == null)
+			columnId = propertyPath;
 		return accesor(OgnlAccesor.createFor(propertyPath));
 	}
 
@@ -365,4 +378,7 @@ public class ColumnBuilder {
 		return this;
 	}
 
+	public ColumnBuilder hidden() {
+		return width(0);
+	}
 }
