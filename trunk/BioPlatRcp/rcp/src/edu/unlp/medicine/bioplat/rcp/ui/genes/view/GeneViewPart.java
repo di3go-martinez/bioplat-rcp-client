@@ -8,6 +8,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.ProgressEvent;
+import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
@@ -38,10 +40,14 @@ import edu.unlp.medicine.entity.gene.Gene;
  */
 public class GeneViewPart extends ViewPart {
 
+	private static final String LOADING_HTML = "<div style='{position:absolute;right:1;top:1;}'><i>Loading...</i></div>";
+
 	public static String id() {
 		return "edu.medicine.bioplat.rcp.gene.view";
 	}
 
+	// problema con las páginas que quedan cacheadas, por ejemplo no carga el
+	// estilo para la página cacheada...
 	// private Cache<String, String> genBrowserCache =
 	// CacheBuilder.newBuilder().expireAfterAccess(10,
 	// TimeUnit.MINUTES).build();
@@ -171,19 +177,23 @@ public class GeneViewPart extends ViewPart {
 
 	private void buildView(Gene gene) {
 
-		CTabFolder t = new CTabFolder(container, SWT.BORDER);
-		t.setLayout(GridLayoutFactory.swtDefaults().create());
-		t.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
+		CTabFolder tabContainer = new CTabFolder(container, SWT.BORDER);
+		tabContainer.setLayout(GridLayoutFactory.swtDefaults().create());
+		tabContainer.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 
-		CTabItem tab = new CTabItem(t, SWT.NONE);
-		Composite c = Widgets.createDefaultContainer(t, 2);
+		// Creo la solapa cabecera
+		CTabItem headerTab = new CTabItem(tabContainer, SWT.NONE);
+		Composite c = Widgets.createDefaultContainer(tabContainer, 2);
 		final GridLayout layout = GridLayoutFactory.createFrom((GridLayout) c.getLayout()).margins(5, 5).create();
 		c.setLayout(layout);
-		ws.add(Widgets.createTextWithLabel(c, "nombre", gene, "name", true));
-		tab.setControl(c);
-		tab.setText("Header");
+		ws.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene, "alternativeIds").readOnly());
+		headerTab.setControl(c);
+		headerTab.setText("Header");
 
-		buildBrowsers(gene, t);
+		// Creo las solapas de los browsers
+		buildBrowsers(gene, tabContainer);
 
 		updateTitle(gene);
 	}
@@ -210,52 +220,47 @@ public class GeneViewPart extends ViewPart {
 			final CTabItem tab = new CTabItem(t, SWT.NONE);
 			tab.setControl(browser);
 			tab.setText(gurl.title());
-			// browser.addProgressListener(new ProgressListener() {
-			//
-			// @Override
-			// public void completed(ProgressEvent event) {
-			//
-			// }
-			//
-			// @Override
-			// public void changed(ProgressEvent event) {
-			// // final Browser browser = (Browser) event.widget;
-			// tab.setText(gurl.title());
-			// }
-			// });
 
+			browser.addProgressListener(new ProgressListener() {
+
+				@Override
+				public void completed(ProgressEvent event) {
+					// TODO que no cachee las páginas cargadas con error...
+					// genBrowserCache.put(browser.getUrl(), browser.getText());
+					tab.setText(gurl.title());
+				}
+
+				@Override
+				public void changed(ProgressEvent event) {
+					// final Browser browser = (Browser) event.widget;
+					// // tab.setText(gurl.title());
+					if (event.current != 0) {
+						tab.setText(gurl.title() + "(Loading...)");
+					}
+
+				}
+			});
 		}
-
-		// browser.addProgressListener(new ProgressListener() {
-		//
-		// @Override
-		// public void completed(ProgressEvent event) {
-		// // TODO que no cachee las páginas cargadas con error...
-		// // genBrowserCache.put(browser.getUrl(), browser.getText());
-		// }
-		//
-		// @Override
-		// public void changed(ProgressEvent event) {
-		//
-		// }
-		// });
 	}
 
 	private void seturl(Browser browser, final String url) {
-		// TODO hacer uso de la cache String html =
-		// genBrowserCache.getIfPresent(url);
-
+		// TODO hacer uso de la cache
+		// String html = genBrowserCache.getIfPresent(url);
+		//
 		// if (html == null)
 		browser.setUrl(url);
 		// else
-		// browser.setText(html, false);
+		// browser.setText(html, true);
 	}
 
 	@Override
 	public void setFocus() {
 		int i = 0;
 		for (GeneUrl gurl : geneUrls) {
-			seturl(browsers.get(i++), gurl.url(currentGene));
+			final String url = gurl.url(currentGene);
+			if (!url.equals(browsers.get(i).getUrl())) {
+				seturl(browsers.get(i++), url);
+			}
 		}
 	}
 
