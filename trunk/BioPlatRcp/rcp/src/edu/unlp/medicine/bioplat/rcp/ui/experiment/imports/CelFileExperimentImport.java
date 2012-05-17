@@ -19,9 +19,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.ExperimentFromCelFileImporter;
@@ -30,7 +32,7 @@ import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class CelFileExperimentImport extends AbstractWizard<Void> {
+public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 	/**
 	 * Logger Object
 	 */
@@ -42,6 +44,7 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 
 	private String filename;
 	private Boolean rma, frma;
+	private Experiment experiment;
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
@@ -67,7 +70,6 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 				check.setText("RMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(RMA));
 
-				// GridLayoutFactory.fillDefaults().numColumns(2).applyTo(container);
 				return container;
 			}
 		};
@@ -81,16 +83,15 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 	}
 
 	@Override
-	protected Void backgroundProcess(Monitor monitor) throws Exception {
+	protected Experiment backgroundProcess(Monitor monitor) throws Exception {
 		ExperimentFromCelFileImporter importer = new ExperimentFromCelFileImporter(this.filename, getNormalizationMethod());
-		Experiment experiment = null;
 		try {
 			experiment = importer.execute();
 		} catch (ExperimentBuildingException e) {
 			logger.error("Experiment Building Exception:", e);
 		}
 
-		return null;
+		return experiment;
 	}
 
 	private ENUM_NORMALIZATION_METHOD getNormalizationMethod() {
@@ -102,8 +103,8 @@ public class CelFileExperimentImport extends AbstractWizard<Void> {
 	}
 
 	@Override
-	protected void doInUI(Void result) throws Exception {
-
+	protected void doInUI(Experiment result) throws Exception {
+		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
 	}
 
 	@Override
