@@ -121,6 +121,7 @@ public class GeneViewPart extends ViewPart {
 	private String[] DEFAULTS = new String[] { REST_URL_NCBI };
 
 	private List<GeneUrl> geneUrls = Lists.newArrayList();
+	private CTabFolder tabContainer;
 
 	private void updateComposite(Composite parent, Gene gene) {
 		currentGene = gene;
@@ -169,6 +170,8 @@ public class GeneViewPart extends ViewPart {
 		}
 
 		updateTitle(gene);
+
+		tabContainer.setSelection(0);
 	}
 
 	private void updateTitle(Gene gene) {
@@ -177,7 +180,7 @@ public class GeneViewPart extends ViewPart {
 
 	private void buildView(Gene gene) {
 
-		CTabFolder tabContainer = new CTabFolder(container, SWT.BORDER);
+		tabContainer = new CTabFolder(container, SWT.BORDER);
 		tabContainer.setLayout(GridLayoutFactory.swtDefaults().create());
 		tabContainer.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 
@@ -196,6 +199,7 @@ public class GeneViewPart extends ViewPart {
 		buildBrowsers(gene, tabContainer);
 
 		updateTitle(gene);
+		tabContainer.setSelection(0);
 	}
 
 	private void buildBrowsers(Gene gene, CTabFolder t) {
@@ -258,9 +262,9 @@ public class GeneViewPart extends ViewPart {
 		int i = 0;
 		for (GeneUrl gurl : geneUrls) {
 			final String url = gurl.url(currentGene);
-			if (!url.equals(browsers.get(i).getUrl())) {
+			if (!url.equals(browsers.get(i).getUrl()))
 				seturl(browsers.get(i++), url);
-			}
+
 		}
 	}
 
