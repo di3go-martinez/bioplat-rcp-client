@@ -147,7 +147,7 @@
    </view>
    <view
          class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
-         icon="resources/icons/default.png"
+         icon="resources/icons/gene.gif"
          id="edu.medicine.bioplat.rcp.gene.view"
          name="%gene.view.name"
          restorable="false">
@@ -280,7 +280,7 @@
       <actionContribution
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGenesAC"
-            image="resources/icons/plus.png"
+            image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
             onMenu="true"
             onToolbar="true">
@@ -318,7 +318,7 @@
       <actionContribution
             caption="Delete Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution"
-            image="resources/icons/removeItem.gif"
+            image="resources/icons/removeItem.png"
             onMenu="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
@@ -327,7 +327,7 @@
       <actionContribution
             caption="Remove Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
-            image="resources/icons/removeItem.gif"
+            image="resources/icons/removeItem.png"
             onMenu="true"
             onToolbar="true">
          <selection
