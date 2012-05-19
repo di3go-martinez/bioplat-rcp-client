@@ -165,7 +165,8 @@ public class Paging<T> {
 	}
 
 	private void loadNextPage() {
-		logger.debug("Intentando cargar la página " + (realList.size() / pagesize) + 1);
+		logger.debug("Intentando cargar la página " + ((realList.size() / pagesize) + 1));
+
 		try {
 			for (int j = 0; j < pagesize; j++) {
 				T e = findNextElement();
