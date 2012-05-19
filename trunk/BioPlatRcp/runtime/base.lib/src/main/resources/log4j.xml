@@ -142,6 +142,9 @@
 		<priority value="DEBUG" />
 	</category>
 
+	<category name="edu.unlp.medicine.dataAccess.cache.JustOneMapWithhAllIdsForQuickAccessRepository">
+		<priority value="info" />
+	</category>
 	
 	<!-- Hibernate loggers -->
 	<!--
