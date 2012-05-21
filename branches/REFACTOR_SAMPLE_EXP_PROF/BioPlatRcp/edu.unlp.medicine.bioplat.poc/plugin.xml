@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension  point="org.eclipse.ui.views">
+   <view
+         class="edu.unlp.medicine.bioplat.poc.rcp.personas.PersonaViewPart"
+         id="edu.unlp.medicine.bioplat.rcp.personas.persona.view"
+         name="Persona"
+         restorable="false">
+   </view>
+  </extension>
+   
+   <extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
+      <actionContribution
+            caption="Poc Dummy Contribution"
+            class="edu.unlp.medicine.bioplat.poc.DummyActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.generic.AbstractEntity">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="by.4"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.By4ActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Remove Selected Genes"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveSelectedGenesActionContribution">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Keep Selected Genes Only"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlySelectedGenesAC">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
+   </extension>
+
+</plugin>
