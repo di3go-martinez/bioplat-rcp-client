@@ -12,11 +12,12 @@ public class AbsoluteValue extends AbstractActionContribution<AbstractExperiment
 		AbstractExperiment experiment = model();
 		double expressionValue;
 		for (Sample sample : experiment.getSamples()) {
-			for (Gene gene : sample.getGenes()) {
+			
+			for (Gene gene : experiment.getGenes()) {
 
-				expressionValue = sample.getExpressionLevelForAGene(gene);
+				expressionValue = experiment.getExpressionLevelForAGene(sample, gene);
 				if (expressionValue < 0)
-					sample.setExpressionLevelForAGene(gene, expressionValue * (-1));
+					experiment.setExpressionLevelForAGene(sample, gene, expressionValue * (-1));
 
 			}
 		}

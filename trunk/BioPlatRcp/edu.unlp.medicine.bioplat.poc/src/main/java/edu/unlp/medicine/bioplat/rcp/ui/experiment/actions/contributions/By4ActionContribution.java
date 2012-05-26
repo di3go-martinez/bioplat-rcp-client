@@ -33,17 +33,17 @@ public class By4ActionContribution extends AbstractActionContribution<AbstractEx
 
 		final ExecutorService service = Executors.newFixedThreadPool(20);
 
-		AbstractExperiment e = model();
+		final AbstractExperiment e = model();
 		long totalcells = e.getSamples().size() * e.getGenes().size();
 		final Holder<Long> holder = Holder.create(0l);
 
 		for (final Sample s : e.getSamples())
-			for (final Gene g : s.getGenes()) {
+			for (final Gene g : e.getGenes()) {
 
 				service.submit(new Runnable() {
 					@Override
 					public void run() {
-						elUpdate(s, g);
+						elUpdate(e, s, g);
 						holder.hold(holder.value() + 1);
 					}
 				});
@@ -66,9 +66,9 @@ public class By4ActionContribution extends AbstractActionContribution<AbstractEx
 			logger.info(msg);
 	}
 
-	private void elUpdate(Sample s, Gene g) {
-		Double expr = s.getExpressionLevelForAGene(g);
-		s.setExpressionLevelForAGene(g, expr * 0.4);
+	private void elUpdate(AbstractExperiment e, Sample s, Gene g) {
+		Double expr = e.getExpressionLevelForAGene(s,g);
+		e.setExpressionLevelForAGene(s,g, expr * 0.4);
 		// delay para que los cambios no sean "instantáneos". El delay puede ser
 		// el tiempo consumido en: calcular el dato, hacer un análisis para
 		// determinar algo, etc etc

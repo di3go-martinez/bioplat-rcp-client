@@ -60,10 +60,10 @@ public class ChangeZerosToAction extends AbstractActionContribution<AbstractExpe
 
 		AbstractExperiment e = model();
 		for (Sample s : e.getSamples())
-			for (Gene g : s.getGenes()) {
-				Double expr = s.getExpressionLevelForAGene(g);
+			for (Gene g : e.getGenes()) {
+				Double expr = e.getExpressionLevelForAGene(s, g);
 				if (expr == null || expr == getValueToSearch()) {
-					s.setExpressionLevelForAGene(g, newValue.value());
+					e.setExpressionLevelForAGene(s, g, newValue.value());
 					addModification(s, g);
 				}
 			}

@@ -30,14 +30,14 @@ class ExpressionLevelResolver implements CellValueResolver<Double> {
 			logger.warn("El sample " + sample + " no está ya en el experimento " + experiment);
 
 		// TODO revisar que no sea por name, sino por id...
-		experiment.setExpressionLevelForAGene(sample.getName(), gene, value);
+		experiment.setExpressionLevelForAGene(sample, gene, value);
 	}
 
 	@Override
 	public Double doGet() {
 		if (!experiment.getSamples().contains(sample))
 			return _DEFAULT;
-		return experiment.getExpressionLevelForAGene(sample.getName(), gene);
+		return experiment.getExpressionLevelForAGene(sample, gene);
 	}
 
 }
