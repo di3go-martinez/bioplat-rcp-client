@@ -119,12 +119,12 @@
 ]>
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
-	debug="true">
+	debug="false">
 
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{ABSOLUTE} - %p - [%x] - [%c] - %m%n" />
+				value="%d{ABSOLUTE} - %p - [%c] - %m%n" />
 		</layout>
 	</appender>
 	
@@ -133,7 +133,7 @@
 		<param name="file" value="bioplat.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{ABSOLUTE} - %p - [%x] - [%c] - %m%n" />
+				value="%d{ABSOLUTE} - %p - [%c] - %m%n" />
 		</layout>
 	</appender>
 
