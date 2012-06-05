@@ -6,6 +6,9 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+
 public class GeneUrlParser {
 
 	private static final String TITLE_URL_SEPARATOR = "::";
@@ -19,7 +22,10 @@ public class GeneUrlParser {
 		String[] urls = StringUtils.split(genesUrls, URLS_SEPARATOR);
 		for (String url : urls) {
 			String[] strparsed = StringUtils.splitByWholeSeparator(url, TITLE_URL_SEPARATOR);
-			result.add(new GeneUrl(strparsed[0], strparsed[1]));
+			if (strparsed.length == 2)
+				result.add(new GeneUrl(strparsed[0], strparsed[1]));
+			else
+				MessageManager.INSTANCE.add(Message.error(url + " is not a valid url for a gene. Correct sintax is title::weburl+parameters "));
 		}
 
 		return result;
