@@ -5,7 +5,7 @@ import org.eclipse.ui.IEditorPart;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractEditorActionBarContributor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearch;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearchDialog;
 import edu.unlp.medicine.entity.experiment.Experiment;
 
 public class ExperimetEditorActionBarContributor extends AbstractEditorActionBarContributor<Experiment> {
@@ -40,9 +40,9 @@ public class ExperimetEditorActionBarContributor extends AbstractEditorActionBar
 	}
 
 	private void doRun() {
-		GeneSearch gs = GeneSearch.createDialog();
+		GeneSearchDialog gs = GeneSearchDialog.createDialog();
 
-		if (gs.open() == GeneSearch.OK) {
+		if (gs.open() == GeneSearchDialog.OK) {
 			editor.showGene(gs.selectedGene());
 		}
 

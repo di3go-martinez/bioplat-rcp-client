@@ -11,11 +11,11 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.gene.Gene;
 
-public class GeneSearch extends Dialog {
+public class GeneSearchDialog extends Dialog {
 
 	private Gene model;
 
-	private GeneSearch(Shell parentShell, Gene model) {
+	private GeneSearchDialog(Shell parentShell, Gene model) {
 		super(parentShell);
 		this.model = model;
 	}
@@ -23,11 +23,11 @@ public class GeneSearch extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Gen a agregar");
+		newShell.setText("Gene To Add");
 	}
 
-	public static GeneSearch createDialog() {
-		return new GeneSearch(null, createDefaultGene());
+	public static GeneSearchDialog createDialog() {
+		return new GeneSearchDialog(null, createDefaultGene());
 	}
 
 	@Override
