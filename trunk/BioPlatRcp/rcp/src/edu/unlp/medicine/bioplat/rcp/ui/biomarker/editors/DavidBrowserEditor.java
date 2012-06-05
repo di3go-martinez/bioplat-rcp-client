@@ -18,6 +18,10 @@ public class DavidBrowserEditor extends AbstractEditorPart<Biomarker> {
 	private Browser browser;
 	private Text url;
 
+	public DavidBrowserEditor() {
+		super(false);
+	}
+
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 		Composite c = Widgets.createDefaultContainer(parent);
@@ -35,11 +39,15 @@ public class DavidBrowserEditor extends AbstractEditorPart<Biomarker> {
 
 			@Override
 			public void update(Observable o, Object arg) {
-				String newUrl = model().getDavidURLForFunctionalAnalysis();
+				String newUrl = resolveUrl();
 				if (!newUrl.equals(browser.getUrl())) {
-					browser.setUrl(model().getDavidURLForFunctionalAnalysis());
+					browser.setUrl(resolveUrl());
 					url.setText(newUrl);
 				}
+			}
+
+			private String resolveUrl() {
+				return model().getDavidURLForFunctionalAnalysis();
 			}
 		};
 	}
