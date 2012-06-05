@@ -32,7 +32,7 @@ public class AddGenesAC extends AbstractActionContribution<Biomarker> {
 				if (mydialog.open() == Dialog.OK)
 					for (String id : mydialog.getids()) {
 						try {
-							final Gene gene = MetaPlat.getInstance().getGeneById(id);
+							final Gene gene = MetaPlat.getInstance().findGene(id);
 							if (!b.getGenes().contains(gene)) {
 								b.addGene(gene);
 								mm.add(Message.info("Gene " + gene + " added."));
