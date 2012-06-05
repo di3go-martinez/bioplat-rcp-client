@@ -45,7 +45,6 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
-import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
@@ -394,8 +393,9 @@ class ExpressionDataModel /* TODO borrar extends AbstractEntity */{
 	}
 
 	public Gene findGene() {
-		final long id = Long.parseLong(data[0].getValue().toString());
-		return MetaPlat.getInstance().getGeneByEntrezId(id);
+		// final long id = Long.parseLong(data[0].getValue().toString());
+		// return MetaPlat.getInstance().getGeneByEntrezId(id);
+		return (Gene) data[0].getValue();
 	}
 
 	@Override
