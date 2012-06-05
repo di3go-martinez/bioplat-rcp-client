@@ -25,19 +25,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 
-import com.google.common.collect.Lists;
-
-import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
@@ -86,17 +79,7 @@ public class PagesDescriptors {
 
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
-				List<AbstractExperiment> editors = Lists.newArrayList();
-				for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
-					for (IWorkbenchPage page : window.getPages()) {
-						for (IEditorReference editor : page.getEditorReferences()) {
-							IEditorPart ed = editor.getEditor(false);
-							ModelProvider<?> e;
-							if (ed instanceof ModelProvider && (e = (ModelProvider<?>) ed).model() instanceof AbstractExperiment)
-								editors.add((AbstractExperiment) e.model());
-						}
-					}
-				}
+				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
 
 				Composite container = new Composite(parent, SWT.BORDER);
 				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//

@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.utils;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -8,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -17,8 +19,10 @@ import org.eclipse.ui.PlatformUI;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.application.Activator;
+import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 
 //TODO ejecutar en el contexto del ui-thread
 public class PlatformUIUtils {
@@ -152,5 +156,24 @@ public class PlatformUIUtils {
 			// default.png existe...
 			return findImage("default.png");
 		}
+	}
+
+	public static <T> List<T> openedEditors(Class<T> modelClass) {
+		List<T> editors = Lists.newArrayList();
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (IWorkbenchPage page : window.getPages()) {
+				for (IEditorReference editor : page.getEditorReferences()) {
+					IEditorPart ed = editor.getEditor(false);
+
+					if (ed instanceof ModelProvider) {
+						ModelProvider<?> mp = (ModelProvider<?>) ed;
+						if (modelClass.isAssignableFrom(mp.model().getClass()))
+							editors.add((T) mp.model());
+					}
+
+				}
+			}
+		}
+		return editors;
 	}
 }
