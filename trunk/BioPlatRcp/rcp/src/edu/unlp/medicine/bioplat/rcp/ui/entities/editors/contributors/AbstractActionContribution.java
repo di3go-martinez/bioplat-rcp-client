@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 
+import org.eclipse.core.runtime.ISafeRunnable;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -8,6 +10,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
@@ -109,10 +113,12 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 		this.onMenu = b;
 	}
 
+	@Override
 	public boolean onMenu() {
 		return onMenu;
 	}
 
+	@Override
 	public boolean onToolbar() {
 		return this.onToolbar;
 	}
@@ -121,4 +127,28 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	public void onToolbar(Boolean b) {
 		this.onToolbar = b;
 	}
+
+	/**
+	 * It runs the <code>runnable</code> in the thread swt ui and in a safe way
+	 * 
+	 * @param runnable
+	 */
+	protected void inDisplay(final Runnable runnable) {
+		SafeRunner.run(new ISafeRunnable() {
+
+			@Override
+			public void run() throws Exception {
+				PlatformUIUtils.findDisplay().syncExec(runnable);
+			}
+
+			@Override
+			public void handleException(Throwable exception) {
+				logger.error("Error executing the action " + this, exception);
+			}
+		});
+
+	}
+
+	private Logger logger = LoggerFactory.getLogger(AbstractActionContribution.class);
+
 }
