@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearch;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearchDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -44,7 +44,7 @@ public class AddGeneAction extends Action implements IWorkbenchWindowActionDeleg
 			return;
 		}
 
-		GeneSearch dialog = GeneSearch.createDialog();
+		GeneSearchDialog dialog = GeneSearchDialog.createDialog();
 		if (dialog.open() == Dialog.OK)
 			try {
 				final Gene selectedGene = dialog.selectedGene();
