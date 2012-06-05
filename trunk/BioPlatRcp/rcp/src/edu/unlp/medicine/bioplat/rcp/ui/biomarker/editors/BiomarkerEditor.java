@@ -12,6 +12,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.internal.AbstractSelectionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -30,6 +32,8 @@ import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener {
+
+	private static Logger logger = LoggerFactory.getLogger(BiomarkerEditor.class);
 
 	public static String id() {
 		return "bio.plat.biomarker.editor"; //$NON-NLS-1$
@@ -72,7 +76,6 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_author_label, model, "author");
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_original_gene_count_label, model, "originalNumberOfGenes").readOnly();
 		Widgets.createMultiTextWithLabel(container, Messages.BiomarkerEditor_description_label, model, "description");
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_significance_value, model, "significanceValue.pvalue").readOnly();
 
 		// Widgets.createTextWithLabel(container,
 		// Messages.BiomarkerEditor_david_URL, model,
@@ -124,12 +127,17 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		return ImmutableMap.of((Object) Constants.GENES, element, Constants.SELECTED_GENES, element1);
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		// FIXME sacar el downcast, avisar a de una manera prolija
-		AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
-		ass.setActivePart(null);
-		ass.setActivePart(this);
+		try {
+			AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
+			ass.setActivePart(null);
+			ass.setActivePart(this);
+		} catch (NullPointerException npe) {
+			logger.debug("Null pointer exception on selection changed");
+		}
 	}
 
 	// /**
