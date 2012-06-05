@@ -61,7 +61,7 @@ public class GenesInputDialog extends Dialog {
 		List<Gene> result = Lists.newArrayList();
 		for (String id : getids())
 			try {
-				result.add(MetaPlat.getInstance().getGeneById(id));
+				result.add(MetaPlat.getInstance().findGene(id));
 			} catch (GeneNotFoundByIdException e) {
 				MessageManager.INSTANCE.add(Message.warn("No se encontró el gen con id '" + id + "'"));
 			} catch (Exception e) {
