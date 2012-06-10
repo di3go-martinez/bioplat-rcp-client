@@ -40,6 +40,7 @@ public class PSOResultViewPart extends ViewPart {
 				.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
 				.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"))//
 				.build();
+
 	}
 
 	@Override

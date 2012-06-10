@@ -104,15 +104,16 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 
 	@Override
 	protected void configureParameters() {
-		processName = wizardModel().value(PROCESS_NAME);
-		miniumNumberOfGenes = wizardModel().value(MINIMUM_NUMBER_OF_GENES);
-		numberOfRounds = wizardModel().value(NUMBER_OF_ROUNDS);
-		numberOfParticles = wizardModel().value(NUMBER_OF_PARTICLES);
-		numberOfGenesToKeepDuringTraining = wizardModel().value(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING);
+		final WizardModel wm = wizardModel();
+		processName = wm.value(PROCESS_NAME);
+		miniumNumberOfGenes = wm.value(MINIMUM_NUMBER_OF_GENES);
+		numberOfRounds = wm.value(NUMBER_OF_ROUNDS);
+		numberOfParticles = wm.value(NUMBER_OF_PARTICLES);
+		numberOfGenesToKeepDuringTraining = wm.value(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING);
 
-		forTraining = wizardModel().value(TRAINING_VALIDATION_CONFIG);
-		forValidation = wizardModel().value(VALIDATION_VALIDATION_CONFIG);
-		forTesting = wizardModel().value(TESTING_VALIDATION_CONFIG);
+		forTraining = wm.value(TRAINING_VALIDATION_CONFIG);
+		forValidation = wm.value(VALIDATION_VALIDATION_CONFIG);
+		forTesting = wm.value(TESTING_VALIDATION_CONFIG);
 
 	}
 }
