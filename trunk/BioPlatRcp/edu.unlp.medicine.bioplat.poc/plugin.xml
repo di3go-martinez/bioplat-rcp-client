@@ -39,5 +39,41 @@
                class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
       </actionContribution>
    </extension>
+   
+   
+   <!-- TODO  ver por qué no anda-->
+
+   <extension point="org.eclipse.ui.commands">
+      <category            
+      			id="edu.unlp.medicine.bioplat.poc.category1"            
+      			name="Category 1"            
+      			description="Description for category 1">
+      </category>
+      <command categoryId="edu.unlp.medicine.bioplat.poc.category1"
+               description="Description for command handler 1"
+               id="edu.unlp.medicine.bioplat.poc.command1"
+               name="Command Handler 1">
+      </command>
+   </extension>
+   
+   <extension point="org.eclipse.ui.handlers">
+      <handler            
+      			class="edu.unlp.medicine.bioplat.poc.rcp.handlers.Handler1"            
+      			commandId="edu.unlp.medicine.bioplat.poc.command1">
+      </handler>
+   </extension>
+   
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="menu:org.eclipse.ui.main.menu?before=additions">
+         <menu
+               commandId="edu.unlp.medicine.bioplat.poc.command1"
+               icon="src/main/java/desc.png"
+               id="menu.handler.1"
+               label="Menu Handler 1">
+         </menu>
+      </menuContribution>
+   </extension>
 
 </plugin>
