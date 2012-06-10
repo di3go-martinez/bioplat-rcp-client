@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 import java.util.List;
 
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.statisticals.StatisticalDataEditor;
 
 public class AppliedExperimentEditor extends ExperimentEditor {
 
