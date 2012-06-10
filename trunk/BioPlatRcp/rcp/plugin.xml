@@ -282,11 +282,20 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGenesAC"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
-            onMenu="true"
+            onMenu="false"
             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Remove Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
+            image="resources/icons/removeItem.png"
+            onMenu="false"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
             caption="Change 0&apos;s"
@@ -325,15 +334,6 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Remove Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
-            image="resources/icons/removeItem.png"
-            onMenu="true"
-            onToolbar="true">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-      </actionContribution>
-      <actionContribution
             caption="Keep Only Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
             onMenu="true">
@@ -356,6 +356,15 @@
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Best variations"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
+            image="resources/icons/tree.png"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
    </extension>
    <extension

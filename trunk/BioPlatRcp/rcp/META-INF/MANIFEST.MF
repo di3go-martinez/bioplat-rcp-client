@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  com.ibm.icu;visibility:=reexport,
  edu.medicine.bioplat.base.lib;visibility:=reexport,
  org.eclipse.ui.intro,
- org.eclipse.nebula.widgets.grid;visibility:=reexport
+ org.eclipse.nebula.widgets.grid;visibility:=reexport,
+ org.eclipse.nebula.widgets.gallery;bundle-version="0.5.3";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
