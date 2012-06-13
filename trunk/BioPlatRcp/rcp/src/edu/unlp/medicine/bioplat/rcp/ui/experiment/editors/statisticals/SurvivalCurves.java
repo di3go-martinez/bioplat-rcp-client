@@ -20,8 +20,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import edu.unlp.medicine.bioplat.rcp.utils.ConvertByteImageUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
-import edu.unlp.medicine.r4j.environments.R4JSession;
 import edu.unlp.medicine.r4j.exceptions.R4JConnectionException;
 
 public class SurvivalCurves extends CompositeGenerator {
@@ -67,11 +67,15 @@ public class SurvivalCurves extends CompositeGenerator {
 	}
 
 	private File resolveImage(String script) throws R4JConnectionException, IOException {
-		final R4JSession r4jSession = new R4JSession("ExperimentFactory");
-		r4jSession.open();
-		byte[] image = r4jSession.plot(script);
-		r4jSession.close();
-		File imageFile = ConvertByteImageUtils.toImage(image, script.hashCode() + ".jpg");
+		// final R4JSession r4jSession = new R4JSession("ExperimentFactory");
+		// r4jSession.open();
+		// byte[] image = r4jSession.plot(script);
+		// r4jSession.close();
+		byte[] image = RRunnerUsingJRI.getInstance().plotSurvivalCurve(script);
+		File imageFile = null;
+		if (image != null) {
+			imageFile = ConvertByteImageUtils.toImage(image, script.hashCode() + ".jpg");
+		}
 		return imageFile;
 	}
 
