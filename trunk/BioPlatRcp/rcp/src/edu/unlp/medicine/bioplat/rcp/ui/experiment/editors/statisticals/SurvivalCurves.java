@@ -71,11 +71,13 @@ public class SurvivalCurves extends CompositeGenerator {
 		// r4jSession.open();
 		// byte[] image = r4jSession.plot(script);
 		// r4jSession.close();
+		RRunnerUsingJRI.getInstance().openSession();
 		byte[] image = RRunnerUsingJRI.getInstance().plotSurvivalCurve(script);
 		File imageFile = null;
 		if (image != null) {
 			imageFile = ConvertByteImageUtils.toImage(image, script.hashCode() + ".jpg");
 		}
+		RRunnerUsingJRI.getInstance().closeSession();
 		return imageFile;
 	}
 
