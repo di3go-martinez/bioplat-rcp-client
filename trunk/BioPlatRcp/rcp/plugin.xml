@@ -412,31 +412,42 @@
    <!--extension
          point="org.eclipse.ui.intro">
       <intro
-            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            class="edu.unlp.medicine.bioplat.rcp.intro.BioplatIntro"
             id="edu.unlp.medicine.bioplat.rcp.intro">
       </intro>
       <introProductBinding
             introId="edu.unlp.medicine.bioplat.rcp.intro"
             productId="edu.medicine.bioplat.rcp.product">
       </introProductBinding>
-   </extension>
+   </extension-->
    
+   
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            
+            id="edu.unlp.medicine.bioplat.rcp.intro"
+            label="Welcome"/>
+      <introProductBinding
+            introId="edu.unlp.medicine.bioplat.rcp.intro"
+            productId="edu.medicine.bioplat.rcp.product">
+      </introProductBinding>
+   </extension>
    <extension
          point="org.eclipse.ui.intro.config">
       <config
-            content="introContent.xml"
-            id="edu.medicine.bioplat.rcp.introConfigId"
+            content="introcontent.xml"
+            id="org.eclipse.intro.minimal.config"
             introId="edu.unlp.medicine.bioplat.rcp.intro">
          <presentation
-               home-page-id="root">
+               home-page-id="root" standby-page-id="standby">
             <implementation
-                  kind="html"
-                  os="win32,linux,macosx"
-                  style="content/shared.css">
+                  kind="html">
             </implementation>
          </presentation>
       </config>
-   </extension-->
+   </extension>
    
  
 </plugin>
