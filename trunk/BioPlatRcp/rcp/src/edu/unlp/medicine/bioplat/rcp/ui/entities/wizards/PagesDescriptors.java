@@ -164,9 +164,10 @@ public class PagesDescriptors {
 				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 
 				// set defaults values después de haber hecho los bindings
-				collapseStrategyCombo.setSelection(new StructuredSelection(AttributeTypeEnum.NUMERIC));
+				final AttributeTypeEnum attr = AttributeTypeEnum.EVENT_OCCURED_AFTER_TIME;
+				collapseStrategyCombo.setSelection(new StructuredSelection(attr));
 
-				final List<IStatisticsSignificanceTest> s = AttributeTypeEnum.NUMERIC.getStatisticsSignificanceTestsThatCouldBeAppliedToThisType();
+				final List<IStatisticsSignificanceTest> s = attr.getStatisticsSignificanceTestsThatCouldBeAppliedToThisType();
 				if (!s.isEmpty())
 					detail.setSelection(new StructuredSelection(s.get(0)));
 
