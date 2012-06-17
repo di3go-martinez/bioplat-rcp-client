@@ -48,6 +48,7 @@ public class ConvertByteImageUtils {
 		// System.out.println(imageFile.getPath());
 	}
 
+	// TODO unificar con el método de abajo
 	public static File toImage(byte[] bytes, String filename) throws IOException {
 		// Before is how to change ByteArray back to Image
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
@@ -74,6 +75,40 @@ public class ConvertByteImageUtils {
 		Graphics2D g2 = bufferedImage.createGraphics();
 		g2.drawImage(image, null, null);
 		File imageFile = new File(filename);
+		ImageIO.write(bufferedImage, "jpg", imageFile);
+		// "jpg" is the format of the image imageFile is the file to be written
+		// to.
+		return imageFile;
+	}
+
+	// TODO unificar con el método de arriba
+	public static File toImage(byte[] bytes) throws IOException {
+		// Before is how to change ByteArray back to Image
+		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+		Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpg");
+		// ImageIO is a class containing static convenience methods for locating
+		// ImageReaders
+		// and ImageWriters, and performing simple encoding and decoding.
+
+		ImageReader reader = (ImageReader) readers.next();
+		Object source = bis; // File or InputStream, it seems file is OK
+
+		ImageInputStream iis = ImageIO.createImageInputStream(source);
+		// Returns an ImageInputStream that will take its input from the given
+		// Object
+
+		reader.setInput(iis, true);
+		ImageReadParam param = reader.getDefaultReadParam();
+
+		Image image = reader.read(0, param);
+		// got an image file
+
+		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		// bufferedImage is the RenderedImage to be written
+		Graphics2D g2 = bufferedImage.createGraphics();
+		g2.drawImage(image, null, null);
+		File imageFile = File.createTempFile("bioplat.image", ".jpg");
+		imageFile.deleteOnExit();
 		ImageIO.write(bufferedImage, "jpg", imageFile);
 		// "jpg" is the format of the image imageFile is the file to be written
 		// to.
