@@ -36,7 +36,7 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 		});
 		result.add(new EditorDescription(input, editor, "General"));
 		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(false), "Applied Experiments"));
-		result.add(new EditorDescription(input, new DavidBrowserEditor(), "David"));
+		result.add(new EditorDescription(input, new BrowserEditor(), "David"));
 
 		return result;
 	}

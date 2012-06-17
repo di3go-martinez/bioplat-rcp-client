@@ -13,12 +13,12 @@ import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-public class DavidBrowserEditor extends AbstractEditorPart<Biomarker> {
+public class BrowserEditor extends AbstractEditorPart<Biomarker> {
 
 	private Browser browser;
 	private Text url;
 
-	public DavidBrowserEditor() {
+	public BrowserEditor() {
 		super(false);
 	}
 
@@ -41,15 +41,15 @@ public class DavidBrowserEditor extends AbstractEditorPart<Biomarker> {
 			public void update(Observable o, Object arg) {
 				String newUrl = resolveUrl();
 				if (!newUrl.equals(browser.getUrl())) {
-					browser.setUrl(resolveUrl());
+					browser.setUrl(newUrl);
 					url.setText(newUrl);
 				}
 			}
 
-			private String resolveUrl() {
-				return model().getDavidURLForFunctionalAnalysis();
-			}
 		};
 	}
 
+	protected String resolveUrl() {
+		return model().getDavidURLForFunctionalAnalysis();
+	}
 }
