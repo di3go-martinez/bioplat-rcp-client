@@ -11,6 +11,13 @@ import org.eclipse.swt.widgets.Composite;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 
 /**
+ * 
+ * 
+ * Es la descripción de una página de un wizard. Una página tiene una
+ * configuración (widgets) y puede originar una página adiciones (seguiente) a
+ * modo de resultado de algún cálculo.
+ * 
+ * 
  * @author Diego Martínez
  */
 public abstract class WizardPageDescriptor {
