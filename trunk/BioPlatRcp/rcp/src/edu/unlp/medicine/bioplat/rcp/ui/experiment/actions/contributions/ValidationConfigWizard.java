@@ -26,6 +26,13 @@ import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
+/**
+ * Wizard de creación de ValidationConfigs para la aplicación de experimentos a
+ * biomarcadores
+ * 
+ * @author diego
+ * 
+ */
 public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 
 	private Biomarker biomarker;
@@ -145,7 +152,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 
 	@Override
 	protected String getTaskName() {
-		return "Aplicando Experimentos";
+		return "Applying Experiments...";
 	}
 
 }

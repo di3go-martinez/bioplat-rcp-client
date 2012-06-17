@@ -122,12 +122,11 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 						command.execute();
 						count++;
 					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Falló la aplicación del experimento", e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment", e));
 					}
 					monitor.worked(1);
 				}
-				String s = (count == 1) ? "" : "s";
-				MessageManager.INSTANCE.add(Message.info(count + " comando" + s + " aplicado" + s + " exitósamente"));
+				MessageManager.INSTANCE.add(Message.info("Succesfully commands applied: " + count));
 				monitor.done();
 				return Status.OK_STATUS;
 			}
