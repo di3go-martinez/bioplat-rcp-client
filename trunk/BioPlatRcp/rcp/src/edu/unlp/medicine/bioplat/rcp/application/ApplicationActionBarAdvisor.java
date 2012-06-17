@@ -28,6 +28,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IAction saveAction;
 	private IAction preferencesAction;
 	private IAction importAction;
+	private IAction introAction;
 	private IContributionItem showViewMenuAction;
 	private IAction newWizard;
 
@@ -45,6 +46,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
 		newWizard = doMake(ActionFactory.NEW_WIZARD_DROP_DOWN, window);
+		introAction = doMake(ActionFactory.INTRO, window);
 
 		showViewMenuAction = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 
@@ -84,6 +86,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		windowMenu.add(m);
 
 		windowMenu.add(preferencesAction);
+		windowMenu.add(introAction);
 
 		// MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
 		// helpMenu.add(aboutAction);
