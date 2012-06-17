@@ -196,6 +196,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		return super.canFinish();
 	}
 
+	/**
+	 * Crea los descriptores de páginas del wizard.
+	 * 
+	 * @return
+	 */
 	protected abstract List<WizardPageDescriptor> createPagesDescriptors();
 
 	// TODO probar el pool, antes tenía 1 por problemas de concurrencia ¿?...
