@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import static java.lang.Math.min;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -155,10 +157,18 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 			@Override
 			public int compare(CustomCellData o1, CustomCellData o2) {
-				Float thisValue = new Float(o1.getValue().toString());
-				Float otherValue = new Float(o2.getValue().toString());
-
-				return thisValue.compareTo(otherValue);
+				final String strValue1 = o1.getValue().toString();
+				final String strValue2 = o2.getValue().toString();
+				try {
+					Float thisValue = new Float(strValue1);
+					Float otherValue = new Float(strValue2);
+					return thisValue.compareTo(otherValue);
+				} catch (Exception e) {
+					return strValue1.compareTo(strValue2); // TODO definir
+															// mejor, hay veces
+															// que los valores
+															// son 'N/A'
+				}
 
 			};
 
@@ -174,6 +184,10 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 	 */
 	private List<Sample> resolveSamplesToLoad() {
 		int count = ExperimentEditor.getSampleCountToLoad();
+		// se salva el caso de que la cantidad a cargar sea más grande que la
+		// cantidad real que tenga el experimento
+		count = min(count, model().getSamples().size());
+
 		return model().getSamples().subList(0, count);
 	}
 
@@ -192,10 +206,6 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 				// LA OTRA SOLAPA,
 				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
 				// TABLEREFENCE CON EL MODELO
-				// Table t = tr.getTable();
-
-				// if (t.isDisposed())
-				// return;
 
 				ExperimentEditor.checkColumns(tr, model());
 
