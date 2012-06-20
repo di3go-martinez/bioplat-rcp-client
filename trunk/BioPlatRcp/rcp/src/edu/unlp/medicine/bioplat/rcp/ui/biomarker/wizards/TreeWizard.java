@@ -7,15 +7,18 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeACResultViewPart;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.PSOResultViewPart;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.ValidationConfigPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.VariationsOfMetasignatureInDepthCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class TreeWizard extends AbstractWizard<Biomarker> {
+public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthCommand> {
 	private static final String NUMBER_OF_TOP_RESULTS_TO_KEEP_IN_EACH_ROUND = "NumberOfTopResultsToKeepInEachRound";
 	private static final String NUMBER_OF_GENES_OF_THE_SMALLEST_BIOMARKER = "NumberOfGenesOfTheSmallestBiomarker";
 	public static final String TESTING_VALIDATION_CONFIG = "TESTING_VALIDATION_CONFIG";
@@ -43,11 +46,11 @@ public class TreeWizard extends AbstractWizard<Biomarker> {
 
 	@Override
 	protected String getTaskName() {
-		return "Tree On " + biomarker;
+		return "Calculating variations on the biomarker " + biomarker;
 	}
 
 	@Override
-	protected Biomarker backgroundProcess(Monitor monitor) throws Exception {
+	protected VariationsOfMetasignatureInDepthCommand backgroundProcess(Monitor monitor) throws Exception {
 		Map<String, String> properties = new HashMap<String, String>();
 
 		VariationsOfMetasignatureInDepthCommand optimizerCommand = new VariationsOfMetasignatureInDepthCommand(biomarker, properties);
@@ -60,13 +63,17 @@ public class TreeWizard extends AbstractWizard<Biomarker> {
 		optimizerCommand.setValidationConfigs4Testing(forTesting);
 
 		optimizerCommand.execute();
-		return null;
+
+		return optimizerCommand;
 
 	}
 
 	@Override
-	protected void doInUI(Biomarker result) throws Exception {
-
+	protected void doInUI(VariationsOfMetasignatureInDepthCommand result) throws Exception {
+		List<Biomarker> bestVariations = result.getBettersBiomarkersDuringTheTrip();
+		PlatformUIUtils.openView(TreeACResultViewPart.id());
+		TreeACResultViewPart v = PlatformUIUtils.findView(PSOResultViewPart.id());
+		v.setResultToShow(bestVariations);
 	}
 
 	@Override
