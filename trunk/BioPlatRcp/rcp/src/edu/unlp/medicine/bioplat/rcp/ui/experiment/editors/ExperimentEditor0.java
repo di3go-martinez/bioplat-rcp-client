@@ -130,7 +130,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 	private List<Sample> resolveSamplesToLoad() {
 		int max = ExperimentEditor.getSampleCountToLoad();
-		return model().getSamples().subList(0, max);
+		return model().getSamples().subList(0, Math.min(model().getSampleCount(), max));
 	}
 
 	@SuppressWarnings("unchecked")
