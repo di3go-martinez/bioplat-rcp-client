@@ -24,6 +24,12 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
+/**
+ * Wizard de creación de un biomarcador "en blanco"
+ * 
+ * @author diego martínez
+ * 
+ */
 public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implements INewWizard {
 
 	private static final String NAME_K = "Name";
@@ -54,12 +60,12 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
 
-		result.add(new WizardPageDescriptor("Configuración") {
+		result.add(new WizardPageDescriptor("Configuration") {
 
 			@Override
 			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = new Composite(parent, SWT.NONE);
-				new CLabel(c, SWT.BOLD).setText("Nombre:");
+				new CLabel(c, SWT.BOLD).setText("Name:");
 				Text nameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(nameHolder, SWT.Modify), wizardModel().valueHolder(NAME_K));
 				GridLayoutFactory.swtDefaults().numColumns(1).margins(5, 5).generateLayout(c);
