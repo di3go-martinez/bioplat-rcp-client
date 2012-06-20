@@ -97,7 +97,6 @@ public class Paging<T> {
 							// se asume que la lista donde se carga la próxima
 							// página es la que está siendo "apuntada" por el
 							// viewer
-
 							loadNextPage();
 							viewer.refresh(true, false);
 						}
@@ -165,7 +164,7 @@ public class Paging<T> {
 	}
 
 	private void loadNextPage() {
-		logger.debug("Intentando cargar la página " + ((realList.size() / pagesize) + 1));
+		logger.debug("Cargando página " + ((realList.size() / pagesize) + 1));
 
 		try {
 			for (int j = 0; j < pagesize; j++) {
