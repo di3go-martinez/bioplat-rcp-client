@@ -1,10 +1,13 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.IStartup;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,7 @@ public class StartupRserve implements IStartup {
 					logger.error(msg, e);
 					e.printStackTrace();
 					MessageManager.INSTANCE.add(Message.error(msg, e));
+					return ValidationStatus.error(msg, e);
 				}
 
 				return Status.OK_STATUS;
@@ -51,11 +55,18 @@ public class StartupRserve implements IStartup {
 
 			@Override
 			public void run() {
-				// FIXME implementar el shutdown del Rserve o un kill
-				// if (process != null) {
-				// process.destroy();
-				// process = null;
-				// }
+				if (process != null) {
+					try {
+						// TODO mover a la API R4JSession?
+						// shutdown remote Rserve. Note that some Rserves cannot
+						// be shut down from the client side.
+						new RConnection(RServeConfigurator.getInstance().getHost(), RServeConfigurator.getInstance().getPort())//
+								.shutdown();
+					} catch (RserveException e) {
+						logger.error("error bajando el servidor Rserve", e);
+					}
+
+				}
 
 			}
 
