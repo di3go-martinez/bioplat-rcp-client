@@ -103,6 +103,5 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 
 	public void checkRequiresView(MessageManager messageManager) {
 		getType().checkRequiresView(messageManager);
-
 	}
 }
