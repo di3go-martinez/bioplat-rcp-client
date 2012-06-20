@@ -24,7 +24,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 /**
  * Vista de mensajes
  * 
- * @author diego matínez
+ * @author diego martínez
  * 
  */
 public class MessageViewPart extends ViewPart {
@@ -42,7 +42,7 @@ public class MessageViewPart extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		Action action = new Action("Limpiar", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
+		Action action = new Action("Clear", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
 
 			@Override
 			public void run() {
