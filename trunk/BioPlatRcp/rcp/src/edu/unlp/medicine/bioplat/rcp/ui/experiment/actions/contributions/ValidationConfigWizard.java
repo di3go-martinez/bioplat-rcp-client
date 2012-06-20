@@ -30,7 +30,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * Wizard de creación de ValidationConfigs para la aplicación de experimentos a
  * biomarcadores
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
@@ -123,7 +123,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 	 */
 	private Set<Integer> calculateRange(String numberOfClusters) {
 		// si es un número armo un rango de ese número hasta ese número,
-		// que a es equivalente
+		// que es equivalente (a modo de homogeneizar el trato)
 		if (!numberOfClusters.contains(".."))
 			numberOfClusters = numberOfClusters + ".." + numberOfClusters;
 		String[] r = numberOfClusters.split("\\.\\.");

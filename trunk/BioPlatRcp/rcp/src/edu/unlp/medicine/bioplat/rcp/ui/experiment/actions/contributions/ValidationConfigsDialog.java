@@ -52,7 +52,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Configurar y aplicar experimentos");
+		newShell.setText("Configure and apply experiments");
 	}
 
 	private final List<ValidationConfig> data = Lists.newArrayList();
@@ -81,7 +81,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
 
-		setMessage("Configuración de experimentos a aplicar");
+		setMessage("Configuration for experiements to be applied");
 		return container;
 	}
 
