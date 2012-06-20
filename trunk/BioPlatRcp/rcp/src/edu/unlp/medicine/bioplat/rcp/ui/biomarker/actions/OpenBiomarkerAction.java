@@ -20,7 +20,7 @@ import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 
 /**
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 @Deprecated
