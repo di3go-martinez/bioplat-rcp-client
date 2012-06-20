@@ -16,6 +16,15 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.editor.input.AbstractEditorInput;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
+/**
+ * 
+ * Editor multipágina. Cada página es un editor en sí mismo.
+ * 
+ * @author diego martínez
+ * 
+ * @param <T>
+ *            es el tipo del model
+ */
 public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormEditor implements ModelProvider {
 
 	private List<EditorDescription> editors = Lists.newArrayList();
@@ -91,24 +100,6 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
-		IProgressMonitor submonitor = new Submonitor(monitor);
-		for (EditorDescription ed : editors)
-			ed.editor().doSave(submonitor);
-		monitor.done();
-	}
-
-	@Override
-	public void doSaveAs() {
-
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
 	public AbstractEditorInput<T> getEditorInput() {
 		return (AbstractEditorInput<T>) super.getEditorInput();
 	}
@@ -116,6 +107,33 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 	@Override
 	public T model() {
 		return getEditorInput().model();
+	}
+
+	@Override
+	public final void doSave(IProgressMonitor monitor) {
+		IProgressMonitor submonitor = new Submonitor(monitor);
+		doSave0(submonitor);
+		monitor.done();
+	}
+
+	/**
+	 * Itera por cada página/editor haciendo el save correspondiente
+	 * 
+	 * @param monitor
+	 */
+	protected void doSave0(IProgressMonitor monitor) {
+		for (EditorDescription ed : editors)
+			ed.editor().doSave(monitor);
+	}
+
+	@Override
+	public void doSaveAs() {
+		// TODO definir
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return false;
 	}
 
 }

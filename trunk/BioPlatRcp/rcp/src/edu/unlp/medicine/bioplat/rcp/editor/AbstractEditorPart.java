@@ -36,8 +36,6 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  * Implementación abstracta para los editores
  * 
  * @author Diego Martínez
- * @version $Revision:$
- * @updatedBy $Author:$ on $Date:$
  */
 public abstract class AbstractEditorPart<T extends AbstractEntity> extends EditorPart implements ISaveablePart2, ModelProvider<T> {
 
@@ -73,14 +71,12 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	private boolean updatableTitle = true;
 
 	@Override
-	public final void doSave(IProgressMonitor monitor) {
+	public final void doSave(final IProgressMonitor rmonitor) {
 		try { // TODO reveer
 			getProgressService().run(true, false, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					// TODO Auto-generated method stub
-					// Save here
-					monitor.beginTask("Guardando", IProgressMonitor.UNKNOWN);
+					monitor.beginTask("Saving...", IProgressMonitor.UNKNOWN);
 					doSave0();
 					getEditorInput().model().clear();
 					monitor.done();

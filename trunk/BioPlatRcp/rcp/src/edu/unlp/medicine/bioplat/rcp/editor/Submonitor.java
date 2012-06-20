@@ -11,7 +11,6 @@ public class Submonitor implements IProgressMonitor {
 
 	@Override
 	public void done() {
-
 	}
 
 	@Override
