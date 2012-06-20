@@ -166,6 +166,12 @@
          name="PSO Result"
          restorable="false">
    </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeACResultViewPart"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.tree.result.view"
+         name="Best Variations"
+         restorable="false">
+   </view>
 </extension>
       <extension
             point="org.eclipse.ui.importWizards">
@@ -358,7 +364,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Best variations"
+            caption="Calculate Best Variations"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
             image="resources/icons/tree.png"
             onMenu="true"
