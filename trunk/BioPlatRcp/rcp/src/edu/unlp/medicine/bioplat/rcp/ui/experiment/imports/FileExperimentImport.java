@@ -44,6 +44,8 @@ import com.google.common.collect.Maps;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.FilePathValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
@@ -54,9 +56,10 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 /**
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
+// TODO migrar a AbstractWizard
 public class FileExperimentImport extends Wizard implements IImportWizard {
 
 	private static ExecutorService exec = Executors.newFixedThreadPool(1);
@@ -94,6 +97,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						@Override
 						public void run() {
 							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+							MessageManager.INSTANCE.add(Message.info("There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
 						}
 					});
 				} catch (Exception e) {
