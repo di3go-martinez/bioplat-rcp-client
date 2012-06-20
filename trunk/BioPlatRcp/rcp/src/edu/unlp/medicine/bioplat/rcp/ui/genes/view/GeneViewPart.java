@@ -135,7 +135,6 @@ public class GeneViewPart extends ViewPart {
 		if (container == null) {
 			container = Widgets.createDefaultContainer(parent);
 			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
-
 		}
 
 		container.setVisible(gene != null);
@@ -189,9 +188,13 @@ public class GeneViewPart extends ViewPart {
 		Composite c = Widgets.createDefaultContainer(tabContainer, 2);
 		final GridLayout layout = GridLayoutFactory.createFrom((GridLayout) c.getLayout()).margins(5, 5).create();
 		c.setLayout(layout);
-		ws.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
 		ws.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Description", gene, "description").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Ensemble Id", gene, "ensemblId").readOnly());
 		ws.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene, "alternativeIds").readOnly());
+		ws.add(Widgets.createTextWithLabel(c, "Chromosome Location", gene, "chromosomeLocation").readOnly());
+
 		headerTab.setControl(c);
 		headerTab.setText("Header");
 
