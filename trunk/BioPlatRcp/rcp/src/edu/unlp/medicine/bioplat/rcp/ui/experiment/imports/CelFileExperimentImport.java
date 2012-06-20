@@ -2,7 +2,6 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
@@ -25,7 +23,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
+import edu.unlp.medicine.bioplat.rcp.widgets.DirectoryText;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.ExperimentFromCelFileImporter;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.ENUM_NORMALIZATION_METHOD;
 import edu.unlp.medicine.entity.experiment.Experiment;
@@ -38,11 +36,11 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 	 */
 	private static Logger logger = LoggerFactory.getLogger(CelFileExperimentImport.class);
 
-	private static final String FILE_NAME = "FILE_NAME";
+	private static final String FOLDER_NAME = "FOLDER_NAME";
 	private static final String RMA = "RMA";
 	private static final String FRMA = "FRMA";
 
-	private String filename;
+	private String folderName;
 	private Boolean rma, frma;
 	private Experiment experiment;
 
@@ -55,12 +53,13 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite container = new Composite(parent, SWT.NONE);
 
-				new Label(container, SWT.NONE).setText("File: ");
-				FileText ft = new FileText(container, SWT.BORDER);
-				Map<String, String> filters = Maps.newHashMap();
-				filters.put("*.cel", "CEL File");
-				ft.setFilter(filters);
-				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("CEL File")), null);
+				new Label(container, SWT.NONE).setText("Folder: ");
+				DirectoryText ft = new DirectoryText(container, SWT.BORDER);
+				/*
+				 * Map<String, String> filters = Maps.newHashMap();
+				 * filters.put("*.cel", "CEL File");
+				 */
+				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FOLDER_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Folder")), null);
 
 				Button check = new Button(container, SWT.RADIO);
 				check.setText("FRMA");
@@ -84,7 +83,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	@Override
 	protected Experiment backgroundProcess(Monitor monitor) throws Exception {
-		ExperimentFromCelFileImporter importer = new ExperimentFromCelFileImporter(this.filename, getNormalizationMethod());
+		ExperimentFromCelFileImporter importer = new ExperimentFromCelFileImporter(this.folderName, getNormalizationMethod());
 		try {
 			experiment = importer.execute();
 		} catch (ExperimentBuildingException e) {
@@ -104,13 +103,13 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	@Override
 	protected void doInUI(Experiment result) throws Exception {
-		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
+		PlatformUIUtils.openEditor(result, EditorsId.experimentEditorId());
 	}
 
 	@Override
 	protected void configureParameters() {
 		final WizardModel m = wizardModel();
-		filename = m.value(FILE_NAME);
+		folderName = m.value(FOLDER_NAME);
 		rma = m.value(RMA);
 		frma = m.value(FRMA);
 	}
@@ -118,7 +117,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 	@Override
 	protected WizardModel createWizardModel() {
 		return new WizardModel()//
-				.add(FILE_NAME, new WritableValue("", File.class))//
+				.add(FOLDER_NAME, new WritableValue("", File.class))//
 				.add(RMA, new WritableValue(false, Boolean.class))//
 				.add(FRMA, new WritableValue(true, Boolean.class))//
 		;
