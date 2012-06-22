@@ -8,9 +8,9 @@ import java.util.concurrent.Future;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
@@ -68,7 +68,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage(PAGE_NAME, "Indicar el experimento a importar", null) {
+		return new WizardPage(PAGE_NAME, "Setting the experiment to import", null) {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -116,37 +116,41 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 		configureParamenters();
 
-		Job j = new Job("Importando experimento") {
+		Job j = new Job("Importing experiment...") {
 
 			@Override
 			protected IStatus run(final IProgressMonitor progressMonitor) {
+				try {
+					progressMonitor.beginTask("Importing experiment...", IProgressMonitor.UNKNOWN);
+					Future<Experiment> holder = exec.submit(new Callable<Experiment>() {
+						@Override
+						public Experiment call() throws Exception {
+							Monitor m = Monitors.adapt(progressMonitor);
+							return execute(m);
+						}
 
-				Future<Experiment> holder = exec.submit(new Callable<Experiment>() {
-					@Override
-					public Experiment call() throws Exception {
-						Monitor m = Monitors.adapt(progressMonitor);
-						return execute(m);
+					});
+
+					try {
+						final Experiment e = holder.get(); // join
+						Display.getDefault().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+							}
+						});
+					} catch (Exception e) {
+						final String msg = "Couldn't import the experiment";
+						MessageManager.INSTANCE.add(Message.error(msg, e));
+						return ValidationStatus.error(msg, e);
 					}
 
-				});
-
-				try {
-					final Experiment e = holder.get(); // join
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-						}
-					});
-				} catch (Exception e) {
-					logger.error("Creation of experiments", e);
-					MessageManager.INSTANCE.add(Message.error("Falló el importador", e));
-					return Status.CANCEL_STATUS;
+					MessageManager.INSTANCE.add(Message.info("Experiment imported succesfully"));
+					return ValidationStatus.ok();
+				} finally {
+					progressMonitor.done();
 				}
-
-				MessageManager.INSTANCE.add(Message.info("Importación finalizada con éxito"));
-				return Status.OK_STATUS;
 			}
 
 		};

@@ -137,7 +137,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new WizardPage("conf", "Configuración", null) {
+		addPage(new WizardPage("conf", "Configuration", null) {
 
 			@Override
 			public void createControl(Composite parent) {
