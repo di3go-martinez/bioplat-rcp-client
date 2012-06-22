@@ -69,9 +69,9 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 				protected void doCreatePartControl(Composite parent) {
 					Composite container = Widgets.createDefaultContainer(parent);
 
-					Widgets.createTextWithLabel(container, "Nombre", model(), "name");
+					Widgets.createTextWithLabel(container, "Name", model(), "name");
 				}
-			}, "Plataforma");
+			}, "Platform");
 
 			result.add(ed);
 		}
