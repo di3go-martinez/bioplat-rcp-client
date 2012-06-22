@@ -176,4 +176,8 @@ public class PlatformUIUtils {
 		}
 		return editors;
 	}
+
+	public static IWorkbench getWorkbench() {
+		return activePage().getWorkbenchWindow().getWorkbench();
+	}
 }
