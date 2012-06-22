@@ -75,6 +75,14 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 		return new Message(text, MessageType.ERROR);
 	}
 
+	/**
+	 * 
+	 * loguea la exception y su pila correspondiente
+	 * 
+	 * @param text
+	 * @param exception
+	 * @return
+	 */
 	public static Message error(String text, Throwable exception) {
 		logger.error(text, exception);
 		Throwable cause = exception.getCause();
