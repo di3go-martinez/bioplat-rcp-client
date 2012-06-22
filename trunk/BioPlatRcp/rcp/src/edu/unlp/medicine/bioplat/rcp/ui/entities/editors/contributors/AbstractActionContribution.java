@@ -59,7 +59,14 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 
 			@Override
 			public void run() {
-				sh.hold(getCurrentEditor().getSite().getSelectionProvider().getSelection());
+				try {
+					sh.hold(getCurrentEditor().getSite().getSelectionProvider().getSelection());
+				} catch (NullPointerException npe) {
+					// FIXME a veces tira esta excepción, en general no, de qué
+					// depende?
+					// La ignoro para parecer que no tuvo efecto y se intente
+					// nuevamente con mejor suerte...
+				}
 			}
 		});
 
