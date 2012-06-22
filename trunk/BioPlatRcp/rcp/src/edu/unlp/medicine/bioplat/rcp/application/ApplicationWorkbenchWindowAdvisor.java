@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.application;
 
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -27,6 +29,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowPerspectiveBar(false);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("Bio PLat"); //$NON-NLS-1$
+
+		// seteo el flag para que se abra siempre la vista de welcome
+		PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_INTRO, true);
 
 	}
 

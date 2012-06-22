@@ -440,6 +440,7 @@
             productId="edu.medicine.bioplat.rcp.product">
       </introProductBinding>
    </extension>
+   
    <extension
          point="org.eclipse.ui.intro.config">
       <config
@@ -455,5 +456,18 @@
       </config>
    </extension>
    
- 
+  <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="generateMetasignatureWizardCommand"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenGenerateMetasignatureWizardAction">
+      </action>
+   </extension>
+  
+  <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="fileExperimentImportCommand"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenFileExperimentImportAction">
+      </action>
+   </extension> 
+   
 </plugin>
