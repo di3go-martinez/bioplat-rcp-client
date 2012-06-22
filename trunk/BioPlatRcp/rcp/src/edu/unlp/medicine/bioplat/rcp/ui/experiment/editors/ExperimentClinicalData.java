@@ -119,8 +119,9 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		TableItem ti = t.getItem(selectionIndex);
 		ClinicalDataModel cdm = (ClinicalDataModel) ti.getData();
 
+		final int samplesCount = Math.min(model().getSampleCount(), ExperimentEditor.getSampleCountToLoad());
 		// sorted es la colección donde quedarán los datos ordenados
-		CustomCellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, ExperimentEditor.getSampleCountToLoad() + 1);
+		CustomCellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, samplesCount + 1);
 		// original es como están los datos (des)ordenados actualmente
 		CustomCellData[] original = new CustomCellData[sorted.length];
 
@@ -157,6 +158,16 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 			@Override
 			public int compare(CustomCellData o1, CustomCellData o2) {
+
+				// trato especial para parámetros nulos...
+				if (o1 == null) {
+					if (o2 == null)
+						return 0;
+					else
+						return 1;
+				} else if (o2 == null)
+					return -1;
+
 				final String strValue1 = o1.getValue().toString();
 				final String strValue2 = o2.getValue().toString();
 				try {
