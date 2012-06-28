@@ -128,6 +128,8 @@ public class Filters extends WizardPageDescriptor {
 				}
 			});
 
+			tref.breakPaging();
+
 			createFilter(c);
 
 		} catch (Exception e) {
