@@ -211,23 +211,30 @@
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFileWizard"
-            icon="resources/icons/export.png"
+            icon="resources/icons/archivo.jpg"
             id="edu.medicine.bioplat.rcp.export.biomarker.file"
             name="%biomarker.export.to.file.wizard.entry.name">
       </wizard>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneXSignatureHeatMapWizard"
-            icon="resources/icons/export.png"
+            icon="resources/icons/archivo.jpg"
             id="edu.medicine.bioplat.rcp.export.biomarker.file2"
             name="%biomarker.export.X.signature.heat.map.wizard.entry.name">
       </wizard>
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class=" edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportJustGeneIdsWizard"
-            icon="resources/icons/export.png"
+            icon="resources/icons/archivo.jpg"
             id="edu.medicine.bioplat.rcp.export.biomarker.file3"
             name="%biomarker.export.just.gene.id.wizard.entry.name">
+      </wizard>
+      <wizard
+            category="edu.medicine.bioplat.rcp.export.biomarker.root"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToPdfWizard"
+            icon="resources/icons/pdf_file_export.png"
+            id="edu.medicine.bioplat.rcp.wizard1"
+            name="Export to PDF file">
       </wizard>
       <category
             id="edu.medicine.bioplat.rcp.export.experiment.root"
@@ -236,7 +243,7 @@
       <wizard
             category="edu.medicine.bioplat.rcp.export.experiment.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentToFileWizard"
-            icon="resources/icons/export.png"
+            icon="resources/icons/archivo.jpg"
             id="edu.medicine.bioplat.rcp.export.experiment.file"
             name="%experiment.export.to.file.wizard.entry.name">
       </wizard>
@@ -273,6 +280,11 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalGeneInformationPage"
             id="edu.medicine.bioplat.rcp.genes.external"
             name="External Information">
+      </page>
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage"
+            id="edu.medicine.bioplat.rcp.preferences.general"
+            name="External Urls">
       </page>
    </extension>
    <extension
@@ -371,6 +383,14 @@
             onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Add Clinical Attribute"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.AddClinicalAttributteAC"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
       </actionContribution>
    </extension>
    <extension
