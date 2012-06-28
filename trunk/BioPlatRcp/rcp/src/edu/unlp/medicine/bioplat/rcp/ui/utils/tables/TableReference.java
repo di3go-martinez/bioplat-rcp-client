@@ -45,9 +45,9 @@ public interface TableReference {
 
 	void show(Object element);
 
-	List selectedElements();
+	<T> List<T> selectedElements();
 
-	List focusedElements();
+	<T> List<T> focusedElements();
 
 	void addSelectionChangeListener(ISelectionChangedListener listener);
 

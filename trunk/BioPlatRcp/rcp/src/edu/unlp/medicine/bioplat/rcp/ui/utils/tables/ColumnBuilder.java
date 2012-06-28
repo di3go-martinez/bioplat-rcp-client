@@ -83,6 +83,8 @@ public class ColumnBuilder {
 								// editingSupport
 	private boolean resizable = true;
 
+	private TableConfigurer tableConfigurer;
+
 	/**
 	 * 
 	 * Construye la columna en un viewer y en una posición
@@ -91,9 +93,12 @@ public class ColumnBuilder {
 	 * @param viewer
 	 * @param index
 	 */
-	TableColumnReference build(TableViewer viewer, int index) {
+	TableColumnReference build(TableConfigurer tableConfigurer, TableViewer viewer, int index) {
 
-		// TODO No todas las columnas son ordenable, por ahora si...
+		this.tableConfigurer = tableConfigurer;
+
+		// TODO No todas las columnas son ordenable, por ahora el orden está
+		// disponible en todas...
 		addHeadeMenuItemDescriptor(new ToggleSortColumnMenuItemDescriptor(this, viewer));
 
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
@@ -301,7 +306,7 @@ public class ColumnBuilder {
 		};
 	}
 
-	// We use icons
+	// We use icons for checkboxes
 	private static final Image CHECKED = Activator.imageDescriptorFromPlugin("resources/icons/checked.gif").createImage();
 	private static final Image UNCHECKED = Activator.imageDescriptorFromPlugin("resources/icons/unchecked.gif").createImage();
 
@@ -380,5 +385,10 @@ public class ColumnBuilder {
 
 	public ColumnBuilder hidden() {
 		return width(0);
+	}
+
+	void reconfigureMenu() {
+		// TODO propias?
+		tableConfigurer.configureMenu();
 	}
 }

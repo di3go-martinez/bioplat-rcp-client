@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -198,12 +199,14 @@ public class TableBuilder implements TableConfigurer {
 		int columnCount = 0;
 
 		if (showSelectionColumn)
-			ROW_SELECT_COLUMN.build(viewer, columnCount++);
+			ROW_SELECT_COLUMN.build(this, viewer, columnCount++);
 
 		for (ColumnBuilder cb : columns) {
-			TableColumnReference tcr = cb.build(viewer, columnCount++);
+			TableColumnReference tcr = cb.build(this, viewer, columnCount++);
 			columnsHolder.put(tcr.id(), tcr);
 		}
+
+		configureMenu();
 
 		viewer.refresh(true);
 		viewer.setComparator(new MyViewerComparator());
@@ -399,6 +402,30 @@ public class TableBuilder implements TableConfigurer {
 		return this;
 	}
 
+	// Asigno un defualt que hace ningún builder
+	private MenuBuilder menuBuilder = new MenuBuilder() {
+
+		@Override
+		public void build(Menu menu) {
+
+		}
+	};
+
+	public static interface MenuBuilder {
+		void build(Menu menu);
+	}
+
+	public TableBuilder contextualMenuBuilder(MenuBuilder menuBuilder) {
+		this.menuBuilder = menuBuilder;
+		return this;
+	}
+
+	@Override
+	public void configureMenu() {
+		final Menu menu = new Menu(getTable().getParent());
+		menuBuilder.build(menu);
+		getTable().setMenu(menu);
+	}
 }
 
 /**
