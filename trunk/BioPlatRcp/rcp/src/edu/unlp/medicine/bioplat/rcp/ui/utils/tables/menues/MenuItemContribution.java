@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.MenuItem;
 /**
  * Delega en MenuItem
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 public class MenuItemContribution implements MenuContribution {
@@ -52,8 +52,9 @@ public class MenuItemContribution implements MenuContribution {
 		return item.getSelection();
 	}
 
-	public void image(Image image) {
+	public MenuItemContribution image(Image image) {
 		item.setImage(image);
+		return this;
 	}
 
 }
