@@ -97,7 +97,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						@Override
 						public void run() {
 							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-							MessageManager.INSTANCE.add(Message.info("There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
+							MessageManager.INSTANCE.openView().add(Message.info("There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
 						}
 					});
 				} catch (Exception e) {
