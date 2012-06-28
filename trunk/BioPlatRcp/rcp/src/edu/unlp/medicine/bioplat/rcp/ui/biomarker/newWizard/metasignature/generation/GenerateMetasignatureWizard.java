@@ -34,6 +34,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	private Providers wpdproviders;
+	private Filters filters;
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
@@ -41,7 +42,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 		Providers p;
 		descriptors.add(p = createProvidersPage());
-		descriptors.add(createFilterPage(p));
+		descriptors.add(filters = createFilterPage(p));
 		descriptors.add(createAlgorithmPage());
 		// descriptors.add(createValidationConfiguration());
 
@@ -52,7 +53,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		return wpdproviders = new Providers().addParameters(wizardModel());
 	}
 
-	private WizardPageDescriptor createFilterPage(Providers providers) {
+	private Filters createFilterPage(Providers providers) {
 		return new Filters(providers).addParameters(wizardModel());
 	}
 
@@ -76,9 +77,10 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		for (IGeneSignatureProvider gsp : geneProviders)
 			smg.addGeneSigntaureProvider(gsp);
 
-		// TODO filter
 		smg.setGeneSelectorAlgorithm(algorithm);
-		// TODO Validation
+
+		// TODO Validation phase
+
 		if (geneSignatures != null && !geneSignatures.isEmpty())
 			return smg.calculateMetasignature(geneSignatures);
 		else
@@ -97,12 +99,14 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	}
 
 	private IGeneSelectorAlgorithm algorithm;
+	private String filter = "";
 
 	@Override
 	protected void configureParameters() {
 		geneProviders = wpdproviders.resolveProviders(wizardModel());
 		algorithm = resolveAlgorithm();
 		geneSignatures = wizardModel().value(Filters.SELECTED_SIGNATURES);
+		filter = wizardModel().value(Filters.ORGANISM);
 	}
 
 	private IGeneSelectorAlgorithm resolveAlgorithm() {

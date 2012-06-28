@@ -1,6 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_BIOMARKER;
+import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_GENE_SIGNATURE;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 		// }
 		// }, "David"));
 
-		new BrowserEditorManager(APPLY_TO_BIOMARKER) {
+		new BrowserEditorManager(APPLY_TO_GENE_SIGNATURE) {
 			@Override
 			protected String getAllGenesAsList() {
 				return model().getGenesAsList();

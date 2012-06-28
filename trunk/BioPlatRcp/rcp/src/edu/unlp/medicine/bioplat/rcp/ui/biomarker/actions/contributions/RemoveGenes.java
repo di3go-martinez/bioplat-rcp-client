@@ -25,10 +25,10 @@ public class RemoveGenes extends FreeGeneInputActionContribution<Biomarker> {
 		final MessageManager mmgr = MessageManager.INSTANCE;
 		for (Gene g : genes) {
 			if (!model().getGenes().contains(g))
-				mmgr.add(Message.warn("The Gene " + g + " is not in the biomarker " + model()));
+				mmgr.add(Message.warn("The Gene " + g + " is not in the gene signature " + model()));
 			else {
 				model().removeGenes(g);
-				mmgr.add(Message.info("The Gene " + g + " was removed from the biomarker " + model()));
+				mmgr.add(Message.info("The Gene " + g + " was removed from the gene signature " + model()));
 			}
 		}
 

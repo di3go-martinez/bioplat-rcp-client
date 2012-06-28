@@ -46,7 +46,7 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 
 	@Override
 	protected String getTaskName() {
-		return "Calculating variations on the biomarker " + biomarker;
+		return "Calculating variations on the Gene signature " + biomarker;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 		optimizerCommand.setValidationConfigs4Validation(forValidation);
 		optimizerCommand.setValidationConfigs4Testing(forTesting);
 
-		optimizerCommand.execute();
+		optimizerCommand.monitor(monitor).execute();
 
 		return optimizerCommand;
 
@@ -80,7 +80,7 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 	protected void configureParameters() {
 
 		numberOfGenesTheSmallestBiomarker = wizardModel().value(GeneralTreeConfigurarionPageDescriptor.NUMBER_OF_GENES);
-		numberOfTopResultsToKeepInEachRound = wizardModel().value(GeneralTreeConfigurarionPageDescriptor.NUM_BIOMARKERS_TO_KEEP);
+		numberOfTopResultsToKeepInEachRound = wizardModel().value(GeneralTreeConfigurarionPageDescriptor.NUM_GENE_SIGNATURES_TO_KEEP);
 
 		forTraining = wizardModel().value(TRAINING_VALIDATION_CONFIG);
 		forValidation = wizardModel().value(VALIDATION_VALIDATION_CONFIG);

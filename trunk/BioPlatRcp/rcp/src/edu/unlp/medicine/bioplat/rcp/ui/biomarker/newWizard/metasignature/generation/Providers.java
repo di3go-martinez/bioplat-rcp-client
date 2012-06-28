@@ -61,7 +61,7 @@ public class Providers extends WizardPageDescriptor {
 			Group openedBiomarker = new Group(container, SWT.NONE);
 			openedBiomarker.setLayout(glf.create());
 			openedBiomarker.setLayoutData(gdf.create());
-			openedBiomarker.setText("Opened Biomarkers");
+			openedBiomarker.setText("Editing Gene Signatures");
 			final TableReference tr = TableBuilder.create(openedBiomarker).addColumn(ColumnBuilder.create().property("name")).input(openedBiomarkers).build();
 			tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
@@ -175,7 +175,7 @@ public class Providers extends WizardPageDescriptor {
 
 				@Override
 				public String getFriendlyDescription() {
-					return "Editing Biomarkers";
+					return "Editing Gene Signatures";
 				}
 			});
 		}

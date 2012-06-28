@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -34,6 +36,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.SingleMetasignatureGenerator;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.StringFilter;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class Filters extends WizardPageDescriptor {
@@ -86,7 +89,7 @@ public class Filters extends WizardPageDescriptor {
 		return c;
 	}
 
-	public WizardPageDescriptor addParameters(WizardModel wizardModel) {
+	public Filters addParameters(WizardModel wizardModel) {
 		wizardModel.add(Filters.ORGANISM);
 		return this;
 	}
@@ -110,6 +113,7 @@ public class Filters extends WizardPageDescriptor {
 					.addColumn(ColumnBuilder.create().property("name").title("Name"))//
 					.addColumn(ColumnBuilder.create().property("geneCount").title("Gene Count"))//
 					.addColumn(ColumnBuilder.create().property("author").title("Author"))//
+					// .noPaging()
 					.build();
 
 			tref.addSelectionChangeListener(new ISelectionChangedListener() {
@@ -182,7 +186,8 @@ public class Filters extends WizardPageDescriptor {
 		for (IGeneSignatureProvider gsp : provider.resolveProviders(wizardModel))
 			smg.addGeneSigntaureProvider(gsp);
 
-		// TODO filter
+		// TODO habilitar filtro
+		// smg.setGeneSignatureFilters(filterResolver(wizardModel));
 
 		return smg;
 	}
@@ -212,6 +217,12 @@ public class Filters extends WizardPageDescriptor {
 			return !selectedElements.isEmpty();
 		}
 
+	}
+
+	private List<StringFilter> filterResolver(WizardModel wizardmodel) {
+		String organism = wizardModel.value(ORGANISM);
+		StringFilter sf = new StringFilter("getOrganism", organism);
+		return Lists.newArrayList(sf);
 	}
 
 }

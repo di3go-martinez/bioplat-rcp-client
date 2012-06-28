@@ -78,7 +78,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 
 	@Override
 	protected String getTaskName() {
-		return "Creating an empty biomarker";
+		return "Creating an empty gene signature";
 	}
 
 }
