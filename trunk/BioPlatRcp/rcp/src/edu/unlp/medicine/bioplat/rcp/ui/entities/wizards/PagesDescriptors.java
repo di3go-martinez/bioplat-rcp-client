@@ -55,7 +55,7 @@ public class PagesDescriptors {
 	public static final String STATISTICAL_TEST_VALUE = "STATISTICAL TEST VALUE";
 	public static final String ATTRIBUTE_NAME_TO_VALIDATION = "ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "SECOND_" + ATTRIBUTE_NAME_TO_VALIDATION;
-	public static final String REMOVE_GENES_IN_BIOMARKER = "REMOVE_GENES_IN_BIOMARKER";
+	public static final String REMOVE_GENES_IN_GENE_SIGNATURE = "REMOVE_GENES_IN_BIOMARKER";
 
 	private static WizardPageDescriptor clusterPageDescriptor() {
 		return new WizardPageDescriptor("Cluster") {

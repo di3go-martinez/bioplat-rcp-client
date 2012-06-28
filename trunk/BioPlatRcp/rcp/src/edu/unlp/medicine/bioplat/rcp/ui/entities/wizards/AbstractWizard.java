@@ -241,10 +241,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				try {
 					o = holder.get(); // join
 				} catch (Exception e) {
-					e.printStackTrace();
-					MessageManager.INSTANCE.add(Message.error(errorMsg(), e));
+					Throwable t = (e.getCause() != null) ? e.getCause() : e;
+					MessageManager.INSTANCE.add(Message.error(errorMsg(), t));
 					errorHolder.hold(true);
-					status = ValidationStatus.error(errorMsg(), e);
+					status = ValidationStatus.error(errorMsg(), t);
 				}
 
 				final T oo = o;
