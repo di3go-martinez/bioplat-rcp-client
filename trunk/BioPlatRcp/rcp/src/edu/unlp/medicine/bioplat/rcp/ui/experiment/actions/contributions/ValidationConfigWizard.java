@@ -71,7 +71,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
 		IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
 		int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
-		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_BIOMARKER);
+		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE);
 
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
@@ -142,7 +142,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 				.add(PagesDescriptors.STATISTICAL_TEST_VALUE, new WritableValue("", String.class))//
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
-				.add(PagesDescriptors.REMOVE_GENES_IN_BIOMARKER, new WritableValue(false, Boolean.class));
+				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class));
 	}
 
 	@Override
