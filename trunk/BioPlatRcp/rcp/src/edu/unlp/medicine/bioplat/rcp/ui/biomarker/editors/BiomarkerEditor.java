@@ -74,7 +74,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 			});
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_gene_count_label, model, "geneCount").readOnly();
 		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_author_label, model, "author");
-		Widgets.createTextWithLabel(container, Messages.BiomarkerEditor_original_gene_count_label, model, "originalNumberOfGenes").readOnly();
+		// Widgets.createTextWithLabel(container,
+		// Messages.BiomarkerEditor_original_gene_count_label, model,
+		// "originalNumberOfGenes").readOnly();
 		Widgets.createMultiTextWithLabel(container, Messages.BiomarkerEditor_description_label, model, "description");
 
 		// Widgets.createTextWithLabel(container,
