@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 import static java.lang.Math.min;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -45,6 +46,8 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 	private static final String CLINICAL_DATA = "Clinical Data";
 	private TableReference tr;
+	private List<ClinicalDataModel> gridModel;
+	private ComboViewer sorterSelectionAttribute;
 
 	public ExperimentClinicalData(boolean updatableTitle) {
 		super(updatableTitle);
@@ -52,13 +55,13 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 	@Override
 	protected void doCreatePartControl(Composite parent) {
-		List<ClinicalDataModel> model = makeModel(model());
+		gridModel = makeModel(model());
 
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		GridLayoutFactory.fillDefaults().margins(10, 10).applyTo(container);
 
-		TableBuilder tb = TableBuilder.create(container).input(model);
+		TableBuilder tb = TableBuilder.create(container).input(gridModel);
 		tb.addColumn(ColumnBuilder.create().property("data[0].value"));
 		int index = 1;
 		for (Sample s : resolveSamplesToLoad())
@@ -70,17 +73,11 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 		Composite sorterContainer = new Composite(container, SWT.BORDER);
 		sorterContainer.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
-		final ComboViewer cv = new ComboViewer(sorterContainer);
-		cv.setContentProvider(ArrayContentProvider.getInstance());
+		sorterSelectionAttribute = new ComboViewer(sorterContainer);
+		sorterSelectionAttribute.setContentProvider(ArrayContentProvider.getInstance());
 
 		// transformo la lista model en una lista de nombres de atributo.
-		cv.setInput(Collections2.transform(model, new Function<ClinicalDataModel, String>() {
-
-			@Override
-			public String apply(ClinicalDataModel input) {
-				return input.getData()[0].getValue().toString();
-			}
-		}));
+		sorterSelectionAttribute.setInput(buildSorterSelectionAttributeInput());
 
 		final Button toggleSorter = new Button(sorterContainer, SWT.TOGGLE | SWT.FLAT);
 		// toggleSorter.setSize(new Point(20, 20));
@@ -92,18 +89,34 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 					toggleSorter.setImage(descimg);
 				else
 					toggleSorter.setImage(ascimg);
-				resort(tr, cv, toggleSorter);
+				resort(tr, sorterSelectionAttribute, toggleSorter);
 			}
 		});
 
-		cv.addSelectionChangedListener(new ISelectionChangedListener() {
+		sorterSelectionAttribute.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				resort(tr, cv, toggleSorter);
+				resort(tr, sorterSelectionAttribute, toggleSorter);
 			}
 
 		});
 		setPartName(CLINICAL_DATA);
+	}
+
+	/**
+	 * En base a gridModle, extra el nombre del atributo
+	 * 
+	 * @return
+	 * @see ClinicalDataModel
+	 */
+	protected Collection<String> buildSorterSelectionAttributeInput() {
+		return Collections2.transform(gridModel, new Function<ClinicalDataModel, String>() {
+
+			@Override
+			public String apply(ClinicalDataModel input) {
+				return input.attributeName();
+			}
+		});
 	}
 
 	// TODO mejorar los parámetros pasados al método, que sean los datos no los
@@ -145,10 +158,12 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		// su índice en la colección newOrder, la cual se usara para
 		// indicarle a la tabla como ordenar las columnas
 		// · 2 porque son dos fijas
-		for (int i = 2; i < sorted.length + 2; i++) {
+		int i;
+		for (i = 2; i < sorted.length + 2; i++) {
 			int newIndex = originalAsList.indexOf(sorted[i - 2]) + 2;
 			newOrder[i] = newIndex;
 		}
+
 		t.setColumnOrder(newOrder);
 	}
 
@@ -220,18 +235,34 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 
 				ExperimentEditor.checkColumns(tr, model());
 
+				if (gridModel.size() != model().getClinicalAttributeNames().size()) {
+					gridModel = makeModel(model());
+					tr.input(gridModel);
+					sorterSelectionAttribute.setInput(buildSorterSelectionAttributeInput());
+				}
+
 			}
 
 		};
 	}
 }
 
+/**
+ * 
+ * Modelo que representa a una fila de la grilla de datos clínicos
+ * 
+ * 
+ */
 class ClinicalDataModel {
 
 	private CustomCellData[] data;
 
 	public CustomCellData[] getData() {
 		return data;
+	}
+
+	public String attributeName() {
+		return getData()[0].getValue().toString();
 	}
 
 	private ClinicalDataModel(CustomCellData[] data) {
@@ -264,9 +295,9 @@ class ClinicalDataModel {
 			for (Sample s : e.getSamples())
 				rowData[index++] = CustomCellDataBuilder.create(new ExpClinicalDataResolver(e, a, s));
 			result.add(new ClinicalDataModel(rowData));
-
 		}
 
 		return result;
 	}
+
 }
