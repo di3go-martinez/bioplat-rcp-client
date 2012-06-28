@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
+import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_BIOMARKER;
+
 import java.util.List;
 
 import org.eclipse.ui.IEditorInput;
@@ -36,7 +38,21 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 		});
 		result.add(new EditorDescription(input, editor, "General"));
 		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(false), "Applied Experiments"));
-		result.add(new EditorDescription(input, new BrowserEditor(), "David"));
+
+		// Estaría configurado en las preferences ahora
+		// result.add(new EditorDescription(input, new BrowserEditor() {
+		// @Override
+		// protected String resolveUrl() {
+		// return model().getDavidURLForFunctionalAnalysis();
+		// }
+		// }, "David"));
+
+		new BrowserEditorManager(APPLY_TO_BIOMARKER) {
+			@Override
+			protected String getAllGenesAsList() {
+				return model().getGenesAsList();
+			}
+		}.createEditorBrowsers(result, input);
 
 		return result;
 	}

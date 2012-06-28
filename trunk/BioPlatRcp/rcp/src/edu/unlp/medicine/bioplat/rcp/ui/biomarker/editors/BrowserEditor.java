@@ -11,9 +11,16 @@ import org.eclipse.swt.widgets.Text;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.generic.AbstractEntity;
 
-public class BrowserEditor extends AbstractEditorPart<Biomarker> {
+/**
+ * 
+ * Editor que muestra un browser
+ * 
+ * @author diego martínez
+ * 
+ */
+public abstract class BrowserEditor extends AbstractEditorPart<AbstractEntity> {
 
 	private Browser browser;
 	private Text url;
@@ -49,7 +56,5 @@ public class BrowserEditor extends AbstractEditorPart<Biomarker> {
 		};
 	}
 
-	protected String resolveUrl() {
-		return model().getDavidURLForFunctionalAnalysis();
-	}
+	protected abstract String resolveUrl();
 }
