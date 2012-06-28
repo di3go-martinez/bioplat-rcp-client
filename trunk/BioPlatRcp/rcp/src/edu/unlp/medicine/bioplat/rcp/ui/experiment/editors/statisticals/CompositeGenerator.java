@@ -69,7 +69,7 @@ abstract class CompositeGenerator {
 		final Clipboard cb = new Clipboard(PlatformUIUtils.findDisplay());
 
 		Button copy = new Button(c, SWT.FLAT);
-		copy.setText("Copy Script");
+		copy.setText("Copy R Script");
 		copy.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
