@@ -60,7 +60,7 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 		this.message = message;
 		this.type = type;
 		this.createdAt = new Date();
-		logger.info("(" + type + ")" + message);
+		logger.info("(" + type + ") " + message);
 	}
 
 	public static Message info(String text) {
