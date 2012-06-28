@@ -2,9 +2,9 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.List;
 
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -30,6 +30,11 @@ import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ApplyExperimentsO
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
+/**
+ * 
+ * @author diego martínez
+ * 
+ */
 public class ValidationConfigsDialog extends TitleAreaDialog {
 
 	protected ValidationConfigsDialog(Shell parentShell, Biomarker biomarker) {
@@ -112,7 +117,8 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		close();
-		Job j = new Job("Applying Validation Configs") {
+		final String mmsg = "Applying Validation Configs";
+		Job j = new Job(mmsg) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("", experimentsWizard.commands2apply().size());
@@ -122,13 +128,15 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 						command.execute();
 						count++;
 					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment", e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying the experiment " + command.getExperimentsAppliedToAMetasignature(), e));
 					}
 					monitor.worked(1);
 				}
-				MessageManager.INSTANCE.add(Message.info("Succesfully commands applied: " + count));
+				final String msg = "Succesfully commands applied: " + count;
+				MessageManager.INSTANCE.add(Message.info(msg));
+
 				monitor.done();
-				return Status.OK_STATUS;
+				return ValidationStatus.ok();
 			}
 		};
 		j.setUser(true);
