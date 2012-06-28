@@ -56,19 +56,22 @@ public class Providers extends WizardPageDescriptor {
 
 		Composite container = Widgets.createDefaultContainer(parent, 1);
 
-		Group openedBiomarker = new Group(container, SWT.NONE);
-		openedBiomarker.setLayout(glf.create());
-		openedBiomarker.setLayoutData(gdf.create());
-		openedBiomarker.setText("Opened Biomarkers");
-		final TableReference tr = TableBuilder.create(openedBiomarker).addColumn(ColumnBuilder.create().property("name")).input(PlatformUIUtils.openedEditors(Biomarker.class)).build();
-		tr.addSelectionChangeListener(new ISelectionChangedListener() {
+		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		if (!openedBiomarkers.isEmpty()) {
+			Group openedBiomarker = new Group(container, SWT.NONE);
+			openedBiomarker.setLayout(glf.create());
+			openedBiomarker.setLayoutData(gdf.create());
+			openedBiomarker.setText("Opened Biomarkers");
+			final TableReference tr = TableBuilder.create(openedBiomarker).addColumn(ColumnBuilder.create().property("name")).input(openedBiomarkers).build();
+			tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				wmodel.set(OPENED_BIOMARKERS, tr.selectedElements());
-				wp.setPageComplete(isPageComplete(wmodel));
-			}
-		});
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					wmodel.set(OPENED_BIOMARKERS, tr.selectedElements());
+					wp.setPageComplete(isPageComplete(wmodel));
+				}
+			});
+		}
 
 		Group onlineSigdbgroup = new Group(container, SWT.NONE);
 		onlineSigdbgroup.setLayout(glf.create());
