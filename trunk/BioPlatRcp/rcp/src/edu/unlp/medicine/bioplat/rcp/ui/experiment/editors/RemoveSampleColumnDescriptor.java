@@ -33,7 +33,7 @@ public class RemoveSampleColumnDescriptor implements MenuItemDescriptor {
 			public void widgetSelected(SelectionEvent e) {
 
 				String columnId = column.getColumn().getText();
-				if (MessageDialog.openConfirm(PlatformUIUtils.findShell(), "", "¿Confirma el borrado de " + columnId + "?")) {
+				if (MessageDialog.openConfirm(PlatformUIUtils.findShell(), "", "Do you really want to delete the sample " + columnId + "?")) {
 					// Borro del modelo
 					new RemoveSamplesCommand(experiment, Arrays.asList(columnId)).execute();
 
