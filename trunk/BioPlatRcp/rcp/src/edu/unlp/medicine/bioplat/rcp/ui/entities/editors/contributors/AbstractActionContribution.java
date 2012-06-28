@@ -18,6 +18,12 @@ import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
+/**
+ * 
+ * @author diego martínez
+ * 
+ * @param <T>
+ */
 public abstract class AbstractActionContribution<T extends AbstractEntity> extends Action implements ActionContribution<T> {
 
 	// TODO revisar bien esto.... a veces tira error
@@ -59,14 +65,7 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 
 			@Override
 			public void run() {
-				try {
-					sh.hold(getCurrentEditor().getSite().getSelectionProvider().getSelection());
-				} catch (NullPointerException npe) {
-					// FIXME a veces tira esta excepción, en general no, de qué
-					// depende?
-					// La ignoro para parecer que no tuvo efecto y se intente
-					// nuevamente con mejor suerte...
-				}
+				sh.hold(getCurrentEditor().getSite().getSelectionProvider().getSelection());
 			}
 		});
 
