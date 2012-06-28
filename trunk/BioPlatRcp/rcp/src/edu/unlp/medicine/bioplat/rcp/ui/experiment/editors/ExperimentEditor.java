@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_EXPERIMENT;
+
 import java.util.List;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -13,6 +15,7 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BrowserEditorManager;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
@@ -75,6 +78,18 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 
 			result.add(ed);
 		}
+
+		new BrowserEditorManager(APPLY_TO_EXPERIMENT) {
+			@Override
+			protected String getAllGenesAsList() {
+				List<Gene> genes = model().getGenes();
+				StringBuilder sb = new StringBuilder();
+				for (Gene gene : genes) {
+					sb.append(gene.getEntrezId()).append(",");
+				}
+				return sb.toString();
+			}
+		}.createEditorBrowsers(result, getEditorInput());
 
 		return result;
 	}
