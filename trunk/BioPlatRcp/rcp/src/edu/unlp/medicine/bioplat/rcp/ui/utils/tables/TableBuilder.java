@@ -301,18 +301,18 @@ public class TableBuilder implements TableConfigurer {
 			}
 
 			@Override
-			public List<?> selectedElements() {
-				return ImmutableList.copyOf(selectedElements);
+			public <T> List<T> selectedElements() {
+				return (List<T>) ImmutableList.copyOf(selectedElements);
 			}
 
 			@Override
-			public List<?> focusedElements() {
+			public <T> List<T> focusedElements() {
 				TableItem[] items = viewer.getTable().getSelection();
-				List result = Lists.transform(Arrays.asList(items), new Function<TableItem, Object>() {
+				List<T> result = Lists.transform(Arrays.asList(items), new Function<TableItem, T>() {
 
 					@Override
-					public Object apply(TableItem input) {
-						return input.getData();
+					public T apply(TableItem input) {
+						return (T) input.getData();
 					}
 				});
 				return result;
@@ -349,6 +349,14 @@ public class TableBuilder implements TableConfigurer {
 					return null;
 				}
 				return tableColumnReference.column();
+			}
+
+			@Override
+			public void breakPaging() {
+				if (paging == null)
+					input((model == null) ? input : null);
+
+				paging.breakPaging();
 			}
 
 			// @Override

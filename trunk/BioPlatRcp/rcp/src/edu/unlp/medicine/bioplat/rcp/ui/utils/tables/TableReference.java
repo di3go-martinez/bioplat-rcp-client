@@ -61,4 +61,8 @@ public interface TableReference {
 
 	TableColumn column(String id);
 
+	/**
+	 * Rompe el paginado, es decir, trae todos los elementos disponibles
+	 */
+	void breakPaging();
 }

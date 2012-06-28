@@ -163,7 +163,11 @@ public class Paging<T> {
 		return realList;
 	}
 
-	private void loadNextPage() {
+	/**
+	 * 
+	 * @return true si se alcanzó el final de la lista, false si no
+	 */
+	private boolean loadNextPage() {
 		logger.debug("Cargando página " + ((realList.size() / pagesize) + 1));
 
 		try {
@@ -172,8 +176,10 @@ public class Paging<T> {
 				if (e != null)
 					realList.add(e);
 			}
+			return false;
 		} catch (EndOfListException e) {
 			logger.debug("Se alcanzó el final de la lista");
+			return true;
 		}
 	}
 
@@ -217,5 +223,13 @@ public class Paging<T> {
 
 	private static class EndOfListException extends Exception {
 		private static final long serialVersionUID = 1L;
+	}
+
+	/**
+	 * Rompe el paginado, cargando todas las páginas
+	 */
+	public void breakPaging() {
+		do {
+		} while (loadNextPage());
 	}
 }
