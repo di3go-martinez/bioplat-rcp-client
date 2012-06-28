@@ -85,7 +85,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 					// directory.getValue().toString());
 				}
 			});
-			directory.setValue("c:/tmp/biomarker");
+			directory.setValue(".");
 		}
 	}
 
