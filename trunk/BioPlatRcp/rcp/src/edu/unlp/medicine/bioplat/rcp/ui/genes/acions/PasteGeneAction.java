@@ -30,7 +30,7 @@ public class PasteGeneAction extends Action {
 
 		Biomarker b = getActiveBiomarker();
 		if (b == null) {
-			mm.add(Message.warn("There is no biomarker selected"));
+			mm.add(Message.warn("There is no gene signature selected"));
 			return;
 		}
 
@@ -43,7 +43,7 @@ public class PasteGeneAction extends Action {
 						b.addGene(gene);
 						mm.add(Message.info("Gene " + gene + " added."));
 					} else
-						mm.add(Message.warn("The gene " + gene + " is already in the biomarker"));
+						mm.add(Message.warn("The gene " + gene + " is already in the gene signature"));
 				} catch (Exception e) {
 					mm.add(Message.error("Couldnt add the gene with id '" + id + "'", e));
 				}
