@@ -1,8 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.IStartup;
 
@@ -20,7 +20,7 @@ public class LoadBasicData implements IStartup {
 
 				MetaPlat.getInstance().getARNMPLatforms();
 
-				return Status.OK_STATUS;
+				return ValidationStatus.ok();
 			}
 		}.schedule();
 	}
