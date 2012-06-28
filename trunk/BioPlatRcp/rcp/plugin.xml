@@ -419,8 +419,8 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
         icon="resources/icons/newBiomarker.PNG"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Biomarcador vacío">
-       <description>Nuevo biomarcador vacío</description>
+        name="Empty Gene Signature">
+       <description>Create an empty gene signature</description>
 	</wizard>
   <wizard
         canFinishEarly="false"
@@ -428,9 +428,9 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
         icon="resources/icons/generateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generar biomarcador">
+        name="Generate Gene Signature">
      <description>
-        Nuevo biomarcador vacío
+        Generate a gene signature from sigDB, MSigDB, etc.
      </description>
   </wizard>
    </extension>
