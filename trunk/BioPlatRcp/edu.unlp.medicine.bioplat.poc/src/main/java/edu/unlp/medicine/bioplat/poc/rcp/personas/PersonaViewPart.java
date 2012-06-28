@@ -25,19 +25,20 @@ public class PersonaViewPart extends ViewPart {
 
 	private Persona p = Persona.nullPersona();;
 	private TableReference tr;
+	private ISelectionListener listener;
 
 	@Override
 	public void createPartControl(Composite parent) {
 
 		createGrid(parent);
 
-		getSelectionService().addSelectionListener(new ISelectionListener() {
+		getSelectionService().addSelectionListener(listener = new ISelectionListener() {
 
 			@Override
 			public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 				p = Persona.nullPersona();
 
-				if (!selection.isEmpty()) {
+				if (!selection.isEmpty() && selection instanceof StructuredSelection) {
 					Object first = ((StructuredSelection) selection).getFirstElement();
 					if (first instanceof Persona)
 						p = (Persona) first;
@@ -46,6 +47,12 @@ public class PersonaViewPart extends ViewPart {
 				tr.input(p.getNombres());
 			}
 		});
+	}
+
+	@Override
+	public void dispose() {
+		getSelectionService().removeSelectionListener(listener);
+		super.dispose();
 	}
 
 	private void createGrid(Composite parent) {
