@@ -84,6 +84,8 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		if (geneSignatures != null && !geneSignatures.isEmpty())
 			return smg.calculateMetasignature(geneSignatures);
 		else
+			// TODO sacar que esta es la forma vieja y no debería pasar más por
+			// acá ahora que tiene resultado intermedio
 			return smg.generateMetaSignature();
 	}
 
