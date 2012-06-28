@@ -63,7 +63,7 @@ public class GenesInputDialog extends Dialog {
 			try {
 				result.add(MetaPlat.getInstance().findGene(id));
 			} catch (GeneNotFoundByIdException e) {
-				MessageManager.INSTANCE.add(Message.warn("No se encontró el gen con id '" + id + "'"));
+				MessageManager.INSTANCE.add(Message.warn("Gene '" + id + "' not found"));
 			} catch (Exception e) {
 				MessageManager.INSTANCE.add(Message.error(e.getLocalizedMessage()));
 			}
@@ -77,8 +77,7 @@ public class GenesInputDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-
-		newShell.setText("Pegar los genes separados por '" + separator + "'");
+		newShell.setText("Paste genes (EntrezId, Gene symbol or EnsemblId)");
 	}
 
 	@Override
