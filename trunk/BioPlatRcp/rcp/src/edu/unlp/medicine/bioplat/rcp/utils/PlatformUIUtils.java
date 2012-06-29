@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -140,8 +141,21 @@ public class PlatformUIUtils {
 		return holder.value();
 	}
 
-	private static Cache<String, Image> imagesCache = CacheBuilder.newBuilder().build();
+	private static Cache<String, Image> imagesCache = createImageCache();
 
+	protected static Cache<String, Image> createImageCache() {
+		return CacheBuilder.newBuilder().build();
+	}
+
+	/**
+	 * Busca la imagen imagename. Las imagenes se cachean para agilizar futuros.
+	 * Se crean utilizando un descriptor de imagen generado por el Activator del
+	 * plugin usos
+	 * 
+	 * @param imagename
+	 * @return
+	 * @see Activator#imageDescriptorFromPlugin(String)
+	 */
 	public static Image findImage(final String imagename) {
 		try {
 			return imagesCache.get(imagename, new Callable<Image>() {
@@ -179,5 +193,15 @@ public class PlatformUIUtils {
 
 	public static IWorkbench getWorkbench() {
 		return activePage().getWorkbenchWindow().getWorkbench();
+	}
+
+	public static void openInformation(final String title, final String message) {
+		findDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				MessageDialog.openInformation(findShell(), title, message);
+			}
+		});
 	}
 }
