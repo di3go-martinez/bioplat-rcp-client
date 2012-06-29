@@ -102,8 +102,10 @@ public abstract class WizardPageDescriptor {
 	 * @param wizardModel
 	 */
 	public void initializeResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
+
 		createResultPage(parent, wizardModel, wizard, resultPage);
 		refreshResultPage(wizardModel, wizard);
+
 	}
 
 	protected void createResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {

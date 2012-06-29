@@ -242,9 +242,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					o = holder.get(); // join
 				} catch (Exception e) {
 					Throwable t = (e.getCause() != null) ? e.getCause() : e;
-					MessageManager.INSTANCE.add(Message.error(errorMsg(), t));
+					MessageManager.INSTANCE.add(Message.error(errorMsg(t), t));
 					errorHolder.hold(true);
-					status = ValidationStatus.error(errorMsg(), t);
+					status = ValidationStatus.error(errorMsg(t), t);
 				}
 
 				final T oo = o;
@@ -259,7 +259,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 							MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed"));
 						} catch (Exception e) {
 							e.printStackTrace();
-							MessageManager.INSTANCE.add(Message.error(errorMsg(), e));
+							MessageManager.INSTANCE.add(Message.error(errorMsg(e), e));
 						}
 					}
 				});
@@ -268,8 +268,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				return status;
 			}
 
-			private String errorMsg() {
-				return "Unexpected error executing " + getTaskName();
+			private String errorMsg(Throwable t) {
+				return "Unexpected error executing " + getTaskName() + ": " + t.getMessage();
 			}
 
 		};
