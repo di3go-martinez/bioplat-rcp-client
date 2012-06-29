@@ -45,6 +45,10 @@
 		<mapping class="edu.unlp.medicine.entity.arnmPlatform.sonda.Sonda" />
 		<mapping class="edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform" />
 
+		<mapping class="edu.unlp.medicine.entity.biomarker.Publication" />
+		<mapping class="edu.unlp.medicine.entity.biomarker.GeneSignature" />
+		<mapping class="edu.unlp.medicine.entity.biomarker.Biomarker" />
+
 	</session-factory>
 
 </hibernate-configuration>
