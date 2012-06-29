@@ -80,7 +80,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		optimizerCommand.setValidationConfigsForValidation(forValidation);
 		optimizerCommand.setValidationConfigsForTesting(forTesting);
 
-		optimizerCommand.execute();
+		optimizerCommand.monitor(monitor).execute();
 		return optimizerCommand.getPsoResult();
 	}
 
