@@ -257,6 +257,48 @@
             parentCategory="edu.medicine.bioplat.rcp.export.biomarker.root">
       </category>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+         
+    <category
+          name="Biomarcador"
+          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards">
+    </category>
+    
+	
+ 	<wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
+        icon="resources/icons/newBiomarker.PNG"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Empty Gene Signature">
+       <description>Create an empty gene signature</description>
+	</wizard>
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
+        icon="resources/icons/generateMetasignature.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
+        name="Generate Gene Signature">
+     <description>
+        Generate a gene signature from sigDB, MSigDB, etc.
+     </description>
+  </wizard>
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
+        icon="resources/icons/importGeneSignature.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
+        name="New From Gene Signature">
+     <description>
+        Create a new Gene Signature from the Genes Signatures in the Platform
+     </description>
+  </wizard>
+   </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -402,37 +444,6 @@
                type="edu.unlp.medicine.entity.biomarker.Biomarker">
          </adapter>
       </factory>
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.newWizards">
-         
-    <category
-          name="Biomarcador"
-          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards">
-    </category>
-    
-	
- 	<wizard
-        canFinishEarly="true"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
-        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
-        icon="resources/icons/newBiomarker.PNG"
-        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Empty Gene Signature">
-       <description>Create an empty gene signature</description>
-	</wizard>
-  <wizard
-        canFinishEarly="false"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
-        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
-        icon="resources/icons/generateMetasignature.png"
-        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generate Gene Signature">
-     <description>
-        Generate a gene signature from sigDB, MSigDB, etc.
-     </description>
-  </wizard>
    </extension>
    
    <!--extension
