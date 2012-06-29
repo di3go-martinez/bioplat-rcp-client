@@ -71,7 +71,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 	private boolean updatableTitle = true;
 
 	@Override
-	public final void doSave(final IProgressMonitor rmonitor) {
+	public void doSave(final IProgressMonitor rmonitor) {
 		try { // TODO reveer
 			getProgressService().run(true, false, new IRunnableWithProgress() {
 				@Override
@@ -99,6 +99,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 		}
 
 	}
+
 
 	protected void doSave0() {
 		delay(500);
