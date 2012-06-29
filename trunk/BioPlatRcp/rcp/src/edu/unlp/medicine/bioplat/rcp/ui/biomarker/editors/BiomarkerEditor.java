@@ -4,13 +4,16 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.internal.AbstractSelectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.save.MetaSignatureMarshaller;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener {
@@ -41,6 +45,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 	private boolean autoUpdateTitle = true;
 
+	private MetaSignatureMarshaller marshaller = new MetaSignatureMarshaller();
+
 	public BiomarkerEditor(boolean autoUpdateTitle) {
 		super(autoUpdateTitle);
 		this.autoUpdateTitle = autoUpdateTitle;
@@ -50,6 +56,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		this(true);
 	}
 
+	// TODO hasta implementar el save as
 	@Override
 	protected void doCreatePartControl(Composite parent) {
 
@@ -142,13 +149,13 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		}
 	}
 
-	// /**
-	// * @deprecated siempre guardar el root, la implementación por default...
-	// */
-	// @Deprecated
-	// @Override
-	// protected void doSave0() {
-	// for (Gene g : model().getGenes())
-	// RepositoryFactory.getRepository().save(g);
-	// }
+	// TODO es hasta definir el save as.
+	@Override
+	public final void doSave(IProgressMonitor monitor) {
+		FileDialog dialog = new FileDialog(this.getSite().getShell(), SWT.SAVE);
+		dialog.setFilterNames(new String[] { "BPL Files" });
+		dialog.setFilterExtensions(new String[] { "*.bpl" }); // Windows // wild
+		String filename = dialog.open();
+		marshaller.marshal(this.model(), filename);
+	}
 }
