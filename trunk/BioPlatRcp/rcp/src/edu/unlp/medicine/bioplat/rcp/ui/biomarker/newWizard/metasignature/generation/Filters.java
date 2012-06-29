@@ -5,9 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -20,6 +24,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +46,12 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.StringFil
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class Filters extends WizardPageDescriptor {
+
+	private static final String GENE_NAME_OR_ENTREZ = "GENE_NAME_OR_ENTREZ";
+
+	private static final String SIGNATURES_ID_OF_NAMES = "SIGNATURES_ID_OF_NAMES";
+
+	private static final String KEYWORD_ON_NAME = "KEYWORD_ON_NAME";
 
 	static final String SELECTED_SIGNATURES = "SELECTED_SIGNATURES";
 
@@ -67,30 +79,49 @@ public class Filters extends WizardPageDescriptor {
 
 	private WizardPage resultPage;
 
+	// FIXME parche de entrega!
+	private boolean initializatePhase = false;
+
+	@Override
+	public void initializeResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
+		initializatePhase = true;
+		super.initializeResultPage(parent, wizardModel, wizard, resultPage);
+		initializatePhase = false;
+	}
+
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-		Composite c = new Composite(parent, SWT.NONE);
-		// new Label(c, SWT.NONE).setText("Organismo:");
-		// ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER |
-		// SWT.READ_ONLY);
-		// collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
-		// collapseStrategyCombo.setInput(//
-		// Arrays.asList("Human", "Mouse", "ALL"));
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
-		ComboViewer cv = Utils.newComboViewer(c, "Organism:", Arrays.asList("Human", "Mouse", "ALL"));
+		ComboViewer cv = Utils.newComboViewer(container, "Organism:", Arrays.asList("Human", "Mouse", "ALL"));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ORGANISM), UpdateStrategies.nonNull(ORGANISM), UpdateStrategies.nullStrategy());
 		cv.setSelection(new StructuredSelection("Human"));
 
-		// IObservableValue widgetObservable =
-		// ViewersObservables.observeSingleSelection(collapseStrategyCombo);
-		// dbc.bindValue(widgetObservable, wmodel.get(ORGANISM), new
-		// UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Organismo")),
-		// null);
-		return c;
+		new Label(container, SWT.NONE).setText("Keyword on name");
+		Text t = new Text(container, SWT.BORDER);
+		t.setToolTipText("keywords by comma separated");
+		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(KEYWORD_ON_NAME));
+
+		new Label(container, SWT.NONE).setText("Signatures Id of Names");
+		t = new Text(container, SWT.BORDER);
+		t.setToolTipText("keywords by comma separated");
+		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(SIGNATURES_ID_OF_NAMES));
+
+		new Label(container, SWT.NONE).setText("Gene name or Entrez");
+		t = new Text(container, SWT.BORDER);
+		t.setToolTipText("keywords by comma separated");
+		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_NAME_OR_ENTREZ));
+
+		return container;
 	}
 
 	public Filters addParameters(WizardModel wizardModel) {
-		wizardModel.add(Filters.ORGANISM);
+		wizardModel.add(Filters.ORGANISM)//
+				.add(KEYWORD_ON_NAME, new WritableValue("", String.class))//
+				.add(SIGNATURES_ID_OF_NAMES)//
+				.add(GENE_NAME_OR_ENTREZ);
+
 		return this;
 	}
 
@@ -111,7 +142,7 @@ public class Filters extends WizardPageDescriptor {
 
 			tref = TableBuilder.create(c).input(holder.value())//
 					.addColumn(ColumnBuilder.create().property("name").title("Name"))//
-					.addColumn(ColumnBuilder.create().property("geneCount").title("Gene Count"))//
+					.addColumn(ColumnBuilder.create().property("geneCount").title("Genes"))//
 					.addColumn(ColumnBuilder.create().property("author").title("Author"))//
 					// .noPaging()
 					.build();
@@ -128,7 +159,7 @@ public class Filters extends WizardPageDescriptor {
 				}
 			});
 
-			tref.breakPaging();
+			//TODO tref.breakPaging();
 
 			createFilter(c);
 
@@ -170,13 +201,35 @@ public class Filters extends WizardPageDescriptor {
 		final List<GeneSignature> value = Collections.emptyList();
 		final Holder<List<GeneSignature>> holder = Holder.create(value);
 		final SingleMetasignatureGenerator smg = createGenerator(wizardModel);
+
+		final String geneNameOrEntrez = wizardModel.value(GENE_NAME_OR_ENTREZ);
+		final String signatures_id_or_names = wizardModel.value(SIGNATURES_ID_OF_NAMES);
+		final String keyword = wizardModel.value(KEYWORD_ON_NAME);
+
 		wizard.getContainer().run(true, false, new IRunnableWithProgress() {
 
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				monitor.beginTask("Calculating...", IProgressMonitor.UNKNOWN);
-				holder.hold(smg/* .monitor(monitor) */.calculateFilteredSignatures());
+
+				holder.hold(smg/* .monitor(monitor) *///
+						.getSignaturesFromProvidersAndFilterThem(keyword, //
+								toList(signatures_id_or_names), //
+								toList(geneNameOrEntrez)));
 				monitor.done();
+			}
+
+			/**
+			 * 
+			 * @param value
+			 *            es un string de "claves" separadas por coma
+			 * @return
+			 */
+			private List<String> toList(String value) {
+				if (value == null)
+					return Collections.emptyList();
+				else
+					return Lists.newArrayList(StringUtils.split(value, ","));
 			}
 		});
 		return holder;
@@ -196,6 +249,8 @@ public class Filters extends WizardPageDescriptor {
 
 	@Override
 	public void refreshResultPage(WizardModel wizardModel, IWizard wizard) {
+		if (initializatePhase)
+			return;
 		// TODO re input si se cambio algo, no va a recalcular lo mismo...
 		try {
 			elements = recalculateHolder(wizardModel, wizard).value();

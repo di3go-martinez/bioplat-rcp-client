@@ -50,7 +50,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	}
 
 	private Providers createProvidersPage() {
-		return wpdproviders = new Providers().addParameters(wizardModel());
+		return wpdproviders = new Providers2().addParameters(wizardModel());
 	}
 
 	private Filters createFilterPage(Providers providers) {

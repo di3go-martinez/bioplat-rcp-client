@@ -35,17 +35,30 @@ import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGene
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
+/**
+ * 
+ * Descritor de página de wizard para los proveedores de genes signatures
+ * 
+ * @author diego martínez
+ * 
+ */
 public class Providers extends WizardPageDescriptor {
 
 	static final String OPENED_BIOMARKERS = "OPENED_BIOMARKERS";
+
+	@Deprecated
 	static final String GENESIGDB_SAVE_FILE = "GENESIGDB_SAVE_FILE";
+	@Deprecated
 	static final String MSIGDB_PROVIDER_FILE = "MSIGDB_PROVIDER_FILE";
+	@Deprecated
 	static final String GENSIGDB_XML_FILE = "GENSIGDB_XML_FILE";
+	@Deprecated
 	static final String MAX_TIME_FOR_PROCESSING = "MAX_TIME_FOR_PROCESSING";
+	@Deprecated
 	static final String PUBLICATION_KEYWORDS = "GENSIGDB_SIGNATURES";
 
 	public Providers() {
-		super("Providers");
+		super("Gene Signature Providers");
 	}
 
 	@Override
@@ -55,6 +68,8 @@ public class Providers extends WizardPageDescriptor {
 		GridLayoutFactory glf = GridLayoutFactory.fillDefaults().numColumns(2).margins(5, 5);
 
 		Composite container = Widgets.createDefaultContainer(parent, 1);
+
+		createSecondaryProvidersGroup(container, glf, gdf, dbc, wmodel);
 
 		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
 		if (!openedBiomarkers.isEmpty()) {
@@ -73,15 +88,10 @@ public class Providers extends WizardPageDescriptor {
 			});
 		}
 
-		Group onlineSigdbgroup = new Group(container, SWT.NONE);
-		onlineSigdbgroup.setLayout(glf.create());
-		onlineSigdbgroup.setLayoutData(gdf.create());
-		onlineSigdbgroup.setText("GenSigDB signatures (online access)");
-		Text t = createTextHolderWithLabel(onlineSigdbgroup, "Publication keyword");
-		bind(dbc, wmodel, t, PUBLICATION_KEYWORDS);
-		t = createTextHolderWithLabel(onlineSigdbgroup, "Limit time for processing (in minutes)");
-		bind(dbc, wmodel, t, MAX_TIME_FOR_PROCESSING);
-		FileText.create(onlineSigdbgroup).bind(dbc, wmodel.valueHolder(GENESIGDB_SAVE_FILE));
+		return container;
+	}
+
+	protected void createSecondaryProvidersGroup(Composite container, GridLayoutFactory glf, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
 
 		Group xmlsigdbgroup = new Group(container, SWT.NONE);
 		xmlsigdbgroup.setLayout(glf.create());
@@ -95,7 +105,16 @@ public class Providers extends WizardPageDescriptor {
 		msigdbgroup.setText("MSigDB Provider, from downloaded file");
 		FileText.create(msigdbgroup).bind(dbc, wmodel.valueHolder(MSIGDB_PROVIDER_FILE));
 
-		return container;
+		Group onlineSigdbgroup = new Group(container, SWT.NONE);
+		onlineSigdbgroup.setLayout(glf.create());
+		onlineSigdbgroup.setLayoutData(gdf.create());
+		onlineSigdbgroup.setText("GenSigDB signatures (online access)");
+		Text t = createTextHolderWithLabel(onlineSigdbgroup, "Publication keyword");
+		bind(dbc, wmodel, t, PUBLICATION_KEYWORDS);
+		t = createTextHolderWithLabel(onlineSigdbgroup, "Limit time for processing (in minutes)");
+		bind(dbc, wmodel, t, MAX_TIME_FOR_PROCESSING);
+		FileText.create(onlineSigdbgroup).bind(dbc, wmodel.valueHolder(GENESIGDB_SAVE_FILE));
+
 	}
 
 	private void bind(DataBindingContext dbc, WizardModel wmodel, Text t, String key) {
@@ -111,9 +130,13 @@ public class Providers extends WizardPageDescriptor {
 
 	public Providers addParameters(WizardModel wizardModel) {
 		wizardModel//
-				.add(PUBLICATION_KEYWORDS).add(MAX_TIME_FOR_PROCESSING, new WritableValue(0, Integer.class)).add(GENESIGDB_SAVE_FILE)//
+				.add(PUBLICATION_KEYWORDS)//
+				.add(MAX_TIME_FOR_PROCESSING, new WritableValue(0, Integer.class))//
 				.add(GENESIGDB_SAVE_FILE)//
-				.add(GENSIGDB_XML_FILE).add(MSIGDB_PROVIDER_FILE);
+				.add(GENESIGDB_SAVE_FILE)//
+				.add(GENSIGDB_XML_FILE)//
+				.add(MSIGDB_PROVIDER_FILE);
+
 		return this;
 	}
 
@@ -128,7 +151,7 @@ public class Providers extends WizardPageDescriptor {
 		return g0 || g1 || g2 || g3;
 	}
 
-	private boolean isOpenedAvailable(WizardModel model) {
+	protected boolean isOpenedAvailable(WizardModel model) {
 		List<?> l = model.value(OPENED_BIOMARKERS);
 		return l != null && !l.isEmpty();
 	}
@@ -159,26 +182,7 @@ public class Providers extends WizardPageDescriptor {
 	public List<IGeneSignatureProvider> resolveProviders(WizardModel model) {
 		List<IGeneSignatureProvider> result = Lists.newArrayList();
 
-		// opened Editors Provider
-		// FIXME un biomarcador no es un GeneSignature
-		final List<Biomarker> l = model.value(OPENED_BIOMARKERS);
-		if (l != null && !l.isEmpty()) {
-			result.add(new IGeneSignatureProvider() {
-
-				@Override
-				public List<GeneSignature> getGeneSignatures() throws ProblemsGettingTheGeneSiganturesException {
-					List<GeneSignature> gs = Lists.newArrayList();
-					for (Biomarker b : l)
-						gs.add(new GeneSignature(b));
-					return gs;
-				}
-
-				@Override
-				public String getFriendlyDescription() {
-					return "Editing Gene Signatures";
-				}
-			});
-		}
+		resolveOpenedProvider(model, result);
 
 		// genesigdb online provider
 		if (isgensigAvailable(model)) {
@@ -206,5 +210,28 @@ public class Providers extends WizardPageDescriptor {
 			result.add(provider);
 		}
 		return result;
+	}
+
+	protected void resolveOpenedProvider(WizardModel model, List<IGeneSignatureProvider> result) {
+		// opened Editors Provider
+		// FIXME un biomarcador no es un GeneSignature
+		final List<Biomarker> l = model.value(OPENED_BIOMARKERS);
+		if (l != null && !l.isEmpty()) {
+			result.add(new IGeneSignatureProvider() {
+
+				@Override
+				public List<GeneSignature> getGeneSignatures() throws ProblemsGettingTheGeneSiganturesException {
+					List<GeneSignature> gs = Lists.newArrayList();
+					for (Biomarker b : l)
+						gs.add(new GeneSignature(b));
+					return gs;
+				}
+
+				@Override
+				public String getFriendlyDescription() {
+					return "Editing Gene Signatures";
+				}
+			});
+		}
 	}
 }
