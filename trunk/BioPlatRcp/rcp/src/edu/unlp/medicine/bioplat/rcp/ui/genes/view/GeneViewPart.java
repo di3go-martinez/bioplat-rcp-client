@@ -1,8 +1,10 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.view;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -14,18 +16,22 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalGeneInformationPage;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrl;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrlParser;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -38,7 +44,7 @@ import edu.unlp.medicine.entity.gene.Gene;
  * @author diego martínez
  * 
  */
-public class GeneViewPart extends ViewPart {
+public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 
 	private static final String LOADING_HTML = "<div style='{position:absolute;right:1;top:1;}'><i>Loading...</i></div>";
 
@@ -112,7 +118,7 @@ public class GeneViewPart extends ViewPart {
 	}
 
 	private Composite container;
-	private List<Widget> ws = Lists.newArrayList();
+	private List<Widget> widgets = Lists.newArrayList();
 	// private List<String> browserTitles = Lists.newArrayList();
 	private List<Browser> browsers = Lists.newArrayList();
 	private static final String REST_URL_NCBI = "NCBI::http://www.ncbi.nlm.nih.gov/gene/?term=" + GeneUrlParser.GEN_ID_HOLDER;
@@ -155,11 +161,11 @@ public class GeneViewPart extends ViewPart {
 	}
 
 	private boolean viewBuilt() {
-		return !ws.isEmpty();
+		return !widgets.isEmpty();
 	}
 
 	private void refreshView(Gene gene) {
-		for (Widget w : ws)
+		for (Widget w : widgets)
 			w.retarget(gene);
 
 		// see setFocus
@@ -188,12 +194,13 @@ public class GeneViewPart extends ViewPart {
 		Composite c = Widgets.createDefaultContainer(tabContainer, 2);
 		final GridLayout layout = GridLayoutFactory.createFrom((GridLayout) c.getLayout()).margins(5, 5).create();
 		c.setLayout(layout);
-		ws.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
-		ws.add(Widgets.createTextWithLabel(c, "Description", gene, "description").readOnly());
-		ws.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
-		ws.add(Widgets.createTextWithLabel(c, "Ensemble Id", gene, "ensemblId").readOnly());
-		ws.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene, "alternativeIds").readOnly());
-		ws.add(Widgets.createTextWithLabel(c, "Chromosome Location", gene, "chromosomeLocation").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Description", gene, "description").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Ensemble Id", gene, "ensemblId").readOnly());
+		// widgets.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene,
+		// "alternativeIds").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Chromosome Location", gene, "chromosomeLocation").readOnly());
 
 		headerTab.setControl(c);
 		headerTab.setText("Header");
@@ -235,6 +242,8 @@ public class GeneViewPart extends ViewPart {
 					// TODO que no cachee las páginas cargadas con error...
 					// genBrowserCache.put(browser.getUrl(), browser.getText());
 					tab.setText(gurl.title());
+					browsersLoading.remove(browser);
+					firePropertyChange(PROP_DIRTY);
 				}
 
 				@Override
@@ -243,10 +252,12 @@ public class GeneViewPart extends ViewPart {
 					// // tab.setText(gurl.title());
 					if (event.current != 0) {
 						tab.setText(gurl.title() + "(Loading...)");
+						browsersLoading.add(browser);
 					}
 
 				}
 			});
+
 		}
 	}
 
@@ -265,10 +276,47 @@ public class GeneViewPart extends ViewPart {
 		int i = 0;
 		for (GeneUrl gurl : geneUrls) {
 			final String url = gurl.url(currentGene);
-			if (!url.equals(browsers.get(i).getUrl()))
-				seturl(browsers.get(i++), url);
+			if (!url.equals(browsers.get(i).getUrl())) {
+				seturl(browsers.get(i), url);
+			}
+			i++;
 
 		}
+	}
+
+	// ISaveable2
+
+	// Parche para que no se cierre la vista cuando se está cargando algun
+	// browser
+	private Set<Browser> browsersLoading = Sets.newHashSet();
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+	}
+
+	@Override
+	public void doSaveAs() {
+	}
+
+	@Override
+	public boolean isDirty() {
+		return !browsersLoading.isEmpty();
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return false;
+	}
+
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		return true;
+	}
+
+	@Override
+	public int promptToSaveOnClose() {
+		MessageManager.INSTANCE.add(Message.info("The gene's view cannot be closed until all browsers have been loaded"));
+		return ISaveablePart2.CANCEL;
 	}
 
 }
