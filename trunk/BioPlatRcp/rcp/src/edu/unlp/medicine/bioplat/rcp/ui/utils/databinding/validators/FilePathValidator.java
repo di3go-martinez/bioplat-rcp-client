@@ -44,9 +44,9 @@ public class FilePathValidator implements IValidator {
 					result = chk.status();
 		} else { // FIXME comportamiento por default... borrar cuando se migre
 			if (f.exists())
-				result = ValidationStatus.warning("El archivo ingresado ya existe, se sobreescribirá");
+				result = ValidationStatus.warning("The file already exists. It will be override.");
 			if (f.isDirectory())
-				result = ValidationStatus.error("El nombre de archivo ingresado ya existe como directorio");
+				result = ValidationStatus.error("There is a folder with the same name");
 		}
 		return result;
 	}
@@ -67,7 +67,7 @@ public class FilePathValidator implements IValidator {
 
 			@Override
 			public IStatus status() {
-				return ValidationStatus.error("El archivo ingresado no es válido");
+				return ValidationStatus.error("Incorrect file path");
 			}
 		});
 		return this;

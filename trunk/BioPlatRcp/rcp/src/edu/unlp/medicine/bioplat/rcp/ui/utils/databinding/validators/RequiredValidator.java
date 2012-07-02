@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.IStatus;
  */
 public class RequiredValidator implements IValidator {
 
-	private String message = "Debe ingresar un valor para ";
+	private String message = "You have to provide a value for the field ";
 	private String entity = "";
 
 	private RequiredValidator(String entityId) {
