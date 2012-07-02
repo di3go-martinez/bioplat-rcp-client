@@ -25,6 +25,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ApplyExperimentsOnMetasignatureCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
@@ -57,7 +58,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Configure and apply experiments");
+		newShell.setText("Apply experiment for Gene Signature validation");
 	}
 
 	private final List<ValidationConfig> data = Lists.newArrayList();
@@ -72,12 +73,12 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		tr = TableBuilder.create(c)//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("experimentToValidate.name").title("experiment"))//
-				.addColumn(ColumnBuilder.create().property("shouldGenerateCluster").checkbox().centered().width(20).title("cluster?"))//
+				// .addColumn(ColumnBuilder.create().property("shouldGenerateCluster").checkbox().centered().width(20).title("cluster?"))//
 				.addColumn(ColumnBuilder.create().property("numberOfClusters").title("clusters"))//
-				.addColumn(ColumnBuilder.create().property("numberOfTimesToRepeatTheCluster").title("times"))//
-				.addColumn(ColumnBuilder.create().property("statisticsSignificanceTest.friendlyName").title("Statistics Significance Test"))//
-				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation"))//
-				.addColumn(ColumnBuilder.create().property("secondAttribtueNameToDoTheValidation"))//
+				// .addColumn(ColumnBuilder.create().property("numberOfTimesToRepeatTheCluster").title("times"))//
+				// .addColumn(ColumnBuilder.create().property("statisticsSignificanceTest.friendlyName").title("Statistics Significance Test"))//
+				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation").title("Time"))//
+				.addColumn(ColumnBuilder.create().property("secondAttribtueNameToDoTheValidation").title("Event"))//
 
 				.input(data).build();
 
@@ -86,7 +87,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
 
-		setMessage("Configuration for experiements to be applied");
+		setMessage("In this dialog you can set up all the validation you would like to do. A validation will be applied on a particular experiment previously loaded in the platform. The experiment must have follow up clinical data (the event and the time). The validation will be done in two steps: 1-Cluster experiment samples by its gene expression profiles 2-Measure the correlation between resulted clusters and follow up data. You will see statistical result on the experiments applied tab of the GeneSignature editor.");
 		return container;
 	}
 
@@ -134,7 +135,8 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 				}
 				final String msg = "Succesfully commands applied: " + count;
 				MessageManager.INSTANCE.add(Message.info(msg));
-
+				if (count == experimentsWizard.commands2apply().size())
+					PlatformUIUtils.openInformation("Experiments Applied", "Experiments Successfully Applied, see the results on message view");
 				monitor.done();
 				return ValidationStatus.ok();
 			}
