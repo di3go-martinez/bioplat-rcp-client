@@ -44,11 +44,12 @@ public class BPLFileBiomarkerImport extends AbstractWizard<Biomarker> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
-		WizardPageDescriptor d = new WizardPageDescriptor("Import") {
+		WizardPageDescriptor d = new WizardPageDescriptor("Open BPL file") {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+				wizardPage.setDescription("When you are working on a gene Signature using Bioplat, you can save it in a .BPL file. Later, you can recover it (with all its information), using this option");
 				Composite container = new Composite(parent, SWT.NONE);
-				new Label(container, SWT.NONE).setText("File: ");
+				new Label(container, SWT.NONE).setText("\n\nFile: ");
 				FileText ft = new FileText(container, SWT.BORDER);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.bpl", "BPL File");

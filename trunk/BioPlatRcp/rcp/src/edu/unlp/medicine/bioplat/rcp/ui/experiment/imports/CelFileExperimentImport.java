@@ -47,13 +47,13 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
-		WizardPageDescriptor d = new WizardPageDescriptor("Import") {
+		WizardPageDescriptor d = new WizardPageDescriptor("Import experiment using your .CEL files") {
 
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite container = new Composite(parent, SWT.NONE);
 
-				new Label(container, SWT.NONE).setText("Folder: ");
+				new Label(container, SWT.NONE).setText("\n\nFolder in which you have your .CEL files: \n");
 				DirectoryText ft = new DirectoryText(container, SWT.BORDER);
 				/*
 				 * Map<String, String> filters = Maps.newHashMap();
@@ -62,12 +62,14 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FOLDER_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Folder")), null);
 
 				Button check = new Button(container, SWT.RADIO);
-				check.setText("FRMA");
+				check.setText("Normalize using FRMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(FRMA));
 
 				check = new Button(container, SWT.RADIO);
-				check.setText("RMA");
+				check.setText("Normalize using RMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(RMA));
+
+				new Label(container, SWT.NONE).setText("\nNote: It will be applied a collapse strategy automatically. \nThe gene will be represented by the sonda with the highest average.");
 
 				return container;
 			}

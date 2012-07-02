@@ -1,7 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_AVERAGE;
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE;
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MAX;
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MEDIA;
 
@@ -137,7 +136,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new WizardPage("conf", "Configuration", null) {
+		addPage(new WizardPage("conf", "Import an experiment from a CSV file in GEO format: Clinical data, header and expression data", null) {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -147,7 +146,8 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				Composite c = new Composite(parent, SWT.NONE);
 
-				new Label(c, SWT.NONE).setText("File:");
+
+				new Label(c, SWT.NONE).setText("File path (take a look at the format example below):");
 				FileText filePath = new FileText(c, SWT.NONE);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.csv", "CSV File");
@@ -158,19 +158,19 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						new UpdateValueStrategy().setAfterConvertValidator(//
 								FilePathValidator.create().fileMustExist()), null);
 
-				new Label(c, SWT.NONE).setText("Estrategia de colapsado:");
+				new Label(c, SWT.NONE).setText("Collapse Strategy (If there is more than one entry for a gene, it will be used this strategy for collapsing):");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
-						Arrays.asList(COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
+						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
 
 				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
-						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Estrategia de colapsado")), null);
+						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Collapse Strategy")), null);
 
-				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_LAST_ONE_IN_THE_FILE);
+				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_AVERAGE);
 
-				new Label(c, SWT.NONE).setText("cfl, cll, snl, efl");
+				new Label(c, SWT.NONE).setText("Clinical data first line, clinical data last line, header line, expression data first line");
 				Text t = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.lines, new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
 
@@ -180,7 +180,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						if (l.matches("\\d+,\\d+,\\d+,\\d+"))
 							return ValidationStatus.ok();
 						else
-							return ValidationStatus.error("Formato no válido: ###,###,###,###");
+							return ValidationStatus.error("Invalid format: ###,###,###,###");
 					}
 				}), null);
 				t.setText("1,2,3,4");
@@ -188,6 +188,9 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
 				setControl(c);
 
+				new Label(c, SWT.NONE).setText("\n\n\nFile example:\n\nOS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
+
+				
 			}
 		});
 	}

@@ -68,7 +68,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage(PAGE_NAME, "Setting the experiment to import", null) {
+		return new WizardPage(PAGE_NAME, "Import Experiment from InSilico DB using GSE (GEO Series)", null) {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -78,7 +78,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				Composite c = new Composite(parent, SWT.BORDER);
 
-				new CLabel(c, SWT.BOLD).setText("GSE:");
+				new CLabel(c, SWT.BOLD).setText("GSE (GEO Series):");
 
 				Text gseHolder = new Text(c, SWT.BORDER);
 
@@ -86,14 +86,16 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				// clinicalDataHolder.setText("Import Clinical Data");
 
-				clinicalDataHolder.setText("Importar datos clinicos");
+				clinicalDataHolder.setText("Import clinical data");
 
 				Button normalizedHolder = new Button(c, SWT.CHECK);
 
 				// normalizedHolder.setText("Normalized (FRMA) ");
 
-				normalizedHolder.setText("Normalizado (FRMA)");
+				normalizedHolder.setText("Normalized (FRMA)");
 
+				new CLabel(c, SWT.NONE).setText("\nNote: If the experiment has got sondas instead of genes, it will be applied a collapse strategy automatically. \nThe gene will be represented by the sonda with the highest average..");
+				
 				dbc.bindValue(SWTObservables.observeText(gseHolder, SWT.Modify), model().valueHolder("GSE"), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("GSE")), null);
 
 				dbc.bindValue(SWTObservables.observeSelection(clinicalDataHolder), model().valueHolder("importClinicalData"));
