@@ -77,12 +77,13 @@ public class GenesInputDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Paste genes (EntrezId, Gene symbol or EnsemblId)");
+		newShell.setText("Paste genes (EntrezId, Gene symbol or EnsemblId separated by blank or enter)");
+		
 	}
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(300, 150);
+		return new Point(550, 400);
 	}
 
 	private String value = "";
