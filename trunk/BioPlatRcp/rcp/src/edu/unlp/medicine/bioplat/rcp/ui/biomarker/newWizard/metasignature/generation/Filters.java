@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.gener
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,7 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -79,7 +81,7 @@ public class Filters extends WizardPageDescriptor {
 
 	private WizardPage resultPage;
 
-	// FIXME parche de entrega!
+	// FIXME FIXME parche de entrega!!
 	private boolean initializatePhase = false;
 
 	@Override
@@ -91,27 +93,33 @@ public class Filters extends WizardPageDescriptor {
 
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+
+		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
+
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
-		ComboViewer cv = Utils.newComboViewer(container, "Organism:", Arrays.asList("Human", "Mouse", "ALL"));
+		ComboViewer cv = Utils.newComboViewer(container, "Organism", Arrays.asList("Human", "Mouse", "ALL"));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ORGANISM), UpdateStrategies.nonNull(ORGANISM), UpdateStrategies.nullStrategy());
 		cv.setSelection(new StructuredSelection("Human"));
+		cv.getCombo().setLayoutData(gdf.create());
 
-		new Label(container, SWT.NONE).setText("Keyword on name");
+		new Label(container, SWT.NONE).setText("Cancer Location/Keyword Name");
 		Text t = new Text(container, SWT.BORDER);
-		t.setToolTipText("keywords by comma separated");
+		t.setLayoutData(gdf.create());
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(KEYWORD_ON_NAME));
 
-		new Label(container, SWT.NONE).setText("Signatures Id of Names");
+		new Label(container, SWT.NONE).setText("Having The Following (Genes name or Entrez, separated by commas)");
 		t = new Text(container, SWT.BORDER);
+		t.setToolTipText("keywords by comma separated");
+		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
+		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_NAME_OR_ENTREZ));
+
+		new Label(container, SWT.NONE).setText("Signatures Id of Names (separated by commas)");
+		t = new Text(container, SWT.BORDER);
+		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
 		t.setToolTipText("keywords by comma separated");
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(SIGNATURES_ID_OF_NAMES));
-
-		new Label(container, SWT.NONE).setText("Gene name or Entrez");
-		t = new Text(container, SWT.BORDER);
-		t.setToolTipText("keywords by comma separated");
-		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_NAME_OR_ENTREZ));
 
 		return container;
 	}
@@ -140,7 +148,8 @@ public class Filters extends WizardPageDescriptor {
 
 			Composite c = Widgets.createDefaultContainer(parent, 1);
 
-			tref = TableBuilder.create(c).input(holder.value())//
+			// FIXME los newss
+			tref = TableBuilder.create(c).input(Lists.newArrayList(new HashSet(holder.value())))//
 					.addColumn(ColumnBuilder.create().property("name").title("Name"))//
 					.addColumn(ColumnBuilder.create().property("geneCount").title("Genes"))//
 					.addColumn(ColumnBuilder.create().property("author").title("Author"))//
@@ -159,7 +168,7 @@ public class Filters extends WizardPageDescriptor {
 				}
 			});
 
-			//TODO tref.breakPaging();
+			tref.breakPaging();
 
 			createFilter(c);
 
@@ -232,6 +241,7 @@ public class Filters extends WizardPageDescriptor {
 					return Lists.newArrayList(StringUtils.split(value, ","));
 			}
 		});
+		elements = holder.value();
 		return holder;
 	}
 

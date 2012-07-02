@@ -8,6 +8,7 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -35,6 +36,9 @@ public class Providers2 extends Providers {
 	 */
 	@Override
 	protected void createSecondaryProvidersGroup(Composite container, GridLayoutFactory glf, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
+
+		new CLabel(container, SWT.BOLD).setText("\nThe configuration you have to do for getting a metasignatures is: \n1-(This wizzard page): Select the providers. You can pick up GeneSigDB, MolSigDB and any of the biomarkers you have previously opened (if there is someone) \n2-(Next wizzard Page): Select the filters. You can filter by cancer location, or giving a gene list which have to be in the signature. \n3-(Last wizzard page): Pick up the algorithm responsible of getting all the gene signature which have passed the filter (step 2) and applying its logic for get the Metasignature                                              \n\n");
+
 		Group providersGroup = new Group(container, SWT.NONE);
 		providersGroup.setText("External Gene Signatures Databases");
 		providersGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());

@@ -81,6 +81,7 @@ public class AlgorithmPageDescriptor extends WizardPageDescriptor {
 		alixComposite.setVisible(false); // TODO revisar
 		new Label(alixComposite, SWT.NONE).setText(ALIX_X_PARAMETER);
 		Text t = new Text(alixComposite, SWT.BORDER);
+		t.setLayoutData(GridDataFactory.fillDefaults().minSize(50, SWT.DEFAULT).grab(true, false).create());
 		// TODO definir mejor el id de la key a poner en el wizard model
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(ALIX + SEPARATOR + ALIX_X_PARAMETER));
 
