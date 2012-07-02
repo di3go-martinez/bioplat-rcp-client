@@ -196,7 +196,7 @@ public class PlatformUIUtils {
 	}
 
 	public static void openInformation(final String title, final String message) {
-		findDisplay().asyncExec(new Runnable() {
+		findDisplay().syncExec(new Runnable() {
 
 			@Override
 			public void run() {
