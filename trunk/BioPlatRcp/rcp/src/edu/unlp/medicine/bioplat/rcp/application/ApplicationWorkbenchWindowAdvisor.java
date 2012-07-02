@@ -37,4 +37,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		// FIXME TODO sacar este discouraged access
 		WorkbenchPlugin.getDefault().getPreferenceStore().setValue(IPreferenceConstants.RUN_IN_BACKGROUND, false);
 	}
+
+	@Override
+	public void postWindowOpen() {
+		getWindowConfigurer().getWindow().getShell().setMaximized(true);
+	}
 }
