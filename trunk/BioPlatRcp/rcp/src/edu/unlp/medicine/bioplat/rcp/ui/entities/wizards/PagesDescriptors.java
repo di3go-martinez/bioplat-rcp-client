@@ -133,7 +133,11 @@ public class PagesDescriptors {
 				new Label(result, SWT.NONE).setText("Validation Type:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(result, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
+
 				collapseStrategyCombo.setInput(AttributeTypeEnum.values());
+				// String[] methods =
+				// {AttributeTypeEnum.EVENT_OCCURED_AFTER_TIME.name()};
+				// collapseStrategyCombo.setInput(methods);
 
 				new Label(result, SWT.NONE).setText("Statistical Significance Test:");
 				final ComboViewer detail = new ComboViewer(result, SWT.BORDER | SWT.READ_ONLY);
