@@ -31,6 +31,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IAction introAction;
 	private IContributionItem showViewMenuAction;
 	private IAction newWizard;
+	private IAction about;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -45,11 +46,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		exitAction = doMake(ActionFactory.QUIT, window);
 		saveAction = doMake(ActionFactory.SAVE, window);
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
-		newWizard = doMake(ActionFactory.NEW_WIZARD_DROP_DOWN, window);
+
+		newWizard = doMake(ActionFactory.NEW, window);
+		newWizard.setText("Gene Signatures/Experiments");
+		newWizard.setImageDescriptor(Activator.imageDescriptorFromPlugin("startButton.png"));
+
 		introAction = doMake(ActionFactory.INTRO, window);
 
 		showViewMenuAction = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 
+		about = new AboutAction();
 	}
 
 	private IAction doMake(ActionFactory af, IWorkbenchWindow window) {
@@ -61,7 +67,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
 
-		MenuManager fileMenu = new MenuManager("&Bio Plat", BIOPLAT_MENU_ID);
+		MenuManager fileMenu = new MenuManager("&Start", BIOPLAT_MENU_ID);
 
 		// bioplat.menu/new.menu/additions
 		// MenuManager newMenu = new MenuManager("Nuevo", NEW_MENU_ID);
@@ -72,21 +78,22 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		fileMenu.add(saveAction);
 		fileMenu.add(new Separator());
-		fileMenu.add(importAction);
+		// fileMenu.add(importAction);
 		fileMenu.add(exportAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
-		MenuManager windowMenu = new MenuManager("&Ventana", "ventana.menu");
+		MenuManager windowMenu = new MenuManager("&Window", "ventana.menu");
 		windowMenu.add(new GroupMarker(MB_ADDITIONS));
 		windowMenu.add(new Separator());
 
-		IMenuManager m = new MenuManager("Vistas");
+		IMenuManager m = new MenuManager("Views");
 		m.add(showViewMenuAction);
 		windowMenu.add(m);
 
 		windowMenu.add(preferencesAction);
 		windowMenu.add(introAction);
+		windowMenu.add(about);
 
 		// MenuManager helpMenu = new MenuManager("&Ayuda", "ayuda.menu");
 		// helpMenu.add(aboutAction);
@@ -104,8 +111,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	@Override
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		ToolBarManager tbm = new ToolBarManager(SWT.FLAT);
-		tbm.add(saveAction);
+		tbm.add(newWizard);
+		tbm.add(new GroupMarker("agroup"));
 		tbm.add(new Separator(MB_ADDITIONS));
+		coolBar.add(tbm);
+		tbm = new ToolBarManager(SWT.FLAT);
+		tbm.add(saveAction);
 		coolBar.add(tbm);
 	}
 }
