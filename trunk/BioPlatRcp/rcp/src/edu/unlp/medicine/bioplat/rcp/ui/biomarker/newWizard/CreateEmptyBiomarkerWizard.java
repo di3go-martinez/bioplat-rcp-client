@@ -60,12 +60,13 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
 
-		result.add(new WizardPageDescriptor("Configuration") {
+		result.add(new WizardPageDescriptor("Create empty bioplat gene signature.") {
 
 			@Override
 			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+				wp.setDescription("You can later, add your genes (Entrez Id, Ensembl ID or geneName) by hand or copying&pasting");
 				Composite c = new Composite(parent, SWT.NONE);
-				new CLabel(c, SWT.BOLD).setText("Name:");
+				new CLabel(c, SWT.BOLD).setText("Gene signature name:");
 				Text nameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(nameHolder, SWT.Modify), wizardModel().valueHolder(NAME_K));
 				GridLayoutFactory.swtDefaults().numColumns(1).margins(5, 5).generateLayout(c);
