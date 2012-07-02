@@ -20,12 +20,12 @@ public class UpdateStrategies {
 			@Override
 			public IStatus validate(Object value) {
 				if (value == null)
-					return ValidationStatus.error("Debe ingresar un valor para " + id); // new
-																						// Status(IStatus.ERROR,
-																						// "none",
-																						// "Debe ingresar un valor para "
-																						// +
-																						// id);
+					return ValidationStatus.error("You must provide a value for " + id); // new
+																							// Status(IStatus.ERROR,
+																							// "none",
+																							// "Debe ingresar un valor para "
+																							// +
+																							// id);
 
 				return ValidationStatus.ok();
 			}
@@ -35,7 +35,7 @@ public class UpdateStrategies {
 
 	/**
 	 * 
-	 * @return null
+	 * @return null, ya que la API de databinding lo soporta
 	 */
 	public static UpdateValueStrategy nullStrategy() {
 		return null;
