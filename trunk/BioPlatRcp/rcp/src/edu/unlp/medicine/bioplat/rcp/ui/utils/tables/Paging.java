@@ -229,7 +229,8 @@ public class Paging<T> {
 	 * Rompe el paginado, cargando todas las páginas
 	 */
 	public void breakPaging() {
-		do {
-		} while (loadNextPage());
+		while (!loadNextPage())
+			;
+		viewer.getTable().update();
 	}
 }
