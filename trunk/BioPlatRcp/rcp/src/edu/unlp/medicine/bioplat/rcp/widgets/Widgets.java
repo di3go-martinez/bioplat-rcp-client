@@ -53,6 +53,10 @@ public class Widgets {
 		return createDefaultContainer(parent, 1);
 	}
 
+	// Todo hacer otra implementación usando FormToolkit??
+	// private static FormToolkit toolkit = new
+	// FormToolkit(PlatformUIUtils.findDisplay());
+
 	public static Composite createDefaultContainer(Composite parent, int numColumns) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
