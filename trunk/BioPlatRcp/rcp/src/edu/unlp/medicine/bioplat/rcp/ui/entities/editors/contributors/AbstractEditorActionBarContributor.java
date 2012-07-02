@@ -110,7 +110,7 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 	}
 
 	private MenuManager createMenuManager() {
-		return new MenuManager("Operaciones");
+		return new MenuManager("Operations");
 	}
 
 	/**
