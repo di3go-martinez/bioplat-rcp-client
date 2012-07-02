@@ -176,31 +176,9 @@
       <extension
             point="org.eclipse.ui.importWizards">
          <category
-               id="edu.medicine.bioplat.rcp.import.experiment.root"
-               name="%experiment.wizard.category.name">
-         </category>
-         <wizard
-               category="edu.medicine.bioplat.rcp.import.experiment.root"
-               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
-               id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
-               name="%experiment.csv.file.import.wizard.name">
-         </wizard>
-         <category
                id="edu.medicine.bioplat.rcp.other"
                name="%experiment.other.category.name">
          </category>
-         <wizard
-               category="edu.medicine.bioplat.rcp.import.experiment.root"
-               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
-               id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
-               name="Import from InSilico using GSE">
-         </wizard>
-         <wizard
-               category="edu.medicine.bioplat.rcp.import.experiment.root"
-               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
-               id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
-               name="Cel File">
-         </wizard>
       </extension>
    <extension
          point="org.eclipse.ui.exportWizards">
@@ -208,13 +186,13 @@
             id="edu.medicine.bioplat.rcp.export.biomarker.root"
             name="%biomarker.wizard.category.name">
       </category>
-      <wizard
+      <!--wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFileWizard"
             icon="resources/icons/archivo.jpg"
             id="edu.medicine.bioplat.rcp.export.biomarker.file"
             name="%biomarker.export.to.file.wizard.entry.name">
-      </wizard>
+      </wizard-->
       <wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root/"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneXSignatureHeatMapWizard"
@@ -229,13 +207,13 @@
             id="edu.medicine.bioplat.rcp.export.biomarker.file3"
             name="%biomarker.export.just.gene.id.wizard.entry.name">
       </wizard>
-      <wizard
+      <!--wizard
             category="edu.medicine.bioplat.rcp.export.biomarker.root"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToPdfWizard"
             icon="resources/icons/pdf_file_export.png"
             id="edu.medicine.bioplat.rcp.wizard1"
             name="Export to PDF file">
-      </wizard>
+      </wizard-->
       <category
             id="edu.medicine.bioplat.rcp.export.experiment.root"
             name="%experiment.wizard.category.name">
@@ -262,41 +240,73 @@
          point="org.eclipse.ui.newWizards">
          
     <category
-          name="Biomarcador"
-          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards">
+          name="Gene Signature"
+          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root">
     </category>
+  <category
+        id="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        name="%experiment.wizard.category.name">
+  </category>
     
-	
+	<wizard
+       category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+       class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.BPLFileBiomarkerImport"
+       icon="resources/icons/archivo.jpg"
+       id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
+       name="Open Gene Signature From .BPL (BioPlat) File ">
+         </wizard>
  	<wizard
         canFinishEarly="true"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
         icon="resources/icons/newBiomarker.PNG"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Empty Gene Signature">
+        name="Create Empty Gene Signature">
        <description>Create an empty gene signature</description>
 	</wizard>
   <wizard
         canFinishEarly="false"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
         icon="resources/icons/generateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generate Gene Signature">
+        name="Generate a Metasignature">
      <description>
         Generate a gene signature from sigDB, MSigDB, etc.
      </description>
   </wizard>
   <wizard
         canFinishEarly="false"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
         icon="resources/icons/importGeneSignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
-        name="New From Gene Signature">
+        name="Copy From External Signature-Database (GeneSigDB, MolSigDB)">
      <description>
         Create a new Gene Signature from the Genes Signatures in the Platform
      </description>
+  </wizard>
+  
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
+        icon="resources/icons/archivo.jpg"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
+        name="Preprocess and Import Experiment From .CEL File">
+  </wizard>
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
+        icon="resources/icons/archivo.jpg"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
+        name="Import Experiment From InSilico Using GSE">
+  </wizard>
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
+        icon="resources/icons/archivo.jpg"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
+        name="%experiment.csv.file.import.wizard.name">
   </wizard>
    </extension>
    <extension
@@ -378,7 +388,9 @@
       <actionContribution
             caption="Apply Experiment"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution"
-            onMenu="true">
+            image="resources/icons/validate.png"
+            onMenu="true"
+            onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -412,7 +424,8 @@
             caption="PSO..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
             image="resources/icons/pso.png"
-            onMenu="true">
+            onMenu="true"
+            onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -458,7 +471,11 @@
       </introProductBinding>
    </extension-->
    
-   
+
+
+<!-- ··············· -->
+<!--      Intro      -->
+<!-- ··············· -->   
    <extension
          point="org.eclipse.ui.intro">
       <intro
@@ -489,16 +506,56 @@
    
   <extension point="org.eclipse.ui.intro.configExtension">
       <action
-            name="generateMetasignatureWizardCommand"
+            name="openGenerateMetasignatureWizardAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenGenerateMetasignatureWizardAction">
       </action>
    </extension>
   
   <extension point="org.eclipse.ui.intro.configExtension">
       <action
+            name="importFromCSVFileIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportFromCSVFileIntroAction">
+      </action>
+   </extension>
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="createEmptyMetasignatureAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CreateEmptyMetasignatureAction">
+      </action>
+   </extension>
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="importFromInSilicoIntroAction" 							
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportFromInSilicoIntroAction">
+      </action>
+   </extension>
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="copyFromExternalDatabaseIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CopyFromExternalDatabaseIntroAction">
+      </action>
+   </extension>
+   
+   <!--
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
             name="fileExperimentImportCommand"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenFileExperimentImportAction">
       </action>
-   </extension> 
+   </extension>
    
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="fileExperimentImportCommand"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenFileExperimentImportAction">
+      </action>
+   </extension>
+   -->
+    
+<!-- ············· -->
+<!--    /Intro     -->
+<!-- ············· -->   
 </plugin>

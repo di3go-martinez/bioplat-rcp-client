@@ -11,7 +11,8 @@
 <body> 
 <h1>Welcome to Bioplat</h1>
 <div class="page-style">
-  <div id="content"> 	
+	<div id="content"> 	</div>
+</div>
 	<!--
 		<a href="http://org.eclipse.ui.intro/showPage?id=biomarker" id="firstLink">
 			<img width="20" height="20" border="0" src="../../resources/icons/biomarker.PNG" alt="biomarker" />
@@ -23,21 +24,45 @@
 			Learn about experiments...
 		</a>
 	-->
-		<center>
-		<a href="http://org.eclipse.ui.intro/generateMetasignatureWizardCommand">
-			<img border="0" src="../../resources/icons/generateMetasignature.png" alt="experiment" />
-			Generate Metasignature...
-		</a>
+	<center>
+	<table width="80%">
+		<tr>
+			<th><h2>Gene Signatures</h2><br/></th>
+			<th><h2>Experiments</h2><br/></th>
+		</tr>
+		<tr>
+			<td><a href="http://org.eclipse.ui.intro/openGenerateMetasignatureWizardAction">
+			    <img border="0" src="../../resources/icons/generateMetasignature.png" alt="metasignature" />Generate Metasignature...</a></td>
+			<td><a href="http://org.eclipse.ui.intro/importFromCSVFileIntroAction">Import Experiment From .CSV File...
+			    <img border="0" src="images/CSV.gif" alt="experiment" /></a></td>
+		</tr>
+
+		<tr>
+			<td>
+			<a href="http://org.eclipse.ui.intro/createEmptyMetasignatureAction">Create Empty Metasignature...<img border="0" src="images/emptyBiomarker.jpg" alt="metasignature" /></a></td>
 		
-		<a href="http://org.eclipse.ui.intro/fileExperimentImportCommand">
-			Import Experiment...
-			<img border="0" src="import_experiment.png" alt="experiment" />
-		</a>
-		</center>
+		<td><a href="http://org.eclipse.ui.intro/importFromInSilicoIntroAction"><img border="0" src="images/InSilico.png" alt="experiment" />Import Experiment From InSilico Using GSE...
+			    </a></td>
+		</tr>
+
+		<tr>
+			<td><a href="http://org.eclipse.ui.intro/copyFromExternalDatabaseIntroAction">
+			    <img border="0" src="images/From_external_database.png" alt="metasignature" />Copy From External Signature-Database (GeneSigDB, MolSigDB)...</a></td>
+			<!--td><a href="http://org.eclipse.ui.intro/fileExperimentImportCommand">Import Experiment...
+			    <img border="0" src="import_experiment.png" alt="experiment" /></a></td-->
+		</tr>
+		
+		<!--tr>
+			<td></td>
+			<td><a href="http://org.eclipse.ui.intro/fileExperimentImportCommand">Import Experiment...
+			    <img border="0" src="import_experiment.png" alt="experiment" /></a></td>
+		</tr-->
+	</table>
+		
+</center>
+	
 	
 		
 		
-  </div> 
-</div>
 </body>
 </html>
