@@ -65,7 +65,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		Composite c = new Composite(container, SWT.BORDER);
 		c.setLayout(new GridLayout(4, false));
 		c.setLayoutData(GridDataFactory.fillDefaults().span(1, 2).create());
-		Widget w = Widgets.createTextWithLabel(c, "Nombre", model(), "name");
+		Widget w = Widgets.createTextWithLabel(c, "Name", model(), "name");
 		w.addModificationListener(new ModificationListener() {
 
 			@Override
@@ -76,7 +76,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		});
 
 		Widgets.createTextWithLabel(c, "Genes", model(), "numberOfGenes").readOnly();
-		Widgets.createTextWithLabel(c, "Autor", model(), "author");
+		Widgets.createTextWithLabel(c, "Author", model(), "author");
 		Widgets.createTextWithLabel(c, "Samples", model(), "numberOfSamples").readOnly();
 
 		// construyo el input para el tablebuilder en background
