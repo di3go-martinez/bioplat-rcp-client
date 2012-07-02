@@ -95,9 +95,9 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 				if (mustinitialize) {
 					newBaseColumnIndex = table.getColumnCount();
 					// creo las nuevas columnas
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex).setWidth(50);
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1).setWidth(50);
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2).setWidth(50);
+					new TableColumn(table, SWT.NONE, newBaseColumnIndex).setWidth(150);
+					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1).setWidth(150);
+					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2).setWidth(150);
 					// ok, ya inicializado
 					mustinitialize = false;
 				}
@@ -109,7 +109,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 					final ExperimentAppliedToAMetasignature exp = eas.get(i);
 					TableEditor editor;
 					editor = new TableEditor(table);
-					Button c = createOpenEditorButton(exp, table, "open", AppliedExperimentEditor.id());
+					Button c = createOpenEditorButton(exp, table, "open applied experiment", AppliedExperimentEditor.id());
 					editor.grabHorizontal = true;
 					// editor.minimumHeight = 100;
 					editor.setEditor(c, items[i], newBaseColumnIndex);
@@ -119,7 +119,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 					editor = new TableEditor(table);
 					try {
-						c = createOpenEditorButton(exp.getOriginalExperiment(), table, "original", EditorsId.experimentEditorId());
+						c = createOpenEditorButton(exp.getOriginalExperiment(), table, "open original experiment", EditorsId.experimentEditorId());
 						editor.grabHorizontal = true;
 						editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 					} catch (ExperimentBuildingException e) {
@@ -129,7 +129,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 					editor = new TableEditor(table);
 					c = new Button(table, SWT.FLAT);
-					c.setText("Mev");
+					c.setText("Export to MEV");
 					c.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
