@@ -9,7 +9,7 @@ public class SWT_UI_Context_Configurator implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		ContextFactory.set(new SWTUIContext());
+		ContextFactory.set(new /* Pooled */SWTUIContext());
 	}
 
 }
