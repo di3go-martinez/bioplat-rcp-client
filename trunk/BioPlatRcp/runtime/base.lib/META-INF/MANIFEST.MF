@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1341290728421
+Bnd-LastModified: 1341291207687
 Build-Jdk: 1.7.0
 Built-By: diego
 Bundle-ClassPath: .,lib/BioPlatModeloClienteRico-3.0.0-SNAPSHOT.jar,lib/
