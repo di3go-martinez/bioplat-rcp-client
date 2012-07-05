@@ -63,6 +63,9 @@
       <startup
             class="edu.unlp.medicine.bioplat.rcp.application.startup.StartupRserve">
       </startup>
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.LoadRLibraries">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
