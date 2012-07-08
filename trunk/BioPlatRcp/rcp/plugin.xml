@@ -124,7 +124,7 @@
                style="push">
          </action>
          <action
-               class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGeneAction"
+               class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGeneAction"
                id="bio.plat.rcp.biomarker.actions.gen.add"
                label="%biomarker.addgen.action.label"
                style="push">
@@ -332,12 +332,12 @@
       </page>
       <page
             category="edu.medicine.bioplat.rcp.genes.general"
-            class="edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalGeneInformationPage"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage"
             id="edu.medicine.bioplat.rcp.genes.external"
             name="External Information">
       </page>
       <page
-            class="edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage"
+            class="edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage"
             id="edu.medicine.bioplat.rcp.preferences.general"
             name="External Urls">
       </page>
@@ -352,7 +352,7 @@
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
             caption="Add Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.genes.acions.AddGenesAC"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
             onMenu="false"
