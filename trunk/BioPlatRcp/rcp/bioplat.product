@@ -37,6 +37,8 @@
       <plugin id="com.ibm.icu"/>
       <plugin id="edu.medicine.bioplat.base.lib"/>
       <plugin id="edu.medicine.bioplat.rcp"/>
+      <plugin id="edu.unlp.medicine.bioplat.core"/>
+      <plugin id="edu.unlp.medicine.bioplat.genes"/>
       <plugin id="edu.unlp.medicine.bioplat.poc"/>
       <plugin id="javax.servlet"/>
       <plugin id="org.eclipse.core.commands"/>
