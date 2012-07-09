@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_EXPERIMENT;
-
 import java.util.List;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -17,6 +15,7 @@ import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BrowserEditorManager;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
@@ -79,7 +78,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 			result.add(ed);
 		}
 
-		new BrowserEditorManager(APPLY_TO_EXPERIMENT) {
+		new BrowserEditorManager(ExternalURLInformationPage.APPLY_TO_EXPERIMENT) {
 			@Override
 			protected String getAllGenesAsList() {
 				List<Gene> genes = model().getGenes();
