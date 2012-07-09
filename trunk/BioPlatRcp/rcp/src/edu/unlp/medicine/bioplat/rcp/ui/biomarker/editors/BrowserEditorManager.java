@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.ui.IEditorInput;
 
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;

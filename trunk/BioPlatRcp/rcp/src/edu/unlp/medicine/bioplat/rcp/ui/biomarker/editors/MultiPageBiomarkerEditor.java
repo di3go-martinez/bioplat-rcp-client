@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.genes.preferences.ExternalURLInformationPage.APPLY_TO_GENE_SIGNATURE;
-
 import java.util.List;
 
 import org.eclipse.ui.IEditorInput;
@@ -11,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
@@ -47,7 +46,7 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 		// }
 		// }, "David"));
 
-		new BrowserEditorManager(APPLY_TO_GENE_SIGNATURE) {
+		new BrowserEditorManager(ExternalURLInformationPage.APPLY_TO_GENE_SIGNATURE) {
 			@Override
 			protected String getAllGenesAsList() {
 				return model().getGenesAsList();
