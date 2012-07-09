@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.dialogs.GenesInputDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs.GenesInputDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
-
+//TODO mover al plugin genes
 public abstract class FreeGeneInputActionContribution<T extends AbstractEntity> extends AbstractActionContribution<T> {
 	private static Logger logger = LoggerFactory.getLogger(FreeGeneInputActionContribution.class);
 
