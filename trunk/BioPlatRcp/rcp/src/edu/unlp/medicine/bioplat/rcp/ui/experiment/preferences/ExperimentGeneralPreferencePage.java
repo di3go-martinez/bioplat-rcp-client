@@ -5,6 +5,8 @@ import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.CustomFieldEditorPreferencePage;
+
 public class ExperimentGeneralPreferencePage extends CustomFieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public static final String EXPERIMENT_GRID_MAX_GENES = "EXPERIMENT_GRID_MAX_GENES";
