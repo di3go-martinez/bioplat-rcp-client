@@ -5,7 +5,7 @@ import org.eclipse.ui.IEditorPart;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractEditorActionBarContributor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.GeneSearchDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneSearchDialog;
 import edu.unlp.medicine.entity.experiment.Experiment;
 
 public class ExperimetEditorActionBarContributor extends AbstractEditorActionBarContributor<Experiment> {
