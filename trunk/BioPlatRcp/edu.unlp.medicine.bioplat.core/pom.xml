@@ -33,7 +33,7 @@
 
 
 	<build>
-		<!-- los ignora, no los configura en el eclipse ide... -->
+		<!-- los ignora, no los configura en el eclipse ide... LOS TOMA DEL BUILD.PROPERTIES -->
 		<!--
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
 		<resources>
