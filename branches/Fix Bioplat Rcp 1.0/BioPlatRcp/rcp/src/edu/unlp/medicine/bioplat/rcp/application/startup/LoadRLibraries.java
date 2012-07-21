@@ -27,7 +27,7 @@ public class LoadRLibraries implements IStartup {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Initializing load R libraries", IProgressMonitor.UNKNOWN);
 				try {
-					Thread.sleep(800);
+					Thread.sleep(5000);
 					this.validateRServe();
 				} catch (R4JConnectionException e) {
 					final String msg = "You must install the Rserve package. You must open R and run the following statement: install.packages (Rserve).";
