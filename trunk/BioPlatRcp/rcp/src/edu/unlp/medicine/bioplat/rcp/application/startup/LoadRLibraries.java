@@ -18,6 +18,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.RLibrary;
 import edu.unlp.medicine.bioplat.rcp.utils.RLibraryManager;
 import edu.unlp.medicine.bioplat.rcp.utils.RLibraryScanner;
+import edu.unlp.medicine.r4j.constants.OSDependentConstants;
 
 public class LoadRLibraries implements IStartup {
 	// Logger Object
@@ -46,7 +47,7 @@ public class LoadRLibraries implements IStartup {
 						String details = "Copy the script and paste it in the R environment\n\n";
 						Iterator<RLibrary> iterator = librariesNotInstalled.iterator();
 						while (iterator.hasNext()) {
-							details = details.concat(iterator.next().getInstallation() + "\n");
+							details = details.concat(iterator.next().getInstallation() + OSDependentConstants.LINE_SEPARATOR);
 						}
 						return ValidationStatus.error(msg, new Throwable(details));
 					}
