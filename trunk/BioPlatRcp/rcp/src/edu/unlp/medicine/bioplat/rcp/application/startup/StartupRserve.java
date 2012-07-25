@@ -37,7 +37,7 @@ public class StartupRserve implements IStartup {
 					process = Runtime.getRuntime().exec(R_PATH + " --save --restore -q -e library('Rserve');Rserve(port=" + port + ")");
 					process.getInputStream();
 					// sleep
-					Thread.sleep(800);
+					Thread.sleep(5000);
 				} catch (Exception e) {
 					final String msg = "Failed to run the Rserve on port " + port + " on the path:" + R_PATH;
 					logger.error(msg, e);
