@@ -29,6 +29,7 @@ public class LoadRLibraries implements IStartup {
 				try {
 					Thread.sleep(5000);
 					this.validateRServe();
+					logger.info("Conexión con R testeada satisfactoriamente");
 				} catch (R4JConnectionException e) {
 					final String msg = "You must install the Rserve package. You must open R and run the following statement: install.packages (Rserve).";
 					logger.error(msg, e);
