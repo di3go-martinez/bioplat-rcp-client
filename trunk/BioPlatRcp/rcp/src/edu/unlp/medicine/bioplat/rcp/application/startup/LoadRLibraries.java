@@ -35,7 +35,7 @@ public class LoadRLibraries implements IStartup {
 				RLibraryManager rlibraryManager = new RLibraryManager();
 				String msg;
 				try {
-					Thread.sleep(900);
+					Thread.sleep(5000);
 					if (!rlibraryManager.isTheRserveRunning()) {
 						msg = "Install the Rserve package by opening R environment and running the following statement: install.packages (Rserve)";
 						MessageManager.INSTANCE.add(Message.error(msg));
