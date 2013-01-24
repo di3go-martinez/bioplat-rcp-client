@@ -17,6 +17,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidation;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
 import edu.unlp.medicine.domainLogic.framework.optimizers.commands.PsoOptimizerCommand;
@@ -76,9 +77,9 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		optimizerCommand.setBettersSize(numberOfGenesToKeepDuringTraining);
 		optimizerCommand.setConfiguration(psoConfig);
 
-		optimizerCommand.setValidationConfigsForTraining(forTraining);
-		optimizerCommand.setValidationConfigsForValidation(forValidation);
-		optimizerCommand.setValidationConfigsForTesting(forTesting);
+		optimizerCommand.setLogRankTestValidation4Training(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTraining));
+		optimizerCommand.setLogRankTestValidation4Validation(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forValidation));
+		optimizerCommand.setLogRankTestValidation4Testing(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTesting));
 
 		optimizerCommand.monitor(monitor).execute();
 		return optimizerCommand.getPsoResult();

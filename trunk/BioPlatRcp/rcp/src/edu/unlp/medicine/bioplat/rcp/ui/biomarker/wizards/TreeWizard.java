@@ -14,6 +14,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.VariationsOfMetasignatureInDepthCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidation;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -58,9 +59,9 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 		optimizerCommand.setNumberOfGenesOfTheSmallestBiomarker(numberOfGenesTheSmallestBiomarker);
 		optimizerCommand.setNumberOfTopResultsToKeepInEachRound(numberOfTopResultsToKeepInEachRound);
 
-		optimizerCommand.setValidationConfigs4Training(forTraining);
-		optimizerCommand.setValidationConfigs4Validation(forValidation);
-		optimizerCommand.setValidationConfigs4Testing(forTesting);
+		optimizerCommand.setLogRankTestValidations4Training(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTraining));
+		optimizerCommand.setLogRankTestValidations4Validation(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forValidation));
+		optimizerCommand.setLogRankTestValidations4Testing(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTesting));
 
 		optimizerCommand.monitor(monitor).execute();
 
