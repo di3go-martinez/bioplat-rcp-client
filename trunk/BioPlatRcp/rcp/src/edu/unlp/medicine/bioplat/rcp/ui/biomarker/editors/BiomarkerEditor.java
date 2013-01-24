@@ -155,7 +155,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		FileDialog dialog = new FileDialog(this.getSite().getShell(), SWT.SAVE);
 		dialog.setFilterNames(new String[] { "BPL Files" });
 		dialog.setFilterExtensions(new String[] { "*.bpl" }); // Windows // wild
+
 		String filename = dialog.open();
-		marshaller.marshal(this.model(), filename);
+		if (filename != null)
+			marshaller.marshal(this.model(), filename);
 	}
 }
