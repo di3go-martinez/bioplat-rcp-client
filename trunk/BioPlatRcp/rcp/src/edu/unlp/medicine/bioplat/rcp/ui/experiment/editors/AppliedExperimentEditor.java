@@ -14,7 +14,7 @@ public class AppliedExperimentEditor extends ExperimentEditor {
 	@Override
 	protected List<EditorDescription> createEditors() {
 		List<EditorDescription> tabs = super.createEditors();
-		tabs.add(new EditorDescription(getEditorInput(), new StatisticalDataEditor(false), "Statistical Data"));
+		tabs.add(0, new EditorDescription(getEditorInput(), new StatisticalDataEditor(false), "Statistical Data"));
 		return tabs;
 	}
 }

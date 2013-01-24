@@ -31,9 +31,7 @@ import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class CelFileExperimentImport extends AbstractWizard<Experiment> {
-	/**
-	 * Logger Object
-	 */
+
 	private static Logger logger = LoggerFactory.getLogger(CelFileExperimentImport.class);
 
 	private static final String FOLDER_NAME = "FOLDER_NAME";
