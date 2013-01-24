@@ -40,6 +40,12 @@ public abstract class IntroAction extends Action {
 	 */
 	protected abstract boolean run0();
 
+	/**
+	 * Abre el wizard recibido por parámetro
+	 * 
+	 * @param wizard
+	 * @return true si el wizard se cerró
+	 */
 	protected boolean open(IWorkbenchWizard wizard) {
 		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), wizard);
 
