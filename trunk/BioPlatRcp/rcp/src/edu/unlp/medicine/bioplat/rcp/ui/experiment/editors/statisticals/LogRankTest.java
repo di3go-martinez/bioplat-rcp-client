@@ -11,7 +11,7 @@ import org.rosuda.REngine.REXP;
 import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
-class LogRankTest extends CompositeGenerator {
+public class LogRankTest extends CompositeGenerator {
 	private final ExperimentAppliedToAMetasignature experiment;
 
 	LogRankTest(FormToolkit toolkit, ExperimentAppliedToAMetasignature experiment) {
