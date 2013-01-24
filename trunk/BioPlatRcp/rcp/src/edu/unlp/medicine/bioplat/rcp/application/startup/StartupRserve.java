@@ -28,13 +28,15 @@ public class StartupRserve implements IStartup {
 
 		new Job("Rserve - Initializing...") {
 
-			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Initializing rserve", IProgressMonitor.UNKNOWN);
 
 				int port = RServeConfigurator.getInstance().getPort();
 				try {
-					process = Runtime.getRuntime().exec(R_PATH + " --save --restore -q -e library('Rserve');Rserve(port=" + port + ")");
+					final String rcmd = R_PATH + " --save --restore -q -e library('Rserve');Rserve(port=" + port + ")";
+					logger.debug("Ejecutando: " + rcmd);
+
+					process = Runtime.getRuntime().exec(rcmd);
 					process.getInputStream();
 					// sleep
 					Thread.sleep(5000);
@@ -50,7 +52,7 @@ public class StartupRserve implements IStartup {
 			}
 		}.schedule();
 
-		// Agrego un listener para cuado se baje la aplicación se ejecute
+		// Agrego un listener para cuando se baje la aplicación se ejecute
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
 			@Override
