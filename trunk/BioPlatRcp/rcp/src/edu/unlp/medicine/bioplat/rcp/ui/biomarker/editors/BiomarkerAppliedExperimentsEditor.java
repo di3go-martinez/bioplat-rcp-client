@@ -92,12 +92,21 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 				// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 				Table table = tr.getTable();
+				TableColumn tc;
 				if (mustinitialize) {
 					newBaseColumnIndex = table.getColumnCount();
 					// creo las nuevas columnas
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex).setWidth(150);
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1).setWidth(150);
-					new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2).setWidth(150);
+					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
+					tc.setWidth(150);
+					tc.setText("Applied Experiment");
+
+					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
+					tc.setWidth(150);
+					tc.setText("Original Experiment");
+
+					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
+					tc.setWidth(150);
+					tc.setText("Export to MEV");
 					// ok, ya inicializado
 					mustinitialize = false;
 				}
@@ -129,7 +138,8 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 					editor = new TableEditor(table);
 					c = new Button(table, SWT.FLAT);
-					c.setText("Export to MEV");
+					// c.setText("Export to MEV");;
+					c.setImage(PlatformUIUtils.findImage("Export to MEV"));
 					c.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
@@ -153,7 +163,8 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 			private Button createOpenEditorButton(final Object o, Composite parent, String label, final String editorId) {
 				Button b = new Button(parent, SWT.FLAT);
-				b.setText(label);
+				// b.setText(label);
+				b.setImage(PlatformUIUtils.findImage(label));
 				b.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {

@@ -77,7 +77,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 				.addColumn(ColumnBuilder.create().property("numberOfClusters").title("clusters"))//
 				// .addColumn(ColumnBuilder.create().property("numberOfTimesToRepeatTheCluster").title("times"))//
 				// .addColumn(ColumnBuilder.create().property("statisticsSignificanceTest.friendlyName").title("Statistics Significance Test"))//
-				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation").title("Time"))//
+				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation").title("Validation Attributte Name"))//
 				.addColumn(ColumnBuilder.create().property("secondAttribtueNameToDoTheValidation").title("Event"))//
 
 				.input(data).build();
@@ -119,6 +119,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		close();
 		final String mmsg = "Applying Validation Configs";
+		// TODO migrar a EJob cuando este esté
 		Job j = new Job(mmsg) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

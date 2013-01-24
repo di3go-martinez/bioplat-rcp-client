@@ -142,7 +142,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 				.add(PagesDescriptors.STATISTICAL_TEST_VALUE, new WritableValue("", String.class))//
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
-				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class));
+				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
+				;
+
 	}
 
 	@Override
