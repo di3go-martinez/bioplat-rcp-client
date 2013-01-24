@@ -262,9 +262,9 @@
         canFinishEarly="true"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
-        icon="resources/icons/newBiomarker.PNG"
+        icon="intro/contents/images/emptyBiomarker.jpg"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create Empty Gene Signature">
+        name="Create Empty Metasignature">
        <description>Create an empty gene signature</description>
 	</wizard>
   <wizard
@@ -282,7 +282,7 @@
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
-        icon="resources/icons/importGeneSignature.png"
+        icon="intro/contents/images/From_external_database.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
         name="Copy From External Signature-Database (GeneSigDB, MolSigDB)">
      <description>
@@ -293,21 +293,21 @@
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
-        icon="resources/icons/archivo.jpg"
+        icon="intro/contents/images/import_experiment.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
-        name="Preprocess and Import Experiment From .CEL File">
+        name="Import Experiment From .CEL File">
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
-        icon="resources/icons/archivo.jpg"
+        icon="intro/contents/images/InSilico.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
         name="Import Experiment From InSilico Using GSE">
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
-        icon="resources/icons/archivo.jpg"
+        icon="intro/contents/images/CSV.gif"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
         name="%experiment.csv.file.import.wizard.name">
   </wizard>
@@ -541,22 +541,30 @@
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CopyFromExternalDatabaseIntroAction">
       </action>
    </extension>
-   
-   <!--
    <extension point="org.eclipse.ui.intro.configExtension">
       <action
-            name="fileExperimentImportCommand"
-            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenFileExperimentImportAction">
+            name="celFileExperimentImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CelFileExperimentImportIntroAction">
       </action>
+      <action
+            name="bPLFileBiomarkerImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.BPLFileBiomarkerImportIntroAction">
+      </action>
+   </extension>
+   <extension
+         id="splashID"
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="edu.medicine.bioplat.rcp.AbstractSplashHandler1"
+            id="edu.medicine.bioplat.rcp.splashHandler1">
+      </splashHandler>
+      <splashHandlerProductBinding
+            productId="edu.medicine.bioplat.rcp.product"
+            splashId="splashID">
+      </splashHandlerProductBinding>
    </extension>
    
-   <extension point="org.eclipse.ui.intro.configExtension">
-      <action
-            name="fileExperimentImportCommand"
-            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenFileExperimentImportAction">
-      </action>
-   </extension>
-   -->
+  
     
 <!-- ············· -->
 <!--    /Intro     -->
