@@ -15,7 +15,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.Validat
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 /**
@@ -64,14 +64,14 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 			public void widgetSelected(SelectionEvent e) {
 				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker) {
 					@Override
-					protected void register(ValidationConfig validationConfig) {
+					protected void register(LogRankTestValidationConfig validationConfig) {
 						update(validationConfig);
 					}
 				};
 				vcw.open();
 			}
 
-			private void update(ValidationConfig config) {
+			private void update(LogRankTestValidationConfig config) {
 
 				if (!contentsCreated) {
 					experimentName = Widgets.createTextWithLabel(innerContainer, "Experiment Name", config, "experimentToValidate.name").readOnly();

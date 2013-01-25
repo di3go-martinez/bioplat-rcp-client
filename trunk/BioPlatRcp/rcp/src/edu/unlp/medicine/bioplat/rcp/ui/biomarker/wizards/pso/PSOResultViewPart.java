@@ -45,7 +45,10 @@ public class PSOResultViewPart extends ViewPart {
 
 		tref = TableBuilder.create(container).input(list) //
 				.addColumn(ColumnBuilder.create().property("name").title("Name"))//
-				.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
+				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result"))//
+				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result"))//
+				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result"))//
+				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
 				.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"))//
 				.contextualMenuBuilder(createMenuBuilder()).build();
 

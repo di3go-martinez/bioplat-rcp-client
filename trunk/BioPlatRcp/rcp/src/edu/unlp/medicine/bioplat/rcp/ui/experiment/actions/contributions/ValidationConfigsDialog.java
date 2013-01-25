@@ -27,8 +27,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ApplyExperimentsOnMetasignatureCommand;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 /**
@@ -61,7 +61,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		newShell.setText("Apply experiment for Gene Signature validation");
 	}
 
-	private final List<ValidationConfig> data = Lists.newArrayList();
+	private final List<LogRankTestValidationConfig> data = Lists.newArrayList();
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -125,12 +125,12 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("", experimentsWizard.commands2apply().size());
 				int count = 0;
-				for (ApplyExperimentsOnMetasignatureCommand command : experimentsWizard.commands2apply()) {
+				for (LogRankTestCommand command : experimentsWizard.commands2apply()) {
 					try {
 						command.execute();
 						count++;
 					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying the experiment " + command.getExperimentsAppliedToAMetasignature(), e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment......" , e));
 					}
 					monitor.worked(1);
 				}
@@ -156,7 +156,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
 		return new ValidationConfigWizard(biomarker) {
 			@Override
-			protected void register(ValidationConfig validationConfig) {
+			protected void register(LogRankTestValidationConfig validationConfig) {
 				data.add(validationConfig);
 			}
 

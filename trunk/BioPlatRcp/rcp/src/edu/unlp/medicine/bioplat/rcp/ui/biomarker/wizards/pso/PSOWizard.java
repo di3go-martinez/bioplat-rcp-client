@@ -17,8 +17,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidation;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
 import edu.unlp.medicine.domainLogic.framework.optimizers.commands.PsoOptimizerCommand;
 import edu.unlp.medicine.domainLogic.optimizations.configuration.PSOConfiguration;
@@ -37,7 +36,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	private String processName;
 	private int miniumNumberOfGenes, numberOfRounds, numberOfParticles, numberOfGenesToKeepDuringTraining;
 
-	private List<ValidationConfig> forTesting, forTraining, forValidation;
+	private List<LogRankTestValidationConfig> forTesting, forTraining, forValidation;
 
 	public PSOWizard(Biomarker biomarker) {
 		this.biomarker = biomarker;
@@ -48,8 +47,8 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		final ArrayList<WizardPageDescriptor> pages = Lists.newArrayList();
 		pages.add(new GeneralPSOConfigurarion());
 		pages.add(new ValidationConfigPageDescriptor(biomarker, "Training", TRAINING_VALIDATION_CONFIG));
-		pages.add(new ValidationConfigPageDescriptor(biomarker, "Validation", VALIDATION_VALIDATION_CONFIG));
 		pages.add(new ValidationConfigPageDescriptor(biomarker, "Testing", TESTING_VALIDATION_CONFIG));
+		pages.add(new ValidationConfigPageDescriptor(biomarker, "Validation", VALIDATION_VALIDATION_CONFIG));
 		// pages.add(new ValidationToDoPageDescriptor());
 		return pages;
 	}
@@ -77,9 +76,9 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		optimizerCommand.setBettersSize(numberOfGenesToKeepDuringTraining);
 		optimizerCommand.setConfiguration(psoConfig);
 
-		optimizerCommand.setLogRankTestValidation4Training(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTraining));
-		optimizerCommand.setLogRankTestValidation4Validation(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forValidation));
-		optimizerCommand.setLogRankTestValidation4Testing(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTesting));
+		optimizerCommand.setLogRankTestValidationConfig4Training(forTraining.get(0));
+		optimizerCommand.setLogRankTestValidationConfig4Validation(forValidation.get(0));
+		optimizerCommand.setLogRankTestValidationConfig4Testing(forTesting.get(0));
 
 		optimizerCommand.monitor(monitor).execute();
 		return optimizerCommand.getPsoResult();

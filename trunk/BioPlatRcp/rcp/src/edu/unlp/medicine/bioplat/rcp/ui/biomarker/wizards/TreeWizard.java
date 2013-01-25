@@ -14,8 +14,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.VariationsOfMetasignatureInDepthCommand;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidation;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
@@ -25,7 +24,7 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 	public static final String TESTING_VALIDATION_CONFIG = "TESTING_VALIDATION_CONFIG";
 	public static final String VALIDATION_VALIDATION_CONFIG = "VALIDATION_VALIDATION_CONFIG";
 	public static final String TRAINING_VALIDATION_CONFIG = "TRAINING_VALIDATION_CONFIG";
-	private List<ValidationConfig> forTesting, forTraining, forValidation;
+	private List<LogRankTestValidationConfig> forTesting, forTraining, forValidation;
 	private Integer numberOfGenesTheSmallestBiomarker;
 	private Integer numberOfTopResultsToKeepInEachRound;
 	private Biomarker biomarker;
@@ -59,10 +58,10 @@ public class TreeWizard extends AbstractWizard<VariationsOfMetasignatureInDepthC
 		optimizerCommand.setNumberOfGenesOfTheSmallestBiomarker(numberOfGenesTheSmallestBiomarker);
 		optimizerCommand.setNumberOfTopResultsToKeepInEachRound(numberOfTopResultsToKeepInEachRound);
 
-		optimizerCommand.setLogRankTestValidations4Training(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTraining));
-		optimizerCommand.setLogRankTestValidations4Validation(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forValidation));
-		optimizerCommand.setLogRankTestValidations4Testing(LogRankTestValidation.translateValidationConfigIntoLogRankTestValidations(forTesting));
-
+		optimizerCommand.setLogRankTestValidationConfig4Training(forTraining.get(0));
+		optimizerCommand.setLogRankTestValidationConfig4Validation(forValidation.get(0));
+		optimizerCommand.setLogRankTestValidationConfig4Testing(forTesting.get(0));
+		
 		optimizerCommand.monitor(monitor).execute();
 
 		return optimizerCommand;

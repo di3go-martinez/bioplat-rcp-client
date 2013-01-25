@@ -15,12 +15,12 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ApplyExperimentsOnMetasignatureCommand;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.ValidationConfig;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
@@ -55,9 +55,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		// TODO hacer para los otros sources (archivo, InSilicoDB, etc)
 	}
 
-	private List<ApplyExperimentsOnMetasignatureCommand> commands2apply = Lists.newArrayList();
+	private List<LogRankTestCommand> commands2apply = Lists.newArrayList();
 
-	public List<ApplyExperimentsOnMetasignatureCommand> commands2apply() {
+	public List<LogRankTestCommand> commands2apply() {
 		return commands2apply;
 	}
 
@@ -76,9 +76,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
-				final ValidationConfig validationConfig = new ValidationConfig(aed, shouldGenerateCluster, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				final LogRankTestValidationConfig validationConfig = new LogRankTestValidationConfig(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
-				commands2apply.add(new ApplyExperimentsOnMetasignatureCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
+				commands2apply.add(new LogRankTestCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 				// FIXME hacer un poquito más generico con una
 				// interface MultipageEditor#addPage(Editor, Input,
@@ -106,7 +106,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 	}
 
 	// TODO mejorar el nombre
-	protected void register(ValidationConfig validationConfig) {
+	protected void register(LogRankTestValidationConfig validationConfig) {
 
 	}
 

@@ -36,7 +36,8 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 			}
 		});
 		result.add(new EditorDescription(input, editor, "General"));
-		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(false), "Applied Experiments"));
+		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(false), "Log Rank Test"));
+		result.add(new EditorDescription(input, new BiomarkerAppliedExperimentsEditor(false), "SurvComp"));
 
 		// Estaría configurado en las preferences ahora
 		// result.add(new EditorDescription(input, new BrowserEditor() {
