@@ -40,9 +40,8 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
 		
-		Providers p;
-		descriptors.add(p = createProvidersPage());
-		descriptors.add(filters = createFilterPage(p));
+		descriptors.add(createProvidersPage());
+		descriptors.add(filters = createFilterPage());
 		descriptors.add(createAlgorithmPage());
 		// descriptors.add(createValidationConfiguration());
 		
@@ -52,11 +51,11 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	}
 
 	private Providers createProvidersPage() {
-		return wpdproviders = new Providers2().addParameters(wizardModel());
+		return wpdproviders = new Providers();//.addParameters(wizardModel());
 	}
 
-	private Filters createFilterPage(Providers providers) {
-		return new Filters(providers).addParameters(wizardModel());
+	private Filters createFilterPage() {
+		return new Filters().addParameters(wizardModel());
 	}
 
 	private WizardPageDescriptor createAlgorithmPage() {
@@ -107,7 +106,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	@Override
 	protected void configureParameters() {
-		geneProviders = wpdproviders.resolveProviders(wizardModel());
+		geneProviders = filters.resolveProviders(wizardModel());
 		algorithm = resolveAlgorithm();
 		geneSignatures = wizardModel().value(Filters.SELECTED_SIGNATURES);
 		filter = wizardModel().value(Filters.ORGANISM);

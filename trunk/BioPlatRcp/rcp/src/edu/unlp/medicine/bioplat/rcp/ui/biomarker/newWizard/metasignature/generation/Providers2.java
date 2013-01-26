@@ -19,6 +19,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.providers.geneSigDB.fromSecondaryDBImprotedInBioplat.ProviderFromSecondaryDBImportedInBioplat;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
+import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGeneSiganturesException;
+import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class Providers2 extends Providers {
 
@@ -34,7 +37,7 @@ public class Providers2 extends Providers {
 	 * @param wmodel
 	 * @param dbc
 	 */
-	@Override
+	//@Override
 	protected void createSecondaryProvidersGroup(Composite container, GridLayoutFactory glf, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
 
 		//new CLabel(container, SWT.BOLD).setText("\nThe configuration you have to do for getting a metasignatures is: \n1-(This wizzard page): Select the providers. You can pick up GeneSigDB, MolSigDB and any of the biomarkers you have previously opened (if there is someone) \n2-(Next wizzard Page): Select the filters. You can filter by cancer location, or giving a gene list which have to be in the signature. \n3-(Last wizzard page): Pick up the algorithm responsible of getting all the gene signature which have passed the filter (step 2) and applying its logic for get the Metasignature                                              \n\n");
@@ -55,7 +58,7 @@ public class Providers2 extends Providers {
 
 	}
 
-	@Override
+	//@Override
 	public Providers addParameters(WizardModel wizardModel) {
 		wizardModel.//
 				add(GENESIGDB, new WritableValue(true, Boolean.class))//
@@ -64,20 +67,20 @@ public class Providers2 extends Providers {
 
 	}
 
-	@Override
-	public boolean isPageComplete(WizardModel model) {
-		return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
-	}
+	//@Override
+//	public boolean isPageComplete(WizardModel model) {
+//		//return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
+//	}
 
 	private boolean isAnySecondaryAvailable(WizardModel model) {
 		return model.value(GENESIGDB) != null || model.value(MSIGDB) != null;
 	}
 
-	@Override
+	
 	public List<IGeneSignatureProvider> resolveProviders(WizardModel model) {
 
 		List<IGeneSignatureProvider> result = Lists.newArrayList();
-		resolveOpenedProvider(model, result);
+		//resolveOpenedProvider(model, result);
 
 		if (isAnySecondaryAvailable(model)) {
 			ProviderFromSecondaryDBImportedInBioplat provider = new ProviderFromSecondaryDBImportedInBioplat();
@@ -95,4 +98,8 @@ public class Providers2 extends Providers {
 		return result;
 
 	}
+	
+	
+	
+	
 }

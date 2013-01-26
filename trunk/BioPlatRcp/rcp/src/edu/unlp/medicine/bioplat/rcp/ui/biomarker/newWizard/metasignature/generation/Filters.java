@@ -26,6 +26,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -40,15 +41,25 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
+import edu.unlp.medicine.domainLogic.ext.providers.geneSigDB.fromSecondaryDBImprotedInBioplat.ProviderFromSecondaryDBImportedInBioplat;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
+import edu.unlp.medicine.domainLogic.framework.constants.Constants;
+import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGeneSiganturesException;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.SingleMetasignatureGenerator;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.StringFilter;
+import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class Filters extends WizardPageDescriptor {
 
+	
+	private static final String GENESIGDB = "GENESIGDB";
+	private static final String MSIGDB = "MSIGDB";
+	static final String OPENED_BIOMARKERS = "OPENED_BIOMARKERS";
+	
 	private static final String GENE_NAME_OR_ENTREZ = "GENE_NAME_OR_ENTREZ";
 
 	private static final String SIGNATURES_ID_OF_NAMES = "SIGNATURES_ID_OF_NAMES";
@@ -62,13 +73,13 @@ public class Filters extends WizardPageDescriptor {
 	public static final String ORGANISM = "ORGANISM";
 	private TableReference tref;
 
-	public Filters(Providers pagedescriptor) {
+	public Filters() {
 		super("Filter");
-		this.provider = pagedescriptor;
+		//this.provider = pagedescriptor;
 	}
 
 	// TODO no iría esto aca.... DESACOPLAR...
-	private Providers provider;
+	//private Providers provider;
 
 	// mantiene la selección actual cuando el filtro de incluir todos está
 	// activo, esto es para que cuando se desactive se vuelva a la selcción que
@@ -93,42 +104,82 @@ public class Filters extends WizardPageDescriptor {
 
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-
+		wp.setDescription("You can import Gene Signatures from GeneSigDB database and MolSigDB database. Use the filter to bring just geneSignatures of interesting.");
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
-
+		
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(30, 30).spacing(20, 20).create());
+		
+		createCheckBoxOfGeneSignatureDBs(container,  gdf, dbc, wmodel);
+		createFilterGroup(container, gdf, dbc, wmodel);
+		
+		return container;
+	}
 
-		ComboViewer cv = Utils.newComboViewer(container, "Organism", Arrays.asList("Human", "Mouse", "ALL"));
+	
+	private void createFilterGroup(Composite container, 
+			GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
+
+		Group filterGroup = new Group(container, SWT.NONE);
+		filterGroup.setText("Gene signature filters");
+		filterGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
+		filterGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
+		ComboViewer cv = Utils.newComboViewer(filterGroup, "Organism", Arrays.asList("Human", "Mouse", "ALL"));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(ORGANISM), UpdateStrategies.nonNull(ORGANISM), UpdateStrategies.nullStrategy());
 		cv.setSelection(new StructuredSelection("Human"));
 		cv.getCombo().setLayoutData(gdf.create());
 
-		new Label(container, SWT.NONE).setText("Cancer Location/Keyword Name");
-		Text t = new Text(container, SWT.BORDER);
+		new Label(filterGroup, SWT.NONE).setText("Cancer Location/Keyword Name");
+		Text t = new Text(filterGroup, SWT.BORDER);
 		t.setLayoutData(gdf.create());
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(KEYWORD_ON_NAME));
 
-		new Label(container, SWT.NONE).setText("Having The Following (Genes name or Entrez, separated by commas)");
-		t = new Text(container, SWT.BORDER);
+		new Label(filterGroup, SWT.NONE).setText("Having The Following genes (Genes name or Entrez, separated by commas)");
+		t = new Text(filterGroup, SWT.BORDER);
 		t.setToolTipText("keywords by comma separated");
 		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_NAME_OR_ENTREZ));
 
-		new Label(container, SWT.NONE).setText("Signatures Id of Names (separated by commas)");
-		t = new Text(container, SWT.BORDER);
+		new Label(filterGroup, SWT.NONE).setText("Signatures Id of Names (separated by commas)");
+		t = new Text(filterGroup, SWT.BORDER);
 		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
 		t.setToolTipText("keywords by comma separated");
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(SIGNATURES_ID_OF_NAMES));
 
-		return container;
+
+		
 	}
+
+	protected void createCheckBoxOfGeneSignatureDBs(Composite container, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
+
+		//new CLabel(container, SWT.BOLD).setText("\nThe configuration you have to do for getting a metasignatures is: \n1-(This wizzard page): Select the providers. You can pick up GeneSigDB, MolSigDB and any of the biomarkers you have previously opened (if there is someone) \n2-(Next wizzard Page): Select the filters. You can filter by cancer location, or giving a gene list which have to be in the signature. \n3-(Last wizzard page): Pick up the algorithm responsible of getting all the gene signature which have passed the filter (step 2) and applying its logic for get the Metasignature                                              \n\n");
+
+		Group providersGroup = new Group(container, SWT.NONE);
+		providersGroup.setText("External Gene Signatures Databases");
+		providersGroup.setLayout(GridLayoutFactory.fillDefaults().margins(20, 20).create());
+		providersGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		Button radio;
+		radio = new Button(providersGroup, SWT.CHECK);
+		radio.setSelection(true);
+		radio.setText("GeneSigDb");
+		dbc.bindValue(SWTObservables.observeSelection(radio), wmodel.valueHolder(GENESIGDB));
+
+		radio = new Button(providersGroup, SWT.CHECK);
+		radio.setText("MSigDb");
+		dbc.bindValue(SWTObservables.observeSelection(radio), wmodel.valueHolder(MSIGDB));
+
+	}
+
 
 	public Filters addParameters(WizardModel wizardModel) {
 		wizardModel.add(Filters.ORGANISM)//
 				.add(KEYWORD_ON_NAME, new WritableValue("", String.class))//
 				.add(SIGNATURES_ID_OF_NAMES)//
-				.add(GENE_NAME_OR_ENTREZ);
+				.add(GENE_NAME_OR_ENTREZ)
+				.add(GENESIGDB, new WritableValue(true, Boolean.class))//
+				.add(MSIGDB, new WritableValue(true, Boolean.class));
+
 
 		return this;
 	}
@@ -248,11 +299,11 @@ public class Filters extends WizardPageDescriptor {
 	private SingleMetasignatureGenerator createGenerator(WizardModel wizardModel) {
 		SingleMetasignatureGenerator smg = new SingleMetasignatureGenerator();
 
-		for (IGeneSignatureProvider gsp : provider.resolveProviders(wizardModel))
+		for (IGeneSignatureProvider gsp : this.resolveProviders(wizardModel))
 			smg.addGeneSigntaureProvider(gsp);
 
-		// TODO habilitar filtro
-		// smg.setGeneSignatureFilters(filterResolver(wizardModel));
+		//TODO habilitar filtro
+		//smg.setGeneSignatureFilters(filterResolver(wizardModel));
 
 		return smg;
 	}
@@ -292,4 +343,77 @@ public class Filters extends WizardPageDescriptor {
 		return Lists.newArrayList(sf);
 	}
 
+	
+	
+	
+	@Override
+	public boolean isPageComplete(WizardModel model) {
+		return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
+	}
+	
+	
+	
+	private boolean isAnySecondaryAvailable(WizardModel model) {
+		return model.value(GENESIGDB) != null || model.value(MSIGDB) != null;
+	}
+	
+	
+	
+	
+	public List<IGeneSignatureProvider> resolveProviders(WizardModel model) {
+
+		List<IGeneSignatureProvider> result = Lists.newArrayList();
+		resolveOpenedProvider(model, result);
+
+		if (isAnySecondaryAvailable(model)) {
+			ProviderFromSecondaryDBImportedInBioplat provider = new ProviderFromSecondaryDBImportedInBioplat();
+			List<String> dbs = Lists.newArrayList();
+			if (model.value(GENESIGDB))
+				dbs.add(Constants.GENE_SIG_DB);
+			if (model.value(MSIGDB))
+				dbs.add(Constants.MOL_SIG_DB);
+			provider.setExternalDatabaseNames(dbs);
+			provider.setOrganism(model.value(Filters.ORGANISM).toString());
+
+			result.add(provider);
+		}
+
+		return result;
+
+	}	
+	
+	
+	protected void resolveOpenedProvider(WizardModel model, List<IGeneSignatureProvider> result) {
+		// opened Editors Provider
+		// FIXME un biomarcador no es un GeneSignature
+		final List<Biomarker> l = model.value(OPENED_BIOMARKERS);
+		if (l != null && !l.isEmpty()) {
+			result.add(new IGeneSignatureProvider() {
+
+				@Override
+				public List<GeneSignature> getGeneSignatures() throws ProblemsGettingTheGeneSiganturesException {
+					List<GeneSignature> gs = Lists.newArrayList();
+					for (Biomarker b : l)
+						gs.add(new GeneSignature(b));
+					return gs;
+				}
+
+				@Override
+				public String getFriendlyDescription() {
+					return "Editing Gene Signatures";
+				}
+			});
+		}
+	}
+
+	protected boolean isOpenedAvailable(WizardModel model) {
+		List<?> l = model.value(OPENED_BIOMARKERS);
+		return l != null && !l.isEmpty();
+	}
+	
+
+	
+	
+	
+	
 }
