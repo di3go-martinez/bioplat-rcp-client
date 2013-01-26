@@ -13,7 +13,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.GenesUrlEditor;
 
 public class ExternalGeneInformationPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	private static final String TEXT = "Urls \n\tSe pueden usar las siguientes variables en la url:\n\t\t{genId}, {genName}, {ensemblId})\n\t\tFormato: Providername::Url";
+	private static final String TEXT = "Urls \n\tYou can use the following variables to specify your URL :\n\t\t{genId}, {genName}, {ensemblId})\n\n\t\tFormat: ProviderName::Url";
 	public static final String URLS = "urls";
 	private ScopedPreferenceStore prefs;
 

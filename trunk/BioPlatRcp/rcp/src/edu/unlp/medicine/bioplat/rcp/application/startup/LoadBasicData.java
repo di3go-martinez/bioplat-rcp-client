@@ -59,7 +59,7 @@ public class LoadBasicData implements IStartup {
 
 	protected void letsStart(IProgressMonitor monitor) {
 		try {
-			monitor.beginTask("Initializing data", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("Initializing data. Please wait.", IProgressMonitor.UNKNOWN);
 
 			MetaPlat.getInstance().getARNMPLatforms();
 		} finally {

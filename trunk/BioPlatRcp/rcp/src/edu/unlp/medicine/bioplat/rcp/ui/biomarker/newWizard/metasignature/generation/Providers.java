@@ -58,12 +58,12 @@ public class Providers extends WizardPageDescriptor {
 	static final String PUBLICATION_KEYWORDS = "GENSIGDB_SIGNATURES";
 
 	public Providers() {
-		super("Generate a metasignature (integration, filtering and computation of many gene signature)");
+		super("Select the providers of the input Gene Signatures");
 	}
 
 	@Override
 	public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
-		wp.setDescription("It integrates gene signatures from different databases and it applies algorithms for getting a potential gene list with prognostic/predictive value. You can then validate it using imported experiments.");
+		wp.setDescription("You can import Gene Signatures from GeneSigDB database and MolSigDB database. Use the filter to bring just geneSignatures of interesting.");
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		GridLayoutFactory glf = GridLayoutFactory.fillDefaults().numColumns(2).margins(5, 5);
 
@@ -71,6 +71,8 @@ public class Providers extends WizardPageDescriptor {
 
 		createSecondaryProvidersGroup(container, glf, gdf, dbc, wmodel);
 
+		//createFiltersGroup();
+		
 		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
 		if (!openedBiomarkers.isEmpty()) {
 			Group openedBiomarker = new Group(container, SWT.NONE);

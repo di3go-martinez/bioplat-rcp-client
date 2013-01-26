@@ -250,6 +250,15 @@
         id="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         name="%experiment.wizard.category.name">
   </category>
+ 	<wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
+        icon="intro/contents/images/emptyBiomarker.jpg"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Create Empty GeneSignature">
+       <description>Create an empty gene signature</description>
+	</wizard>
     
 	<wizard
        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
@@ -258,22 +267,13 @@
        id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
        name="Open Gene Signature From .BPL (BioPlat) File ">
          </wizard>
- 	<wizard
-        canFinishEarly="true"
-        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
-        icon="intro/contents/images/emptyBiomarker.jpg"
-        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create Empty Metasignature">
-       <description>Create an empty gene signature</description>
-	</wizard>
   <wizard
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
         icon="resources/icons/generateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generate a Metasignature">
+        name="Generate Metasignature">
      <description>
         Generate a gene signature from sigDB, MSigDB, etc.
      </description>
@@ -289,27 +289,27 @@
         Create a new Gene Signature from the Genes Signatures in the Platform
      </description>
   </wizard>
-  
-  <wizard
-        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
-        icon="intro/contents/images/import_experiment.png"
-        id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
-        name="Import Experiment From .CEL File">
-  </wizard>
-  <wizard
-        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
-        icon="intro/contents/images/InSilico.png"
-        id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
-        name="Import Experiment From InSilico Using GSE">
-  </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
         icon="intro/contents/images/CSV.gif"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
         name="%experiment.csv.file.import.wizard.name">
+  </wizard>
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
+        icon="intro/contents/images/InSilico.png"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
+        name="Import Experiment from InSilico Using GSE">
+  </wizard>
+  
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
+        icon="intro/contents/images/import_experiment.png"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
+        name="Import Experiment from .CEL File">
   </wizard>
    </extension>
    <extension

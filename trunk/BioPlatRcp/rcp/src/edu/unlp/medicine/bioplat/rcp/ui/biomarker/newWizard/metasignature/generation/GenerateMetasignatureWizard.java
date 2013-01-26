@@ -39,13 +39,15 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
-
+		
 		Providers p;
 		descriptors.add(p = createProvidersPage());
 		descriptors.add(filters = createFilterPage(p));
 		descriptors.add(createAlgorithmPage());
 		// descriptors.add(createValidationConfiguration());
-
+		
+		this.setWindowTitle("Generate a metasignature. Select the input Gene Signatures and the algorithm which will suggest genes of your metasignature.");
+		
 		return descriptors;
 	}
 
