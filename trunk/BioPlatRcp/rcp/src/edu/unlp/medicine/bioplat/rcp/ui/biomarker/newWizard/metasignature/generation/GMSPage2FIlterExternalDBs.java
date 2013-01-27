@@ -53,7 +53,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.StringFil
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
-public class Filters extends WizardPageDescriptor {
+public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 	
 	private static final String GENESIGDB = "GENESIGDB";
@@ -66,24 +66,37 @@ public class Filters extends WizardPageDescriptor {
 
 	private static final String KEYWORD_ON_NAME = "KEYWORD_ON_NAME";
 
+	public static final String ORGANISM = "ORGANISM";
+	
 	static final String SELECTED_SIGNATURES = "SELECTED_SIGNATURES";
 
-	private static Logger logger = LoggerFactory.getLogger(Filters.class);
+	private static Logger logger = LoggerFactory.getLogger(GMSPage2FIlterExternalDBs.class);
 
-	public static final String ORGANISM = "ORGANISM";
+	
 	private TableReference tref;
-
-	public Filters() {
-		super("Filter");
-		//this.provider = pagedescriptor;
+	int resultSize;
+	
+	//////////////////////////INITIALIZATION OF THE PAGE. It is executed when the wizard is started.////////////////////////////////
+	public GMSPage2FIlterExternalDBs(WizardModel wizardModel) {
+		super("External Gene Signature databases");
+		addParameters(wizardModel);
 	}
+	
+	
 
-	// TODO no iría esto aca.... DESACOPLAR...
-	//private Providers provider;
+	public GMSPage2FIlterExternalDBs addParameters(WizardModel wizardModel) {
+		wizardModel.add(GMSPage2FIlterExternalDBs.ORGANISM)//
+				.add(KEYWORD_ON_NAME, new WritableValue("", String.class))//
+				.add(SIGNATURES_ID_OF_NAMES)//
+				.add(GENE_NAME_OR_ENTREZ)
+				.add(GENESIGDB, new WritableValue(true, Boolean.class))//
+				.add(MSIGDB, new WritableValue(true, Boolean.class));
 
-	// mantiene la selección actual cuando el filtro de incluir todos está
-	// activo, esto es para que cuando se desactive se vuelva a la selcción que
-	// estaba
+
+		return this;
+	}
+	
+
 	private List<GeneSignature> selection;
 
 	private List<GeneSignature> elements;
@@ -92,23 +105,17 @@ public class Filters extends WizardPageDescriptor {
 
 	private WizardPage resultPage;
 
-	// FIXME FIXME parche de entrega!!
-	private boolean initializatePhase = false;
 
-	@Override
-	public void initializeResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
-		initializatePhase = true;
-		super.initializeResultPage(parent, wizardModel, wizard, resultPage);
-		initializatePhase = false;
-	}
 
+	
+	////////////////////////PAGE UI.////////////////////////////////
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		wp.setDescription("You can import Gene Signatures from GeneSigDB database and MolSigDB database. Use the filter to bring just geneSignatures of interesting.");
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(30, 30).spacing(20, 20).create());
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(30, 100).spacing(20, 20).create());
 		
 		createCheckBoxOfGeneSignatureDBs(container,  gdf, dbc, wmodel);
 		createFilterGroup(container, gdf, dbc, wmodel);
@@ -172,18 +179,40 @@ public class Filters extends WizardPageDescriptor {
 	}
 
 
-	public Filters addParameters(WizardModel wizardModel) {
-		wizardModel.add(Filters.ORGANISM)//
-				.add(KEYWORD_ON_NAME, new WritableValue("", String.class))//
-				.add(SIGNATURES_ID_OF_NAMES)//
-				.add(GENE_NAME_OR_ENTREZ)
-				.add(GENESIGDB, new WritableValue(true, Boolean.class))//
-				.add(MSIGDB, new WritableValue(true, Boolean.class));
+	@Override
+	public boolean isPageComplete(WizardModel model) {
+		return true;
+	}
+	
+	
+	private boolean isAnySecondaryAvailable(WizardModel model) {
+		return model.value(GENESIGDB) != null || model.value(MSIGDB) != null;
+	}
+	
+	
+	
+		
 
-
-		return this;
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	///////////////////////////////RESULTA PAGE///////////////////////
+	
+	private boolean includeAll = false;
+	
+	// FIXME FIXME parche de entrega!!
+	private boolean initializatePhase = false;	
+	@Override
+	public void initializeResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
+		initializatePhase = true;
+		super.initializeResultPage(parent, wizardModel, wizard, resultPage);
+		initializatePhase = false;
 	}
 
+	
 	@Override
 	public boolean hasResultPage() {
 		return true;
@@ -194,16 +223,22 @@ public class Filters extends WizardPageDescriptor {
 
 		this.wizardModel = wizardModel;
 		this.resultPage = resultPage;
+		this.resultPage.setTitle("Select the input Gene Signatures");
+		
 		try {
-			final Holder<List<GeneSignature>> holder = recalculateHolder(wizardModel, wizard);
-
+			final Holder<List<GeneSignature>> holder = getGeneSignaturesPassedTheFilters(wizardModel, wizard);
+			resultSize = holder.value().size();
+			
+			
+			this.resultPage.setDescription(resultSize + " Gene signatures found. Please select the ones you want to take as input, for doing the Metasignature generation.");
+			
 			Composite c = Widgets.createDefaultContainer(parent, 1);
 
 			// FIXME los newss
 			tref = TableBuilder.create(c).input(Lists.newArrayList(new HashSet(holder.value())))//
-					.addColumn(ColumnBuilder.create().property("name").title("Name"))//
+					.addColumn(ColumnBuilder.create().property("name").title("Name").width(400))//
 					.addColumn(ColumnBuilder.create().property("geneCount").title("Genes"))//
-					.addColumn(ColumnBuilder.create().property("author").title("Author"))//
+					//.addColumn(ColumnBuilder.create().property("author").title("Author"))//
 					// .noPaging()
 					.build();
 
@@ -228,6 +263,7 @@ public class Filters extends WizardPageDescriptor {
 		}
 	}
 
+
 	private void createFilter(Composite c) {
 		// Group ec = new Group(c, SWT.NONE);
 		// ec.setText("Filters");
@@ -236,7 +272,7 @@ public class Filters extends WizardPageDescriptor {
 		// ec.setLayout(GridLayoutFactory.fillDefaults().create());
 
 		final Button b = new Button(c, SWT.CHECK);
-		b.setText("Include All");
+		b.setText("Include All (" + resultSize + " gene Signatures)");
 
 		b.addSelectionListener(new SelectionAdapter() {
 
@@ -255,9 +291,8 @@ public class Filters extends WizardPageDescriptor {
 
 	}
 
-	private boolean includeAll = false;
 
-	private Holder<List<GeneSignature>> recalculateHolder(final WizardModel wizardModel, IWizard wizard) throws InvocationTargetException, InterruptedException {
+	private Holder<List<GeneSignature>> getGeneSignaturesPassedTheFilters(final WizardModel wizardModel, IWizard wizard) throws InvocationTargetException, InterruptedException {
 		final List<GeneSignature> value = Collections.emptyList();
 		final Holder<List<GeneSignature>> holder = Holder.create(value);
 		final SingleMetasignatureGenerator smg = createGenerator(wizardModel);
@@ -296,6 +331,7 @@ public class Filters extends WizardPageDescriptor {
 		return holder;
 	}
 
+
 	private SingleMetasignatureGenerator createGenerator(WizardModel wizardModel) {
 		SingleMetasignatureGenerator smg = new SingleMetasignatureGenerator();
 
@@ -308,13 +344,14 @@ public class Filters extends WizardPageDescriptor {
 		return smg;
 	}
 
+
 	@Override
 	public void refreshResultPage(WizardModel wizardModel, IWizard wizard) {
 		if (initializatePhase)
 			return;
 		// TODO re input si se cambio algo, no va a recalcular lo mismo...
 		try {
-			elements = recalculateHolder(wizardModel, wizard).value();
+			elements = getGeneSignaturesPassedTheFilters(wizardModel, wizard).value();
 			tref.input(elements);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -323,47 +360,26 @@ public class Filters extends WizardPageDescriptor {
 
 	@Override
 	public boolean isResultPageComplete(WizardModel model) {
-		if (tref == null)
-			return false;
-
-		if (includeAll) {
-			model.set(SELECTED_SIGNATURES, elements);
-			return !elements.isEmpty();
-		} else {
-			final List<?> selectedElements = tref.selectedElements();
-			model.set(SELECTED_SIGNATURES, selectedElements);
-			return !selectedElements.isEmpty();
-		}
+		return true;
+//		if (tref == null)
+//			return false;
+//
+//		if (includeAll) {
+//			model.set(SELECTED_SIGNATURES, elements);
+//			return !elements.isEmpty();
+//		} else {
+//			final List<?> selectedElements = tref.selectedElements();
+//			model.set(SELECTED_SIGNATURES, selectedElements);
+//			return !selectedElements.isEmpty();
+//		}
 
 	}
 
-	private List<StringFilter> filterResolver(WizardModel wizardmodel) {
-		String organism = wizardModel.value(ORGANISM);
-		StringFilter sf = new StringFilter("getOrganism", organism);
-		return Lists.newArrayList(sf);
-	}
-
-	
-	
-	
-	@Override
-	public boolean isPageComplete(WizardModel model) {
-		return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
-	}
-	
-	
-	
-	private boolean isAnySecondaryAvailable(WizardModel model) {
-		return model.value(GENESIGDB) != null || model.value(MSIGDB) != null;
-	}
-	
-	
-	
 	
 	public List<IGeneSignatureProvider> resolveProviders(WizardModel model) {
 
 		List<IGeneSignatureProvider> result = Lists.newArrayList();
-		resolveOpenedProvider(model, result);
+		
 
 		if (isAnySecondaryAvailable(model)) {
 			ProviderFromSecondaryDBImportedInBioplat provider = new ProviderFromSecondaryDBImportedInBioplat();
@@ -373,7 +389,7 @@ public class Filters extends WizardPageDescriptor {
 			if (model.value(MSIGDB))
 				dbs.add(Constants.MOL_SIG_DB);
 			provider.setExternalDatabaseNames(dbs);
-			provider.setOrganism(model.value(Filters.ORGANISM).toString());
+			provider.setOrganism(model.value(GMSPage2FIlterExternalDBs.ORGANISM).toString());
 
 			result.add(provider);
 		}
@@ -381,39 +397,6 @@ public class Filters extends WizardPageDescriptor {
 		return result;
 
 	}	
-	
-	
-	protected void resolveOpenedProvider(WizardModel model, List<IGeneSignatureProvider> result) {
-		// opened Editors Provider
-		// FIXME un biomarcador no es un GeneSignature
-		final List<Biomarker> l = model.value(OPENED_BIOMARKERS);
-		if (l != null && !l.isEmpty()) {
-			result.add(new IGeneSignatureProvider() {
 
-				@Override
-				public List<GeneSignature> getGeneSignatures() throws ProblemsGettingTheGeneSiganturesException {
-					List<GeneSignature> gs = Lists.newArrayList();
-					for (Biomarker b : l)
-						gs.add(new GeneSignature(b));
-					return gs;
-				}
-
-				@Override
-				public String getFriendlyDescription() {
-					return "Editing Gene Signatures";
-				}
-			});
-		}
-	}
-
-	protected boolean isOpenedAvailable(WizardModel model) {
-		List<?> l = model.value(OPENED_BIOMARKERS);
-		return l != null && !l.isEmpty();
-	}
-	
-
-	
-	
-	
 	
 }

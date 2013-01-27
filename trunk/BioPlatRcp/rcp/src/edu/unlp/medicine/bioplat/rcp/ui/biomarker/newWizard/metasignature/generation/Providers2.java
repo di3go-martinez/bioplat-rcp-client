@@ -23,7 +23,7 @@ import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGene
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
-public class Providers2 extends Providers {
+public class Providers2 extends GMSPage1Introduction {
 
 	private static final String GENESIGDB = "GENESIGDB";
 	private static final String MSIGDB = "MSIGDB";
@@ -59,7 +59,7 @@ public class Providers2 extends Providers {
 	}
 
 	//@Override
-	public Providers addParameters(WizardModel wizardModel) {
+	public GMSPage1Introduction addParameters(WizardModel wizardModel) {
 		wizardModel.//
 				add(GENESIGDB, new WritableValue(true, Boolean.class))//
 				.add(MSIGDB, new WritableValue(true, Boolean.class));
@@ -90,7 +90,7 @@ public class Providers2 extends Providers {
 			if (model.value(MSIGDB))
 				dbs.add(Constants.MOL_SIG_DB);
 			provider.setExternalDatabaseNames(dbs);
-			provider.setOrganism(model.value(Filters.ORGANISM).toString());
+			provider.setOrganism(model.value(GMSPage2FIlterExternalDBs.ORGANISM).toString());
 
 			result.add(provider);
 		}

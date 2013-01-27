@@ -1,13 +1,14 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.ALIX;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.ALIX_X_PARAMETER;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.CONT;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.IES;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.SEPARATOR;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.SMS;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.AlgorithmPageDescriptor.UNION;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.ALIX;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.ALIX_X_PARAMETER;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.CONT;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.IES;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.SEPARATOR;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.SMS;
+import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GMSPage4Algorithm.UNION;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,42 +25,56 @@ import edu.unlp.medicine.domainLogic.ext.algorithms.CONT;
 import edu.unlp.medicine.domainLogic.ext.algorithms.IES;
 import edu.unlp.medicine.domainLogic.ext.algorithms.SMS;
 import edu.unlp.medicine.domainLogic.ext.algorithms.Union;
-import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.algorithm.IGeneSelectorAlgorithm;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.SingleMetasignatureGenerator;
+import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 import edu.unlp.medicine.entity.biomarker.MetaSignature;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
-	private Providers wpdproviders;
-	private Filters filters;
-
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GenerateMetasignatureWizard.class);
+	List<GeneSignature> externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
+	List<GeneSignature> openedGeneSignatures =  wizardModel().value(GMSPage2FIlterExternalDBs.OPENED_BIOMARKERS);
+	private IGeneSelectorAlgorithm algorithm = null;
+	
+	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
+			
+			descriptors.add(createIntroductionPage());
 		
-		descriptors.add(createProvidersPage());
-		descriptors.add(filters = createFilterPage());
-		descriptors.add(createAlgorithmPage());
-		// descriptors.add(createValidationConfiguration());
+			descriptors.add(createExternalGSDatabasesPage());
+			//There is no page for the selection of external geneSignatures because it is a resultPage of the Page2. This result page shows the GS which passed the filter and sets the SELECTED_SIGNATURES model whith this selection.    
 		
-		this.setWindowTitle("Generate a metasignature. Select the input Gene Signatures and the algorithm which will suggest genes of your metasignature.");
+			final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+			if (!openedBiomarkers.isEmpty()) descriptors.add(createLocalGS());
+	
+			descriptors.add(createAlgorithmPage());
+				
+		this.setWindowTitle("Generate a metasignature.");
+		
 		
 		return descriptors;
 	}
 
-	private Providers createProvidersPage() {
-		return wpdproviders = new Providers();//.addParameters(wizardModel());
+	private WizardPageDescriptor createLocalGS() {
+		
+		return new GMSPage3LocalGSs();
 	}
 
-	private Filters createFilterPage() {
-		return new Filters().addParameters(wizardModel());
+	private GMSPage1Introduction createIntroductionPage() {
+		return new GMSPage1Introduction();
+	}
+
+	private GMSPage2FIlterExternalDBs createExternalGSDatabasesPage() {
+		return new GMSPage2FIlterExternalDBs(wizardModel());
 	}
 
 	private WizardPageDescriptor createAlgorithmPage() {
-		return new AlgorithmPageDescriptor().addParameters(wizardModel());
+		return new GMSPage4Algorithm().addParameters(wizardModel());
 	}
 
 	private WizardPageDescriptor createValidationConfiguration() {
@@ -68,26 +83,17 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	@Override
 	protected String getTaskName() {
-		return "Metasignature Calculator using " + algorithm.getName();
+		return "Generating Metasignature using " + algorithm.getName();
 	}
 
 	@Override
 	protected MetaSignature backgroundProcess(Monitor m) throws Exception {
 		SingleMetasignatureGenerator smg = new SingleMetasignatureGenerator();
-
-		for (IGeneSignatureProvider gsp : geneProviders)
-			smg.addGeneSigntaureProvider(gsp);
-
+		List<GeneSignature> inputGeneSignatures = new ArrayList<GeneSignature>(); 
+		if (externalSelectedGS!=null) inputGeneSignatures.addAll(externalSelectedGS);
+		if (openedGeneSignatures!=null) inputGeneSignatures.addAll(openedGeneSignatures);
 		smg.setGeneSelectorAlgorithm(algorithm);
-
-		// TODO Validation phase
-
-		if (geneSignatures != null && !geneSignatures.isEmpty())
-			return smg.calculateMetasignature(geneSignatures);
-		else
-			// TODO sacar que esta es la forma vieja y no debería pasar más por
-			// acá ahora que tiene resultado intermedio
-			return smg.generateMetaSignature();
+		return smg.calculateMetasignature(inputGeneSignatures);
 	}
 
 	@Override
@@ -101,19 +107,38 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	}
 
-	private IGeneSelectorAlgorithm algorithm;
+	
 	private String filter = "";
 
 	@Override
 	protected void configureParameters() {
-		geneProviders = filters.resolveProviders(wizardModel());
+		//geneProviders = gMSPage2FIlterExternalDBs.resolveProviders(wizardModel());
 		algorithm = resolveAlgorithm();
-		geneSignatures = wizardModel().value(Filters.SELECTED_SIGNATURES);
-		filter = wizardModel().value(Filters.ORGANISM);
+		externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
+		
+		 List<Biomarker> openedBiomarkers =  wizardModel().value(GMSPage2FIlterExternalDBs.OPENED_BIOMARKERS);
+		 openedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
+		
+		
+		//geneSignatures = wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
+		//filter = wizardModel().value(GMSPage2FIlterExternalDBs.ORGANISM);
+	}
+
+	private List<GeneSignature> translateBiomarkerIntoGS(
+			List<Biomarker> openedBiomarkers) {
+		
+		
+		
+		List<GeneSignature> result = new ArrayList<GeneSignature>();
+		if (openedBiomarkers!=null){
+			for (Biomarker biomarker : openedBiomarkers) {
+				result.add(new GeneSignature(biomarker));
+		}}
+		return result;
 	}
 
 	private IGeneSelectorAlgorithm resolveAlgorithm() {
-		String from = wizardModel().value(AlgorithmPageDescriptor.ALGORITHM);
+		String from = wizardModel().value(GMSPage4Algorithm.ALGORITHM);
 		IGeneSelectorAlgorithm result = null;
 		if (from == null)
 			result = null;
@@ -132,7 +157,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		return result;
 	}
 
-	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GenerateMetasignatureWizard.class);
-	private List<IGeneSignatureProvider> geneProviders;
-	private List<GeneSignature> geneSignatures;
+
+	
+	
 }
