@@ -271,11 +271,12 @@
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
+        hasPages="true"
         icon="resources/icons/generateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
         name="Generate Metasignature">
      <description>
-        Generate a gene signature from sigDB, MSigDB, etc.
+        Generate a gene signature from sigDB, MSigDB.
      </description>
   </wizard>
   <wizard
