@@ -193,6 +193,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		for (IWizardPage page : getPages())
 			if (page.getErrorMessage() != null)
 				return false;
+		
+		
+				
 		return super.canFinish();
 	}
 

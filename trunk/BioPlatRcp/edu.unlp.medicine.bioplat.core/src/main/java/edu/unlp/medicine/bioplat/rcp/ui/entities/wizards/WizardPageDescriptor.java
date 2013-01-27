@@ -39,6 +39,7 @@ public abstract class WizardPageDescriptor {
 
 	public String getPageName() {
 		return name;
+		
 	};
 
 	/**
@@ -76,6 +77,7 @@ public abstract class WizardPageDescriptor {
 		return imageDescriptor;
 	}
 
+	
 	public boolean isPageComplete(WizardModel model) {
 		return true;
 	}
@@ -96,7 +98,7 @@ public abstract class WizardPageDescriptor {
 
 	/**
 	 * 
-	 * Inicializa una página de resultado
+	 * Inicializa una página de resultado. Se ejecuta al ingresar la pagina de resultados. En caso de que no 
 	 * 
 	 * @param parent
 	 * @param wizardModel
@@ -120,4 +122,7 @@ public abstract class WizardPageDescriptor {
 		return true;
 	}
 
+	
+
+	
 }
