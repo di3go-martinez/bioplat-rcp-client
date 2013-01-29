@@ -35,7 +35,7 @@ public class AddGenesAC extends AbstractActionContribution<Biomarker> {
 							final Gene gene = MetaPlat.getInstance().findGene(id);
 							if (!b.getGenes().contains(gene)) {
 								b.addGene(gene);
-								mm.add(Message.info("Gene " + gene + " added."));
+								mm.add(Message.info("Gene " + gene + " added to " + b.getName() + "."));
 							} else
 								mm.add(Message.warn("The gene " + gene + " is already in the gene signature"));
 						} catch (Exception e) {
