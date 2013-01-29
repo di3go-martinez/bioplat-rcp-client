@@ -175,6 +175,13 @@
          name="Best Variations"
          restorable="false">
    </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart"
+         icon="resources/icons/blindSearch.png"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view"
+         name="PSO Result"
+         restorable="false">
+   </view>
 </extension>
       <extension
             point="org.eclipse.ui.importWizards">
@@ -292,7 +299,7 @@
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FileExperimentImport"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
         icon="intro/contents/images/CSV.gif"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
         name="%experiment.csv.file.import.wizard.name">
@@ -450,6 +457,16 @@
             onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Blind search Optimizer"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
+            image="resources/icons/blindSearch.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
       </actionContribution>
    </extension>
    <extension
