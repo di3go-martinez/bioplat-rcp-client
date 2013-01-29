@@ -39,7 +39,7 @@ public abstract class WizardPageDescriptor {
 
 	public String getPageName() {
 		return name;
-		
+
 	};
 
 	/**
@@ -77,7 +77,6 @@ public abstract class WizardPageDescriptor {
 		return imageDescriptor;
 	}
 
-	
 	public boolean isPageComplete(WizardModel model) {
 		return true;
 	}
@@ -98,16 +97,15 @@ public abstract class WizardPageDescriptor {
 
 	/**
 	 * 
-	 * Inicializa una página de resultado. Se ejecuta al ingresar la pagina de resultados. En caso de que no 
+	 * Inicializa una página de resultado. Se ejecuta al ingresar la pagina de
+	 * resultados. En caso de que no
 	 * 
 	 * @param parent
 	 * @param wizardModel
 	 */
 	public void initializeResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
-
 		createResultPage(parent, wizardModel, wizard, resultPage);
 		refreshResultPage(wizardModel, wizard);
-
 	}
 
 	protected void createResultPage(Composite parent, WizardModel wizardModel, IWizard wizard, WizardPage resultPage) {
@@ -118,11 +116,15 @@ public abstract class WizardPageDescriptor {
 		// nada, por default no hay página de resultados a refrescar
 	}
 
+	/**
+	 * 
+	 * por defecto está completa, puede ser redefinido
+	 * 
+	 * @param wizardModel
+	 * @return true si está completa la página de resultado, false si no.
+	 */
 	public boolean isResultPageComplete(WizardModel wizardModel) {
 		return true;
 	}
 
-	
-
-	
 }

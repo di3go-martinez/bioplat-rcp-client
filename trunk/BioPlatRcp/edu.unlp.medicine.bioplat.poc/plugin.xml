@@ -38,6 +38,13 @@
          <selection
                class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
       </actionContribution>
+      <actionContribution
+            caption="Open Model on dialog"
+            class="edu.unlp.medicine.bioplat.poc.DialogWithModelAction"
+            onMenu="true"
+            onToolbar="false">
+         <selection></selection>
+      </actionContribution>
    </extension>
    
    

@@ -139,7 +139,7 @@
 
 	
 	<category name="edu.unlp.medicine">
-		<priority value="DEBUG" />
+		<priority value="info" />
 	</category>
 
 	<category name="edu.unlp.medicine.dataAccess.cache.JustOneMapWithhAllIdsForQuickAccessRepository">
@@ -194,7 +194,7 @@
 	<root>
 		<priority value="INFO" />
 		<appender-ref ref="CONSOLE"/>
-		<appender-ref ref="FILE"/>
+		<!--appender-ref ref="FILE"/-->
 	</root>
 
 </log4j:configuration>

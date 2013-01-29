@@ -5,6 +5,8 @@ import javax.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+//FIXME mover de paquete
+//Ojo con la carga de recursos (como imágenes)
 public class Activator extends AbstractUIPlugin {
 
 	public Activator() {

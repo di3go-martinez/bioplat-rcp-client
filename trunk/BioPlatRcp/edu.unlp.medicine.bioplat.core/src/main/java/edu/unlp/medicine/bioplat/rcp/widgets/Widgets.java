@@ -32,8 +32,8 @@ public class Widgets {
 		return createText(container, model, property, readonly);
 	}
 
-	public static void createText(Composite container, AbstractEntity model, String property) {
-		createText(container, model, property, false);
+	public static Widget createText(Composite container, AbstractEntity model, String property) {
+		return createText(container, model, property, false);
 	}
 
 	public static Widget createText(Composite container, AbstractEntity model, String property, boolean readOnly) {

@@ -62,7 +62,7 @@
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="caption" type="string">
+         <attribute name="caption" type="string" use="required">
             <annotation>
                <documentation>
                   Nombre a mostrar para la acción

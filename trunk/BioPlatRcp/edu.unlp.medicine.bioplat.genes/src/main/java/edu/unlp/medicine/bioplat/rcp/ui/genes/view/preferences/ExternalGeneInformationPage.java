@@ -18,13 +18,13 @@ public class ExternalGeneInformationPage extends FieldEditorPreferencePage imple
 	private ScopedPreferenceStore prefs;
 
 	public ExternalGeneInformationPage() {
-		prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, Activator.id());
-		setPreferenceStore(prefs);
+
 	}
 
 	@Override
 	public void init(IWorkbench workbench) {
-
+		prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, Activator.id());
+		setPreferenceStore(prefs);
 	}
 
 	@Override

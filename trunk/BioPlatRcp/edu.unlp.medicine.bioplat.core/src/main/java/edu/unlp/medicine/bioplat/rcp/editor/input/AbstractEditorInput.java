@@ -8,8 +8,7 @@ import org.eclipse.ui.IPersistableElement;
  * 
  * Mantiene una referencia al modelo que esta mostrando
  * 
- * @author diego
- * @updatedBy $Author:$ on $Date:$
+ * @author Diego Martínez
  * 
  * @param <T>
  *            Tipo del modelo
@@ -70,11 +69,9 @@ public abstract class AbstractEditorInput<T> implements IEditorInput {
 
 	}
 
-	//FIXME no está bien implementado
 	@Override
 	public int hashCode() {
-
-		return model.hashCode();
+		return model.hashCode() * 21;
 	}
 
 }
