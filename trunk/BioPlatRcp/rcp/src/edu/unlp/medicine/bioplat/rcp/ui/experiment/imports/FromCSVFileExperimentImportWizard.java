@@ -25,6 +25,7 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +39,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -50,6 +52,7 @@ import org.eclipse.ui.IWorkbench;
 
 import com.google.common.collect.Maps;
 
+import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.FilePathValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
@@ -69,11 +72,11 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * 
  */
 // TODO migrar a AbstractWizard
-public class FileExperimentImport extends Wizard implements IImportWizard {
+public class FromCSVFileExperimentImportWizard extends Wizard implements IImportWizard {
 
 	private static ExecutorService exec = Executors.newFixedThreadPool(1);
 
-	public FileExperimentImport() {
+	public FromCSVFileExperimentImportWizard() {
 		setNeedsProgressMonitor(true);
 		this.setWindowTitle("Import from .CSV in GEO format");
 	}
@@ -166,7 +169,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 				this.setDescription("Import the experiment using a .CSV file following the GEO format. Take a look below at the file format template");
 				Composite c = new Group(parent, SWT.NONE);
-				c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(5, 15).create());
+				c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(5, 10).create());
 				//group.setLayoutData(gridData);
 
 
@@ -220,17 +223,20 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				setControl(c);
 
 				
-				Group formatExampleGroup = new Group(c, SWT.NONE);
-				formatExampleGroup.setText("Format example");
-				formatExampleGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(5,5).spacing(7, 10).create());
+				//Composite formatExampleGroup = new Composite(c, SWT.NONE);
+				//formatExampleGroup.setText("Format example");
+				//formatExampleGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(5,5).spacing(7, 10).create());
 				GridData formatExampleGroupLD = new GridData();
 				formatExampleGroupLD.horizontalAlignment = GridData.CENTER;
 				formatExampleGroupLD.horizontalSpan = 2;
-				formatExampleGroup.setLayoutData(formatExampleGroupLD);
-				new Label(formatExampleGroup, SWT.NONE).setText("OS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
+				formatExampleGroupLD.verticalIndent = 15;
+				//formatExampleGroup.setLayoutData(formatExampleGroupLD);
+//				new Label(formatExampleGroup, SWT.NONE).setText("OS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
 
-				
-				//Image myImage = new Image( formatExampleGroup.getDisplay(), "C:/ImportExpTemplateEx1.jpg" );
+				Image image = Activator.imageDescriptorFromPlugin("ImportExpTemplateEx1.jpg").createImage();
+				Button button = new Button(c, SWT.FLAT);
+				button.setImage(image);
+				button.setLayoutData(formatExampleGroupLD);
 			
 								
 				
