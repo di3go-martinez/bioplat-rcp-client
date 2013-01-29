@@ -88,7 +88,11 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 				ac.onToolbar(Boolean.valueOf(celement.getAttribute("onToolbar")));
 
 				IConfigurationElement[] c = celement.getChildren("selection");
-				final Class<?> configuredSelectionClass = Class.forName(c[0].getAttribute("class"));
+				String selectionClass = c[0].getAttribute("class");
+				if (selectionClass == null) // es opcional, en caso de no estar
+											// seteada va para cualquier entidad
+					selectionClass = Object.class.getName();
+				final Class<?> configuredSelectionClass = Class.forName(selectionClass);
 				boolean shouldAdd = (c.length == 0) || //
 						configuredSelectionClass.isAssignableFrom(getSelectionType());
 
