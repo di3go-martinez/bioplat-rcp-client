@@ -40,6 +40,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -180,6 +181,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 	@Override
 	public boolean isPageComplete(WizardModel model) {
+		
 		return true;
 	}
 	
@@ -359,18 +361,22 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 	@Override
 	public boolean isResultPageComplete(WizardModel model) {
+		//return true;
+		if (tref == null)
+			return false;
+
+		if (PlatformUIUtils.openedEditors(Biomarker.class).isEmpty()){
+		
+		if (includeAll) {
+			//model.set(SELECTED_SIGNATURES, elements);
+			return !elements.isEmpty();
+		} else {
+			final List<?> selectedElements = tref.selectedElements();
+			//model.set(SELECTED_SIGNATURES, selectedElements);
+			return !selectedElements.isEmpty();
+		}
+		}
 		return true;
-//		if (tref == null)
-//			return false;
-//
-//		if (includeAll) {
-//			model.set(SELECTED_SIGNATURES, elements);
-//			return !elements.isEmpty();
-//		} else {
-//			final List<?> selectedElements = tref.selectedElements();
-//			model.set(SELECTED_SIGNATURES, selectedElements);
-//			return !selectedElements.isEmpty();
-//		}
 
 	}
 
@@ -396,6 +402,9 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 		return result;
 
 	}	
+	
+	
+	
 
 	
 }
