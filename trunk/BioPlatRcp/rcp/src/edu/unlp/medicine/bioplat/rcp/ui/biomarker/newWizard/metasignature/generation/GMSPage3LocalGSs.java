@@ -30,7 +30,7 @@ import edu.unlp.medicine.entity.biomarker.GeneSignature;
 public class GMSPage3LocalGSs extends WizardPageDescriptor {
 
 	
-	static final String OPENED_BIOMARKERS = "OPENED_BIOMARKERS";
+	static final String OPENED_SELECTED_BIOMARKERS = "OPENED_SELECTED_BIOMARKERS";
 	
 	private static Logger logger = LoggerFactory.getLogger(GMSPage3LocalGSs.class);
 
@@ -74,7 +74,7 @@ private TableReference tref;
 
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
-					wmodel.set(OPENED_BIOMARKERS, tr.selectedElements());
+					wmodel.set(OPENED_SELECTED_BIOMARKERS, tr.selectedElements());
 					wp.setPageComplete(isPageComplete(wmodel));
 				}
 			});
@@ -274,7 +274,7 @@ private TableReference tref;
 	protected void resolveOpenedProvider(WizardModel model, List<IGeneSignatureProvider> result) {
 		// opened Editors Provider
 		// FIXME un biomarcador no es un GeneSignature
-		final List<Biomarker> l = model.value(OPENED_BIOMARKERS);
+		final List<Biomarker> l = model.value(OPENED_SELECTED_BIOMARKERS);
 		if (l != null && !l.isEmpty()) {
 			result.add(new IGeneSignatureProvider() {
 
@@ -295,7 +295,7 @@ private TableReference tref;
 	}
 
 	protected boolean isOpenedAvailable(WizardModel model) {
-		List<?> l = model.value(OPENED_BIOMARKERS);
+		List<?> l = model.value(OPENED_SELECTED_BIOMARKERS);
 		return l != null && !l.isEmpty();
 	}
 	

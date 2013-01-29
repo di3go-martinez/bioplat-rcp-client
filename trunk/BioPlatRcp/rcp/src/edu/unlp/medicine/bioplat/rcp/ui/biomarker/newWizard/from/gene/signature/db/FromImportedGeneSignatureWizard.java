@@ -22,20 +22,21 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> implements INewWizard {
 
 	public FromImportedGeneSignatureWizard() {
+		this.setWindowTitle("Copy Gene Signature from external database (GeneSigDB, MolSigDB)");
 	}
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
 
-		result.add(new ConfigWizardPageDescriptor(wizardModel()));
+		result.add(new CopyFromExternalDatabasesWizard(wizardModel()));
 
 		return result;
 	}
 
 	@Override
 	protected String getTaskName() {
-		return "Loading new Gene Signature from database";
+		return " Copy of " + geneSignatureNameOrId + " from  "+ database + " ";
 	}
 
 	@Override
@@ -53,9 +54,11 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	@Override
 	protected void configureParameters() {
-		database = wizardModel().value(ConfigWizardPageDescriptor.DATABASE);
-		geneSignatureNameOrId = wizardModel().value(ConfigWizardPageDescriptor.GENE_SIGNATURE_OR_ID);
+		database = wizardModel().value(CopyFromExternalDatabasesWizard.DATABASE);
+		geneSignatureNameOrId = wizardModel().value(CopyFromExternalDatabasesWizard.GENE_SIGNATURE_OR_ID);
 
 	}
 
+	
+	
 }

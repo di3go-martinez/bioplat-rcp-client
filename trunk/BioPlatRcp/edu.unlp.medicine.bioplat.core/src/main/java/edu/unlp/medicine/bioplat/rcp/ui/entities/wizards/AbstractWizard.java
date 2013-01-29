@@ -162,6 +162,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private boolean initialized = false;
 
+	public int getMinimumWith(){
+		return 400;
+	}
+	
 	/**
 	 * 
 	 * @return devuelve el resultado del open del diálogo, true si se cerró ok y
@@ -175,6 +179,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 		// TODO resolver con scrollbars
 		d.setPageSize(400, 450);
+		//d.setMinimumPageSize(this.getMinimumWith(), 450);
 		return d.open() == Dialog.OK;
 	}
 

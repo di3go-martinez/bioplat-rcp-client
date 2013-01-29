@@ -58,7 +58,6 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 	
 	private static final String GENESIGDB = "GENESIGDB";
 	private static final String MSIGDB = "MSIGDB";
-	static final String OPENED_BIOMARKERS = "OPENED_BIOMARKERS";
 	
 	private static final String GENE_NAME_OR_ENTREZ = "GENE_NAME_OR_ENTREZ";
 
@@ -68,7 +67,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 	public static final String ORGANISM = "ORGANISM";
 	
-	static final String SELECTED_SIGNATURES = "SELECTED_SIGNATURES";
+	static final String SELECTED_EXTERNAL_SIGNATURES = "EXTERNAL_SELECTED_SIGNATURES";
 
 	private static Logger logger = LoggerFactory.getLogger(GMSPage2FIlterExternalDBs.class);
 
@@ -247,7 +246,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
 					if (!includeAll)
-						wizardModel.set(SELECTED_SIGNATURES, tref.selectedElements());
+						wizardModel.set(SELECTED_EXTERNAL_SIGNATURES, tref.selectedElements());
 					else
 						selection = tref.selectedElements();
 					resultPage.setPageComplete(isResultPageComplete(wizardModel));
@@ -281,9 +280,9 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 				includeAll = b.getSelection();
 				if (includeAll) {
 					selection = tref.selectedElements();
-					wizardModel.set(SELECTED_SIGNATURES, elements);
+					wizardModel.set(SELECTED_EXTERNAL_SIGNATURES, elements);
 				} else
-					wizardModel.set(SELECTED_SIGNATURES, selection);
+					wizardModel.set(SELECTED_EXTERNAL_SIGNATURES, selection);
 				resultPage.setPageComplete(isResultPageComplete(wizardModel));
 			}
 		});
@@ -305,7 +304,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				monitor.beginTask("Calculating...", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Querying Gene Signature Databases...", IProgressMonitor.UNKNOWN);
 
 				holder.hold(smg/* .monitor(monitor) *///
 						.getSignaturesFromProvidersAndFilterThem(keyword, //

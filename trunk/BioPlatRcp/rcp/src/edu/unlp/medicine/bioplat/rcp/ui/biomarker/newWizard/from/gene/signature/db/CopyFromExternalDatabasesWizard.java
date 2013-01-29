@@ -12,7 +12,9 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -27,9 +29,9 @@ import edu.unlp.medicine.domainLogic.framework.constants.Constants;
  * @author diego martínez
  * 
  */
-public class ConfigWizardPageDescriptor extends WizardPageDescriptor {
+public class CopyFromExternalDatabasesWizard extends WizardPageDescriptor {
 
-	public ConfigWizardPageDescriptor(WizardModel wmodel) {
+	public CopyFromExternalDatabasesWizard(WizardModel wmodel) {
 		super("Configuration");
 
 		addParameters(wmodel);
@@ -41,28 +43,31 @@ public class ConfigWizardPageDescriptor extends WizardPageDescriptor {
 
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-		wizardPage.setTitle("Copy gene signature from external database");
-		wizardPage.setDescription("It creates your own copy of a Bioplat geneSignature containing all the information of the original gene Signature");
+		wizardPage.setTitle("Which gene Signature to copy?");
+		wizardPage.setDescription("It creates your own copy of Bioplat geneSignature, containing all the information of the original gene Signature");
 
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
-		Composite container = new Composite(parent, SWT.BORDER);
-		container.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(2).create());
 
-		ComboViewer cv = Utils.newComboViewer(container, "Database:", Arrays.asList(Constants.GENE_SIG_DB, Constants.MOL_SIG_DB));
+		Composite group = new Group(parent, SWT.NONE);
+		group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(7, 20).create());
+
+		ComboViewer cv = Utils.newComboViewer(group, "Database:", Arrays.asList(Constants.GENE_SIG_DB, Constants.MOL_SIG_DB));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(DATABASE));
 		cv.setSelection(new StructuredSelection(Constants.GENE_SIG_DB));
 		cv.getCombo().setLayoutData(gdf.create());
+		//cv.setLayoutData(group);
 
-		new Label(container, SWT.NONE).setText("Gene Signature Name or Id");
-		Text t = new Text(container, SWT.BORDER);
+		new Label(group, SWT.NONE).setText("Gene Signature Name or Id");
+		Text t = new Text(group, SWT.BORDER);
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_SIGNATURE_OR_ID), UpdateStrategies.nonNull(GENE_SIGNATURE_OR_ID), null);
 		t.setLayoutData(gdf.create());
+		
 
-		return container;
+		return group;
 	}
 
-	ConfigWizardPageDescriptor addParameters(WizardModel wmodel) {
+	CopyFromExternalDatabasesWizard addParameters(WizardModel wmodel) {
 
 		wmodel.add(DATABASE);
 		wmodel.add(GENE_SIGNATURE_OR_ID, new WritableValue("", String.class));

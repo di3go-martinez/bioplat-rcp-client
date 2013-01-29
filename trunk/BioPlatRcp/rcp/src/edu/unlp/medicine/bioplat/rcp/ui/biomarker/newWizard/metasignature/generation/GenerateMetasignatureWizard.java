@@ -35,8 +35,8 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GenerateMetasignatureWizard.class);
-	List<GeneSignature> externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
-	List<GeneSignature> openedGeneSignatures =  wizardModel().value(GMSPage2FIlterExternalDBs.OPENED_BIOMARKERS);
+	List<GeneSignature> externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_EXTERNAL_SIGNATURES);
+	List<GeneSignature> openedSelectedGeneSignatures =  wizardModel().value(GMSPage3LocalGSs.OPENED_SELECTED_BIOMARKERS);
 	private IGeneSelectorAlgorithm algorithm = null;
 	
 	
@@ -83,7 +83,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	@Override
 	protected String getTaskName() {
-		return "Generating Metasignature using " + algorithm.getName();
+		return "Generation of metasignature using " + algorithm.getName() + " on " + externalSelectedGS.size() + openedSelectedGeneSignatures.size() + " Gene Signatures" ;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		SingleMetasignatureGenerator smg = new SingleMetasignatureGenerator();
 		List<GeneSignature> inputGeneSignatures = new ArrayList<GeneSignature>(); 
 		if (externalSelectedGS!=null) inputGeneSignatures.addAll(externalSelectedGS);
-		if (openedGeneSignatures!=null) inputGeneSignatures.addAll(openedGeneSignatures);
+		if (openedSelectedGeneSignatures!=null) inputGeneSignatures.addAll(openedSelectedGeneSignatures);
 		smg.setGeneSelectorAlgorithm(algorithm);
 		return smg.calculateMetasignature(inputGeneSignatures);
 	}
@@ -114,10 +114,10 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	protected void configureParameters() {
 		//geneProviders = gMSPage2FIlterExternalDBs.resolveProviders(wizardModel());
 		algorithm = resolveAlgorithm();
-		externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
+		externalSelectedGS =  wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_EXTERNAL_SIGNATURES);
 		
-		 List<Biomarker> openedBiomarkers =  wizardModel().value(GMSPage2FIlterExternalDBs.OPENED_BIOMARKERS);
-		 openedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
+		 List<Biomarker> openedBiomarkers =  wizardModel().value(GMSPage3LocalGSs.OPENED_SELECTED_BIOMARKERS);
+		 openedSelectedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
 		
 		
 		//geneSignatures = wizardModel().value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);

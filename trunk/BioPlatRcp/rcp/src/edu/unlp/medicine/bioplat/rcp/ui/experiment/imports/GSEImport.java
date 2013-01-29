@@ -20,9 +20,14 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -47,11 +52,13 @@ public class GSEImport extends Wizard implements IImportWizard {
 	private static Logger logger = LoggerFactory.getLogger(GSEImport.class);
 
 	public GSEImport() {
+		this.setWindowTitle("Import experiment from InSilico using GSE (GEO Series)");
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		addPage(createFirstPage());
+		
 	}
 
 	private WizardModel model = createWizardModel();
@@ -68,33 +75,46 @@ public class GSEImport extends Wizard implements IImportWizard {
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage(PAGE_NAME, "Import Experiment from InSilico DB using GSE (GEO Series)", null) {
+		return new WizardPage(PAGE_NAME, "Which experiment to import from In Silico?", null) {
 
 			@Override
 			public void createControl(Composite parent) {
 
+				this.setDescription("Bioplat will connect with InSilicoDB for importing the experiment you are asking. Please specify the following information.");
+				
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
 
-				Composite c = new Composite(parent, SWT.BORDER);
+				//GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
+				Composite group = new Group(parent, SWT.NONE);
+				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(50,50).spacing(7, 20).create());
 
-				new CLabel(c, SWT.BOLD).setText("GSE (GEO Series):");
+				new CLabel(group, SWT.BOLD).setText("GSE (GEO Series):");
+				Text gseHolder = new Text(group, SWT.BORDER);
 
-				Text gseHolder = new Text(c, SWT.BORDER);
-
-				Button clinicalDataHolder = new Button(c, SWT.CHECK);
+				Button clinicalDataHolder = new Button(group, SWT.CHECK);
 
 				// clinicalDataHolder.setText("Import Clinical Data");
 
 				clinicalDataHolder.setText("Import clinical data");
 
-				Button normalizedHolder = new Button(c, SWT.CHECK);
+				Button normalizedHolder = new Button(group, SWT.CHECK);
 
 				// normalizedHolder.setText("Normalized (FRMA) ");
 
 				normalizedHolder.setText("Normalized (FRMA)");
 
-				new CLabel(c, SWT.NONE).setText("\nNote: If the experiment has got sondas instead of genes, it will be applied a collapse strategy automatically. \nThe gene will be represented by the sonda with the highest average..");
+
+				//Label for explaining the possible 
+				Label introdudctionLabel = new Label(group, SWT.WRAP);
+				GridData gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL); 
+				introdudctionLabel.setLayoutData(gridData);
+				FontData[] fD = introdudctionLabel.getFont().getFontData();
+				fD[0].setHeight(8);
+				fD[0].setStyle(SWT.ITALIC);
+				introdudctionLabel.setFont( new Font(group.getDisplay(),fD[0]));
+				introdudctionLabel.setText("\nNote: If the experiment has got sondas instead of genes, it will be applied a collapse strategy automatically. The gene will be represented by the sonda with the highest average...");
+				
 				
 				dbc.bindValue(SWTObservables.observeText(gseHolder, SWT.Modify), model().valueHolder("GSE"), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("GSE")), null);
 
@@ -102,8 +122,8 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				dbc.bindValue(SWTObservables.observeSelection(normalizedHolder), model().valueHolder("normalized"));
 
-				GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(c);
-				setControl(c);
+				GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(group);
+				setControl(group);
 
 			}
 		};
@@ -118,12 +138,12 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 		configureParamenters();
 
-		Job j = new Job("Importing experiment...") {
+		Job j = new Job("Import experiment " + gse + " from InSilicoDB") {
 
 			@Override
 			protected IStatus run(final IProgressMonitor progressMonitor) {
 				try {
-					progressMonitor.beginTask("Importing experiment...", IProgressMonitor.UNKNOWN);
+					progressMonitor.beginTask("Importing experiment " + gse + " from InSilicoDB", IProgressMonitor.UNKNOWN);
 					Future<Experiment> holder = exec.submit(new Callable<Experiment>() {
 						@Override
 						public Experiment call() throws Exception {
@@ -148,7 +168,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 						return ValidationStatus.error(msg, e);
 					}
 
-					MessageManager.INSTANCE.add(Message.info("Experiment imported succesfully"));
+					MessageManager.INSTANCE.add(Message.info("Experiment " + gse + " imported succesfully"));
 					return ValidationStatus.ok();
 				} finally {
 					progressMonitor.done();
@@ -193,4 +213,8 @@ public class GSEImport extends Wizard implements IImportWizard {
 		return experiment;
 
 	}
+	
+	
+	
+	
 }

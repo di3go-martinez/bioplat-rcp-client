@@ -107,7 +107,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 		tb.addColumn(ColumnBuilder.create().rightAligned().property("EntrezId").title("entrezId"))//
 				.addColumn(ColumnBuilder.create().title("Name").centered().accesor(OgnlAccesor.createFor("name")))//
-				.addColumn(ColumnBuilder.create().property("description").title("Description"));
+				.addColumn(ColumnBuilder.create().property("description").title("Description").width(500));
 
 		tr = tb.build();
 

@@ -7,10 +7,16 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,27 +55,64 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-				Composite container = new Composite(parent, SWT.NONE);
+				
+				wizardPage.setTitle("Import your .CEL files to Bioplat");
+				wizardPage.setDescription("Import and normalize an experiment you have in your .CEL files. THey will be useful for doing validation of your biomarkers.");
+				
+				GridData gridData = new GridData();
+				gridData.horizontalAlignment=SWT.FILL;
+				gridData.grabExcessHorizontalSpace=true;
+				
+				//COMPOSITE
+				Composite group = new Group(parent, SWT.NONE);
+				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(2, 20).create());
+				group.setLayoutData(gridData);
 
-				new Label(container, SWT.NONE).setText("\n\nFolder in which you have your .CEL files: \n");
-				DirectoryText ft = new DirectoryText(container, SWT.BORDER);
+				//LABEL + FOLDER INPUT
+				new Label(group, SWT.NONE).setText("Folder in which you have your .CEL files: ");
+				Composite directoryComposite = new Composite(group, SWT.NONE);
+				DirectoryText ft = new DirectoryText(directoryComposite, SWT.NONE);
+				directoryComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
+				directoryComposite.setLayoutData(gridData);
+				
+				
+				
 				/*
 				 * Map<String, String> filters = Maps.newHashMap();
 				 * filters.put("*.cel", "CEL File");
 				 */
-				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FOLDER_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Folder")), null);
+				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FOLDER_NAME), null, null);
 
-				Button check = new Button(container, SWT.RADIO);
+				Composite normalizationGroup = new Group(group, SWT.NONE);
+				normalizationGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(5,5).spacing(7, 10).create());
+				GridData gridData4RadioButton = new GridData();
+				gridData4RadioButton.horizontalAlignment = GridData.CENTER;
+				gridData4RadioButton.horizontalSpan = 2;
+				normalizationGroup.setLayoutData(gridData4RadioButton);
+				
+				Button check = new Button(normalizationGroup, SWT.RADIO);
 				check.setText("Normalize using FRMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(FRMA));
 
-				check = new Button(container, SWT.RADIO);
+				check = new Button(normalizationGroup, SWT.RADIO);
 				check.setText("Normalize using RMA");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(RMA));
 
-				new Label(container, SWT.NONE).setText("\nNote: It will be applied a collapse strategy automatically. \nThe gene will be represented by the sonda with the highest average.");
+				
+				
+				//Label for explaining the possible 
+				Label introdudctionLabel = new Label(group, SWT.WRAP);
+				introdudctionLabel.setText("\nNote: It will be applied a collapse strategy automatically. The gene will be represented by the sonda with the highest average.");
+				GridData gridData4Text = new GridData(GridData.FILL_HORIZONTAL); 
+				gridData4Text.horizontalSpan = 2;
+				introdudctionLabel.setLayoutData(gridData4Text);
+				FontData[] fD = introdudctionLabel.getFont().getFontData();
+				fD[0].setHeight(8);
+				fD[0].setStyle(SWT.ITALIC);
+				introdudctionLabel.setFont( new Font(group.getDisplay(),fD[0]));
+				
 
-				return container;
+				return group;
 			}
 		};
 		result.add(d);
@@ -78,7 +121,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	@Override
 	protected String getTaskName() {
-		return "CelFile";
+		return "Import experiment from .Cel files. Folder:\" " + folderName + "\"";
 	}
 
 	@Override
@@ -123,4 +166,15 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 		;
 	}
 
+	
+	public CelFileExperimentImport(){
+		this.setWindowTitle("Import experiment from .CEL file");
+	}
+	
+	@Override
+	public int getMinimumWith(){
+		return 900;
+	}
+
+	
 }

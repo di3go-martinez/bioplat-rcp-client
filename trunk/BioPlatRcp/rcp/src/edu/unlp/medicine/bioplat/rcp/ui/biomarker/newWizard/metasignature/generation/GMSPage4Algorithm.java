@@ -47,7 +47,10 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 	static final String SEPARATOR = "#";
 	static final String ALIX_X_PARAMETER = "Please specify the value for X: ";
 	static final String  ALIX_DESCRIPTION = "The algorithm selects all the genes which were proposed by, at least, X of the selected Gene Signatures.";
+	static final String  UNION_DESCRIPTION = "The algorithm does a union of all the gene sets proposed by the selected Gene Signatures.";
+	static final String  IES_DESCRIPTION = "The algorithm selectS the genes which are proposed by all the Gene Signatures you have selected.";
 
+	
 	// Algorithm names
 	static final String ALIX = "ALIX (At least in X signatures)";
 
@@ -108,8 +111,8 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 
 	protected void changeAlgorithmDescription(Object selection) {
 			if (ALIX.equals(selection)) descriptionLabel.setText(ALIX_DESCRIPTION);
-			else if (UNION.equals(selection)) descriptionLabel.setText("The algorithm does a union of all the gene sets proposed by the selected Gene Signatures");
-			else if (IES.equals(selection)) descriptionLabel.setText("The algorithm select the genes which are proposed by all the Gene Signatures you have selected.");
+			else if (UNION.equals(selection)) descriptionLabel.setText(UNION_DESCRIPTION);
+			else if (IES.equals(selection)) descriptionLabel.setText(IES_DESCRIPTION);
 	}
 
 	private void createLabelForALgorithmDescription(Composite algorithmPanel,
@@ -135,7 +138,7 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 		introdudctionLabel.setLayoutData(gridData);
 		
 		FontData[] fD = introdudctionLabel.getFont().getFontData();
-		fD[0].setHeight(9);
+		fD[0].setHeight(8);
 		fD[0].setStyle(SWT.ITALIC);
 		introdudctionLabel.setFont( new Font(container.getDisplay(),fD[0]));
 		introdudctionLabel.setText("Bioplat was designed to easily incorporate new algorithms for datamining Gene Signatures. We are working on new algorithms. Any idea? Tell us");
@@ -145,11 +148,11 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 
 	private int calculateNumberOfSelectedGS(WizardModel wmodel) {
 		
-		List<GeneSignature> externalSelectedGS =  wmodel.value(GMSPage2FIlterExternalDBs.SELECTED_SIGNATURES);
+		List<GeneSignature> externalSelectedGS =  wmodel.value(GMSPage2FIlterExternalDBs.SELECTED_EXTERNAL_SIGNATURES);
 		int numberOfExternalSelected = 0;
 		if (externalSelectedGS!=null) numberOfExternalSelected = externalSelectedGS.size(); 
 		
-		List<Biomarker> openedBiomarkers =  wmodel.value(GMSPage2FIlterExternalDBs.OPENED_BIOMARKERS);
+		List<Biomarker> openedBiomarkers =  wmodel.value(GMSPage3LocalGSs.OPENED_SELECTED_BIOMARKERS);
 		int numberOfopenedBiomarkersSelected = 0;
 		if (openedBiomarkers!=null) numberOfopenedBiomarkersSelected = externalSelectedGS.size();
 		

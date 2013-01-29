@@ -31,9 +31,19 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -65,6 +75,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 
 	public FileExperimentImport() {
 		setNeedsProgressMonitor(true);
+		this.setWindowTitle("Import from .CSV in GEO format");
 	}
 
 	@Override
@@ -73,9 +84,10 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 		// deben ser accedidas desde el "Realm"
 		final String filePath = str(wm.filePath);
 		final String collapseStrategy = str(wm.collapseStrategy);
-		final int[] lines = split(str(wm.lines));
+		//final int[] lines = split(str(wm.lines));
+		final int clinicalDataFirstLine = Integer.valueOf(str(wm.clinicalDataFirstLine));
 
-		Job j = new Job("Importando experimento") {
+		Job j = new Job("Importing experiment") {
 
 			@Override
 			protected IStatus run(final IProgressMonitor progressMonitor) {
@@ -85,7 +97,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 					public Experiment call() throws Exception {
 						Monitor m = Monitors.adapt(progressMonitor);
 
-						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, lines[0], lines[1], lines[2], lines[3], "\t", collapseStrategy)).monitor(m).createExperiment();
+						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy)).monitor(m).createExperiment();
 					}
 				});
 
@@ -96,7 +108,8 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						@Override
 						public void run() {
 							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-							MessageManager.INSTANCE.openView().add(Message.info("There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
+							MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
+							
 						}
 					});
 				} catch (Exception e) {
@@ -131,7 +144,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 	private class WizardModel {
 		IObservableValue filePath = WritableValue.withValueType(File.class);
 		IObservableValue collapseStrategy = WritableValue.withValueType(String.class);
-		IObservableValue lines = WritableValue.withValueType(String.class);
+		IObservableValue clinicalDataFirstLine = WritableValue.withValueType(String.class);
 	}
 
 	@Override
@@ -141,10 +154,20 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 			@Override
 			public void createControl(Composite parent) {
 
+				this.setDescription("ssss");
+				
+				
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
+				
+				GridData gridData = new GridData();
+				gridData.horizontalAlignment=SWT.FILL;
+				gridData.grabExcessHorizontalSpace=true;
 
-				Composite c = new Composite(parent, SWT.NONE);
+				this.setDescription("Import the experiment using a .CSV file following the GEO format. Take a look below at the file format template");
+				Composite c = new Group(parent, SWT.NONE);
+				c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(5, 15).create());
+				//group.setLayoutData(gridData);
 
 
 				new Label(c, SWT.NONE).setText("File path (take a look at the format example below):");
@@ -158,42 +181,71 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 						new UpdateValueStrategy().setAfterConvertValidator(//
 								FilePathValidator.create().fileMustExist()), null);
 
-				new Label(c, SWT.NONE).setText("Collapse Strategy (If there is more than one entry for a gene, it will be used this strategy for collapsing):");
+				new Label(c, SWT.NONE).setText("Collapse Strategy \n(If there is more than one entry for a gene, \nit will be used this strategy for collapsing):");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
 						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
 
+				//collapseStrategyCombo.getCombo().setLayoutData(gridData);
+				
 				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
 						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Collapse Strategy")), null);
 
 				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_AVERAGE);
 
-				new Label(c, SWT.NONE).setText("Clinical data first line, clinical data last line, header line, expression data first line");
+				new Label(c, SWT.NONE).setText("First line number of expression data");
 				Text t = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.lines, new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+				t.setLayoutData(gridData);
+				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.clinicalDataFirstLine, null, null);
+						
+//						new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+//
+//					@Override
+//					public IStatus validate(Object value) {
+//						String l = value.toString();
+//						if (l.matches("\\d+,\\d+,\\d+,\\d+"))
+//							return ValidationStatus.ok();
+//						else
+//							return ValidationStatus.error("Invalid format: ###,###,###,###");
+//					}
+//				}), null);
+				//t.setText("4");
+				//t.setSize(100, 10);
+				t.setText("4");
+				
 
-					@Override
-					public IStatus validate(Object value) {
-						String l = value.toString();
-						if (l.matches("\\d+,\\d+,\\d+,\\d+"))
-							return ValidationStatus.ok();
-						else
-							return ValidationStatus.error("Invalid format: ###,###,###,###");
-					}
-				}), null);
-				t.setText("1,2,3,4");
-
-				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
+//				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
 				setControl(c);
 
-				new Label(c, SWT.NONE).setText("\n\n\nFile example:\n\nOS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
+				
+				Group formatExampleGroup = new Group(c, SWT.NONE);
+				formatExampleGroup.setText("Format example");
+				formatExampleGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(5,5).spacing(7, 10).create());
+				GridData formatExampleGroupLD = new GridData();
+				formatExampleGroupLD.horizontalAlignment = GridData.CENTER;
+				formatExampleGroupLD.horizontalSpan = 2;
+				formatExampleGroup.setLayoutData(formatExampleGroupLD);
+				new Label(formatExampleGroup, SWT.NONE).setText("OS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
+
+				
+				//Image myImage = new Image( formatExampleGroup.getDisplay(), "C:/ImportExpTemplateEx1.jpg" );
+			
+								
+				
+				
+				
+				
 
 				
 			}
 		});
 	}
+	
+	
+	
+	
 	// TODO hacer fluent!
 	// WizardFactory.createWizard().addPage().addPage()
 	// WizardPage.create(WizardPage.class).
