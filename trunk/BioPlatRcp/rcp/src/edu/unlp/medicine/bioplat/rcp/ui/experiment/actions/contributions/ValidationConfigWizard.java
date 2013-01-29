@@ -65,7 +65,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 	protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
 
 		boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
-		// numberOfCluster puede ser un rango
+		// numberOfCluster puede ser un rango o no
 		String numberOfClusters = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
 		String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
@@ -132,10 +132,10 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 
 	@Override
 	protected WizardModel createWizardModel() {
-		return new WizardModel()//
+
+		WizardModel wm = new WizardModel()//
 				.add(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE, new WritableValue(true, Boolean.class))//
-				// el "número" de clusters puede ser un rango
-				.add(PagesDescriptors.NUMBER_OF_CLUSTERS, new WritableValue("2..3", String.class))//
+
 				.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new WritableValue(10, Integer.class))//
 				.add(PagesDescriptors.VALIDATION_TYPE)//
 				.add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null, AttributeTypeEnum.class))//
@@ -143,8 +143,18 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
-				;
+		;
 
+		WritableValue wv;
+		wv = clusterWritableValue();
+
+		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, wv);
+
+		return wm;
+	}
+
+	protected WritableValue clusterWritableValue() {
+		return new WritableValue("2..3", String.class);
 	}
 
 	@Override
