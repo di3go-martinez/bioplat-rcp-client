@@ -1,4 +1,4 @@
-package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso;
+package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +24,7 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
 /**
  * @author Diego Martínez
  */
-public class PSOResultViewPart extends ViewPart {
+public class BlindSearchResultViewPart extends ViewPart {
 
 	private BiomarkerOptimizationResult result;
 	private TableReference tref;
@@ -43,7 +43,9 @@ public class PSOResultViewPart extends ViewPart {
 		else
 			list = Collections.emptyList();
 
-		tref = TableBuilder.create(container).input(list).addColumn(ColumnBuilder.create().property("name").title("Name")).addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result"))//
+		tref = TableBuilder.create(container).input(list) //
+				.addColumn(ColumnBuilder.create().property("name").title("Name"))//
+				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result"))//
 				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result"))//
 				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result"))//
 				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
@@ -81,7 +83,7 @@ public class PSOResultViewPart extends ViewPart {
 	}
 
 	public static String id() {
-		return "edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.result.view";
+		return "edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view";
 	}
 
 	public void setResultToShow(BiomarkerOptimizationResult result) {

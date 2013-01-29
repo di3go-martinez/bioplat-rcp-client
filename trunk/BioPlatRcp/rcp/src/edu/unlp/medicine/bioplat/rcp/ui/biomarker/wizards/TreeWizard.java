@@ -8,8 +8,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeACResultViewPart;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.ValidationConfigPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.PSOResultViewPart;
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.ValidationConfigPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;

@@ -34,8 +34,6 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 	
 	private static Logger logger = LoggerFactory.getLogger(GMSPage3LocalGSs.class);
 
-private TableReference tref;
-
 	public GMSPage3LocalGSs() {
 		super("Filter");
 		//this.provider = pagedescriptor;
@@ -43,7 +41,7 @@ private TableReference tref;
 
 
 	private WizardModel wizardModel;
-
+	private TableReference tr ;
 
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
@@ -66,9 +64,9 @@ private TableReference tref;
 			openedBiomarker.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).create());
 			openedBiomarker.setLayoutData(gdf.create());
 			openedBiomarker.setText("Gene Signatures in your Bioplat desktop");
-			final TableReference tr = TableBuilder.create(openedBiomarker).input(openedBiomarkers)
-			.addColumn(ColumnBuilder.create().property("name").title("biomarker name"))
-			.addColumn(ColumnBuilder.create().property("numberOfGenes").title("Number of genes"))
+			tr = TableBuilder.create(openedBiomarker).input(openedBiomarkers)
+					.addColumn(ColumnBuilder.create().property("name").title("biomarker name"))
+					.addColumn(ColumnBuilder.create().property("numberOfGenes").title("Number of genes"))
 			.build();
 			tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
@@ -242,7 +240,13 @@ private TableReference tref;
 	
 	@Override
 	public boolean isPageComplete(WizardModel model) {
-		return true;
+		
+		final List<?> selectedElements = tr.selectedElements();
+		List<GeneSignature> externalGS = model.value(GMSPage2FIlterExternalDBs.SELECTED_EXTERNAL_SIGNATURES);	
+		return  !externalGS.isEmpty()  ||  !selectedElements.isEmpty();
+		
+		
+		
 	}
 	
 	
