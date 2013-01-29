@@ -46,9 +46,9 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		final ArrayList<WizardPageDescriptor> pages = Lists.newArrayList();
 		pages.add(new GeneralPSOConfigurarion());
-		pages.add(new ValidationConfigPageDescriptor(biomarker, "Training", TRAINING_VALIDATION_CONFIG));
-		pages.add(new ValidationConfigPageDescriptor(biomarker, "Testing", TESTING_VALIDATION_CONFIG));
-		pages.add(new ValidationConfigPageDescriptor(biomarker, "Validation", VALIDATION_VALIDATION_CONFIG));
+		pages.add(new ValidationConfigPageDescriptor(biomarker, "Training", TRAINING_VALIDATION_CONFIG).disableClusterRange());
+		pages.add(new ValidationConfigPageDescriptor(biomarker, "Testing", TESTING_VALIDATION_CONFIG).optional());
+		pages.add(new ValidationConfigPageDescriptor(biomarker, "Validation", VALIDATION_VALIDATION_CONFIG).optional());
 		// pages.add(new ValidationToDoPageDescriptor());
 		return pages;
 	}
@@ -88,9 +88,9 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	protected WizardModel createWizardModel() {
 		WizardModel wmodel = super.createWizardModel()//
 				.add(PROCESS_NAME, String.class, "")//
-				.add(MINIMUM_NUMBER_OF_GENES, Integer.class, 30)//
-				.add(NUMBER_OF_ROUNDS, Integer.class, 1000)//
-				.add(NUMBER_OF_PARTICLES, Integer.class, 15)//
+				.add(MINIMUM_NUMBER_OF_GENES, Integer.class, 3)//
+				.add(NUMBER_OF_ROUNDS, Integer.class, 100)//
+				.add(NUMBER_OF_PARTICLES, Integer.class, 5)//
 				.add(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING, Integer.class, 10)//
 		// No se agregan porque no son IObservables...
 		// FIXME mejorar...

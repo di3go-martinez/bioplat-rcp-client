@@ -48,6 +48,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	private Widget numberOfTimesToRepeatTheCluster;
 	private Widget attribtueNameToDoTheValidation2;
 	private Widget statisticsSignificanceTest;
+	private boolean optional;
 
 	@Override
 	public Composite create(final WizardPage wizardPage, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
@@ -58,16 +59,17 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 		b.setText("Configure Validation Config");
 		b.addSelectionListener(new SelectionAdapter() {
 
-			private boolean contentsCreated;
+			private boolean contentsCreated = false;
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker) {
+				ValidationConfigWizard vcw = new ValidationConfigWizardWithoutRange(biomarker) {
 					@Override
 					protected void register(LogRankTestValidationConfig validationConfig) {
 						update(validationConfig);
 					}
 				};
+
 				vcw.open();
 			}
 
@@ -103,6 +105,18 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 	@Override
 	public boolean isPageComplete(WizardModel model) {
-		return model.value(wizardModelKey) != null;
+		return optional || model.value(wizardModelKey) != null;
+	}
+
+	public WizardPageDescriptor optional() {
+		optional = true;
+		return this;
+	}
+
+	private boolean disableClusterRanges = false;
+
+	public WizardPageDescriptor disableClusterRange() {
+		disableClusterRanges = true;
+		return this;
 	}
 }
