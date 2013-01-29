@@ -66,7 +66,13 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 
 		boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
 		// numberOfCluster puede ser un rango o no
-		int numberOfClusters = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+		String numberOfClusters = getClusterRangeAsString(); 
+		
+		
+		wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+		
+		
+		
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
 		String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
 		IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
@@ -75,8 +81,8 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
-			//for (Integer clusters : calculateRange(numberOfClusters)) {
-				final LogRankTestValidationConfig validationConfig = new LogRankTestValidationConfig(aed, numberOfClusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+			for (Integer clusters : calculateRange(numberOfClusters)) {
+				final LogRankTestValidationConfig validationConfig = new LogRankTestValidationConfig(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
 				commands2apply.add(new LogRankTestCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
@@ -94,10 +100,15 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 				// EditorInputFactory.createDefaultEditorInput(appliedExperiment));
 
 				register(validationConfig);
-			//}
+			}
 
 		}
 		afterExecution();
+	}
+
+	protected String getClusterRangeAsString() {
+		
+		return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 	}
 
 	// TODO mejorar el nombre
