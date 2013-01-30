@@ -28,30 +28,14 @@ public class PSOResultViewPart extends ViewPart {
 
 	private BiomarkerOptimizationResult result;
 	private TableReference tref;
+	Composite parent;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		createContents(parent);
+		this.parent = parent;
 	}
 
-	private void createContents(Composite parent) {
-		Composite container = Widgets.createDefaultContainer(parent);
 
-		final List<Biomarker> list;
-		if (result != null)
-			list = result.getBettersTouchedDuringTheTrip();
-		else
-			list = Collections.emptyList();
-
-		 TableBuilder tableBuilder = TableBuilder.create(container).input(list).addColumn(ColumnBuilder.create().property("name").title("Name")).addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result"));//
-				
-		if (list.get(0).getValidationManager().getLogRankTestValidationResults().get(1) != null) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result"));//
-		if (list.get(0).getValidationManager().getLogRankTestValidationResults().get(2) != null) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result"));//
-				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
-		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"));//
-				
-		tref = tableBuilder.contextualMenuBuilder(createMenuBuilder()).build();
-	}
 
 	private MenuBuilder createMenuBuilder() {
 		return new MenuBuilder() {
@@ -85,9 +69,32 @@ public class PSOResultViewPart extends ViewPart {
 		return "edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.result.view";
 	}
 
+	
+	Composite actualContainer;
 	public void setResultToShow(BiomarkerOptimizationResult result) {
+		if (actualContainer!=null) actualContainer.dispose();
 		this.result = result;
-		tref.input(result.getBettersTouchedDuringTheTrip());
+		Composite container = Widgets.createDefaultContainer(parent);
+		actualContainer=container;
+		
+		
+		TableBuilder tableBuilder = TableBuilder.create(container).input(result.getBettersTouchedDuringTheTrip()).addColumn(ColumnBuilder.create().property("name").title("Gene Signature name").width(200));
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Number of Genes"));//
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result").width(200));//
+
+		
+		 //TableBuilder tableBuilder = TableBuilder.create(container).input(list).addColumn(ColumnBuilder.create().property("name").title("Name")).addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result").width(100));//
+				
+		if (result.getBettersTouchedDuringTheTrip().get(0).getValidationManager().getLogRankTestValidationResults().size() >=2) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result").width(200));//
+		if (result.getBettersTouchedDuringTheTrip().get(0).getValidationManager().getLogRankTestValidationResults().size() >=3) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result").width(200));//
+				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"));//
+				
+		tref = tableBuilder.contextualMenuBuilder(createMenuBuilder()).build();
+		
+		
+		parent.layout();
+		
 	}
 
 }

@@ -243,7 +243,7 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 		
 		final List<?> selectedElements = tr.selectedElements();
 		List<GeneSignature> externalGS = model.value(GMSPage2FIlterExternalDBs.SELECTED_EXTERNAL_SIGNATURES);	
-		return  !externalGS.isEmpty()  ||  !selectedElements.isEmpty();
+		return  (externalGS!=null  && !externalGS.isEmpty())  ||  (!selectedElements.isEmpty());
 		
 		
 		

@@ -29,7 +29,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 /**
  * @author Diego Martínez
  */
-public class BLindSearchWizard extends AbstractWizard<BiomarkerOptimizationResult> {
+public class BLindSearchWizard extends AbstractWizard<List<Biomarker>> {
 
 	public static final String TESTING_VALIDATION_CONFIG = "TESTING_VALIDATION_CONFIG";
 	public static final String VALIDATION_VALIDATION_CONFIG = "VALIDATION_VALIDATION_CONFIG";
@@ -69,18 +69,12 @@ public class BLindSearchWizard extends AbstractWizard<BiomarkerOptimizationResul
 
 	@Override
 	protected String getTaskName() {
-		return "PSO on " + biomarker;
+		return "Blind Search on " + biomarker;
 	}
 
-	@Override
-	protected void doInUI(BiomarkerOptimizationResult result) throws Exception {
-		PlatformUIUtils.openView(BlindSearchResultViewPart.id());
-		BlindSearchResultViewPart v = (BlindSearchResultViewPart) PlatformUIUtils.findView(BlindSearchResultViewPart.id());
-		v.setResultToShow(result);
-	}
 
 	@Override
-	protected BiomarkerOptimizationResult backgroundProcess(Monitor monitor) throws Exception {
+	protected List<Biomarker> backgroundProcess(Monitor monitor) throws Exception {
 		BlindSearchOptimizerCommand blindSearchCommand = new BlindSearchOptimizerCommand(biomarker, new HashMap<String, String>());
 		blindSearchCommand.setNumberOfGenesToRemoveFrom(numberOfGenesToRemoveFrom);
 		blindSearchCommand.setNumberOfGenesToRemoveTo(numberOfGenesToRemoveTo);
@@ -91,12 +85,12 @@ public class BLindSearchWizard extends AbstractWizard<BiomarkerOptimizationResul
 		if (forValidation != null) blindSearchCommand.setLogRankTestValidationConfig4Validation(forValidation.get(0));
 		if (forTesting != null) blindSearchCommand.setLogRankTestValidationConfig4Testing(forTesting.get(0));
 		
-		blindSearchCommand.execute();
+		//blindSearchCommand.execute();
 		
 		blindSearchCommand.monitor(monitor).execute();
 
-		//return blindSearchCommand.getBetters(numberYouWant);
-		return null;
+		return blindSearchCommand.getBetters(numberOfResultsToShow);
+		
 	}
 
 	@Override
@@ -133,5 +127,13 @@ public class BLindSearchWizard extends AbstractWizard<BiomarkerOptimizationResul
 		forValidation = wm.value(VALIDATION_VALIDATION_CONFIG);
 		forTesting = wm.value(TESTING_VALIDATION_CONFIG);
 
+	}
+
+	@Override
+	protected void doInUI(List<Biomarker> result) throws Exception {
+		PlatformUIUtils.openView(BlindSearchResultViewPart.id());
+		BlindSearchResultViewPart v = (BlindSearchResultViewPart) PlatformUIUtils.findView(BlindSearchResultViewPart.id());
+		v.setResultToShow(result);
+		
 	}
 }

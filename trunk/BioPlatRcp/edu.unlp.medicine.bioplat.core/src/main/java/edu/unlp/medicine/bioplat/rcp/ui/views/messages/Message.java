@@ -87,7 +87,7 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 		logger.error(text, exception);
 		Throwable cause = exception.getCause();
 		if (cause != null)
-			text += ". Causa: " + cause;
+			text += ". Cause: " + cause;
 		return error(text);
 	}
 

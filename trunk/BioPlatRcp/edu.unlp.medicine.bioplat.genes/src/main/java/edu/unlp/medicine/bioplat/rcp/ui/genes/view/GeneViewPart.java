@@ -196,7 +196,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		c.setLayout(layout);
 		widgets.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
 		widgets.add(Widgets.createTextWithLabel(c, "Description", gene, "description").readOnly());
-		widgets.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezId").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezAsString").readOnly());
 		widgets.add(Widgets.createTextWithLabel(c, "Ensemble Id", gene, "ensemblId").readOnly());
 		// widgets.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene,
 		// "alternativeIds").readOnly());

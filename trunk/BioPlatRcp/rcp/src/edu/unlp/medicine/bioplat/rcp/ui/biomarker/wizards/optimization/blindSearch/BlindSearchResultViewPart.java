@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -18,7 +17,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemContribution;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 /**
@@ -26,32 +24,19 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
  */
 public class BlindSearchResultViewPart extends ViewPart {
 
-	private BiomarkerOptimizationResult result;
+	private List<Biomarker> betters;
 	private TableReference tref;
+	Composite parent;
 
 	@Override
 	public void createPartControl(Composite parent) {
+		this.parent = parent;
 		createContents(parent);
+		
 	}
 
 	private void createContents(Composite parent) {
-		Composite container = Widgets.createDefaultContainer(parent);
-
-		final List<Biomarker> list;
-		if (result != null)
-			list = result.getBettersTouchedDuringTheTrip();
-		else
-			list = Collections.emptyList();
-
-		tref = TableBuilder.create(container).input(list) //
-				.addColumn(ColumnBuilder.create().property("name").title("Name"))//
-				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result"))//
-				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result"))//
-				.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result"))//
-				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
-				.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Genes"))//
-				.contextualMenuBuilder(createMenuBuilder()).build();
-
+		
 	}
 
 	private MenuBuilder createMenuBuilder() {
@@ -86,9 +71,27 @@ public class BlindSearchResultViewPart extends ViewPart {
 		return "edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view";
 	}
 
-	public void setResultToShow(BiomarkerOptimizationResult result) {
-		this.result = result;
-		tref.input(result.getBettersTouchedDuringTheTrip());
+	Composite actualContainer;
+	public void setResultToShow(List<Biomarker> result) {
+		if (actualContainer!=null) actualContainer.dispose();
+		
+		this.betters = result;
+		Composite container = Widgets.createDefaultContainer(parent);
+		
+		actualContainer=container;
+		
+		TableBuilder tableBuilder = TableBuilder.create(container).input(betters).addColumn(ColumnBuilder.create().property("name").title("Gene Signature name").width(200));
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Number of Genes"));//
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result").width(200));//
+			
+		if (betters.get(0).getValidationManager().getLogRankTestValidationResults().size() >=2) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result").width(200));//
+		if (betters.get(0).getValidationManager().getLogRankTestValidationResults().size() >=3) tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result").width(200));//
+				//.addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
+		
+				
+		tref = tableBuilder.contextualMenuBuilder(createMenuBuilder()).build();
+		//actualContainer.layout();
+		parent.layout();
 	}
 
 }

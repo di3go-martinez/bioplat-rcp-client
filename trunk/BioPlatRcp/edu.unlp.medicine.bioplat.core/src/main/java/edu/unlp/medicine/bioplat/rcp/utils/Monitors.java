@@ -18,6 +18,7 @@ public class Monitors {
 
 			@Override
 			public void beginTask(String name, int totalWork) {
+				
 				delegate.beginTask(name, totalWork);
 			}
 
