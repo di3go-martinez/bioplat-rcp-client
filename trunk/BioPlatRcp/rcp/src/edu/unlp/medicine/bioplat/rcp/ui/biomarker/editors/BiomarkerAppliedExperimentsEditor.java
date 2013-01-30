@@ -32,6 +32,7 @@ import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException
 public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 	private TableReference tr;
+	private Helper helper;
 
 	public BiomarkerAppliedExperimentsEditor(boolean autoUpdatableTitle) {
 		super(autoUpdatableTitle);
@@ -46,6 +47,7 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 		// createButtonPart(c);
 		createWorkAreaPart(c);
 
+		getHelper().refreshView();
 	}
 
 	private void createWorkAreaPart(Composite parent) {
@@ -78,109 +80,123 @@ public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomar
 
 	@Override
 	protected Observer createModificationObserver() {
-		return new Observer() {
+		return getHelper();
+	}
 
-			// indica si se tiene que inicializar
-			private Boolean mustinitialize = true;
-			// índice de la columna a la cual se le agregan las nuevas columnas
-			private Integer newBaseColumnIndex;
+	protected Helper getHelper() {
+		if (helper == null)
+			helper = new Helper();
+		return helper;
+	}
 
-			@Override
-			public void update(Observable o, Object arg) {
-				final List<ExperimentAppliedToAMetasignature> eas = model().getExperimentsApplied();
-				tr.input(eas);
+	private class Helper implements Observer {
 
-				// FIXME Horrible esto... "tapar" en el ColumnBuilder...
-				Table table = tr.getTable();
-				TableColumn tc;
-				if (mustinitialize) {
-					newBaseColumnIndex = table.getColumnCount();
-					// creo las nuevas columnas
-					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
-					tc.setWidth(150);
-					tc.setText("Applied Experiment");
+		// indica si se tiene que inicializar
+		private Boolean mustinitialize = true;
+		// índice de la columna a la cual se le agregan las nuevas columnas
+		private Integer newBaseColumnIndex;
 
-					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
-					tc.setWidth(150);
-					tc.setText("Original Experiment");
+		@Override
+		public void update(Observable o, Object arg) {
+			refreshView();
+		}
 
-					tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
-					tc.setWidth(150);
-					tc.setText("Export to MEV");
-					// ok, ya inicializado
-					mustinitialize = false;
-				}
-				// para cada item de agrega el table editor
-				// FIXME no es necesario pisar los que ya están creados...
-				TableItem[] items = table.getItems();
-				for (int i = 0; i < items.length; i++) {
+		public void refreshView() {
+			final List<ExperimentAppliedToAMetasignature> eas = model().getExperimentsApplied();
+			tr.input(eas);
 
-					final ExperimentAppliedToAMetasignature exp = eas.get(i);
-					TableEditor editor;
-					editor = new TableEditor(table);
-					Button c = createOpenEditorButton(exp, table, "open applied experiment", AppliedExperimentEditor.id());
-					editor.grabHorizontal = true;
-					// editor.minimumHeight = 100;
-					editor.setEditor(c, items[i], newBaseColumnIndex);
+			// FIXME Horrible esto... "tapar" en el ColumnBuilder...
+			Table table = tr.getTable();
+			TableColumn tc;
+			if (mustinitialize) {
+				newBaseColumnIndex = table.getColumnCount();
+				// creo las nuevas columnas
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
+				tc.setWidth(150);
+				tc.setText("Applied Experiment");
 
-					// createAndConfigureEditor(table, c, items[i],
-					// newBaseColumnIndex).minimumHeight = 100;
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
+				tc.setWidth(150);
+				tc.setText("Original Experiment");
 
-					editor = new TableEditor(table);
-					try {
-						c = createOpenEditorButton(exp.getOriginalExperiment(), table, "open original experiment", EditorsId.experimentEditorId());
-						editor.grabHorizontal = true;
-						editor.setEditor(c, items[i], newBaseColumnIndex + 1);
-					} catch (ExperimentBuildingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					editor = new TableEditor(table);
-					c = new Button(table, SWT.FLAT);
-					// c.setText("Export to MEV");;
-					c.setImage(PlatformUIUtils.findImage("Export to MEV"));
-					c.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							new MevWizard(exp).blockOnOpen().open();
-						}
-					});
-					editor.grabHorizontal = true;
-					editor.setEditor(c, items[i], newBaseColumnIndex + 2);
-					// createAndConfigureEditor(table, c, items[i],
-					// newBaseColumnIndex + 2);
-
-				}
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
+				tc.setWidth(150);
+				tc.setText("Export to MEV");
+				// ok, ya inicializado
+				mustinitialize = false;
 			}
+			// para cada item de agrega el table editor
+			// FIXME no es necesario pisar los que ya están creados...
+			TableItem[] items = table.getItems();
+			for (int i = 0; i < items.length; i++) {
 
-			private TableEditor createAndConfigureEditor(Table t, Control c, TableItem ti, int index) {
-				TableEditor editor = new TableEditor(t);
+				final ExperimentAppliedToAMetasignature exp = eas.get(i);
+				TableEditor editor;
+				editor = new TableEditor(table);
+				Button c = createOpenEditorButton(exp, table, "open applied experiment", AppliedExperimentEditor.id());
 				editor.grabHorizontal = true;
-				editor.setEditor(t, ti, index);
-				return editor;
-			}
+				// editor.minimumHeight = 100;
+				editor.setEditor(c, items[i], newBaseColumnIndex);
 
-			private Button createOpenEditorButton(final Object o, Composite parent, String label, final String editorId) {
-				Button b = new Button(parent, SWT.FLAT);
-				// b.setText(label);
-				b.setImage(PlatformUIUtils.findImage(label));
-				b.addSelectionListener(new SelectionAdapter() {
+				// createAndConfigureEditor(table, c, items[i],
+				// newBaseColumnIndex).minimumHeight = 100;
+
+				editor = new TableEditor(table);
+				try {
+					c = createOpenEditorButton(exp.getOriginalExperiment(), table, "open original experiment", EditorsId.experimentEditorId());
+					editor.grabHorizontal = true;
+					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
+				} catch (ExperimentBuildingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				editor = new TableEditor(table);
+				c = new Button(table, SWT.FLAT);
+				// c.setText("Export to MEV");;
+				c.setImage(PlatformUIUtils.findImage("Export to MEV"));
+				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-
-						try {
-							PlatformUIUtils.openEditor(o, editorId);
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
+						new MevWizard(exp).blockOnOpen().open();
 					}
 				});
-				return b;
+				editor.grabHorizontal = true;
+				editor.setEditor(c, items[i], newBaseColumnIndex + 2);
+				// createAndConfigureEditor(table, c, items[i],
+				// newBaseColumnIndex + 2);
+
 			}
 
-		};
+		}
+
+		private TableEditor createAndConfigureEditor(Table t, Control c, TableItem ti, int index) {
+			TableEditor editor = new TableEditor(t);
+			editor.grabHorizontal = true;
+			editor.setEditor(t, ti, index);
+			return editor;
+		}
+
+		private Button createOpenEditorButton(final Object o, Composite parent, String label, final String editorId) {
+			Button b = new Button(parent, SWT.FLAT);
+			// b.setText(label);
+			b.setImage(PlatformUIUtils.findImage(label));
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					try {
+						PlatformUIUtils.openEditor(o, editorId);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			});
+			return b;
+		}
+
 	}
+
 }
