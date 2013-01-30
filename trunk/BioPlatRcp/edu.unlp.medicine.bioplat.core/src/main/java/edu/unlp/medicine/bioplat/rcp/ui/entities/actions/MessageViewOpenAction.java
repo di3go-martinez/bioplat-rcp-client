@@ -14,11 +14,10 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 
 /**
  * 
- * Esta acción se encarga de limpiar la vista de mensajes, ejecutar la acción
- * configurada como target, y cuando esta termina abrir la vista de mansajes si
- * hay mensajes a mostar
+ * Esta acción ejecutar la acción configurada como target, y cuando esta termina
+ * abrir la vista de mansajes si hay mensajes a mostar
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 public class MessageViewOpenAction extends Action {
@@ -207,7 +206,8 @@ public class MessageViewOpenAction extends Action {
 	}
 
 	private void beforeRun() {
-		MessageManager.INSTANCE.clear();
+		// Ahora no se borran
+		// MessageManager.INSTANCE.clear();
 	}
 
 	public static IAction wrap(IAction action) {
