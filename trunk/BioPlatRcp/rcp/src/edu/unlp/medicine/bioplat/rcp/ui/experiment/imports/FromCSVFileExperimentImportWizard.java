@@ -1,8 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_AVERAGE;
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MAX;
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MEDIA;
+import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_VARIANCE;
 
 import java.io.File;
 import java.util.Arrays;
@@ -16,7 +16,6 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,27 +24,19 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -184,11 +175,11 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 						new UpdateValueStrategy().setAfterConvertValidator(//
 								FilePathValidator.create().fileMustExist()), null);
 
-				new Label(c, SWT.NONE).setText("Collapse Strategy \n(If there is more than one entry for a gene, \nit will be used this strategy for collapsing):");
+				new Label(c, SWT.NONE).setText("Collapse Strategy. If there is more than one probe \nfor the same gene, represent the gene with the sonda with highest:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
-						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MAX, COLLAPSE_STRATEGY_MEDIA));
+						Arrays.asList(COLLAPSE_STRATEGY_MEDIA, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_VARIANCE));
 
 				//collapseStrategyCombo.getCombo().setLayoutData(gridData);
 				
@@ -196,7 +187,7 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
 						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Collapse Strategy")), null);
 
-				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_AVERAGE);
+				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_MEDIA);
 
 				new Label(c, SWT.NONE).setText("First line number of expression data");
 				Text t = new Text(c, SWT.BORDER);

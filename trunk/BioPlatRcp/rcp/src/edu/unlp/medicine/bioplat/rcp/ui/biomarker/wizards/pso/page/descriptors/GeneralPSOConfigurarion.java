@@ -19,7 +19,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 public class GeneralPSOConfigurarion extends WizardPageDescriptor {
 
 	public static final String PROCESS_NAME = "PROCESS_NAME";
-	public static final String NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING = "NUMBER OF GENES TO DURING TRAINING";
+	//public static final String NUMBER_OF_GENE_SIGNATURE_TO_KEEP_DURING_TRAINING = "NUMBER_OF_GENES_SIGNATURE_TO_DURING_TRAINING";
 	public static final String MINIMUM_NUMBER_OF_GENES = "MINIMUM NUMBER OF GENES";
 	public static final String NUMBER_OF_ROUNDS = "NUMBER_OF_ROUNDS";
 	public static final String NUMBER_OF_PARTICLES = "NUMBER_OF_PARTICLES";
@@ -52,8 +52,8 @@ public class GeneralPSOConfigurarion extends WizardPageDescriptor {
 		wizardPage.setDescription("You can use this metaheuristic to optimize your gene signature. You should configure basic parametrs and then three different experiments. \n The first one is for PSO training. It is used by the metaheuristic for getting the 10 betters. \n The second one is for testing. It is used  for getting the best one of the 10 previosuly picked by PSO \n The validation experiment is the one which you want to use to publish. You should not present the results with the same algorithm used for training. This will cause overfitting");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_PARTICLES), "Number of Particles");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_ROUNDS), "Number of Rounds");
-		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(MINIMUM_NUMBER_OF_GENES), "Number of Genes");
-		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING), "Genes To Keep");
+		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(MINIMUM_NUMBER_OF_GENES), "Minimum number of genes");
+		//WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_GENE_SIGNATURE_TO_KEEP_DURING_TRAINING), "Genes signature to kee");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(PROCESS_NAME), "Process Name");
 
 		return container;

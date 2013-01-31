@@ -1,7 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso;
 
 import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.MINIMUM_NUMBER_OF_GENES;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING;
+//import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_GENE_SIGNATURE_TO_KEEP_DURING_TRAINING;
 import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_PARTICLES;
 import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_ROUNDS;
 import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.PROCESS_NAME;
@@ -78,7 +78,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		psoConfig.setNumberOfGenes(miniumNumberOfGenes);
 		psoConfig.setNumberOfRounds(numberOfRounds);
 		psoConfig.setNumberOfParticles(numberOfParticles);
-		optimizerCommand.setBettersSize(numberOfGenesToKeepDuringTraining);
+		//optimizerCommand.setBettersSize(numberOfGenesToKeepDuringTraining);
 		optimizerCommand.setConfiguration(psoConfig);
 
 		optimizerCommand.setLogRankTestValidationConfig4Training(forTraining.get(0));
@@ -96,7 +96,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 				.add(MINIMUM_NUMBER_OF_GENES, Integer.class, 3)//
 				.add(NUMBER_OF_ROUNDS, Integer.class, 100)//
 				.add(NUMBER_OF_PARTICLES, Integer.class, 5)//
-				.add(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING, Integer.class, 10)//
+				//.add(NUMBER_OF_GENE_SIGNATURE_TO_KEEP_DURING_TRAINING, Integer.class, 10)//
 		// No se agregan porque no son IObservables...
 		// FIXME mejorar...
 		// .add(TRAINING_VALIDATION_CONFIG, List.class, null). //
@@ -114,7 +114,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		miniumNumberOfGenes = wm.value(MINIMUM_NUMBER_OF_GENES);
 		numberOfRounds = wm.value(NUMBER_OF_ROUNDS);
 		numberOfParticles = wm.value(NUMBER_OF_PARTICLES);
-		numberOfGenesToKeepDuringTraining = wm.value(NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING);
+		//numberOfGenesToKeepDuringTraining = wm.value(NUMBER_OF_GENE_SIGNATURE_TO_KEEP_DURING_TRAINING);
 
 		forTraining = wm.value(TRAINING_VALIDATION_CONFIG);
 		forValidation = wm.value(VALIDATION_VALIDATION_CONFIG);

@@ -1,10 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.MINIMUM_NUMBER_OF_GENES;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_GENES_TO_KEEP_DURING_TRAINING;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_PARTICLES;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.NUMBER_OF_ROUNDS;
-import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion.PROCESS_NAME;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +9,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.ValidationConfigPageDescriptor;
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.BlindSearchOptimizerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
-import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
-import edu.unlp.medicine.domainLogic.framework.optimizers.commands.PsoOptimizerCommand;
-import edu.unlp.medicine.domainLogic.optimizations.configuration.PSOConfiguration;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
