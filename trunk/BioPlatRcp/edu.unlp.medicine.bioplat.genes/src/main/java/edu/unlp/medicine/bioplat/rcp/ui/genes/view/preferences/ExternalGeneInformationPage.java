@@ -8,7 +8,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import edu.unlp.medicine.bioplat.rcp.ui.genes.Activator;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.GenesUrlEditor;
 
 public class ExternalGeneInformationPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -23,7 +23,7 @@ public class ExternalGeneInformationPage extends FieldEditorPreferencePage imple
 
 	@Override
 	public void init(IWorkbench workbench) {
-		prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, Activator.id());
+		prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, GenesPluginActivator.id());
 		setPreferenceStore(prefs);
 	}
 
