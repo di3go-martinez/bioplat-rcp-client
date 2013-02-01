@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.google.common.collect.Lists;
 
@@ -25,6 +27,14 @@ public class InitializeGenesUrlStartup implements IStartup {
 			String[] defaults = fillDefaults();
 			String urls = StringUtils.join(defaults, '|');
 			PlatformUtils.preferences(GenesPluginActivator.id()).put(ExternalGeneInformationPage.URLS, urls);
+			// TODO acomodar mejor
+			ScopedPreferenceStore prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, GenesPluginActivator.id());
+			try {
+				prefs.save();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			try {
 				f.createNewFile();
 			} catch (IOException e) {
