@@ -27,6 +27,8 @@ import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.startup.InitializeGenesUrlStartup;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrl;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrlParser;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage;
@@ -124,7 +126,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 	private static final String REST_URL_NCBI = "NCBI::http://www.ncbi.nlm.nih.gov/gene/?term=" + GeneUrlParser.GEN_ID_HOLDER;
 	// urls rest configuradas, contiene variables seguramente ej el id del gen
 	// Agrego la de NCBI por default
-	private String[] DEFAULTS = new String[] { REST_URL_NCBI };
+	private String[] DEFAULTS = InitializeGenesUrlStartup.fillDefaults();
 
 	private List<GeneUrl> geneUrls = Lists.newArrayList();
 	private CTabFolder tabContainer;
@@ -146,6 +148,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		container.setVisible(gene != null);
 
 		if (gene != null)
+
 			if (viewBuilt())
 				refreshView(gene);
 			else
@@ -196,7 +199,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		c.setLayout(layout);
 		widgets.add(Widgets.createTextWithLabel(c, "Name", gene, "name").readOnly());
 		widgets.add(Widgets.createTextWithLabel(c, "Description", gene, "description").readOnly());
-		widgets.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezAsString").readOnly());
+		widgets.add(Widgets.createTextWithLabel(c, "Entrez Id", gene, "entrezIdAsString").readOnly());
 		widgets.add(Widgets.createTextWithLabel(c, "Ensemble Id", gene, "ensemblId").readOnly());
 		// widgets.add(Widgets.createTextWithLabel(c, "Alternative IDs", gene,
 		// "alternativeIds").readOnly());
@@ -214,11 +217,12 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 
 	private void buildBrowsers(Gene gene, CTabFolder t) {
 
-		String urls = PlatformUtils.preferences().get(ExternalGeneInformationPage.URLS, "");
+		String urls = PlatformUtils.preferences(GenesPluginActivator.id()).get(ExternalGeneInformationPage.URLS, "");
 
 		if (urls.isEmpty()) {
+
 			urls = StringUtils.join(DEFAULTS, '|');
-			PlatformUtils.preferences().put(ExternalGeneInformationPage.URLS, urls);
+			PlatformUtils.preferences(GenesPluginActivator.id()).put(ExternalGeneInformationPage.URLS, urls);
 		}
 
 		geneUrls = GeneUrlParser.parse(urls);
