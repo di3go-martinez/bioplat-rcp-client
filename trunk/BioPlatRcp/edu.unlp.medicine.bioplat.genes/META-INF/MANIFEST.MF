@@ -10,7 +10,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Localization: OSGI-INF/l10n/bundle
-Bundle-Activator: edu.unlp.medicine.bioplat.rcp.ui.genes.Activator
+Bundle-Activator: edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator
 Export-Package: edu.unlp.medicine.bioplat.rcp.ui.genes,
  edu.unlp.medicine.bioplat.rcp.ui.genes.view,
  edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions,
