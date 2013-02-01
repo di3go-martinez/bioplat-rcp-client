@@ -79,7 +79,7 @@ public class MessageViewPart extends ViewPart {
 						return df.format(fecha);
 					}
 				})) //
-				.addColumn(ColumnBuilder.create().property("text").width(450)) //
+				.addColumn(ColumnBuilder.create().property("text").width(750)) //
 				.input(MessageManager.INSTANCE.getMessages());
 
 		tr = tb.build();
