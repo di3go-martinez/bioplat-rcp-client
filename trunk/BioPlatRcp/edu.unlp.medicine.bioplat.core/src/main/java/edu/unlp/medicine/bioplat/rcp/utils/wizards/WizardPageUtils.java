@@ -30,4 +30,26 @@ public class WizardPageUtils {
 		Binding b = dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), model);
 		return new BindingResult(b);
 	}
+	
+
+	/**
+	 * Crea en el container un Label, un Text y otro label atrás.
+	 * 
+	 * @param container
+	 * @param dbc
+	 * @param model
+	 * @param label
+	 * @return
+	 */
+	public static BindingResult createText(Composite container, DataBindingContext dbc, String labelBefore, IObservableValue model, String labelAfter) {
+		new Label(container, SWT.NONE).setText(labelBefore);
+		Text t = new Text(container, SWT.BORDER);
+		t.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		Binding b = dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), model);
+		new Label(container, SWT.NONE).setText(labelAfter);
+		return new BindingResult(b);
+	}
+	
+	
+	
 }
