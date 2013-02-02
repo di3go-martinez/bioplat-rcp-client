@@ -36,6 +36,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.framework.exceptions.BioplatException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 /**
@@ -241,16 +242,16 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				});
 
 				// TODO revisar mejor lo del error holder y lo de status...
-				final Holder<Boolean> errorHolder = Holder.create(false);
-				IStatus status = ValidationStatus.ok();
+				final Holder<Throwable> errorHolder = Holder.create(null);
+				//IStatus status = ValidationStatus.ok();
 				T o = null;
+				
 				try {
 					o = holder.get(); // join
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					Throwable t = (e.getCause() != null) ? e.getCause() : e;
-					MessageManager.INSTANCE.add(Message.error(errorMsg(t), t));
-					errorHolder.hold(true);
-					status = ValidationStatus.error(errorMsg(t), t);
+					errorHolder.hold(t);
 				}
 
 				final T oo = o;
@@ -259,22 +260,44 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					@Override
 					public void run() {
 						try {
-							if (errorHolder.value())
-								return;
-							doInUI(oo);
-							MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed"));
+							if (errorHolder.value()!=null){
+								progressMonitor.done();
+								doInUIError(errorHolder.value());
+								addMessageErrorToMessageView(errorHolder.value());
+								
+							}
+							else{
+								progressMonitor.done();
+								doInUI(oo);
+								addMessageToMessageView(oo);
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
-							MessageManager.INSTANCE.add(Message.error(errorMsg(e), e));
+							MessageManager.INSTANCE.add(Message.error(defaultErrorMsg(e), e));
 						}
 					}
-				});
 
-				progressMonitor.done();
-				return status;
+					
+				});
+				if (errorHolder.value()==null) return ValidationStatus.ok();
+				else return ValidationStatus.error(errorHolder.value().getMessage(), errorHolder.value());
 			}
 
-			private String errorMsg(Throwable t) {
+
+//			private IStatus processBioplatException(BioplatException bioplatE) {
+//				IStatus status = bioplatE.isWarning() ? ValidationStatus.warning(getErrorMessage().getText()):ValidationStatus.error(getErrorMessage().getText(), bioplatE);
+//				return status;
+//				
+//			}
+//
+//			private void setErrorOnMessageView(Throwable t){
+//				//Si no setearon error desde afuera seteo uno por defecto
+//				if (getErrorMessage()==null) setErrorMessage(Message.error(defaultErrorMsg(t), t));
+//				MessageManager.INSTANCE.add(getErrorMessage());
+//			}
+//
+//			
+			private String defaultErrorMsg(Throwable t) {
 				return "Unexpected error executing " + getTaskName() + ": " + t.getMessage();
 			}
 
@@ -286,6 +309,21 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		return true;
 
 	}
+	
+	
+	
+	Message errorMessage=null;
+	
+
+
+	public Message getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(Message errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
 
 	protected abstract String getTaskName();
 
@@ -323,6 +361,22 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *            es el resultado de {@link #backgroundProcess(Monitor)}
 	 */
 	protected abstract void doInUI(T result) throws Exception;
+	
+	public void doInUIError(Throwable e) throws Exception{
+		
+	}
+
+	public void addMessageToMessageView(T oo) {
+		MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed"));
+		
+	}
+	
+	private void addMessageErrorToMessageView(Throwable t) {
+		MessageManager.INSTANCE.add(Message.error(t.getMessage(), t));
+		
+	}
+
+
 
 }
 

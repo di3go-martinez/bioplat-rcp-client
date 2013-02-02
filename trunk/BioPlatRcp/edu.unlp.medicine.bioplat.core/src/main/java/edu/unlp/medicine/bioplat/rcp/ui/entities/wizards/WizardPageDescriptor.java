@@ -8,6 +8,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 
 /**
@@ -126,5 +127,13 @@ public abstract class WizardPageDescriptor {
 	public boolean isResultPageComplete(WizardModel wizardModel) {
 		return true;
 	}
+
+	public WizardPageDescriptor setImageDescriptor(
+			ImageDescriptor imageDescriptorFromPlugin) {
+		
+		this.imageDescriptor =imageDescriptorFromPlugin;
+		return this;
+	}
+
 
 }
