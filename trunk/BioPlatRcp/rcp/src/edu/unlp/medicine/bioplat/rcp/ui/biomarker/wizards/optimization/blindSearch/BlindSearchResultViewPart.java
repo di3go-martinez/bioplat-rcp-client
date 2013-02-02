@@ -30,6 +30,7 @@ public class BlindSearchResultViewPart extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		
 		this.parent = parent;
 		createContents(parent);
 		

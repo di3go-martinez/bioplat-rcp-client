@@ -1,12 +1,16 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 
 import com.google.common.collect.ImmutableList;
 
@@ -25,7 +29,9 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 	protected Biomarker biomarker;
 	private String wizardModelKey;
-
+	Image image4Button;
+	String type;
+	String description;
 	/**
 	 * 
 	 * @param biomarker
@@ -34,10 +40,13 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	 *            clave por la cual se accedera al validationconfig en el
 	 *            wizardmodel
 	 */
-	public ValidationConfigPageDescriptor(Biomarker biomarker, String title, String wmodelKey) {
-		super(title + " Configuration");
+	public ValidationConfigPageDescriptor(Biomarker biomarker, String type, String description, String wmodelKey, Image image4Button) {
+		super("Select the experiment to do "+ type);
 		this.biomarker = biomarker;
 		this.wizardModelKey = wmodelKey;
+		this.image4Button=image4Button;
+		this.type = type;
+		this.description = description;
 	}
 
 	private Composite innerContainer;
@@ -53,10 +62,23 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	@Override
 	public Composite create(final WizardPage wizardPage, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
-		Composite container = Widgets.createDefaultContainer(parent);
+		//Composite container = Widgets.createDefaultContainer(parent);
+		wizardPage.setDescription(description);
 
-		Button b = new Button(container, SWT.FLAT);
-		b.setText("Configure Validation Config");
+		GridData extensor = new GridData();
+		extensor.horizontalAlignment=SWT.CENTER;
+		extensor.grabExcessHorizontalSpace=true;
+		extensor.verticalIndent=300;
+		
+		Composite group = new Group(parent, SWT.NONE);
+		group.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(50,50).spacing(2, 50).create());
+		group.setLayoutData(extensor);
+
+		Button b = new Button(group, SWT.FLAT);
+		b.setText("Select " + type + " dataset (Bioplat Experiment in your desktop)");
+		b.setImage(image4Button);
+		GridData gd = new GridData(400,70);gd.horizontalAlignment = SWT.CENTER;
+		b.setLayoutData(gd);
 		b.addSelectionListener(new SelectionAdapter() {
 
 			private boolean contentsCreated = false;
@@ -98,9 +120,9 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 			}
 		});
 
-		innerContainer = Widgets.createDefaultContainer(container, 2);
+		innerContainer = Widgets.createDefaultContainer(group, 2);
 
-		return container;
+		return group;
 	}
 
 	@Override
@@ -119,4 +141,6 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 		disableClusterRanges = true;
 		return this;
 	}
+	
+		
 }
