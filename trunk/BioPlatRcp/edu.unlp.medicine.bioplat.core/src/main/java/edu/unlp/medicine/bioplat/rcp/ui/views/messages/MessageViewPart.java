@@ -83,7 +83,7 @@ public class MessageViewPart extends ViewPart {
 				.input(MessageManager.INSTANCE.getMessages());
 
 		tr = tb.build();
-
+		
 		GridLayoutFactory.fillDefaults().generateLayout(c);
 	}
 
@@ -94,6 +94,11 @@ public class MessageViewPart extends ViewPart {
 
 	public void refresh() {
 		tr.refresh();
+	}
+
+	public void focusAtLastLine() {
+		//tr.getTable().select(tr.getTable().getItemCount());
+		
 	}
 
 }
