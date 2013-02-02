@@ -18,6 +18,8 @@ public class Holder<T> implements Serializable {
 		return value;
 	}
 
+	
+	
 	public Holder<T> hold(T newvalue) {
 		this.value = newvalue;
 		return this;
