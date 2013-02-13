@@ -88,7 +88,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 				
 				
 				
-				wp.setDescription("You can later, add your genes (Entrez Id, Ensembl ID or geneName) by hand or copying&pasting");
+				wp.setDescription("You can later add your genes (Entrez Id, Ensembl ID or geneName) by hand or copying&pasting");
 				Composite group = new Group(parent, SWT.NONE);
 				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(2, 20).create());
 				group.setLayoutData(gridData);

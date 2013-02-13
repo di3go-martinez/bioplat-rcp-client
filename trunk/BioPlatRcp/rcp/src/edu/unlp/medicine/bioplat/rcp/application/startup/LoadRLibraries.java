@@ -27,7 +27,7 @@ public class LoadRLibraries implements IStartup {
 	@Override
 	public void earlyStartup() {
 
-		new Job("Load R Libraries...") {
+		new Job("Loading R Libraries...") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

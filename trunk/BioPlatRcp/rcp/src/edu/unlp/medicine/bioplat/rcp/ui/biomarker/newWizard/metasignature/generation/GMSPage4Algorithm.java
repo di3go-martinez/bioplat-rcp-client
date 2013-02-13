@@ -48,7 +48,7 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 	static final String ALIX_X_PARAMETER = "Please specify the value for X: ";
 	static final String  ALIX_DESCRIPTION = "The algorithm selects all the genes which were proposed by, at least, X of the selected Gene Signatures.";
 	static final String  UNION_DESCRIPTION = "The algorithm does a union of all the gene sets proposed by the selected Gene Signatures.";
-	static final String  IES_DESCRIPTION = "The algorithm selectS the genes which are proposed by all the Gene Signatures you have selected.";
+	static final String  IES_DESCRIPTION = "The algorithm selects the genes which are proposed by all the Gene Signatures you have selected.";
 
 	
 	// Algorithm names
@@ -67,7 +67,8 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(30, 50).spacing(0,30).create());
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		wp.setDescription("Select the algorithm for processing the input Gene Signatures you have selected (" + calculateNumberOfSelectedGS(wmodel) + "). It will generate the metasignature."); 
+		//wp.setDescription("Select the algorithm for processing the input Gene Signatures you have selected (" + calculateNumberOfSelectedGS(wmodel) + "). It will generate the metasignature."); 
+		wp.setDescription("Select the algorithm for processing the input Gene Signatures you have selected. It will generate the Metasignature.");
 
 		Composite algorithmPanel = createALgorithmPanel(container, dbc, wmodel);
 		

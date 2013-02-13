@@ -57,7 +57,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				
 				wizardPage.setTitle("Import your .CEL files to Bioplat");
-				wizardPage.setDescription("Import and normalize an experiment you have in your .CEL files. THey will be useful for doing validation of your biomarkers.");
+				wizardPage.setDescription("Import and normalize an experiment you have in your .CEL files. They will be useful for doing validation of your biomarkers.");
 				
 				GridData gridData = new GridData();
 				gridData.horizontalAlignment=SWT.FILL;
@@ -102,7 +102,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 				
 				//Label for explaining the possible 
 				Label introdudctionLabel = new Label(group, SWT.WRAP);
-				introdudctionLabel.setText("\nNote: It will be applied a collapse strategy automatically. The gene will be represented by the sonda with the highest average.");
+				introdudctionLabel.setText("\nNote: A collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average.");
 				GridData gridData4Text = new GridData(GridData.FILL_HORIZONTAL); 
 				gridData4Text.horizontalSpan = 2;
 				introdudctionLabel.setLayoutData(gridData4Text);

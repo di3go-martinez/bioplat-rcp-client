@@ -80,7 +80,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 			@Override
 			public void createControl(Composite parent) {
 
-				this.setDescription("Bioplat will connect with InSilicoDB for importing the experiment you are asking. Please specify the following information.");
+				this.setDescription("Bioplat will connect with InSilicoDB for importing the experiment you are asking for. Please specify the following information.");
 				
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
@@ -113,7 +113,7 @@ public class GSEImport extends Wizard implements IImportWizard {
 				fD[0].setHeight(8);
 				fD[0].setStyle(SWT.ITALIC);
 				introdudctionLabel.setFont( new Font(group.getDisplay(),fD[0]));
-				introdudctionLabel.setText("\nNote: If the experiment has got sondas instead of genes, it will be applied a collapse strategy automatically. The gene will be represented by the sonda with the highest average...");
+				introdudctionLabel.setText("\nNote: If the experiment has got probes instead of genes, a collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average...");
 				
 				
 				dbc.bindValue(SWTObservables.observeText(gseHolder, SWT.Modify), model().valueHolder("GSE"), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("GSE")), null);

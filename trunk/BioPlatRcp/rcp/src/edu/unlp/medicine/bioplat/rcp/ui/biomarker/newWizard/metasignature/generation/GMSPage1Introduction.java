@@ -75,7 +75,7 @@ public class GMSPage1Introduction extends WizardPageDescriptor {
 		introdudctionLabel.setFont( new Font(filterGroup.getDisplay(),fD[0]));
 		
 		
-		introdudctionLabel.setText("A Bioplat metasignature is the result of datamining many input Gene Signatures you selected.\n\n You can select the input Gene Signatures from external databases buy you can also use the GeneSignatures you have previously open in Bioplat. The algorithm will take as input all the GeneSignatures you provided it and will suggest a list of genes which conforms the MEtaSIgnature");
+		introdudctionLabel.setText("A Bioplat Metasignature is the result of datamining many input Gene Signatures you selected.\n\n You can select the input Gene Signatures from external databases but you can also use the GeneSignatures you have previously opened in Bioplat. The algorithm will take as input all the GeneSignatures you selected and it will suggest a list of genes which conforms the MetaSIgnature");
 		
 
 	}

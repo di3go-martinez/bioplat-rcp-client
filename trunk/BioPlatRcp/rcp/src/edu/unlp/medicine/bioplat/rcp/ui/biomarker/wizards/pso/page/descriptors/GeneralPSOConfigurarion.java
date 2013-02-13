@@ -49,7 +49,7 @@ public class GeneralPSOConfigurarion extends WizardPageDescriptor {
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		Composite container = Widgets.createDefaultContainer(parent, 2);
-		wizardPage.setDescription("You can use this metaheuristic to optimize your gene signature. You should configure basic parametrs and then three different experiments. \n The first one is for PSO training. It is used by the metaheuristic for getting the 10 betters. \n The second one is for testing. It is used  for getting the best one of the 10 previosuly picked by PSO \n The validation experiment is the one which you want to use to publish. You should not present the results with the same algorithm used for training. This will cause overfitting");
+		wizardPage.setDescription("You can use this metaheuristic to optimize your gene signature. You should configure basic parameters and then three different experiments. \n The first one is for PSO training. It is used by the metaheuristic for getting the best 10. \n The second one is for testing. It is used  for getting the best one of the 10 previosuly picked by PSO \n The validation experiment is the one you want to use to publish. You should not present the results with the same algorithm used for training. This will cause overfitting");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_PARTICLES), "Number of Particles");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(NUMBER_OF_ROUNDS), "Number of Rounds");
 		WizardPageUtils.createText(container, dbc, wmodel.valueHolder(MINIMUM_NUMBER_OF_GENES), "Minimum number of genes");

@@ -65,7 +65,7 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 			openedBiomarker.setLayoutData(gdf.create());
 			openedBiomarker.setText("Gene Signatures in your Bioplat desktop");
 			tr = TableBuilder.create(openedBiomarker).input(openedBiomarkers)
-					.addColumn(ColumnBuilder.create().property("name").title("biomarker name"))
+					.addColumn(ColumnBuilder.create().property("name").title("Biomarker name"))
 					.addColumn(ColumnBuilder.create().property("numberOfGenes").title("Number of genes"))
 			.build();
 			tr.addSelectionChangeListener(new ISelectionChangedListener() {

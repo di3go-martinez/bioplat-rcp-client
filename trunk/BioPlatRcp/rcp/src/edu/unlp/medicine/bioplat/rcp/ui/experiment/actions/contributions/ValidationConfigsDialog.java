@@ -88,7 +88,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
 
-		setMessage("In this dialog you can set up all the validation you would like to do. A validation will be applied on a particular experiment previously loaded in the platform. The experiment must have follow up clinical data (the event and the time). The validation will be done in two steps: 1-Cluster experiment samples by its gene expression profiles 2-Measure the correlation between resulted clusters and follow up data. You will see statistical result on the experiments applied tab of the GeneSignature editor.");
+		setMessage("In this dialog you can set up all the validations you would like to do. Each validation will be applied on a particular experiment previously loaded in the platform. ");
 		return container;
 	}
 

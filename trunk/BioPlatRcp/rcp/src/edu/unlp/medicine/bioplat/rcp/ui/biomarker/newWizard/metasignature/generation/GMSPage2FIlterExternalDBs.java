@@ -111,7 +111,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 	////////////////////////PAGE UI.////////////////////////////////
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-		wp.setDescription("You can import Gene Signatures from GeneSigDB database and MolSigDB database. Use the filter to bring just geneSignatures of interesting.");
+		wp.setDescription("You can import Gene Signatures from GeneSigDB database and MolSigDB database. Use the filter to bring only Geene Signatures of interest.");
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		
 		Composite container = new Composite(parent, SWT.NONE);
@@ -142,13 +142,13 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 		t.setLayoutData(gdf.create());
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(KEYWORD_ON_NAME));
 
-		new Label(filterGroup, SWT.NONE).setText("Having The Following genes (Genes name or Entrez, separated by commas)");
+		new Label(filterGroup, SWT.NONE).setText("Having The following genes (Gene name or Entrez (separated by commas))");
 		t = new Text(filterGroup, SWT.BORDER);
 		t.setToolTipText("keywords by comma separated");
 		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(GENE_NAME_OR_ENTREZ));
 
-		new Label(filterGroup, SWT.NONE).setText("Signatures Id of Names (separated by commas)");
+		new Label(filterGroup, SWT.NONE).setText("Signature Id or Name (separated by commas)");
 		t = new Text(filterGroup, SWT.BORDER);
 		t.setLayoutData(gdf.minSize(SWT.DEFAULT, 100).create());
 		t.setToolTipText("keywords by comma separated");
@@ -231,7 +231,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 			resultSize = holder.value().size();
 			
 			
-			this.resultPage.setDescription(resultSize + " Gene signatures found. Please select the ones you want to take as input, for doing the Metasignature generation.");
+			this.resultPage.setDescription(resultSize + " Gene signatures found. Please select the ones you want to take as input for doing the Metasignature generation.");
 			
 			Composite c = Widgets.createDefaultContainer(parent, 1);
 

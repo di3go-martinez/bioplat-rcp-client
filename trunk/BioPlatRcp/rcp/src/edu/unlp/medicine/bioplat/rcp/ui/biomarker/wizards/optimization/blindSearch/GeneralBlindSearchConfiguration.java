@@ -86,7 +86,7 @@ public class GeneralBlindSearchConfiguration extends WizardPageDescriptor {
 		group.setLayoutData(extensor);
 
 		
-		new Label(group, SWT.NONE).setText("I am interesting in analyzying gene Signatures with no less than ");
+		new Label(group, SWT.NONE).setText("I am interested in analyzying gene Signatures with no less than ");
 		
 		
 		Text t = new Text(group, SWT.BORDER);
@@ -112,11 +112,11 @@ public class GeneralBlindSearchConfiguration extends WizardPageDescriptor {
 		extensor4NumberOfResults.horizontalSpan=6;
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
 		c.setLayoutData(extensor4NumberOfResults);
-		new Label(c, SWT.NONE).setText("Show me the betters ");
+		new Label(c, SWT.NONE).setText("Show me the best ");
 		Text t3 = new Text(c, SWT.BORDER);
 		t3.setLayoutData(new GridData(30, 13));
 		dbc.bindValue(SWTObservables.observeText(t3, SWT.Modify),  wmodel.valueHolder(NUMBER_OF_RESULTS_TO_SHOW));
-		new Label(c, SWT.NONE).setText( " gene Signatures");
+		new Label(c, SWT.NONE).setText( " gene Signatures.");
 		
 		
 		
@@ -132,7 +132,7 @@ public class GeneralBlindSearchConfiguration extends WizardPageDescriptor {
 		fD[0].setHeight(8);
 		fD[0].setStyle(SWT.ITALIC);
 		noteLabel.setFont( new Font(group.getDisplay(),fD[0]));
-		noteLabel.setText("\nNote: Take into account that the time to finish the execution is proportional to the number of genes of the original Gene Siganture and the result range you configure. If the time for searching the whole space is too large, consider PSO instead of blind search.\nWe are working on Parallel blind search to execute in a cluster or a Grid");
+		noteLabel.setText("\nNote: Take into account that the time to finish the execution is proportional to the number of genes of the original Gene Signature and the result range you configure above. If the time for searching the whole space is too long, consider PSO instead of blind search.\nWe are working on Parallel blind search to execute in a Cluster or a Grid.");
 
 		
 		

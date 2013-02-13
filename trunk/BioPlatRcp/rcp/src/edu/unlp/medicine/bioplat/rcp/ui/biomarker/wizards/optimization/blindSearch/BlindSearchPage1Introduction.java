@@ -42,7 +42,7 @@ public class BlindSearchPage1Introduction extends WizardPageDescriptor {
 	@Override
 	public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 		
-		wp.setDescription("Do you have a Gene Signature but you arent sure each gene provides information for prognostic? Here you are.");
+		wp.setDescription("Do you have a Gene Signature but you are not sure whether each gene provides information for prognostic? Here you are an optimizer.");
 		wp.setImageDescriptor(Activator.imageDescriptorFromPlugin("blindSearch-page.png"));
 		Composite container = Widgets.createDefaultContainer(parent, 1);
 
@@ -76,7 +76,7 @@ public class BlindSearchPage1Introduction extends WizardPageDescriptor {
 		introdudctionLabel.setFont( new Font(filterGroup.getDisplay(),fD[0]));
 		
 		
-		introdudctionLabel.setText("Many times you have a Gene Signature in hands, but you are not sure that every gene is useful for progonostic/prediction. This algorithm will look in the whole space solution for a given Gene Signature, the element (Gene Signature) which maximizes the value for measuring prognostic/predictive value. Each element of this solution space is a different Gene Signature. \n\nWhich Gene Signatures are part of this solution space for a given GeneSignature GS1? Any Gene Signature as a result of removing a gene subset of GS1. For example if you have the GeneSignature with genes AURKA, BCL2, BRG3 the solution space will have 6 different elements (Gene Signature): \n\tGene signature containing AURKA, BCL2 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing AURKA alone \n\tGene signature containing BRG3 alone \n\tGene signature containing BCL2 alone");
+		introdudctionLabel.setText("Many times you have a Gene Signature in hands, but you are not sure whether every proposed gene is useful for progonostic/prediction. This algorithm will look for the element (Gene Signature) which maximizes the value for measuring prognostic/predictive value for a given Gene Signature in the whole space solution. Each element of this solution space is a different Gene Signature. \n\nWhich Gene Signatures are part of this solution space for a given GeneSignature GS1? Any Gene Signature as a result of removing a gene subset of GS1. For example, if you have the GeneSignature with genes AURKA, BCL2, BRG3 the solution space will have 6 different elements (Gene Signature): \n\tGene signature containing AURKA, BCL2 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing only AURKA \n\tGene signature containing only BRG3 \n\tGene signature containing only BCL2");
 		
 
 	}

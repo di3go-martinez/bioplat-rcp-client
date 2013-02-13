@@ -175,7 +175,7 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 						new UpdateValueStrategy().setAfterConvertValidator(//
 								FilePathValidator.create().fileMustExist()), null);
 
-				new Label(c, SWT.NONE).setText("Collapse Strategy. If there is more than one probe \nfor the same gene, represent the gene with the sonda with highest:");
+				new Label(c, SWT.NONE).setText("Collapse Strategy. If there is more than one probe \nfor the same gene, represent the gene with the probe with highest:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
