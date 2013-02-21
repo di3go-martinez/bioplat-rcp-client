@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
@@ -33,8 +36,8 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * @author diego martínez
  * 
  */
-public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 
+public abstract class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 	private Biomarker biomarker;
 
 	public ValidationConfigWizard(Biomarker biomarker) {
@@ -55,9 +58,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		// TODO hacer para los otros sources (archivo, InSilicoDB, etc)
 	}
 
-	private List<LogRankTestCommand> commands2apply = Lists.newArrayList();
+	private List<OneBiomarkerCommand> commands2apply = Lists.newArrayList();
 
-	public List<LogRankTestCommand> commands2apply() {
+	public List<OneBiomarkerCommand> commands2apply() {
 		return commands2apply;
 	}
 
@@ -82,9 +85,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
-				final LogRankTestValidationConfig validationConfig = new LogRankTestValidationConfig(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 
-				commands2apply.add(new LogRankTestCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
+				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 				// FIXME hacer un poquito más generico con una
 				// interface MultipageEditor#addPage(Editor, Input,
@@ -106,6 +109,9 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 		afterExecution();
 	}
 
+	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker,
+			ArrayList<ValidationConfig4DoingCluster> newArrayList);
+	
 	protected String getClusterRangeAsString() {
 		
 		return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
@@ -117,7 +123,7 @@ public class ValidationConfigWizard extends AbstractWizard<List<AbstractExperime
 	}
 
 	// TODO mejorar el nombre
-	protected void register(LogRankTestValidationConfig validationConfig) {
+	protected void register(ValidationConfig4DoingCluster validationConfig) {
 
 	}
 
