@@ -398,7 +398,7 @@
       
       <actionContribution
             caption="Apply Experiment"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyExperimentActionContribution"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             image="resources/icons/validate.png"
             onMenu="true"
             onToolbar="true">
@@ -462,6 +462,16 @@
             caption="Blind search Optimizer"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
             image="resources/icons/blindSearch.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Apply Experiment"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
+            image="resources/icons/tree.png"
             onMenu="true"
             onToolbar="true">
          <selection
