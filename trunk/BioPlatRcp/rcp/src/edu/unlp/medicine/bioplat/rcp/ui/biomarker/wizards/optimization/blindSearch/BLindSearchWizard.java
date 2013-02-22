@@ -22,6 +22,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.exceptions.BioplatException;
 import edu.unlp.medicine.domainLogic.framework.exceptions.BioplatWarning;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -40,9 +41,9 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 	
 	
 
-	private List<LogRankTestValidationConfig> forTesting=new ArrayList<LogRankTestValidationConfig>();
-	private List<LogRankTestValidationConfig> forTraining=new ArrayList<LogRankTestValidationConfig>();
-	private List<LogRankTestValidationConfig> forValidation=new ArrayList<LogRankTestValidationConfig>();
+	private List<ValidationConfig4DoingCluster> forTesting=new ArrayList<ValidationConfig4DoingCluster>();
+	private List<ValidationConfig4DoingCluster> forTraining=new ArrayList<ValidationConfig4DoingCluster>();
+	private List<ValidationConfig4DoingCluster> forValidation=new ArrayList<ValidationConfig4DoingCluster>();
 	private Biomarker biomarker;
 	int numberOfGenesForResultingGSFrom;
 	int numberOfGenesForResultingGSTo;
@@ -92,9 +93,9 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 		blindSearchCommand.setNumberOfResults(numberOfResultsToShow);
 
 		
-		blindSearchCommand.setLogRankTestValidationConfig4Training(forTraining.get(0));
-		if (forValidation != null) blindSearchCommand.setLogRankTestValidationConfig4Validation(forValidation.get(0));
-		if (forTesting != null) blindSearchCommand.setLogRankTestValidationConfig4Testing(forTesting.get(0));
+		blindSearchCommand.setLogRankTestValidationConfig4Training(new LogRankTestValidationConfig(forTraining.get(0)));
+		if (forValidation != null) blindSearchCommand.setLogRankTestValidationConfig4Validation(new LogRankTestValidationConfig(forValidation.get(0)));
+		if (forTesting != null) blindSearchCommand.setLogRankTestValidationConfig4Testing(new LogRankTestValidationConfig(forTesting.get(0)));
 		
 		//blindSearchCommand.execute();
 		
