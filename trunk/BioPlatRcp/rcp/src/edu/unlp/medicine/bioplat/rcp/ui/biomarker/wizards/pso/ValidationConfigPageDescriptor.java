@@ -17,6 +17,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.Validat
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -65,7 +66,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker) {
+				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, true) {
 					@Override
 					protected void register(ValidationConfig4DoingCluster validationConfig) {
 						update(validationConfig);
@@ -73,11 +74,14 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 					@Override
 					public OneBiomarkerCommand createCommand(
-							Biomarker findBiomarker,
-							ArrayList<ValidationConfig4DoingCluster> newArrayList) {
-						// TODO Auto-generated method stub
-						return null;
+							Biomarker biomarker,
+							ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
+						
+						return new LogRankTestCommand(biomarker, validationConfigs);
 					}
+
+					
+					
 				};
 				vcw.open();
 			}
