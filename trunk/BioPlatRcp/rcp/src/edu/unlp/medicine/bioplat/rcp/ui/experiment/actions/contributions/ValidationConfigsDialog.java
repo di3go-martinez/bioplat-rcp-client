@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -28,7 +29,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
@@ -62,7 +65,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 		newShell.setText("Apply experiment for Gene Signature validation");
 	}
 
-	private final List<LogRankTestValidationConfig> data = Lists.newArrayList();
+	private final List<ValidationConfig4DoingCluster> data = Lists.newArrayList();
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -128,7 +131,7 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 				
 				monitor.beginTask("", experimentsWizard.commands2apply().size());
 				int count = 0;
-				for (LogRankTestCommand command : experimentsWizard.commands2apply()) {
+				for (OneBiomarkerCommand command : experimentsWizard.commands2apply()) {
 					try {
 						command.execute();
 						count++;
@@ -166,9 +169,9 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 	private TableReference tr;
 
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
-		return new ValidationConfigWizard(biomarker) {
+		return new ValidationConfigWizard(biomarker, true) {
 			@Override
-			protected void register(LogRankTestValidationConfig validationConfig) {
+			protected void register(ValidationConfig4DoingCluster validationConfig) {
 				data.add(validationConfig);
 			}
 
@@ -176,6 +179,8 @@ public class ValidationConfigsDialog extends TitleAreaDialog {
 			protected void afterExecution() {
 				tr.refresh();
 			}
+
+			
 		};
 	}
 }
