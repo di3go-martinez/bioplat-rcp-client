@@ -110,4 +110,10 @@ public class WizardModel {
 	}
 
 	private static Logger logger = LoggerFactory.getLogger(WizardModel.class);
+
+	public void replace(String key,
+			WritableValue writableValue) {
+		values.put(key, writableValue);
+		
+	}
 }
