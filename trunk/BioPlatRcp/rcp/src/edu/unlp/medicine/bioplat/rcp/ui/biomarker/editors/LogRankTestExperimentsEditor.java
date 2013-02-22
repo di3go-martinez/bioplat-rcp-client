@@ -29,12 +29,12 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
-public class BiomarkerAppliedExperimentsEditor extends AbstractEditorPart<Biomarker> {
+public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 	private TableReference tr;
 	private Helper helper;
 
-	public BiomarkerAppliedExperimentsEditor(boolean autoUpdatableTitle) {
+	public LogRankTestExperimentsEditor(boolean autoUpdatableTitle) {
 		super(autoUpdatableTitle);
 	}
 
