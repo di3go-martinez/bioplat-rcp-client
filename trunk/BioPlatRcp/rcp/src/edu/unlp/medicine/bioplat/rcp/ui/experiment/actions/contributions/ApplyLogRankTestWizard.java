@@ -38,9 +38,10 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  */
 public class ApplyLogRankTestWizard extends ValidationConfigWizard {
 
-	public ApplyLogRankTestWizard(Biomarker biomarker) {
-		super(biomarker);
-		// TODO Auto-generated constructor stub
+
+	public ApplyLogRankTestWizard(Biomarker biomarker, boolean acceptRange) {
+		super(biomarker, acceptRange);
+		
 	}
 
 	@Override

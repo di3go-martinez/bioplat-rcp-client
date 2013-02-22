@@ -43,6 +43,8 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 		super(parentShell);
 		this.biomarker = biomarker;
 
+		//copy&paste!!!
+		
 		// TODO mejorar
 		experimentsWizard = createExperimentSelectorWizard(biomarker);
 		// TODO conseguir la selección actual
@@ -166,7 +168,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	private TableReference tr;
 
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
-		return new ApplySurvCompTestWizard(biomarker) {
+		return new ApplySurvCompTestWizard(biomarker, true) {
 			@Override
 			protected void register(ValidationConfig4DoingCluster validationConfig) {
 				data.add(validationConfig);

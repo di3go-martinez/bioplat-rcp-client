@@ -163,12 +163,13 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	}
 
 	private Biomarker biomarker;
+
 	private ValidationConfigWizard experimentsWizard;
 	private WizardDialog wd;
 	private TableReference tr;
 
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
-		return new ApplyLogRankTestWizard(biomarker) {
+		return new ApplyLogRankTestWizard(biomarker, true) {
 			@Override
 			protected void register(ValidationConfig4DoingCluster validationConfig) {
 				data.add(validationConfig);

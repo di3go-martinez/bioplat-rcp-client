@@ -39,9 +39,11 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  */
 public class ApplySurvCompTestWizard extends ValidationConfigWizard {
 
-	public ApplySurvCompTestWizard(Biomarker biomarker) {
-		super(biomarker);
-		// TODO Auto-generated constructor stub
+
+
+	public ApplySurvCompTestWizard(Biomarker biomarker, boolean acceptRange) {
+		super(biomarker, acceptRange);
+		
 	}
 
 	@Override

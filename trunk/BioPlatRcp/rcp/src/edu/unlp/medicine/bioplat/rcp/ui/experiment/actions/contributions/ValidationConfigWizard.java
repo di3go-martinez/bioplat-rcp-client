@@ -39,9 +39,22 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 public abstract class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 	private Biomarker biomarker;
+	private boolean acceptRange;
+	 
 
-	public ValidationConfigWizard(Biomarker biomarker) {
+	/**
+	 * 
+	 * @param biomarker
+	 * @param acceptRange
+	 */
+	public ValidationConfigWizard(Biomarker biomarker, boolean acceptRange) {
 		this.biomarker = biomarker;
+		this.acceptRange = acceptRange;
+		
+		//Se invoca al replace porque la variable acceptRange no esta inicializada al momento de crear el modelo.
+	    wizardModel().replace(PagesDescriptors.NUMBER_OF_CLUSTERS, getClusterWriatableValue());
+
+		
 	}
 
 	@Override
@@ -72,7 +85,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		String numberOfClusters = getClusterRangeAsString(); 
 		
 		
-		wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+	//no va 	wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 		
 		
 		
@@ -114,12 +127,21 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	
 	protected String getClusterRangeAsString() {
 		
-		return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+		if (acceptRange){
+			return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);	
+		}
+		else{
+			Integer cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+			return String.valueOf(cluster);	
+		}
+		
+		
+		
 	}
 
 	// TODO mejorar el nombre
 	protected void afterExecution() {
-
+		
 	}
 
 	// TODO mejorar el nombre
@@ -163,11 +185,17 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		;
 
 		WritableValue wv;
-		wv = clusterWritableValue();
+		wv = getClusterWriatableValue();
 
 		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, wv);
 
 		return wm;
+	}
+
+	private WritableValue getClusterWriatableValue() {
+		if (acceptRange) return new WritableValue("2..3", String.class);
+		else return new WritableValue(2, Integer.class);
+		
 	}
 
 	protected WritableValue clusterWritableValue() {
