@@ -26,7 +26,9 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  */
 public abstract class AbstractActionContribution<T extends AbstractEntity> extends Action implements ActionContribution<T> {
 
-	// TODO revisar bien esto.... a veces tira error
+	
+	//active editor es necesatio para saber la selección actual
+	// TODO revisar cuándo y por qué puede tirar error
 	private IEditorPart activeEditor;
 
 	public AbstractActionContribution() {
