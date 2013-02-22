@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -19,7 +21,10 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.Validat
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 /**
@@ -85,17 +90,25 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ValidationConfigWizard vcw = new ValidationConfigWizardWithoutRange(biomarker) {
+				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, false) {
 					@Override
-					protected void register(LogRankTestValidationConfig validationConfig) {
+					protected void register(ValidationConfig4DoingCluster validationConfig) {
 						update(validationConfig);
+					}
+
+					@Override
+					public OneBiomarkerCommand createCommand(
+							Biomarker aBiomarker,
+							ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
+						// TODO Auto-generated method stub
+						return new LogRankTestCommand(aBiomarker, validationConfigs);
 					}
 				};
 
 				vcw.open();
 			}
 
-			private void update(LogRankTestValidationConfig config) {
+			private void update(ValidationConfig4DoingCluster config) {
 
 				if (!contentsCreated) {
 					experimentName = Widgets.createTextWithLabel(innerContainer, "Experiment Name", config, "experimentToValidate.name").readOnly();
