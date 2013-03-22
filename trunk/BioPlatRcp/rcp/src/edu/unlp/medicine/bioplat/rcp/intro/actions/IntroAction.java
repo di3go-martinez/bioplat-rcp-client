@@ -47,7 +47,7 @@ public abstract class IntroAction extends Action {
 	 * @return true si el wizard se cerró
 	 */
 	protected boolean open(IWorkbenchWizard wizard) {
-		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), wizard);
+		WizardDialog d = new MyWizardDialog(PlatformUIUtils.findShell(), wizard);
 
 		wizard.init(PlatformUI.getWorkbench(), StructuredSelection.EMPTY);
 
