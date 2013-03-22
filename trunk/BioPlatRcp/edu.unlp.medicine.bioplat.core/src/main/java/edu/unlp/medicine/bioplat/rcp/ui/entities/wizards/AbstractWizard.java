@@ -21,7 +21,12 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -95,6 +100,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 					setControl(control);
 
+					// Point size = getShell().computeSize(510, 540);
+					//getShell().setSize(510, 540);
+
 				}
 
 				private void fillDefaultsIfNecesary(Composite control) {
@@ -111,6 +119,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				public boolean canFlipToNextPage() {
 					return isPageComplete() && (pd.hasResultPage() || getNextPage() != null);
 				}
+
+//				@Override
+//				public Shell getShell() {
+//					return super.getShell();
+//				}
 
 			});
 
@@ -173,7 +186,21 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *         false si se canceló la operaciòn
 	 */
 	public boolean open() {
-		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this);
+		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this)
+//		{
+//			@Override
+//			protected Control createContents(Composite parent) {
+//				Control result = super.createContents(parent);
+//				getShell().addListener(SWT.Resize, new Listener() {
+//					@Override
+//					public void handleEvent(Event event) {
+//						getShell().setSize(100, 100);
+//					}
+//				});
+//				return result;
+//			}
+//		}
+		;
 
 		this.init(PlatformUI.getWorkbench());
 		d.setBlockOnOpen(blockOnOpen);
