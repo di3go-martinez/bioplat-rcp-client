@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.statisticals;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -22,25 +23,14 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 		super(autoUpdatableTitle);
 	}
 
-	private FormToolkit toolkit;
+	private static FormToolkit toolkit;
 
 	@Override
 	protected void doCreatePartControl(final Composite parent) {
-		toolkit = new FormToolkit(parent.getDisplay());
-
-		ScrolledForm container = toolkit.createScrolledForm(parent);
-		// container.setLayout(GridLayoutFactory.fillDefaults().create());
-		container.getBody().setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
-
-		final ExperimentAppliedToAMetasignature experiment = model();
-
-		createExpandable(container, "Survival Curves", new SurvivalCurves(toolkit, experiment));
-
-		createExpandable(container, "LogRankTestChiSqured", new LogRankTest(toolkit, experiment));
-
+		makeView(parent, model());
 	}
 
-	private void createExpandable(final ScrolledForm parent, String title, CompositeGenerator compositeGenerator) {
+	private static void createExpandable(final ScrolledForm parent, String title, CompositeGenerator compositeGenerator) {
 		final ExpandableComposite ec = toolkit.createExpandableComposite(parent.getBody(), ExpandableComposite.TWISTIE | ExpandableComposite.CLIENT_INDENT);
 
 		try {
@@ -62,5 +52,21 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 	public void dispose() {
 		toolkit.dispose();
 		super.dispose();
+	}
+
+	public static void makeView(Composite parent, ExperimentAppliedToAMetasignature model) {
+		toolkit = new FormToolkit(parent.getDisplay());
+
+		ScrolledForm container = toolkit.createScrolledForm(parent);
+		// container.setLayout(GridLayoutFactory.fillDefaults().create());
+		container.getBody().setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+
+		final ExperimentAppliedToAMetasignature experiment = model;
+
+		createExpandable(container, "Survival Curves", new SurvivalCurves(toolkit, experiment));
+
+		createExpandable(container, "LogRankTestChiSqured", new LogRankTest(toolkit, experiment));
+
 	}
 }

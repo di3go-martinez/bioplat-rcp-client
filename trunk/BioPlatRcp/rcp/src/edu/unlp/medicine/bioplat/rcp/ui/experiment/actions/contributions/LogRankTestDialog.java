@@ -27,9 +27,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -69,7 +67,8 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 
-		Composite container = (Composite) super.createDialogArea(parent);
+		Composite container = parent;// (Composite)
+										// super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 
@@ -127,7 +126,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				int cantOK = 0;
-				
+
 				monitor.beginTask("", experimentsWizard.commands2apply().size());
 				int count = 0;
 				for (OneBiomarkerCommand command : experimentsWizard.commands2apply()) {
@@ -135,14 +134,16 @@ public class LogRankTestDialog extends TitleAreaDialog {
 						command.execute();
 						count++;
 					} catch (ClusteringException e) {
-						//Agrego el mensaje de error.
+						// Agrego el mensaje de error.
 						MessageManager.INSTANCE.add(Message.error(e.getSpecificError() + ". Details: " + e.getGenericError(), e));
-						//PlatformUIUtils.openInformation("Experiments Applied", e.getSpecificError() + ". Details: " + e.getGenericError());
-						
-					}
-					catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment......" , e));
-						//PlatformUIUtils.openInformation("Experiments Applied", "Unexpected error applying an experiment......");
+						// PlatformUIUtils.openInformation("Experiments Applied",
+						// e.getSpecificError() + ". Details: " +
+						// e.getGenericError());
+
+					} catch (Exception e) {
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment......", e));
+						// PlatformUIUtils.openInformation("Experiments Applied",
+						// "Unexpected error applying an experiment......");
 					}
 					monitor.worked(1);
 				}
@@ -151,7 +152,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 				if (count == experimentsWizard.commands2apply().size())
 					PlatformUIUtils.openInformation("Experiments Applied", "All validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture");
 				else
-					PlatformUIUtils.openInformation("Experiments Applied", "There were " + (experimentsWizard.commands2apply().size()-count) + " validations with error and " + count + " were succesfully executed. Please see the Message view for more details.");
+					PlatformUIUtils.openInformation("Experiments Applied", "There were " + (experimentsWizard.commands2apply().size() - count) + " validations with error and " + count + " were succesfully executed. Please see the Message view for more details.");
 				monitor.done();
 				return ValidationStatus.ok();
 			}
