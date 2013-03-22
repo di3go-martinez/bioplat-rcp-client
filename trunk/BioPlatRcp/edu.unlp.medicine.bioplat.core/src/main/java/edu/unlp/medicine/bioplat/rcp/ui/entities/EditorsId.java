@@ -1,5 +1,11 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities;
 
+/**
+ * TODO por qué está deprecado
+ * 
+ * @author diego
+ * 
+ */
 @Deprecated
 public class EditorsId {
 
