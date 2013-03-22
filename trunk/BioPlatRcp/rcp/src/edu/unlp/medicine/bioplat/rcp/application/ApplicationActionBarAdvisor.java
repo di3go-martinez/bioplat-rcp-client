@@ -101,8 +101,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// top level additions
 		menuBar.add(fileMenu);
 
-		// utilizado por el contributerClass de los editores
+		// utilizado por el contributerClass de los editores; "Operations Menu"
 		menuBar.add(new GroupMarker("entidad.additions"));
+		// MenuManager mm = new MenuManager("ABM");
+		// menuBar.add(mm);
+		// mm.add(new Separator("abm.additions"));
 		menuBar.add(windowMenu);
 		// menuBar.add(helpMenu);
 

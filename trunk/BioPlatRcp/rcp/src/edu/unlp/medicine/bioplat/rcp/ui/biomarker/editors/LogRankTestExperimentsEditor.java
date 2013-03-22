@@ -18,13 +18,16 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
@@ -133,7 +136,9 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				final ExperimentAppliedToAMetasignature exp = eas.get(i);
 				TableEditor editor;
 				editor = new TableEditor(table);
-				Button c = createOpenEditorButton(exp, table, "open applied experiment", AppliedExperimentEditor.id());
+				Button c = new Button(table, SWT.FLAT);
+				c.setText("...");
+				c.addSelectionListener(openExperimentAppliedDialog(exp));
 				editor.grabHorizontal = true;
 				// editor.minimumHeight = 100;
 				editor.setEditor(c, items[i], newBaseColumnIndex);
@@ -168,6 +173,28 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 
 			}
 
+		}
+
+		protected SelectionAdapter openExperimentAppliedDialog(final ExperimentAppliedToAMetasignature exp) {
+			return new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					new DialogModel<ExperimentAppliedToAMetasignature>(LogRankTestExperimentsEditor.this.getSite().getShell(), new ModelProvider<ExperimentAppliedToAMetasignature>() {
+
+						@Override
+						public ExperimentAppliedToAMetasignature model() {
+							return exp;
+						}
+					}) {
+						@Override
+						protected Control createDialogArea(Composite parent) {
+							final Composite container = Widgets.createDefaultContainer((Composite) super.createDialogArea(parent));
+							AppliedExperimentEditor.makeView(container, model());
+							return container;
+						}
+					}.open();
+				}
+			};
 		}
 
 		private TableEditor createAndConfigureEditor(Table t, Control c, TableItem ti, int index) {
