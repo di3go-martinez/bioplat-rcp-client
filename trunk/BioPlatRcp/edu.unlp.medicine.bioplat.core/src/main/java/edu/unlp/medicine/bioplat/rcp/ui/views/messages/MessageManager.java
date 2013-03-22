@@ -32,16 +32,17 @@ public enum MessageManager {
 		messages.add(msg);
 		msg.checkRequiresView(this);
 		refresh();
-		
+
 		return this;
 	}
 
 	private void refresh() {
 		MessageViewPart view = PlatformUIUtils.findView(MessageViewPart.id());
-		view.focusAtLastLine();
-		
-		if (view != null)
+
+		if (view != null) {
 			view.refresh();
+			view.focusAtLastLine();
+		}
 	}
 
 	public boolean isThereAnyMessage() {
