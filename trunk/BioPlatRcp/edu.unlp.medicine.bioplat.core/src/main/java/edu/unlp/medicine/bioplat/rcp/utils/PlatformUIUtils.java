@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
@@ -204,4 +206,25 @@ public class PlatformUIUtils {
 			}
 		});
 	}
+
+	public static void center(Shell shell) {
+		Point p = centerPointFor(shell);
+		shell.setLocation(p.x, p.y);
+
+	}
+
+	// FIXME no anda bien...
+	public static Point centerPointFor(Shell shell) {
+		Display display = shell.getDisplay();
+
+		org.eclipse.swt.widgets.Monitor primary = display.getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+
+		return new Point(x, y);
+	}
+
 }
