@@ -18,8 +18,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
-import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
@@ -27,9 +25,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
-import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
+//TODO sacar este copy&paste de LogRankTestExperimentsEditor!!
 public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 	private TableReference tr;
@@ -56,7 +54,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				// .model(model(), "experiemntsApplied")//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("survCompIndex").title("SurvComp index"))//
-				//.addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//
+				// .addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//
 				// TODO .addContextualMenu(new MyMenu())//
 				.build();
 
@@ -134,7 +132,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				final SurvCompValidationResult exp = eas.get(i);
 				TableEditor editor;
 				editor = new TableEditor(table);
-				Button c = createOpenEditorButton(exp, table, "open applied experiment", AppliedExperimentEditor.id());
+				Button c = createOpenEditorButton(exp, table, "Open Applied Experiment", AppliedExperimentEditor.id());
 				editor.grabHorizontal = true;
 				// editor.minimumHeight = 100;
 				editor.setEditor(c, items[i], newBaseColumnIndex);
@@ -144,7 +142,9 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 				editor = new TableEditor(table);
 				try {
-					//c = createOpenEditorButton(exp.getOriginalExperiment(), table, "open original experiment", EditorsId.experimentEditorId());
+					// c = createOpenEditorButton(exp.getOriginalExperiment(),
+					// table, "open original experiment",
+					// EditorsId.experimentEditorId());
 					editor.grabHorizontal = true;
 					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 				} catch (ExperimentBuildingException e) {
@@ -156,12 +156,12 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				c = new Button(table, SWT.FLAT);
 				// c.setText("Export to MEV");;
 				c.setImage(PlatformUIUtils.findImage("Export to MEV"));
-//				c.addSelectionListener(new SelectionAdapter() {
-//					@Override
-//					public void widgetSelected(SelectionEvent e) {
-//						new MevWizard(exp).blockOnOpen().open();
-//					}
-//				});
+				// c.addSelectionListener(new SelectionAdapter() {
+				// @Override
+				// public void widgetSelected(SelectionEvent e) {
+				// new MevWizard(exp).blockOnOpen().open();
+				// }
+				// });
 				editor.grabHorizontal = true;
 				editor.setEditor(c, items[i], newBaseColumnIndex + 2);
 				// createAndConfigureEditor(table, c, items[i],

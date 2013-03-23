@@ -4,15 +4,18 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -148,7 +151,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 
 				editor = new TableEditor(table);
 				try {
-					c = createOpenEditorButton(exp.getOriginalExperiment(), table, "open original experiment", EditorsId.experimentEditorId());
+					c = createOpenEditorButton(exp.getOriginalExperiment(), table, "Open Original Experiment", EditorsId.experimentEditorId());
 					editor.grabHorizontal = true;
 					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 				} catch (ExperimentBuildingException e) {
@@ -179,7 +182,8 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 			return new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					new DialogModel<ExperimentAppliedToAMetasignature>(LogRankTestExperimentsEditor.this.getSite().getShell(), new ModelProvider<ExperimentAppliedToAMetasignature>() {
+					final Shell shell = LogRankTestExperimentsEditor.this.getSite().getShell();
+					Dialog dialog = new DialogModel<ExperimentAppliedToAMetasignature>(shell, new ModelProvider<ExperimentAppliedToAMetasignature>() {
 
 						@Override
 						public ExperimentAppliedToAMetasignature model() {
@@ -192,7 +196,20 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 							AppliedExperimentEditor.makeView(container, model());
 							return container;
 						}
-					}.open();
+
+						@Override
+						protected Point getInitialSize() {
+							return new Point(800, 600);
+						}
+
+						@Override
+						protected Point getInitialLocation(Point initialSize) {
+							return PlatformUIUtils.centerPointFor(this.getShell());
+						}
+					};
+					dialog.create();
+
+					dialog.open();
 				}
 			};
 		}
