@@ -116,7 +116,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				// creo las nuevas columnas
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
-				tc.setText("Applied Experiment");
+				tc.setText("Open Applied Experiment");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 				tc.setWidth(150);
