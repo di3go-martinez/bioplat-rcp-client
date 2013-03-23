@@ -21,11 +21,10 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -41,7 +40,6 @@ import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.domainLogic.framework.exceptions.BioplatException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 /**
@@ -85,8 +83,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			return;
 		initialized = true;
 		IWizardPage page;
-		for (final WizardPageDescriptor pd : createPagesDescriptors()) {
-			addPage(page = new WizardPage(pd.getPageName(), pd.getTitle(), pd.getImageDescriptor()) {
+		for (final WizardPageDescriptor pageDescriptor : createPagesDescriptors()) {
+			addPage(page = new WizardPage(pageDescriptor.getPageName(), pageDescriptor.getTitle(), pageDescriptor.getImageDescriptor()) {
 
 				@Override
 				public void createControl(Composite parent) {
@@ -94,14 +92,14 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					final DataBindingContext dbc = new DataBindingContext();
 
 					WizardPageSupport.create(this, dbc);
-					Composite control = pd.create(this, parent, dbc, wizardModel());
+					Composite control = pageDescriptor.create(this, parent, dbc, wizardModel());
 
 					fillDefaultsIfNecesary(control);
 
 					setControl(control);
 
 					// Point size = getShell().computeSize(510, 540);
-					//getShell().setSize(510, 540);
+					// getShell().setSize(510, 540);
 
 				}
 
@@ -112,26 +110,26 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean isPageComplete() {
-					return pd.isPageComplete(/* this? */wizardModel());
+					return pageDescriptor.isPageComplete(/* this? */wizardModel());
 				}
 
 				@Override
 				public boolean canFlipToNextPage() {
-					return isPageComplete() && (pd.hasResultPage() || getNextPage() != null);
+					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null);
 				}
 
-//				@Override
-//				public Shell getShell() {
-//					return super.getShell();
-//				}
+				// @Override
+				// public Shell getShell() {
+				// return super.getShell();
+				// }
 
 			});
 
-			map.put(page, pd);
+			map.put(page, pageDescriptor);
 
-			if (pd.hasResultPage()) {
+			if (pageDescriptor.hasResultPage()) {
 				// TODO pd.createResultPage();
-				IWizardPage p = new ResultPage(this, pd);
+				IWizardPage p = new ResultPage(this, pageDescriptor);
 				map.put(p, null);
 				addPage(p);
 			}
@@ -186,29 +184,53 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *         false si se canceló la operaciòn
 	 */
 	public boolean open() {
-		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this)
-//		{
-//			@Override
-//			protected Control createContents(Composite parent) {
-//				Control result = super.createContents(parent);
-//				getShell().addListener(SWT.Resize, new Listener() {
-//					@Override
-//					public void handleEvent(Event event) {
-//						getShell().setSize(100, 100);
-//					}
-//				});
-//				return result;
-//			}
-//		}
+		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this) {
+			private boolean initialize = true;
+
+			@Override
+			protected Control createContents(Composite parent) {
+				if (initialize) {
+					getShell().setSize(Math.max(500, getShell().getSize().x), Math.max(500, getShell().getSize().y));
+					center(getShell().getDisplay(), getShell());
+					initialize = false;
+				}
+				Control result = super.createContents(parent);
+				// getShell().addListener(SWT.Resize, new Listener() {
+				// @Override
+				// public void handleEvent(Event event) {
+				// getShell().setSize(500, 500);
+				// }
+				// });
+				return result;
+			}
+		}
+
 		;
 
 		this.init(PlatformUI.getWorkbench());
 		d.setBlockOnOpen(blockOnOpen);
-
+		d.create();
+		// FIXME ver
+		// org.eclipse.ui.internal.handlers.WizardHandler.New.executeHandler(ExecutionEvent
+		// event)
+		d.getShell().setSize(Math.max(500, d.getShell().getSize().x), Math.max(500, d.getShell().getSize().y));
+		center(d.getShell().getDisplay(), d.getShell());
 		// TODO resolver con scrollbars
-		d.setPageSize(400, 450);
+		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
+
 		return d.open() == Dialog.OK;
+	}
+
+	private void center(Display display, Shell shell) {
+		org.eclipse.swt.widgets.Monitor primary = display.getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+
+		shell.setLocation(x, y);
 	}
 
 	/**
@@ -270,13 +292,12 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				// TODO revisar mejor lo del error holder y lo de status...
 				final Holder<Throwable> errorHolder = Holder.create(null);
-				//IStatus status = ValidationStatus.ok();
+				// IStatus status = ValidationStatus.ok();
 				T o = null;
-				
+
 				try {
 					o = holder.get(); // join
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					Throwable t = (e.getCause() != null) ? e.getCause() : e;
 					errorHolder.hold(t);
 				}
@@ -287,13 +308,12 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					@Override
 					public void run() {
 						try {
-							if (errorHolder.value()!=null){
+							if (errorHolder.value() != null) {
 								progressMonitor.done();
 								doInUIError(errorHolder.value());
 								addMessageErrorToMessageView(errorHolder.value());
-								
-							}
-							else{
+
+							} else {
 								progressMonitor.done();
 								doInUI(oo);
 								addMessageToMessageView(oo);
@@ -304,26 +324,30 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 						}
 					}
 
-					
 				});
-				if (errorHolder.value()==null) return ValidationStatus.ok();
-				else return ValidationStatus.error(errorHolder.value().getMessage(), errorHolder.value());
+				if (errorHolder.value() == null)
+					return ValidationStatus.ok();
+				else
+					return ValidationStatus.error(errorHolder.value().getMessage(), errorHolder.value());
 			}
 
-
-//			private IStatus processBioplatException(BioplatException bioplatE) {
-//				IStatus status = bioplatE.isWarning() ? ValidationStatus.warning(getErrorMessage().getText()):ValidationStatus.error(getErrorMessage().getText(), bioplatE);
-//				return status;
-//				
-//			}
-//
-//			private void setErrorOnMessageView(Throwable t){
-//				//Si no setearon error desde afuera seteo uno por defecto
-//				if (getErrorMessage()==null) setErrorMessage(Message.error(defaultErrorMsg(t), t));
-//				MessageManager.INSTANCE.add(getErrorMessage());
-//			}
-//
-//			
+			// private IStatus processBioplatException(BioplatException
+			// bioplatE) {
+			// IStatus status = bioplatE.isWarning() ?
+			// ValidationStatus.warning(getErrorMessage().getText()):ValidationStatus.error(getErrorMessage().getText(),
+			// bioplatE);
+			// return status;
+			//
+			// }
+			//
+			// private void setErrorOnMessageView(Throwable t){
+			// //Si no setearon error desde afuera seteo uno por defecto
+			// if (getErrorMessage()==null)
+			// setErrorMessage(Message.error(defaultErrorMsg(t), t));
+			// MessageManager.INSTANCE.add(getErrorMessage());
+			// }
+			//
+			//
 			private String defaultErrorMsg(Throwable t) {
 				return "Unexpected error executing " + getTaskName() + ": " + t.getMessage();
 			}
@@ -336,12 +360,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		return true;
 
 	}
-	
-	
-	
-	Message errorMessage=null;
-	
 
+	Message errorMessage = null;
 
 	public Message getErrorMessage() {
 		return errorMessage;
@@ -350,7 +370,6 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	public void setErrorMessage(Message errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-
 
 	protected abstract String getTaskName();
 
@@ -388,22 +407,20 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *            es el resultado de {@link #backgroundProcess(Monitor)}
 	 */
 	protected abstract void doInUI(T result) throws Exception;
-	
-	public void doInUIError(Throwable e) throws Exception{
-		
+
+	public void doInUIError(Throwable e) throws Exception {
+
 	}
 
 	public void addMessageToMessageView(T oo) {
 		MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed"));
-		
+
 	}
-	
+
 	private void addMessageErrorToMessageView(Throwable t) {
 		MessageManager.INSTANCE.add(Message.error(t.getMessage(), t));
-		
+
 	}
-
-
 
 }
 
