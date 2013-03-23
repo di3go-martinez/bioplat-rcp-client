@@ -21,6 +21,7 @@ public class AppliedExperimentEditor extends ExperimentEditor {
 		return tabs;
 	}
 
+	// TODO que no sea un método estático...
 	public static void makeView(Composite container, ExperimentAppliedToAMetasignature model) {
 		StatisticalDataEditor.makeView(container, model);
 
