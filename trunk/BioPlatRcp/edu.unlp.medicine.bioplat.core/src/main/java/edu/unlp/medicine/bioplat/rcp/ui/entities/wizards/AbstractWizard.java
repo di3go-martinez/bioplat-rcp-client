@@ -21,11 +21,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -191,7 +188,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			protected Control createContents(Composite parent) {
 				if (initialize) {
 					getShell().setSize(Math.max(500, getShell().getSize().x), Math.max(500, getShell().getSize().y));
-					center(getShell().getDisplay(), getShell());
+					PlatformUIUtils.center(getShell());
 					initialize = false;
 				}
 				Control result = super.createContents(parent);
@@ -214,23 +211,12 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// org.eclipse.ui.internal.handlers.WizardHandler.New.executeHandler(ExecutionEvent
 		// event)
 		d.getShell().setSize(Math.max(500, d.getShell().getSize().x), Math.max(500, d.getShell().getSize().y));
-		center(d.getShell().getDisplay(), d.getShell());
+		PlatformUIUtils.center(d.getShell());
 		// TODO resolver con scrollbars
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
 
 		return d.open() == Dialog.OK;
-	}
-
-	private void center(Display display, Shell shell) {
-		org.eclipse.swt.widgets.Monitor primary = display.getPrimaryMonitor();
-		Rectangle bounds = primary.getBounds();
-		Rectangle rect = shell.getBounds();
-
-		int x = bounds.x + (bounds.width - rect.width) / 2;
-		int y = bounds.y + (bounds.height - rect.height) / 2;
-
-		shell.setLocation(x, y);
 	}
 
 	/**
