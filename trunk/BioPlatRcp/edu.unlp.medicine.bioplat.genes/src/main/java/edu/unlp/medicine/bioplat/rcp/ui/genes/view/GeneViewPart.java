@@ -14,6 +14,8 @@ import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISaveablePart2;
@@ -123,7 +125,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 	private List<Widget> widgets = Lists.newArrayList();
 	// private List<String> browserTitles = Lists.newArrayList();
 	private List<Browser> browsers = Lists.newArrayList();
-	private static final String REST_URL_NCBI = "NCBI::http://www.ncbi.nlm.nih.gov/gene/?term=" + GeneUrlParser.GEN_ID_HOLDER;
+
 	// urls rest configuradas, contiene variables seguramente ej el id del gen
 	// Agrego la de NCBI por default
 	private String[] DEFAULTS = InitializeGenesUrlStartup.fillDefaults();
@@ -191,6 +193,14 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		tabContainer = new CTabFolder(container, SWT.BORDER);
 		tabContainer.setLayout(GridLayoutFactory.swtDefaults().create());
 		tabContainer.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
+
+		tabContainer.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				setMeFocus();
+			}
+		});
 
 		// Creo la solapa cabecera
 		CTabItem headerTab = new CTabItem(tabContainer, SWT.NONE);
@@ -277,6 +287,11 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 
 	@Override
 	public void setFocus() {
+	}
+
+	private void setMeFocus() {
+		if (isDirty()) // hay browsers cargando, ignoro el foco
+			return;
 		int i = 0;
 		for (GeneUrl gurl : geneUrls) {
 			final String url = gurl.url(currentGene);
