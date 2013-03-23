@@ -14,8 +14,8 @@ import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISaveablePart2;
@@ -194,10 +194,12 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		tabContainer.setLayout(GridLayoutFactory.swtDefaults().create());
 		tabContainer.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 
-		tabContainer.addFocusListener(new FocusAdapter() {
+		// para acomodar problemas entre el foco y la selección de una solapa en
+		// la vista de genes y la carga de url "lazy"
+		tabContainer.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void focusGained(FocusEvent e) {
+			public void mouseUp(MouseEvent e) {
 				setMeFocus();
 			}
 		});
@@ -290,6 +292,7 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 	}
 
 	private void setMeFocus() {
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>><fucking focus!!!");
 		if (isDirty()) // hay browsers cargando, ignoro el foco
 			return;
 		int i = 0;
