@@ -13,6 +13,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
@@ -27,7 +28,7 @@ public class InitializeGeneSetUrlStartup implements IStartup {
 		if (!(f = new File(".geneSigUrlsInitialized")).exists()) {
 			String[] defaults = fillDefaults();
 			String urls = StringUtils.join(defaults, '|');
-			PlatformUtils.preferences(GenesPluginActivator.id()).put(ExternalURLInformationPage.EXTERNAL_URLS, urls);
+			PlatformUtils.preferences(Activator.id()).put(ExternalURLInformationPage.EXTERNAL_URLS, urls);
 			// TODO acomodar mejor
 			ScopedPreferenceStore prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, GenesPluginActivator.id());
 			try {

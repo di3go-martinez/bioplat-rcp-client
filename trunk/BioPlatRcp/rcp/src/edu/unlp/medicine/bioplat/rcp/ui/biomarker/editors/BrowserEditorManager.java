@@ -34,6 +34,7 @@ public abstract class BrowserEditorManager {
 		Boolean apply = pref.getBoolean(key(), false);
 		if (apply) {
 			String urls = pref.get(ExternalURLInformationPage.EXTERNAL_URLS, "");
+			
 			StringTokenizer st = new StringTokenizer(urls, ExternalURLInformationPage.SEPARATOR);
 			while (st.hasMoreElements()) {
 				EditorDescription ed = createBrowserEditor(input, st.nextElement().toString());
