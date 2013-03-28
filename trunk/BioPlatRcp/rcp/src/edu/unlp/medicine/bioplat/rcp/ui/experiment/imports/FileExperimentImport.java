@@ -1,7 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_AVERAGE;
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MEDIA;
 
 import java.io.File;
 import java.util.Arrays;
@@ -162,7 +161,7 @@ public class FileExperimentImport extends Wizard implements IImportWizard {
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
-						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_MEDIA, CommonConstants.COLLAPSE_STRATEGY_VARIANCE));
+						Arrays.asList(COLLAPSE_STRATEGY_AVERAGE, CommonConstants.COLLAPSE_STRATEGY_MEDIAN, CommonConstants.COLLAPSE_STRATEGY_VARIANCE));
 
 				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //

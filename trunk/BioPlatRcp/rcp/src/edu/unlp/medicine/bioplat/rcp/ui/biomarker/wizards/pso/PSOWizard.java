@@ -19,6 +19,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
 import edu.unlp.medicine.domainLogic.framework.optimizers.commands.PsoOptimizerCommand;
 import edu.unlp.medicine.domainLogic.optimizations.configuration.PSOConfiguration;
@@ -37,9 +38,9 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	private String processName;
 	private int miniumNumberOfGenes, numberOfRounds, numberOfParticles, numberOfGenesToKeepDuringTraining;
 
-	private List<LogRankTestValidationConfig> forTesting = new ArrayList<LogRankTestValidationConfig>();
-	private List<LogRankTestValidationConfig> forTraining = new ArrayList<LogRankTestValidationConfig>();
-	private List<LogRankTestValidationConfig> forValidation = new ArrayList<LogRankTestValidationConfig>();
+	private List<ValidationConfig4DoingCluster> forTesting = new ArrayList<ValidationConfig4DoingCluster>();
+	private List<ValidationConfig4DoingCluster> forTraining = new ArrayList<ValidationConfig4DoingCluster>();
+	private List<ValidationConfig4DoingCluster> forValidation = new ArrayList<ValidationConfig4DoingCluster>();
 
 	public PSOWizard(Biomarker biomarker) {
 		this.biomarker = biomarker;
@@ -87,11 +88,11 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		// optimizerCommand.setBettersSize(numberOfGenesToKeepDuringTraining);
 		optimizerCommand.setConfiguration(psoConfig);
 
-		optimizerCommand.setLogRankTestValidationConfig4Training(forTraining.get(0));
+		optimizerCommand.setLogRankTestValidationConfig4Training(new LogRankTestValidationConfig(forTraining.get(0)));
 		if (forValidation != null)
-			optimizerCommand.setLogRankTestValidationConfig4Validation(forValidation.get(0));
+			optimizerCommand.setLogRankTestValidationConfig4Validation(new LogRankTestValidationConfig(forValidation.get(0)));
 		if (forTesting != null)
-			optimizerCommand.setLogRankTestValidationConfig4Testing(forTesting.get(0));
+			optimizerCommand.setLogRankTestValidationConfig4Testing(new LogRankTestValidationConfig(forTesting.get(0)));
 
 		optimizerCommand.monitor(monitor).execute();
 		return optimizerCommand.getPsoResult();

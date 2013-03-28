@@ -1,7 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_AVERAGE;
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_MEDIA;
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_VARIANCE;
 
 import java.io.File;
@@ -52,6 +51,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
+import edu.unlp.medicine.domainLogic.common.constants.CommonConstants;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromFileExperimentDescriptor;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.FromFileExperimentFactory;
@@ -179,7 +179,7 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
 				collapseStrategyCombo.setInput(//
-						Arrays.asList(COLLAPSE_STRATEGY_MEDIA, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_VARIANCE));
+						Arrays.asList(CommonConstants.COLLAPSE_STRATEGY_MEDIAN, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_VARIANCE));
 
 				//collapseStrategyCombo.getCombo().setLayoutData(gridData);
 				
@@ -187,7 +187,7 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
 						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Collapse Strategy")), null);
 
-				wm.collapseStrategy.setValue(COLLAPSE_STRATEGY_MEDIA);
+				wm.collapseStrategy.setValue(CommonConstants.COLLAPSE_STRATEGY_MEDIAN);
 
 				new Label(c, SWT.NONE).setText("First line number of expression data");
 				Text t = new Text(c, SWT.BORDER);
