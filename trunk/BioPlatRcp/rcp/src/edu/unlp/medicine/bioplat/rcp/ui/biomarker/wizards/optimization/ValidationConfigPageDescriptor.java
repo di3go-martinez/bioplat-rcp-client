@@ -79,7 +79,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 		group.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(50,50).spacing(2, 50).create());
 		group.setLayoutData(extensor);
 
-		Button b = new Button(group, SWT.FLAT);
+		Button b = new Button(group, SWT.PUSH);
 		b.setText("Select " + type + " dataset (Bioplat Experiment in your desktop)");
 		b.setImage(image4Button);
 		GridData gd = new GridData(400,70);gd.horizontalAlignment = SWT.CENTER;
