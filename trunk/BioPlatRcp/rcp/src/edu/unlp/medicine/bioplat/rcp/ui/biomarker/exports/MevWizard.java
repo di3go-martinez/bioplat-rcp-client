@@ -22,6 +22,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
@@ -33,7 +34,7 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	private AbstractExperiment experiment;
 
-	public MevWizard(ExperimentAppliedToAMetasignature e) {
+	public MevWizard(AbstractExperiment e) {
 		this.experiment = e;
 	}
 

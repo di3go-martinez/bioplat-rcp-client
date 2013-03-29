@@ -119,15 +119,15 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				// creo las nuevas columnas
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
-				tc.setText("Open Applied Experiment");
+				tc.setText("View result details");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 				tc.setWidth(150);
-				tc.setText("Original Experiment");
+				tc.setText("Open Original Experiment");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
-				tc.setWidth(150);
-				tc.setText("Export to MEV");
+				tc.setWidth(200);
+				tc.setText("Export experiment used for validation");
 				// ok, ya inicializado
 				mustinitialize = false;
 			}

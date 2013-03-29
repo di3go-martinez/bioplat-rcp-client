@@ -40,8 +40,10 @@ import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 public class PagesDescriptors {
 
 	private static final String OS_EVENT = "OS_Event";
+	private static final String RFS_EVENT = "RFS_Event";
 
 	private static final String OS_MONTHS = "OS_Months";
+	private static final String RFS_MONTHS = "RFS_Months";
 
 	// clave para el wizardModel que indica la lista de elementos seleccionados.
 	// Es un common value, no un IObservableValue...
@@ -161,10 +163,10 @@ public class PagesDescriptors {
 				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE), UpdateStrategies.nonNull("Statistical Value"), UpdateStrategies.nullStrategy());
 
 				// hook para ejecutar el
-				ComboViewer validationAttrName = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, "recurrence", "timeUntilEventOccured"));
+				ComboViewer validationAttrName = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured"));
 				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 
-				ComboViewer validationAttrName2 = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", OS_EVENT, "status"));
+				ComboViewer validationAttrName2 = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", OS_EVENT, RFS_EVENT, "status"));
 				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 
 				// set defaults values después de haber hecho los bindings

@@ -4,6 +4,7 @@ import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COL
 import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_VARIANCE;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -39,6 +40,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+
+import antlr.collections.List;
 
 import com.google.common.collect.Maps;
 
@@ -90,8 +93,22 @@ public class FromCSVFileExperimentImportWizard extends Wizard implements IImport
 					@Override
 					public Experiment call() throws Exception {
 						Monitor m = Monitors.adapt(progressMonitor);
+						FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy);
+						
+						
+						java.util.List<String> genesToKeep = new ArrayList<String>();
+						
+						//add55gmGenes(genesToKeep);
+						
+						
+						fromFileExperimentDescriptor.addGenesToKeep(genesToKeep);
+						
+						return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
+					}
 
-						return new FromFileExperimentFactory(new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy)).monitor(m).createExperiment();
+					private void add55gmGenes(java.util.List<String> genesToKeep) {
+						genesToKeep.add("6790");genesToKeep.add("596");genesToKeep.add("10950");genesToKeep.add("890");genesToKeep.add("891");genesToKeep.add("595");genesToKeep.add("898");genesToKeep.add("9134");genesToKeep.add("991");genesToKeep.add("990");genesToKeep.add("999");genesToKeep.add("1033");genesToKeep.add("1153");genesToKeep.add("1345");genesToKeep.add("9787");genesToKeep.add("51514");genesToKeep.add("1956");genesToKeep.add("2064");genesToKeep.add("2099");genesToKeep.add("9156");genesToKeep.add("2335");genesToKeep.add("2353");genesToKeep.add("2296");genesToKeep.add("2625");genesToKeep.add("3488");genesToKeep.add("3572");genesToKeep.add("8821");genesToKeep.add("3667");genesToKeep.add("9493");genesToKeep.add("11004");genesToKeep.add("3872");genesToKeep.add("4085");genesToKeep.add("4171");genesToKeep.add("4172");genesToKeep.add("9833");genesToKeep.add("79682");genesToKeep.add("4602");genesToKeep.add("10403");genesToKeep.add("4886");genesToKeep.add("51203");genesToKeep.add("5214");genesToKeep.add("5347");genesToKeep.add("83956");genesToKeep.add("6241");genesToKeep.add("57758");genesToKeep.add("25800");genesToKeep.add("10615");genesToKeep.add("7083");genesToKeep.add("22974");genesToKeep.add("9319");genesToKeep.add("7272");genesToKeep.add("7298");genesToKeep.add("11065");genesToKeep.add("10451");genesToKeep.add("7494");
+						
 					}
 				});
 
