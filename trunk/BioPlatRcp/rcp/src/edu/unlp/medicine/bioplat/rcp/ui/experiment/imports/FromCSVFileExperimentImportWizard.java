@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.domainLogic.framework.MetaPlat;
+import edu.unlp.medicine.domainLogic.framework.exceptions.GeneNotFoundByIdException;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromFileExperimentDescriptor;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
@@ -33,10 +36,13 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 	//Variables used in the wizard
 	List<GeneSignature> openedSelectedGeneSignatures =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
+	String selectedGenes4Filtering;
 	String filePath;
 	String collapseStrategy;
 	int clinicalDataFirstLine;
+
 	
+	private String separator = " ";
 	
 	public FromCSVFileExperimentImportWizard() {
 		super();
@@ -55,7 +61,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	@Override
 	public int getWizardWidth() {
 		
-		return 670;
+		return 630;
 	}
 	
 	@Override
@@ -82,7 +88,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 	private WizardPageDescriptor createPage3ForSelecctingGenesOrGS() {
 		
-		return new FromCSVFilePage3SelectGenesOrGSForFiltering();
+		return new FromCSVFilePage3SelectGenesOrGSForFiltering( wizardModel());
 	}
 
 	private GenericPage1ForIntroduction createIntroductionPage() {
@@ -112,6 +118,8 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 		
 		 List<Biomarker> openedBiomarkers =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
 		 openedSelectedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
+		 
+		 selectedGenes4Filtering = wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.SELECTED_GENES);
 		
 		 filePath = wizardModel().value(FromCSVFilePage2Main.FILE_PATH);
 		 collapseStrategy = wizardModel().value(FromCSVFilePage2Main.COLLAPSE_STRATEGY);
@@ -132,6 +140,10 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 			java.util.List<Gene> genesToKeep = openedSelectedGeneSignatures.get(0).getGenes();
 			fromFileExperimentDescriptor.setGenesToKeep(genesToKeep);
 		}
+		else if (!selectedGenes4Filtering.equals("")){
+			fromFileExperimentDescriptor.setGenesToKeep(genes());
+		}
+		
 		return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
 
 		
@@ -147,7 +159,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 				@Override
 				public void run() {
 					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
+					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
 					
 				}
 			});
@@ -180,7 +192,28 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	}
 
 
+	public List<Gene> genes() {
+		List<Gene> result = Lists.newArrayList();
+		for (String id : getids())
+			try {
+				result.add(MetaPlat.getInstance().findGene(id));
+			} catch (GeneNotFoundByIdException e) {
+				MessageManager.INSTANCE.add(Message.warn("Gene '" + id + "' not found"));
+			} catch (Exception e) {
+				MessageManager.INSTANCE.add(Message.error(e.getLocalizedMessage()));
+			}
+		return result;
+	}
 
-	
+	public String[] getids() {
+		
+		String value = StringUtils.replace(selectedGenes4Filtering, "\r\n", " ");
+//		value = StringUtils.replace(selectedGenes4Filtering, "\r", " ");
+//		value = StringUtils.replace(selectedGenes4Filtering, "\n", " ");
+		value = StringUtils.replace(value, ",", " ");
+		value = StringUtils.replace(value, "\t", " ");
+		
+		return StringUtils.split(value, separator);
+	}
 	
 }
