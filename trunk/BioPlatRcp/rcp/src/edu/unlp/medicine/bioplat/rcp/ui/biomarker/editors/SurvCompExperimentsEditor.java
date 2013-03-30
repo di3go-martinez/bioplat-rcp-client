@@ -56,7 +56,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				// .model(model(), "experiemntsApplied")//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("experimentName").title("Experiment"))//
-				.addColumn(ColumnBuilder.create().property("survCompIndex").title("SurvComp index").width(170))//
+				.addColumn(ColumnBuilder.create().property("survCompIndex").title("SurvComp index").width(270))//
 				// .addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//
 				// TODO .addContextualMenu(new MyMenu())//
 				.build();

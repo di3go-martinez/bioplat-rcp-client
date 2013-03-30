@@ -59,6 +59,21 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 		
 	}
 
+	
+	@Override
+	public int getWizardWidth() {
+		
+		return 700;
+	}
+	
+	
+	@Override
+	public int getWizardHeight() {
+	
+		return 600;
+	}
+	
+	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		final ArrayList<WizardPageDescriptor> pages = Lists.newArrayList();
@@ -93,9 +108,9 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 		blindSearchCommand.setNumberOfResults(numberOfResultsToShow);
 
 		
-		blindSearchCommand.setLogRankTestValidationConfig4Training(new LogRankTestValidationConfig(forTraining.get(0)));
-		if (forValidation != null) blindSearchCommand.setLogRankTestValidationConfig4Validation(new LogRankTestValidationConfig(forValidation.get(0)));
-		if (forTesting != null) blindSearchCommand.setLogRankTestValidationConfig4Testing(new LogRankTestValidationConfig(forTesting.get(0)));
+		blindSearchCommand.setValidationConfig4Clustering4Training(forTraining.get(0));
+		if (forValidation != null) blindSearchCommand.setValidationConfig4Clustering4Validation(forValidation.get(0));
+		if (forTesting != null) blindSearchCommand.setValidationConfig4Clustering4Testing(forTesting.get(0));
 		
 		//blindSearchCommand.execute();
 		

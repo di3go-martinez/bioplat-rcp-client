@@ -21,6 +21,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
@@ -73,6 +74,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private Map<IWizardPage, WizardPageDescriptor> map = Maps.newHashMap();
 
+	
+	public int getWizardWidth(){
+		return 300;
+	}
+	
+	public int getWizardHeight(){
+		return 600;
+	}
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 
@@ -94,9 +104,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					fillDefaultsIfNecesary(control);
 
 					setControl(control);
-
-					// Point size = getShell().computeSize(510, 540);
-					// getShell().setSize(510, 540);
+					
+					Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
+					getShell().setSize(size);
 
 				}
 
