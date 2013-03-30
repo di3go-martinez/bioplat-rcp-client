@@ -41,6 +41,9 @@ public class CopyFromExternalDatabasesWizard extends WizardPageDescriptor {
 	static final String DATABASE = "DATABASE";
 	static final String GENE_SIGNATURE_OR_ID = "GENE_SIGNATURE_OR_ID";
 
+	
+	
+	
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		wizardPage.setTitle("Which gene Signature to copy?");

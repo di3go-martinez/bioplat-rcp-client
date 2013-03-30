@@ -1,13 +1,13 @@
 package edu.unlp.medicine.bioplat.rcp.intro.actions;
 
-import edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromInSilicoWizard;
 
 public class ImportFromInSilicoIntroAction extends IntroAction {
 
 	@Override
 	protected boolean run0() {
 
-		return open(new GSEImport());
+		return open(new ImportExperimentFromInSilicoWizard());
 	}
 
 }

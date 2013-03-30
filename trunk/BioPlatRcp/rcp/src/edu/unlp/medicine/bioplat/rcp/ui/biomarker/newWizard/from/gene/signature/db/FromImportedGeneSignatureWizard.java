@@ -25,6 +25,21 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 		this.setWindowTitle("Copy Gene Signature from external database (GeneSigDB, MolSigDB)");
 	}
 
+	
+	@Override
+	public int getWizardWidth() {
+		return 570;
+		
+	}
+	
+	
+	@Override
+	public int getWizardHeight() {
+		return 400;
+		
+	}
+	
+	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();

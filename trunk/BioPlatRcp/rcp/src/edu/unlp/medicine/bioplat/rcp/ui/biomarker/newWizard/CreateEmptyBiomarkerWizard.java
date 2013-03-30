@@ -39,6 +39,19 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	private static final String AUTHOR = "author";
 	private static final String DESCRIPTION = "desccription";
 	
+	
+	@Override
+	public int getWizardWidth() {
+		
+		return 500;
+	}
+	
+	@Override
+	public int getWizardHeight() {
+		
+		return 400;
+	}
+	
 	@Override
 	protected WizardModel createWizardModel() {
 		WizardModel wm = new WizardModel().add(NAME_K, new WritableValue("noName", String.class));

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.components.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 
@@ -66,40 +67,15 @@ public class GenericPage1ForIntroduction extends WizardPageDescriptor {
 		filterGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		
-		this.addIntroductionText(introductionText, filterGroup);
+		GUIUtils.addWrappedText(filterGroup, introductionText, 10, true);
+		
 		
 		
 
 	}
 
 	
-	
-	public void addIntroductionText(String introductionText, Composite container){
 		
-		
-		GridLayout gridLayout = new GridLayout(1,false) ;
-		gridLayout.marginWidth=30;
-		gridLayout.marginHeight=30;
-		container.setLayout( gridLayout ) ;
-		GridData layoutData = new GridData(GridData.FILL_BOTH);
-		layoutData.horizontalSpan = 1;
-		container.setLayoutData(layoutData);
-		Label introdudctionLabel = new Label(container, SWT.WRAP);
-		GridData gridData = new GridData( GridData.FILL_HORIZONTAL ) ;
-		gridData.grabExcessHorizontalSpace = true ;
-		gridData.horizontalAlignment = SWT.FILL;
-		gridData.widthHint = 200;
-		gridData.horizontalSpan = 2;
-		introdudctionLabel.setLayoutData( gridData ) ;
-		FontData[] fD = introdudctionLabel.getFont().getFontData();
-		fD[0].setHeight(10);
-		fD[0].setStyle(SWT.ITALIC);
-		introdudctionLabel.setFont( new Font(container.getDisplay(),fD[0]));
-		introdudctionLabel.setText(introductionText);
-
-		
-	}
-	
 	
 	
 	@Override

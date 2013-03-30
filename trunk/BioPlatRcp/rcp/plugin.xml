@@ -269,7 +269,7 @@
     
 	<wizard
        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
-       class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.BPLFileBiomarkerImport"
+       class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportGeneSignatureFromBPLWizard"
        icon="resources/icons/archivo.jpg"
        id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
        name="Open Gene Signature From .BPL (BioPlat) File ">
@@ -287,6 +287,13 @@
      </description>
   </wizard>
   <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
+        icon="intro/contents/images/CSV.gif"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
+        name="Importar desde archivo de texto">
+  </wizard>
+  <wizard
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
@@ -299,14 +306,7 @@
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
-        icon="intro/contents/images/CSV.gif"
-        id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
-        name="%experiment.csv.file.import.wizard.name">
-  </wizard>
-  <wizard
-        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.GSEImport"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromInSilicoWizard"
         icon="intro/contents/images/InSilico.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
         name="Import Experiment from InSilico Using GSE">

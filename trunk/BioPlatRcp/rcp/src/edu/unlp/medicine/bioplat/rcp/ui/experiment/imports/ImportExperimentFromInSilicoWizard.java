@@ -22,6 +22,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.components.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
@@ -46,15 +48,25 @@ import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class GSEImport extends Wizard implements IImportWizard {
+public class ImportExperimentFromInSilicoWizard extends Wizard implements IImportWizard {
 
 	private static final String PAGE_NAME = "GSE";
-	private static Logger logger = LoggerFactory.getLogger(GSEImport.class);
+	private static Logger logger = LoggerFactory.getLogger(ImportExperimentFromInSilicoWizard.class);
 
-	public GSEImport() {
+	public ImportExperimentFromInSilicoWizard() {
 		this.setWindowTitle("Import experiment from InSilico using GSE (GEO Series)");
 	}
 
+	
+	public int getWizardWidth(){
+		return 700;
+	}
+	
+	
+	public int getWizardHeight(){
+		return 500;
+	}
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		addPage(createFirstPage());
@@ -105,15 +117,13 @@ public class GSEImport extends Wizard implements IImportWizard {
 				normalizedHolder.setText("Normalized (FRMA)");
 
 
-				//Label for explaining the possible 
-				Label introdudctionLabel = new Label(group, SWT.WRAP);
-				GridData gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL); 
-				introdudctionLabel.setLayoutData(gridData);
-				FontData[] fD = introdudctionLabel.getFont().getFontData();
-				fD[0].setHeight(8);
-				fD[0].setStyle(SWT.ITALIC);
-				introdudctionLabel.setFont( new Font(group.getDisplay(),fD[0]));
-				introdudctionLabel.setText("\nNote: If the experiment has got probes instead of genes, a collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average...");
+				String text = "\n\n\n\nImportante Note: Take into account that the connection between both systems it is not as faster as downloading the file from the page. So, if the experiment is so m uch big, you should download it from the inSilico page and then import it in Bioplat using the 'Import Experiment From Text file'.";
+				GUIUtils.addWrappedText(group, text,8,true);
+
+				
+				//Label for explaining the possible
+				String text2 = "\nGene Collapse Strategy: If the experiment has got probes instead of genes, a collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average...";
+				GUIUtils.addWrappedText(group, text2,8,true);
 				
 				
 				dbc.bindValue(SWTObservables.observeText(gseHolder, SWT.Modify), model().valueHolder("GSE"), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("GSE")), null);
@@ -124,6 +134,10 @@ public class GSEImport extends Wizard implements IImportWizard {
 
 				GridLayoutFactory.swtDefaults().numColumns(1).generateLayout(group);
 				setControl(group);
+				
+				
+				Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
+				getShell().setSize(size);
 
 			}
 		};

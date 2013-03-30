@@ -48,14 +48,14 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	@Override
 	public int getWizardHeight() {
 		
-		return 630;
+		return 620;
 	}
 	
 	
 	@Override
 	public int getWizardWidth() {
 		
-		return 630;
+		return 670;
 	}
 	
 	@Override
@@ -127,12 +127,11 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 		
 		FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy);
 		
-		java.util.List<Gene> genesToKeep = openedSelectedGeneSignatures.get(0).getGenes();
+		if (openedSelectedGeneSignatures.size()>0){
 		
-		//add55gmGenes(genesToKeep);
-		
-		fromFileExperimentDescriptor.setGenesToKeep(genesToKeep);
-		
+			java.util.List<Gene> genesToKeep = openedSelectedGeneSignatures.get(0).getGenes();
+			fromFileExperimentDescriptor.setGenesToKeep(genesToKeep);
+		}
 		return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
 
 		

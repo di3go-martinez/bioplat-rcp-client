@@ -32,7 +32,7 @@ import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.save.MetaSignatur
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class BPLFileBiomarkerImport extends AbstractWizard<Biomarker> {
+public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> {
 	/**
 	 * Logger Object
 	 */
@@ -44,6 +44,19 @@ public class BPLFileBiomarkerImport extends AbstractWizard<Biomarker> {
 	private String fileName;
 	private MetaSignatureMarshaller marshaller = new MetaSignatureMarshaller();
 
+	
+	@Override
+	public int getWizardWidth() {
+		
+		return 770;
+	}
+	
+	@Override
+	public int getWizardHeight() {
+		
+		return 370;
+	}
+	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
@@ -113,7 +126,7 @@ public class BPLFileBiomarkerImport extends AbstractWizard<Biomarker> {
 
 	
 	
-	public BPLFileBiomarkerImport(){
+	public ImportGeneSignatureFromBPLWizard(){
 		this.setWindowTitle("Open Gene Signature from BPL file");
 		
 	}

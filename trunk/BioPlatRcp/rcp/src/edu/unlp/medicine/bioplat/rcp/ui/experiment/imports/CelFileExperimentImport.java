@@ -49,6 +49,18 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 	private Experiment experiment;
 
 	@Override
+	public int getWizardWidth() {
+		
+		return 670;
+	}
+	
+	
+	@Override
+	public int getWizardHeight() {
+		return 600;
+	}
+	
+	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
 		WizardPageDescriptor d = new WizardPageDescriptor("Import experiment using your .CEL files") {
