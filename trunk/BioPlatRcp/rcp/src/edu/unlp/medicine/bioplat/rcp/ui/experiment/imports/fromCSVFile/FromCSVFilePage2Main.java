@@ -65,16 +65,12 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 	public static final String CLINICAL_FIRST_LINE	= "CLINICAL_FIRST_LINE";
 
 	
-	
-	
 	//////////////////////////INITIALIZATION OF THE PAGE. It is executed when the wizard is started.////////////////////////////////
 	public FromCSVFilePage2Main(WizardModel wizardModel) {
-		super("Main page");
+		super("File configuration and collapsing strategy                                                                               ");
 		addParameters(wizardModel);
 	}
 	
-	
-
 	public FromCSVFilePage2Main addParameters(WizardModel wizardModel) {
 		wizardModel.add(FILE_PATH, new WritableValue("", String.class))
 				.add(COLLAPSE_STRATEGY, new WritableValue("", String.class))
@@ -86,7 +82,7 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 	@Override
 	public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 		
-		wp.setDescription("How to import an experiment from CSV file?                                                                                                                                                                ");
+		wp.setDescription("Select the file, the collapse strategy and the line number of the first expression data");
 		
 		Composite container = Widgets.createDefaultContainer(parent, 1);
 
@@ -97,28 +93,13 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 	}
 
 	
-	
-	
 	public void init(Composite container, final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wm) {
 		IWorkbench workbench; 
 		IStructuredSelection selection;
 		
-		//addPage(new WizardPage("conf", "Import an experiment from a CSV file in GEO format: Clinical data, header and expression data", null) {
-
-				//this.setDescription("ssss");
-				
-				
-			//WizardPageSupport.create(this, dbc);
-				
-//		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(30, 50).create());
-//		Group mainPageGroup = new Group(container, SWT.NONE);
-//		mainPageGroup.setLayout(GridLayoutFactory.fillDefaults().margins(50, 50).create());
-//		mainPageGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		
-		
-				GridData gridData = new GridData();
-				gridData.horizontalAlignment=SWT.FILL;
-				gridData.grabExcessHorizontalSpace=true;
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment=SWT.FILL;
+		gridData.grabExcessHorizontalSpace=true;
 
 				//this.setDescription("Import the experiment using a .CSV file following the GEO format. Take a look below at the file format template");
 				
@@ -187,10 +168,9 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 
 				Image image = Activator.imageDescriptorFromPlugin("ImportExpTemplateEx1.jpg").createImage();
 				Button button = new Button(c, SWT.FLAT);
+				
 				button.setImage(image);
 				button.setLayoutData(formatExampleGroupLD);
-			
-			
 		}
 	
 	
@@ -230,10 +210,6 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 //
 //	}
 
-
-	
-	
-	
 	
 	@Override
 	public boolean isPageComplete(WizardModel model) {

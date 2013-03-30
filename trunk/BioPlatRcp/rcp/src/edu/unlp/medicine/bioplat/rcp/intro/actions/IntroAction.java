@@ -24,6 +24,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
  */
 public abstract class IntroAction extends Action {
 
+	
+	
+	
 	@Override
 	public final void run() {
 		if (run0()) {
@@ -48,11 +51,14 @@ public abstract class IntroAction extends Action {
 	 */
 	protected boolean open(IWorkbenchWizard wizard) {
 		WizardDialog d = new MyWizardDialog(PlatformUIUtils.findShell(), wizard);
+		//DialogForOpeningWizard d = new DialogForOpeningWizard(PlatformUIUtils.findShell(), wizard);
 
 		wizard.init(PlatformUI.getWorkbench(), StructuredSelection.EMPTY);
 
 		d.setBlockOnOpen(true);
 
+		//d.getShell().setSize(700, 700);
+		
 		// TODO resolver con scrollbars
 		d.setPageSize(400, 450);
 		return d.open() == Dialog.OK;

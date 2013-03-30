@@ -1,266 +1,187 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_AVERAGE;
-import static edu.unlp.medicine.domainLogic.common.constants.CommonConstants.COLLAPSE_STRATEGY_VARIANCE;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.List;
 
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.databinding.validation.ValidationStatus;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.databinding.viewers.ViewersObservables;
-import org.eclipse.jface.databinding.wizard.WizardPageSupport;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IImportWizard;
-import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
 
-import antlr.collections.List;
+import com.google.common.collect.Lists;
 
-import com.google.common.collect.Maps;
-
-import edu.unlp.medicine.bioplat.core.Activator;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.FilePathValidator;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromCSVFile.FromCSVFilePage2Main;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromCSVFile.FromCSVFilePage3SelectGenesOrGSForFiltering;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.wizards.GenericPage1ForIntroduction;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
-import edu.unlp.medicine.bioplat.rcp.utils.Monitors;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
-import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
-import edu.unlp.medicine.domainLogic.common.constants.CommonConstants;
+import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromFileExperimentDescriptor;
+import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.biomarker.GeneSignature;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.FromFileExperimentFactory;
+import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-/**
- * 
- * @author diego martínez
- * 
- */
-// TODO migrar a AbstractWizard
-public class FromCSVFileExperimentImportWizard extends Wizard implements IImportWizard {
+public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment> {
 
-	private static ExecutorService exec = Executors.newFixedThreadPool(1);
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(FromCSVFileExperimentImportWizard.class);
 
+	//Variables used in the wizard
+	List<GeneSignature> openedSelectedGeneSignatures =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
+	String filePath;
+	String collapseStrategy;
+	int clinicalDataFirstLine;
+	
+	
 	public FromCSVFileExperimentImportWizard() {
-		setNeedsProgressMonitor(true);
-		this.setWindowTitle("Import from .CSV in GEO format");
+		super();
+		
+		
+	}
+	
+	
+	@Override
+	public int getWizardHeight() {
+		
+		return 630;
+	}
+	
+	
+	@Override
+	public int getWizardWidth() {
+		
+		return 630;
+	}
+	
+	@Override
+	protected List<WizardPageDescriptor> createPagesDescriptors() {
+		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
+			
+			descriptors.add(createIntroductionPage());
+		
+			descriptors.add(createMainPage());
+		
+			//final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+			descriptors.add(createPage3ForSelecctingGenesOrGS());
+	
+				
+		this.setWindowTitle("Generate a metasignature.");
+		
+		
+		return descriptors;
+	}
+
+	private WizardPageDescriptor createMainPage() {
+		return new FromCSVFilePage2Main(wizardModel());
+	}
+
+	private WizardPageDescriptor createPage3ForSelecctingGenesOrGS() {
+		
+		return new FromCSVFilePage3SelectGenesOrGSForFiltering();
+	}
+
+	private GenericPage1ForIntroduction createIntroductionPage() {
+		
+		String inBlankBigTitle =  "Import experiment from .CSV file"; 
+
+		String inBlankSmallTitle =  "Import an experiment, from a text file containing expression data and clinical data";
+
+		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating biomarkers, for optimizing biomarkers or just for filtering and visualizing the experiment data in a convenient way. You can also export the experiment into a file.\n\n If your experiment is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
+		
+		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
+	}
+
+
+	private WizardPageDescriptor createValidationConfiguration() {
+		return null;
 	}
 
 	@Override
-	public boolean performFinish() {
+	protected String getTaskName() {
+		return "Import experiment from CSV file";
+	}
+	
+	
+	@Override
+	protected void configureParameters() {
+		
+		 List<Biomarker> openedBiomarkers =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
+		 openedSelectedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
+		
+		 filePath = wizardModel().value(FromCSVFilePage2Main.FILE_PATH);
+		 collapseStrategy = wizardModel().value(FromCSVFilePage2Main.COLLAPSE_STRATEGY);
+		 
+		 //final String clinicalDataFirstLineString = wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
+		 clinicalDataFirstLine = wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
 
-		// deben ser accedidas desde el "Realm"
-		final String filePath = str(wm.filePath);
-		final String collapseStrategy = str(wm.collapseStrategy);
-		//final int[] lines = split(str(wm.lines));
-		final int clinicalDataFirstLine = Integer.valueOf(str(wm.clinicalDataFirstLine));
-
-		Job j = new Job("Importing experiment") {
-
-			@Override
-			protected IStatus run(final IProgressMonitor progressMonitor) {
-
-				Future<Experiment> holder = exec.submit(new Callable<Experiment>() {
-					@Override
-					public Experiment call() throws Exception {
-						Monitor m = Monitors.adapt(progressMonitor);
-						FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy);
-						
-						
-						java.util.List<String> genesToKeep = new ArrayList<String>();
-						
-						//add55gmGenes(genesToKeep);
-						
-						
-						fromFileExperimentDescriptor.addGenesToKeep(genesToKeep);
-						
-						return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
-					}
-
-					private void add55gmGenes(java.util.List<String> genesToKeep) {
-						genesToKeep.add("6790");genesToKeep.add("596");genesToKeep.add("10950");genesToKeep.add("890");genesToKeep.add("891");genesToKeep.add("595");genesToKeep.add("898");genesToKeep.add("9134");genesToKeep.add("991");genesToKeep.add("990");genesToKeep.add("999");genesToKeep.add("1033");genesToKeep.add("1153");genesToKeep.add("1345");genesToKeep.add("9787");genesToKeep.add("51514");genesToKeep.add("1956");genesToKeep.add("2064");genesToKeep.add("2099");genesToKeep.add("9156");genesToKeep.add("2335");genesToKeep.add("2353");genesToKeep.add("2296");genesToKeep.add("2625");genesToKeep.add("3488");genesToKeep.add("3572");genesToKeep.add("8821");genesToKeep.add("3667");genesToKeep.add("9493");genesToKeep.add("11004");genesToKeep.add("3872");genesToKeep.add("4085");genesToKeep.add("4171");genesToKeep.add("4172");genesToKeep.add("9833");genesToKeep.add("79682");genesToKeep.add("4602");genesToKeep.add("10403");genesToKeep.add("4886");genesToKeep.add("51203");genesToKeep.add("5214");genesToKeep.add("5347");genesToKeep.add("83956");genesToKeep.add("6241");genesToKeep.add("57758");genesToKeep.add("25800");genesToKeep.add("10615");genesToKeep.add("7083");genesToKeep.add("22974");genesToKeep.add("9319");genesToKeep.add("7272");genesToKeep.add("7298");genesToKeep.add("11065");genesToKeep.add("10451");genesToKeep.add("7494");
-						
-					}
-				});
-
-				try {
-					final Experiment e = holder.get(); // join
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-							MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
-							
-						}
-					});
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				return ValidationStatus.ok();
-			}
-
-		};
-		j.setUser(true);
-		j.setPriority(Job.LONG);
-		j.schedule();
-
-		return true;
 	}
 
-	private int[] split(String str) {
-		int[] result = new int[4];
-		String[] input = str.split(",");
-		for (int i = 0; i < 4; i++)
-			result[i] = Integer.valueOf(input[i].trim());
+
+	@Override
+	protected Experiment backgroundProcess(Monitor m) throws Exception {
+		
+		FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy);
+		
+		java.util.List<Gene> genesToKeep = openedSelectedGeneSignatures.get(0).getGenes();
+		
+		//add55gmGenes(genesToKeep);
+		
+		fromFileExperimentDescriptor.setGenesToKeep(genesToKeep);
+		
+		return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
+
+		
+	}
+		
+		
+	@Override
+	protected void doInUI(Experiment result) {
+		try {
+			final Experiment e = result; // join
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. There were " + e.getNumberOfCollapsedGenes() + " collapsed genes. They were collapsed using " + e.getCollapsedStrategyName() + "."));
+					
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected WizardModel createWizardModel() {
+		return new WizardModel();
+
+	}
+
+	
+	private String filter = "";
+
+
+	private List<GeneSignature> translateBiomarkerIntoGS(
+			List<Biomarker> openedBiomarkers) {
+		
+		
+		
+		List<GeneSignature> result = new ArrayList<GeneSignature>();
+		if (openedBiomarkers!=null){
+			for (Biomarker biomarker : openedBiomarkers) {
+				result.add(new GeneSignature(biomarker));
+		}}
 		return result;
 	}
 
-	private static String str(IObservableValue valueHolder) {
-		return valueHolder.getValue().toString();
-	}
-
-	private WizardModel wm = new WizardModel();
-
-	private class WizardModel {
-		IObservableValue filePath = WritableValue.withValueType(File.class);
-		IObservableValue collapseStrategy = WritableValue.withValueType(String.class);
-		IObservableValue clinicalDataFirstLine = WritableValue.withValueType(String.class);
-	}
-
-	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new WizardPage("conf", "Import an experiment from a CSV file in GEO format: Clinical data, header and expression data", null) {
-
-			@Override
-			public void createControl(Composite parent) {
-
-				this.setDescription("ssss");
-				
-				
-				DataBindingContext dbc = new DataBindingContext();
-				WizardPageSupport.create(this, dbc);
-				
-				GridData gridData = new GridData();
-				gridData.horizontalAlignment=SWT.FILL;
-				gridData.grabExcessHorizontalSpace=true;
-
-				this.setDescription("Import the experiment using a .CSV file following the GEO format. Take a look below at the file format template");
-				Composite c = new Group(parent, SWT.NONE);
-				c.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(5, 10).create());
-				//group.setLayoutData(gridData);
 
 
-				new Label(c, SWT.NONE).setText("File path (take a look at the format example below):");
-				FileText filePath = new FileText(c, SWT.NONE);
-				Map<String, String> filters = Maps.newHashMap();
-				filters.put("*.csv", "CSV File");
-				filters.put("*", "All");
-				filePath.setFilter(filters);
-
-				dbc.bindValue(SWTObservables.observeText(filePath.textControl(), SWT.Modify), wm.filePath, //
-						new UpdateValueStrategy().setAfterConvertValidator(//
-								FilePathValidator.create().fileMustExist()), null);
-
-				new Label(c, SWT.NONE).setText("Collapse Strategy. If there is more than one probe \nfor the same gene, represent the gene with the probe with highest:");
-				ComboViewer collapseStrategyCombo = new ComboViewer(c, SWT.BORDER | SWT.READ_ONLY);
-				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
-				collapseStrategyCombo.setInput(//
-						Arrays.asList(CommonConstants.COLLAPSE_STRATEGY_MEDIAN, COLLAPSE_STRATEGY_AVERAGE, COLLAPSE_STRATEGY_VARIANCE));
-
-				//collapseStrategyCombo.getCombo().setLayoutData(gridData);
-				
-				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(collapseStrategyCombo);
-				dbc.bindValue(widgetObservable, wm.collapseStrategy, //
-						new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Collapse Strategy")), null);
-
-				wm.collapseStrategy.setValue(CommonConstants.COLLAPSE_STRATEGY_MEDIAN);
-
-				new Label(c, SWT.NONE).setText("First line number of expression data");
-				Text t = new Text(c, SWT.BORDER);
-				t.setLayoutData(gridData);
-				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wm.clinicalDataFirstLine, null, null);
-						
-//						new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
-//
-//					@Override
-//					public IStatus validate(Object value) {
-//						String l = value.toString();
-//						if (l.matches("\\d+,\\d+,\\d+,\\d+"))
-//							return ValidationStatus.ok();
-//						else
-//							return ValidationStatus.error("Invalid format: ###,###,###,###");
-//					}
-//				}), null);
-				//t.setText("4");
-				//t.setSize(100, 10);
-				t.setText("4");
-				
-
-//				GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(c);
-				setControl(c);
-
-				
-				//Composite formatExampleGroup = new Composite(c, SWT.NONE);
-				//formatExampleGroup.setText("Format example");
-				//formatExampleGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(5,5).spacing(7, 10).create());
-				GridData formatExampleGroupLD = new GridData();
-				formatExampleGroupLD.horizontalAlignment = GridData.CENTER;
-				formatExampleGroupLD.horizontalSpan = 2;
-				formatExampleGroupLD.verticalIndent = 15;
-				//formatExampleGroup.setLayoutData(formatExampleGroupLD);
-//				new Label(formatExampleGroup, SWT.NONE).setText("OS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
-
-				Image image = Activator.imageDescriptorFromPlugin("ImportExpTemplateEx1.jpg").createImage();
-				Button button = new Button(c, SWT.FLAT);
-				button.setImage(image);
-				button.setLayoutData(formatExampleGroupLD);
-			
-								
-				
-				
-				
-				
-
-				
-			}
-		});
-	}
 	
 	
-	
-	
-	// TODO hacer fluent!
-	// WizardFactory.createWizard().addPage().addPage()
-	// WizardPage.create(WizardPage.class).
 }

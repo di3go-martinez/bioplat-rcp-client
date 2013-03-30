@@ -41,6 +41,18 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	
 	
 	@Override
+	public int getWizardHeight() {
+		
+		return 600;
+	}
+	
+	@Override
+	public int getWizardWidth() {
+		
+		return 740;
+	}
+	
+	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
 			
@@ -54,7 +66,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	
 			descriptors.add(createAlgorithmPage());
 				
-		this.setWindowTitle("Generate a metasignature.");
+		this.setWindowTitle("Import experimento from text file.");
 		
 		
 		return descriptors;
