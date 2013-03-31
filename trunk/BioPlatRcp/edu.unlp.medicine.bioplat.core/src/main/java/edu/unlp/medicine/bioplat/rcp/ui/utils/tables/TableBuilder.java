@@ -92,10 +92,13 @@ public class TableBuilder implements TableConfigurer {
 		table.setHeaderVisible(true); // TODO configurable
 		table.setLinesVisible(viewTableLines);
 
+		
 		// viewer.setContentProvider(new ArrayContentProvider());
 		// Make the selection available to other views
 		// getSite().setSelectionProvider(viewer);
 
+		
+		
 		// Layout the viewer
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.horizontalSpan = 1;

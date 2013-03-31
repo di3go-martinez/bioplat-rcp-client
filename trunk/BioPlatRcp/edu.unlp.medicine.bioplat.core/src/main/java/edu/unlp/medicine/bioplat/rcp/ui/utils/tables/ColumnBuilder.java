@@ -348,6 +348,7 @@ public class ColumnBuilder {
 	public ColumnBuilder property(String propertyPath) {
 		if (columnId == null)
 			columnId = propertyPath;
+		
 		return accesor(OgnlAccesor.createFor(propertyPath));
 	}
 
