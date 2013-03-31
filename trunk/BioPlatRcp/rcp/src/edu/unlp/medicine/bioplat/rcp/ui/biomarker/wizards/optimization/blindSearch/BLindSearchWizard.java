@@ -98,11 +98,11 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 	}
 
 	
-	
+	BlindSearchOptimizerCommand blindSearchCommand=null;
 	
 	@Override
 	protected BlindSearchResult backgroundProcess(Monitor monitor) throws Exception {
-		BlindSearchOptimizerCommand blindSearchCommand = new BlindSearchOptimizerCommand(biomarker, new HashMap<String, String>());
+		blindSearchCommand = new BlindSearchOptimizerCommand(biomarker, new HashMap<String, String>());
 		blindSearchCommand.setNumberOfGenesToRemoveFrom(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSTo + 1);
 		blindSearchCommand.setNumberOfGenesToRemoveTo(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSFrom );
 		blindSearchCommand.setNumberOfResults(numberOfResultsToShow);
@@ -170,7 +170,12 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 		
 		PlatformUIUtils.openView(BlindSearchResultViewPart.id());
 		BlindSearchResultViewPart v = (BlindSearchResultViewPart) PlatformUIUtils.findView(BlindSearchResultViewPart.id());
-		v.setResultToShow(result.getBetters());
+
+		v.setForTraining(forTraining.get(0));
+		if (forTesting!=null && forTesting.size()>0) v.setForTesting(forTesting.get(0));
+		if (forValidation!=null && forValidation.size()>0) v.setForValidation(forValidation.get(0));
+		v.setResultToShow(result.getBetters());		
+		//v.setCommand(blindSearchCommand);
 		
 		if (result.getWarnings().size()>0) {
 			String warningMsg = "Blind Search on " + biomarker.getName() + " has finished but there were some warnings. You can see results on 'Blind Search Result' view but please read carefully the warning details in the message view, before analyzing the result";
