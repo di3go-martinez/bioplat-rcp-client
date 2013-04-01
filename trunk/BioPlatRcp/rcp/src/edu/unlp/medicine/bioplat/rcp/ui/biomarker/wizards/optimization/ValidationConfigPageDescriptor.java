@@ -66,7 +66,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	private Widget attribtueNameToDoTheValidation;
 	private Widget numberOfTimesToRepeatTheCluster;
 	private Widget attribtueNameToDoTheValidation2;
-	private Widget statisticsSignificanceTest;
+	
 	
 	private boolean optional;
 
@@ -129,7 +129,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 					contentsCreated = true;
 				}
 
-				Widgets.retarget(config, experimentName, numberOfClusters, numberOfTimesToRepeatTheCluster, attribtueNameToDoTheValidation, attribtueNameToDoTheValidation2, statisticsSignificanceTest);
+				Widgets.retarget(config, experimentName, numberOfClusters, numberOfTimesToRepeatTheCluster, attribtueNameToDoTheValidation, attribtueNameToDoTheValidation2);
 
 				wmodel.set(wizardModelKey, ImmutableList.of(config));
 				// TODO revisar mejor: actualizo los botones del wizard

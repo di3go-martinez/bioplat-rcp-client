@@ -25,4 +25,16 @@ public class Utils {
 		return cv;
 
 	}
+	
+	
+	public static ComboViewer newComboViewerWithoutLabel(Composite parent, String tooltip, List<?> values) {
+		ComboViewer cv = new ComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
+		cv.setContentProvider(ArrayContentProvider.getInstance());
+		cv.setInput(values);
+		cv.getCombo().setToolTipText(tooltip);
+		return cv;
+
+	}
+
+	
 }

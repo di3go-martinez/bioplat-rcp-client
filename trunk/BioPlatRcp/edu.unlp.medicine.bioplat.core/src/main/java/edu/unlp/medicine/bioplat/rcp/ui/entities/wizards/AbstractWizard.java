@@ -107,6 +107,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					
 					Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
 					getShell().setSize(size);
+					
+					
 
 				}
 

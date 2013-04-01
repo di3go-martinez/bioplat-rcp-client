@@ -374,7 +374,7 @@
       <actionContribution
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
-            groupId="abm"
+            groupId="abm3"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"

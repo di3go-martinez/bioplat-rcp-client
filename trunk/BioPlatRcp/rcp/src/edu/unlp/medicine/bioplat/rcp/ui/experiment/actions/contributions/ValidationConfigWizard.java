@@ -116,6 +116,11 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 			secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
 		}
 		
+
+		if (attributeNameToValidation .equals(PagesDescriptors.OTHER)){
+			attributeNameToValidation = wizardModel().value(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION);
+		}
+
 		
 		//IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
 		int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
@@ -223,6 +228,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
+				.add(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
 		;
 

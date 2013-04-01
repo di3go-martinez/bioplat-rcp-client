@@ -29,24 +29,7 @@ public class ConvertByteImageUtils {
 			+ "\n" + " survFitResult13<-survfit(formula = Surv(time13, status13) ~ groups13) " //
 			+ "\n" + " plot(survFitResult13,col=c('red', 'blue', 'green', 'orange', 'yellow', 'brown'))";
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		/*
-		 * In this function the first part shows how to convert an image file to
-		 * byte array. The second part of the code shows how to change byte
-		 * array back to a image
-		 */
-		// byte[] bytes = toBytes(new File("C:\\rose.jpg"));
 
-		// R4J r4j = R4JFactory.getR4JInstance();
-
-		R4JSession r4js = new R4JSession("adsf");
-
-		byte[] bytes = r4js.plot(EXPRESSION);
-
-		// File imageFile = toImage(bytes, "c:\\copy of rose.jpg");
-
-		// System.out.println(imageFile.getPath());
-	}
 
 	// TODO unificar con el método de abajo
 	public static File toImage(byte[] bytes, String filename) throws IOException {
@@ -73,6 +56,7 @@ public class ConvertByteImageUtils {
 		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 		// bufferedImage is the RenderedImage to be written
 		Graphics2D g2 = bufferedImage.createGraphics();
+		
 		g2.drawImage(image, null, null);
 		File imageFile = new File(filename);
 		ImageIO.write(bufferedImage, "jpg", imageFile);

@@ -13,6 +13,7 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -21,8 +22,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -30,6 +32,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrat
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
@@ -48,6 +51,7 @@ public class PagesDescriptors {
 	// clave para el wizardModel que indica la lista de elementos seleccionados.
 	// Es un common value, no un IObservableValue...
 	public static final String SELECTED = "SELECTED";
+	
 
 	public static final String ATTRIBUTE_TYPE = "ATTRIBUTE_TYPE";
 	public static final String GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE = "GENERATE_CLUSTER_&_CALCULATE_BIOLOGICAL_VALUE";
@@ -58,6 +62,14 @@ public class PagesDescriptors {
 	public static final String ATTRIBUTE_NAME_TO_VALIDATION = "ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "SECOND_" + ATTRIBUTE_NAME_TO_VALIDATION;
 	public static final String REMOVE_GENES_IN_GENE_SIGNATURE = "REMOVE_GENES_IN_BIOMARKER";
+	public static final String OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION";
+	public static final String OTHER_ATTRIBUTE_NAME_TO_VALIDATION="OTHER_ATTRIBUTE_NAME_TO_VALIDATION";
+	
+	//GUI
+	public  static  String OTHER = "Other";
+	
+
+	
 
 	private static WizardPageDescriptor clusterPageDescriptor() {
 		return new WizardPageDescriptor("Cluster") {
@@ -72,20 +84,26 @@ public class PagesDescriptors {
 	/**
 	 * Define y mantiene la variable SELECTED para indicar la lista de
 	 * experimentos seleccionados
+	 * @param validationTestGUIProvider 
 	 * 
 	 * @return
 	 */
 	// TODO agregar desde distintas fuentes, inSilico e archivo
-	public static WizardPageDescriptor experimentsWPD() {
-		return new WizardPageDescriptor("Experimentos") {
-
+	public static WizardPageDescriptor experimentsWPD(ValidationTestGUIProvider validationTestGUIProvider) {
+		return new WizardPageDescriptor("Experiments for applying " + validationTestGUIProvider.getName()) {
+			
+			
+			
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
+				
+				wp.setDescription("Select the experiments for validating your biomarker." );
+				
 				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
 
 				Composite container = new Composite(parent, SWT.BORDER);
 				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//
-						.addColumn(ColumnBuilder.create().title("Bioplat experiments in Bioplat Desktop").width(200).property("name"))//
+						.addColumn(ColumnBuilder.create().title("Experiments in your Bioplat Desktop").width(500).property("name"))//
 						.build();
 				tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
@@ -112,26 +130,130 @@ public class PagesDescriptors {
 		};
 	}
 
-	public static WizardPageDescriptor configurationPage() {
-		return new WizardPageDescriptor("Configuración") {
+	public static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider) {
+		return new WizardPageDescriptor("Validation strategy configuration ( " + validationTestGUIProvider.getName() + ")") {
 
+			
+			
 			@Override
 			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
-				Composite result = new Composite(parent, SWT.None);
+				
+				
+				GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
+				
+				Composite container = new Composite(parent, SWT.CENTER);
+				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).spacing(5, 1).create());
 
-				Button check = new Button(result, SWT.CHECK);
-				check.setText("Generate cluster and calculate biological value");
-				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE));
-				check.setSelection(true);
+				
+				createGroup4CLusteringInfo(container,  gdf, dbc, wmodel);
+				createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
 
-				new Label(result, SWT.NONE).setText("Number of clusters:");
-				Text t = new Text(result, SWT.BORDER);
+				
+				return container;
+			}
+
+			private void createGroup4AdditionalParameters(Composite container,
+					GridDataFactory gdf, DataBindingContext dbc,
+					WizardModel wmodel) {
+				
+				
+				if (validationTestGUIProvider.isThereAdditionalParameters()){
+					new Label(container, SWT.NONE).setText("\n\n");
+				Group additionalParameters = new Group(container, SWT.NONE);
+				additionalParameters.setText("Additional parameters of " + validationTestGUIProvider.getName());
+				additionalParameters.setFont(GUIUtils.getFontForGrouptTitle(container));
+				additionalParameters.setLayout(GridLayoutFactory.fillDefaults().margins(40, 15).create());
+				additionalParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+				
+				
+				validationTestGUIProvider.addAdditionComposite(additionalParameters, wmodel, dbc, gdf);
+				}
+				
+								
+				
+				
+
+				
+			}
+
+			private void createGroup4CLusteringInfo(Composite container,
+					GridDataFactory gdf, DataBindingContext dbc,
+					WizardModel wmodel) {
+				
+				
+				Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
+				clusterginGroup.setText("Clustering parameters");
+				clusterginGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
+				clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().margins(40, 20).spacing(10, 10).create());
+				clusterginGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+				
+				
+
+//				Button check = new Button(result, SWT.CHECK);
+//				check.setText("Generate cluster and calculate biological value");
+//				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE));
+//				check.setSelection(true);
+
+				new Label(clusterginGroup, SWT.NONE).setText("Number of clusters:");
+				Text t = new Text(clusterginGroup, SWT.BORDER);
+				t.setLayoutData(gdf.create());
 				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
 
-				new Label(result, SWT.NONE).setText("Times to repeat de k-means clustering (& keep the best):");
-				Text t2 = new Text(result, SWT.BORDER);
+				new Label(clusterginGroup, SWT.NONE).setText("\nTimes to repeat de k-means clustering (It keeps the best):");
+				Text t2 = new Text(clusterginGroup, SWT.BORDER);
+				//t2.setText("10");
+				t2.setLayoutData(gdf.create());
 				dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
 
+
+				//addValidationTypeAndStatissticaSigTestComponents(result, dbc, wmodel);
+				
+				// hook para ejecutar el
+//				ComboViewer validationAttrName = Utils.newComboViewer(clusterginGroup, "\nValidation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured"));
+//				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
+//				validationAttrName.getCombo().setLayoutData(gdf.create());
+//				validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
+//				
+
+				new Label(clusterginGroup, SWT.NONE).setText("\nValidation Attribute Name");
+				Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);
+				ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
+				validationAttrName.getCombo().setLayoutData(gdf.create());
+				validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
+				Text other = new Text(groupForValidationAtt1, SWT.BORDER);
+//				GridData gd = gdf.create();
+//				gd.horizontalSpan=1;
+//				other.setLayoutData(gd);
+				dbc.bindValue(SWTObservables.observeText(other, SWT.Modify), wmodel.valueHolder(OTHER_ATTRIBUTE_NAME_TO_VALIDATION));
+				
+				
+				
+				new Label(clusterginGroup, SWT.NONE).setText("\nSecond Validation Attribute Name");
+				
+				Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(clusterginGroup);
+				ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList(OS_EVENT, RFS_EVENT, "Evento", OTHER));
+				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
+				validationAttrName2.getCombo().setLayoutData(gdf.create());
+				validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
+				Text other2 = new Text(groupForValidationAtt2, SWT.BORDER);
+//				GridData gd2 = gdf.create();
+//				gd2.horizontalSpan=1;
+//				other2.setLayoutData(gd2);
+				dbc.bindValue(SWTObservables.observeText(other2, SWT.Modify), wmodel.valueHolder(OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION));
+				
+
+				
+			}
+
+			private Composite getGroupFoRClusteringAttribute(Composite parent) {
+				Composite container = new Composite(parent, SWT.NONE);
+				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+				container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+				return container;
+			}
+
+			private void addValidationTypeAndStatissticaSigTestComponents(Composite result, DataBindingContext dbc, WizardModel wmodel) {
 				new Label(result, SWT.NONE).setText("Validation Type:");
 				ComboViewer collapseStrategyCombo = new ComboViewer(result, SWT.BORDER | SWT.READ_ONLY);
 				collapseStrategyCombo.setContentProvider(ArrayContentProvider.getInstance());
@@ -161,14 +283,7 @@ public class PagesDescriptors {
 				// bind value del "detalle"
 				IObservableValue selectedStatisticalValue = ViewersObservables.observeSingleSelection(detail);
 				dbc.bindValue(selectedStatisticalValue, wmodel.valueHolder(STATISTICAL_TEST_VALUE), UpdateStrategies.nonNull("Statistical Value"), UpdateStrategies.nullStrategy());
-
-				// hook para ejecutar el
-				ComboViewer validationAttrName = Utils.newComboViewer(result, "Validation Attribute Name", "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
-
-				ComboViewer validationAttrName2 = Utils.newComboViewer(result, "Second Validation Attribute Name", "Second attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList("none", OS_EVENT, RFS_EVENT, "status"));
-				dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
-
+				
 				// set defaults values después de haber hecho los bindings
 				final AttributeTypeEnum attr = AttributeTypeEnum.EVENT_OCCURED_AFTER_TIME;
 				collapseStrategyCombo.setSelection(new StructuredSelection(attr));
@@ -177,11 +292,6 @@ public class PagesDescriptors {
 				if (!s.isEmpty())
 					detail.setSelection(new StructuredSelection(s.get(0)));
 
-				validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
-
-				validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
-
-				return result;
 			}
 
 			private UpdateValueStrategy uvsNumberOfClusters() {

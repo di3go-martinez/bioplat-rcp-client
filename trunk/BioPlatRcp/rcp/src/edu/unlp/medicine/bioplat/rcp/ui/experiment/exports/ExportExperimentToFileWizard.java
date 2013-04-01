@@ -46,6 +46,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 			MessageManager.INSTANCE.add(Message.warn("No Experiment selected"));
 		}
 
+		this.setWindowTitle("Export Bioplat experiment to text file");
 		addPage(createWizardPage());
 	}
 
@@ -96,7 +97,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 	}
 
 	private WizardPage createWizardPage() {
-		return new WizardPage("Datos") {
+		return new WizardPage("Export parameters") {
 
 			@Override
 			public void createControl(Composite parent) {
@@ -106,11 +107,11 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 
 				Composite c = new Composite(parent, SWT.BORDER);
 
-				new CLabel(c, SWT.BOLD).setText("Nombre de archivo:");
+				new CLabel(c, SWT.BOLD).setText("File name:");
 				Text filenameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(filenameHolder, SWT.Modify), getModel().filename);
 
-				new CLabel(c, SWT.BOLD).setText("Carpeta:");
+				new CLabel(c, SWT.BOLD).setText("Folder:");
 				Text directoryHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(directoryHolder, SWT.Modify), getModel().directory);
 
@@ -129,16 +130,19 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				Button clinicalData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(clinicalData_cbholder), getModel().includeClinicalData);
 
-				new CLabel(c, SWT.BOLD).setText("Number separator:");
+				new CLabel(c, SWT.BOLD).setText("Number separator character:");
 				Text numericSeparatorHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(numericSeparatorHolder, SWT.Modify), getModel().numericSeparator);
 
-				new CLabel(c, SWT.BOLD).setText("Separador de columnas:");
+				new CLabel(c, SWT.BOLD).setText("Column separator character:");
 				Text columnSeparatorHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(columnSeparatorHolder, SWT.Modify), getModel().columnSeparator);
 
 				GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(c);
 				setControl(c);
+				
+				this.setTitle("Export configuration");
+				this.setDescription("Select the file for doing the export. You can also parametrize the data to include.");
 
 			}
 		};
