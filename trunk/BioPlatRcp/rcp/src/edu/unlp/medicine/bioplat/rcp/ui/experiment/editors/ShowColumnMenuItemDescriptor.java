@@ -44,16 +44,17 @@ public class ShowColumnMenuItemDescriptor implements MenuItemDescriptor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableColumn c = editor.tableref().column(columnId);
-				if (c.getWidth() == 0) {
+				if (c.getWidth() != 0) {
+					c.setWidth(0);
+					c.setResizable(false);
+					mic.text(showText());
+				} else {
 					// TODO no deberían asumirse datos de la configuración
 					// inicial
 					c.setWidth(DEFAULT);
 					c.setResizable(true);
 					mic.text(hideText());
-				} else {
-					c.setWidth(0);
-					c.setResizable(false);
-					mic.text(showText());
+
 				}
 
 			}
