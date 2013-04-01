@@ -75,7 +75,12 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	protected void doInUI(BiomarkerOptimizationResult result) throws Exception {
 		PlatformUIUtils.openView(PSOResultViewPart.id());
 		PSOResultViewPart v = (PSOResultViewPart) PlatformUIUtils.findView(PSOResultViewPart.id());
-		v.setResultToShow(result);
+		
+		v.setForTraining(forTraining.get(0));
+		if (forTesting!=null && forTesting.size()>0) v.setForTesting(forTesting.get(0));
+		if (forValidation!=null && forValidation.size()>0) v.setForValidation(forValidation.get(0));
+		
+		v.setResultToShow(result.getBettersTouchedDuringTheTrip());
 	}
 
 	@Override

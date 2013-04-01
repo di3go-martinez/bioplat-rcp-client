@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.collect.ImmutableList;
 
+import edu.unlp.medicine.bioplat.rcp.config.StatisticConfigGUI;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ValidationConfigWizard;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
@@ -66,7 +67,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, true) {
+				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, true, StatisticConfigGUI.getValidationTestGUIProvider()) {
 					@Override
 					protected void register(ValidationConfig4DoingCluster validationConfig) {
 						update(validationConfig);

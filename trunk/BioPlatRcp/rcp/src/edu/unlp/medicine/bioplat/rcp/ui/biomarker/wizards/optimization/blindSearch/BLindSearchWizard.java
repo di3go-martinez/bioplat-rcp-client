@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.optimizers.blindSearch.*;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 
 import com.google.common.collect.Lists;
 
@@ -102,6 +104,15 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 	
 	@Override
 	protected BlindSearchResult backgroundProcess(Monitor monitor) throws Exception {
+		
+		// create dialog with ok and cancel button and info icon
+//		MessageBox dialog = new MessageBox(, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+//		dialog.setText("My info");
+//		dialog.setMessage("Do you really want to do this?");
+//
+//		
+//		int returnCode = dialog.open();
+		
 		blindSearchCommand = new BlindSearchOptimizerCommand(biomarker, new HashMap<String, String>());
 		blindSearchCommand.setNumberOfGenesToRemoveFrom(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSTo + 1);
 		blindSearchCommand.setNumberOfGenesToRemoveTo(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSFrom );
@@ -167,13 +178,13 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> {
 
 	@Override
 	protected void doInUI(BlindSearchResult result) throws Exception {
-		
 		PlatformUIUtils.openView(BlindSearchResultViewPart.id());
 		BlindSearchResultViewPart v = (BlindSearchResultViewPart) PlatformUIUtils.findView(BlindSearchResultViewPart.id());
 
 		v.setForTraining(forTraining.get(0));
 		if (forTesting!=null && forTesting.size()>0) v.setForTesting(forTesting.get(0));
 		if (forValidation!=null && forValidation.size()>0) v.setForValidation(forValidation.get(0));
+		
 		v.setResultToShow(result.getBetters());		
 		//v.setCommand(blindSearchCommand);
 		

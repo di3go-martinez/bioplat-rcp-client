@@ -2,6 +2,8 @@ package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization;
 
 import java.util.ArrayList;
 
+import edu.unlp.medicine.bioplat.rcp.config.StatisticConfigGUI;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.*;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -21,6 +23,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.Validat
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
+import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
+import edu.unlp.medicine.config.StatisticConfig;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
@@ -62,6 +67,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	private Widget numberOfTimesToRepeatTheCluster;
 	private Widget attribtueNameToDoTheValidation2;
 	private Widget statisticsSignificanceTest;
+	
 	private boolean optional;
 
 	@Override
@@ -90,7 +96,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, false) {
+				ValidationConfigWizard vcw = new ValidationConfigWizard(biomarker, false, StatisticConfigGUI.getValidationTestGUIProvider()) {
 					@Override
 					protected void register(ValidationConfig4DoingCluster validationConfig) {
 						update(validationConfig);
@@ -118,6 +124,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 					attribtueNameToDoTheValidation2 = Widgets.createTextWithLabel(innerContainer, "Validation Attribute 2", config, "secondAttribtueNameToDoTheValidation").readOnly();
 					statisticsSignificanceTest = Widgets.createTextWithLabel(innerContainer, "Statistics Significance Test", config, "statisticsSignificanceTest.friendlyName").readOnly();
 
+					
 					innerContainer.layout();
 					contentsCreated = true;
 				}

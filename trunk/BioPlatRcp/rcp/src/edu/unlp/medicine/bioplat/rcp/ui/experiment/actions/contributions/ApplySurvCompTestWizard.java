@@ -15,6 +15,7 @@ import com.google.common.collect.Ranges;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.survComp.SurvCompGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.SurvCompTestCommand;
@@ -42,7 +43,7 @@ public class ApplySurvCompTestWizard extends ValidationConfigWizard {
 
 
 	public ApplySurvCompTestWizard(Biomarker biomarker, boolean acceptRange) {
-		super(biomarker, acceptRange);
+		super(biomarker, acceptRange, new SurvCompGUIProvider());
 		
 	}
 

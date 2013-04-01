@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.base.Function;
 import com.google.common.collect.DiscreteDomains;
@@ -14,7 +15,9 @@ import com.google.common.collect.Ranges;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.logRankTest.LogRankTestGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
@@ -40,7 +43,7 @@ public class ApplyLogRankTestWizard extends ValidationConfigWizard {
 
 
 	public ApplyLogRankTestWizard(Biomarker biomarker, boolean acceptRange) {
-		super(biomarker, acceptRange);
+		super(biomarker, acceptRange, new LogRankTestGUIProvider());
 		
 	}
 

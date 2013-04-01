@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.wizards.GenericPage1ForIntroduction;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.ext.algorithms.ALIX;
@@ -77,8 +78,9 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		return new GMSPage3LocalGSs();
 	}
 
-	private GMSPage1Introduction createIntroductionPage() {
-		return new GMSPage1Introduction();
+	private WizardPageDescriptor createIntroductionPage() {
+		String introText = "A Bioplat Metasignature is the result of datamining many input Gene Signatures you selected.\n\n You can select the input Gene Signatures from external databases but you can also use the GeneSignatures you have previously opened in Bioplat. The algorithm will take as input all the GeneSignatures you selected and it will suggest a list of genes which conforms the MetaSIgnature";
+		return new GenericPage1ForIntroduction("What is a Metasignature?", "What is a metasignature? How does it work?", introText);
 	}
 
 	private GMSPage2FIlterExternalDBs createExternalGSDatabasesPage() {

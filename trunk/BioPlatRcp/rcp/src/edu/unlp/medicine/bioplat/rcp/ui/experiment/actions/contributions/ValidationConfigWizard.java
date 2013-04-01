@@ -2,7 +2,9 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -14,16 +16,13 @@ import com.google.common.collect.Ranges;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
@@ -40,16 +39,21 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 public abstract class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 	private Biomarker biomarker;
 	private boolean acceptRange;
+	ValidationTestGUIProvider validationTestGUIProvider;
 	 
+
 
 	/**
 	 * 
 	 * @param biomarker
 	 * @param acceptRange
 	 */
-	public ValidationConfigWizard(Biomarker biomarker, boolean acceptRange) {
+	public ValidationConfigWizard(Biomarker biomarker, boolean acceptRange, ValidationTestGUIProvider validationTestGUIProvider) {
 		this.biomarker = biomarker;
 		this.acceptRange = acceptRange;
+		this.validationTestGUIProvider = validationTestGUIProvider;
+	
+		this.validationTestGUIProvider.declareVariablesInWizardModel(wizardModel());
 		
 		//Se invoca al replace porque la variable acceptRange no esta inicializada al momento de crear el modelo.
 	    wizardModel().replace(PagesDescriptors.NUMBER_OF_CLUSTERS, getClusterWriatableValue());
@@ -80,7 +84,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	@Override
 	protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
 
-		boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
+		//boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
 		// numberOfCluster puede ser un rango o no
 		String numberOfClusters = getClusterRangeAsString(); 
 		
@@ -91,15 +95,27 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
 		String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
-		IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
+		
+		if (secondAttributeNameToDoTheValidation .equals(PagesDescriptors.OTHER)){
+			secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
+		}
+		
+		
+		//IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
 		int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
 		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE);
+		
+		//It adds additional parameters for the validation. It will delegate on the validationTestGUIProvider
+		Map<String, String> specificParametersForTheValidationTest = this.getSpecificParametersForTheValidationTest();
+		
 
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
-				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, statisticsSignificanceTest, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
-
+				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
+				
+				
 				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 				// FIXME hacer un poquito más generico con una
@@ -120,6 +136,15 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		}
 		afterExecution();
+	}
+
+	private Map<String, String> getSpecificParametersForTheValidationTest() {
+		
+		Map<String, String> result = new HashMap<String, String>();
+		this.validationTestGUIProvider.getSpecificParametersForTheValidationTest(result, wizardModel());
+		
+		return result;
+		
 	}
 
 	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker,
@@ -175,19 +200,26 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		WizardModel wm = new WizardModel()//
 				.add(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE, new WritableValue(true, Boolean.class))//
 
-				.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new WritableValue(10, Integer.class))//
-				.add(PagesDescriptors.VALIDATION_TYPE)//
-				.add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null, AttributeTypeEnum.class))//
-				.add(PagesDescriptors.STATISTICAL_TEST_VALUE, new WritableValue("", String.class))//
+				//.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new WritableValue(10, Integer.class))//
+//				.add(PagesDescriptors.VALIDATION_TYPE)//
+//				.add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null, AttributeTypeEnum.class))//
+//				.add(PagesDescriptors.STATISTICAL_TEST_VALUE, new WritableValue("", String.class))//
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
+				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
 		;
 
 		WritableValue wv;
 		wv = getClusterWriatableValue();
-
 		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, wv);
+		
+		
+		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);;
+		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
+		wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
+		
+		
 
 		return wm;
 	}
@@ -195,7 +227,6 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	private WritableValue getClusterWriatableValue() {
 		if (acceptRange) return new WritableValue("2..3", String.class);
 		else return new WritableValue(2, Integer.class);
-		
 	}
 
 	protected WritableValue clusterWritableValue() {
@@ -204,7 +235,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
-		return Arrays.asList(PagesDescriptors.experimentsWPD(), PagesDescriptors.configurationPage());
+		return Arrays.asList(PagesDescriptors.experimentsWPD(), PagesDescriptors.configurationPage(this.validationTestGUIProvider));
 	}
 
 	@Override
