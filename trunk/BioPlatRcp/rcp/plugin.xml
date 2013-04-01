@@ -137,6 +137,19 @@
                style="push">
          </action>
       </actionSet>
+      <actionSet
+            id="operations"
+            label="Operations (d)"
+            visible="true">
+         <menu
+               id="operations.menu1"
+               label="menu1"
+               path="operations.menu.path">
+            <groupMarker
+                  name="edu.medicine.bioplat.rcp.groupMarker1">
+            </groupMarker>
+         </menu>
+      </actionSet>
       
    </extension>
       <extension
@@ -361,8 +374,10 @@
       <actionContribution
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
+            groupId="abm"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
             onMenu="false"
             onToolbar="true">
          <selection
@@ -372,6 +387,7 @@
       <actionContribution
             caption="Remove Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
+            groupId="abm"
             image="resources/icons/removeItem.png"
             onMenu="false"
             onToolbar="true">
@@ -444,6 +460,7 @@
       <actionContribution
             caption="Calculate Best Variations"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
+            groupId="g1"
             image="resources/icons/tree.png"
             onMenu="true"
             onToolbar="false">
@@ -540,14 +557,12 @@
             name="openGenerateMetasignatureWizardAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenGenerateMetasignatureWizardAction">
       </action>
-   </extension>
-  
-  <extension point="org.eclipse.ui.intro.configExtension">
       <action
             name="importFromCSVFileIntroAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportFromCSVFileIntroAction">
       </action>
    </extension>
+  
    
    <extension point="org.eclipse.ui.intro.configExtension">
       <action
