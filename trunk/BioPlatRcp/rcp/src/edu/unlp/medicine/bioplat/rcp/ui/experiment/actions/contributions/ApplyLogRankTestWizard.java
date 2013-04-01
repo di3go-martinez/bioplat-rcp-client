@@ -50,7 +50,8 @@ public class ApplyLogRankTestWizard extends ValidationConfigWizard {
 	@Override
 	public OneBiomarkerCommand createCommand(Biomarker biomarker,
 			ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
-		 return new LogRankTestCommand(biomarker, validationConfigs);
+		 
+		return new LogRankTestCommand(biomarker, validationConfigs);
 		
 	}
 

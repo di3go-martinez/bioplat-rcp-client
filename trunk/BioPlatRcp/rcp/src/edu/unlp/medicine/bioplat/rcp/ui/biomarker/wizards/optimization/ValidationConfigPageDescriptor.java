@@ -122,7 +122,7 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 					numberOfTimesToRepeatTheCluster = Widgets.createTextWithLabel(innerContainer, "Times", config, "numberOfTimesToRepeatTheCluster").readOnly();
 					attribtueNameToDoTheValidation = Widgets.createTextWithLabel(innerContainer, "Validation Attribute 1", config, "attribtueNameToDoTheValidation").readOnly();
 					attribtueNameToDoTheValidation2 = Widgets.createTextWithLabel(innerContainer, "Validation Attribute 2", config, "secondAttribtueNameToDoTheValidation").readOnly();
-					statisticsSignificanceTest = Widgets.createTextWithLabel(innerContainer, "Statistics Significance Test", config, "statisticsSignificanceTest.friendlyName").readOnly();
+					//statisticsSignificanceTest = Widgets.createTextWithLabel(innerContainer, "Statistics Significance Test", config, "statisticsSignificanceTest.friendlyName").readOnly();
 
 					
 					innerContainer.layout();

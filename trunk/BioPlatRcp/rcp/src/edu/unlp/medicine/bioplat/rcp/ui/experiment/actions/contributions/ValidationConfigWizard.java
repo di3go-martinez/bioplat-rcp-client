@@ -43,6 +43,19 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	 
 
 
+	@Override
+	public int getWizardWidth() {
+		
+		return 700;
+	}
+	
+	@Override
+	public int getWizardHeight() {
+		
+		return 670;
+	}
+	
+	
 	/**
 	 * 
 	 * @param biomarker
@@ -55,9 +68,12 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	
 		this.validationTestGUIProvider.declareVariablesInWizardModel(wizardModel());
 		
+		this.setWindowTitle(this.validationTestGUIProvider.getName() + " Validation");
+		
 		//Se invoca al replace porque la variable acceptRange no esta inicializada al momento de crear el modelo.
 	    wizardModel().replace(PagesDescriptors.NUMBER_OF_CLUSTERS, getClusterWriatableValue());
 
+	    
 		
 	}
 
@@ -235,7 +251,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
-		return Arrays.asList(PagesDescriptors.experimentsWPD(), PagesDescriptors.configurationPage(this.validationTestGUIProvider));
+		return Arrays.asList(PagesDescriptors.experimentsWPD(this.validationTestGUIProvider), PagesDescriptors.configurationPage(this.validationTestGUIProvider));
 	}
 
 	@Override

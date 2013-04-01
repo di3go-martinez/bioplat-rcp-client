@@ -25,6 +25,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
@@ -42,7 +43,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	protected LogRankTestDialog(Shell parentShell, Biomarker biomarker) {
 		super(parentShell);
 		this.biomarker = biomarker;
-
+		
 		// TODO mejorar
 		experimentsWizard = createExperimentSelectorWizard(biomarker);
 		// TODO conseguir la selección actual
@@ -59,19 +60,24 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Apply experiment for Gene Signature validation");
+		newShell.setText("Log rank test Validation");
 	}
 
 	private final List<ValidationConfig4DoingCluster> data = Lists.newArrayList();
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-
+		this.setTitle("Validate biomarker using log rank test");
+		setMessage("In this dialog you can set up all the validations you would like to do using log rank test. Each validation will be applied on a particular experiment previously loaded in the platform. ");
 		Composite container = parent;// (Composite)
 										// super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 
+		String help = "Help: In the table you can see the validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
+		GUIUtils.addWrappedText(c, help, 8, true);
+		
+		
 		tr = TableBuilder.create(c)//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("experimentToValidate.name").title("experiment"))//
@@ -88,8 +94,8 @@ public class LogRankTestDialog extends TitleAreaDialog {
 		// buttons.setLayout(GridLayoutFactory.fillDefaults().create());
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
-
-		setMessage("In this dialog you can set up all the validations you would like to do. Each validation will be applied on a particular experiment previously loaded in the platform. ");
+		
+		
 		return container;
 	}
 
@@ -170,6 +176,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	private TableReference tr;
 
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
+		
 		return new ApplyLogRankTestWizard(biomarker, true) {
 			@Override
 			protected void register(ValidationConfig4DoingCluster validationConfig) {

@@ -46,6 +46,7 @@ class SurvivalCurves extends CompositeGenerator {
 			final Image image2 = new Image(PlatformUIUtils.findDisplay(), new FileInputStream(imageFile));
 			final Button imageButton = new Button(c, SWT.FLAT);
 			imageButton.setImage(image2);
+			imageButton.setSize(image2.getImageData().width /2, image2.getImageData().width /2);
 
 			createCopyTextButton(c, script);
 

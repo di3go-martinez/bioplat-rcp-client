@@ -115,21 +115,21 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				dbc.bindValue(SWTObservables.observeText(directoryHolder, SWT.Modify), getModel().directory);
 
 				// checkboxes
-				new CLabel(c, SWT.BOLD).setText("Incluir datos de expresi�n");
+				new CLabel(c, SWT.BOLD).setText("Include expression data");
 				Button exprData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(exprData_cbholder), getModel().includeExpressionData);
 
 				// checkboxes
-				new CLabel(c, SWT.BOLD).setText("Incluir nombres de campos");
+				new CLabel(c, SWT.BOLD).setText("Include sample names (header)");
 				Button headerData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(headerData_cbholder), getModel().includeHeader);
 
 				// checkboxes
-				new CLabel(c, SWT.BOLD).setText("Incluir datos cl�nicos");
+				new CLabel(c, SWT.BOLD).setText("Include clinical data");
 				Button clinicalData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(clinicalData_cbholder), getModel().includeClinicalData);
 
-				new CLabel(c, SWT.BOLD).setText("Separador de n�mero:");
+				new CLabel(c, SWT.BOLD).setText("Number separator:");
 				Text numericSeparatorHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(numericSeparatorHolder, SWT.Modify), getModel().numericSeparator);
 
