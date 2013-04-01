@@ -81,6 +81,12 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 		}
 	}
 
+	/**
+	 * Agrupa las acciones en función del id del grupo
+	 * 
+	 * @param ungroupedActions
+	 * @return
+	 */
 	private Map<String, List<ActionContribution<T>>> groupActions(List<ActionContribution<T>> ungroupedActions) {
 		Map<String, List<ActionContribution<T>>> result = new HashMap<String, List<ActionContribution<T>>>();
 		for (ActionContribution<T> actionc : ungroupedActions) {
