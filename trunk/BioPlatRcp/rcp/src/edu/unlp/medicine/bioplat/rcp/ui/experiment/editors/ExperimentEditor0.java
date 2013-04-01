@@ -104,8 +104,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// data[0] es porque ahí está el gen, ver ExpressionDataModel
 		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value.entrezId")//
 				.addHeadeMenuItemDescriptor(new ShowColumnMenuItemDescriptor(this, "Name", "name"), new ShowColumnMenuItemDescriptor(this, "Alternative Ids", "alternativeIds")))//
-				.addColumn(ColumnBuilder.create().title("Nombre").id("name").property("data[0].value.name").hidden().fixed())//
-				.addColumn(ColumnBuilder.create().title("Alternative Ids").id("alternativeIds").property("data[0].value.alternativeIds").hidden().fixed());
+				.addColumn(ColumnBuilder.create().title("Nombre").id("name").resizable(false).property("data[0].value.name").hidden().fixed())//
+				.addColumn(ColumnBuilder.create().title("Alternative Ids").resizable(false).id("alternativeIds").property("data[0].value.alternativeIds").hidden().fixed());
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
 		for (Sample s : sampleToLoad)
