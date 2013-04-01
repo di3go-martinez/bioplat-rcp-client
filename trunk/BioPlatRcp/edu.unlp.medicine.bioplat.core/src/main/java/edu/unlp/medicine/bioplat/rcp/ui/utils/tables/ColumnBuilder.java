@@ -145,6 +145,11 @@ public class ColumnBuilder {
 		return this;
 	}
 
+	/**
+	 * Posicion fija de la columna
+	 * 
+	 * @return
+	 */
 	public ColumnBuilder fixed() {
 		moveable = false;
 		return this;
@@ -348,7 +353,7 @@ public class ColumnBuilder {
 	public ColumnBuilder property(String propertyPath) {
 		if (columnId == null)
 			columnId = propertyPath;
-		
+
 		return accesor(OgnlAccesor.createFor(propertyPath));
 	}
 
