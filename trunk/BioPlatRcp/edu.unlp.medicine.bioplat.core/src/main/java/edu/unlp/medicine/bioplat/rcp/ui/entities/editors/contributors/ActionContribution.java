@@ -33,4 +33,13 @@ public interface ActionContribution<T> {
 	void onToolbar(Boolean present);
 
 	boolean onToolbar();
+
+	/**
+	 * indica que la action pertenece a algún grupo
+	 * 
+	 * @param groupId
+	 */
+	void group(String groupId);
+
+	String group();
 }

@@ -26,8 +26,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  */
 public abstract class AbstractActionContribution<T extends AbstractEntity> extends Action implements ActionContribution<T> {
 
-	
-	//active editor es necesatio para saber la selección actual
+	// active editor es necesatio para saber la selección actual
 	// TODO revisar cuándo y por qué puede tirar error
 	private IEditorPart activeEditor;
 
@@ -115,6 +114,21 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	public abstract void run();
 
 	private boolean onMenu, onToolbar;
+	private String groupId;
+
+	@Override
+	public void group(String groupId) {
+		this.groupId = groupId;
+	}
+
+	/**
+	 * 
+	 * @return the group al que pertencece la acción o null si no pertenece a
+	 *         algún grupo en particular
+	 */
+	public String group() {
+		return groupId;
+	}
 
 	@Override
 	public void onMenu(Boolean b) {

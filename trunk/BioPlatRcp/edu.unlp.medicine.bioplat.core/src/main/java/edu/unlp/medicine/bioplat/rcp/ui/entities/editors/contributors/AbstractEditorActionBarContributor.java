@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -9,10 +11,12 @@ import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorActionBarContributor;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.core.Activator;
@@ -51,10 +55,46 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 
 	private void populateMenu0(MenuManager mm) {
 		populateMenu(mm);
-		for (ActionContribution<T> actionc : actions) {
-			if (actionc.onMenu())
-				add(mm, actionc);
+		populateGrouped(mm, new Predicate<ActionContribution<?>>() {
+
+			@Override
+			public boolean apply(ActionContribution<?> input) {
+				return input.onMenu();
+			}
+		});
+	}
+
+	private void populateGrouped(IContributionManager mm, Predicate<ActionContribution<?>> predicate) {
+		boolean atLeastOnce = false;
+		Map<String, List<ActionContribution<T>>> groupedActions = groupActions(actions);
+		for (String groupKey : groupedActions.keySet()) {
+			atLeastOnce = false;
+			for (ActionContribution<T> actionc : groupedActions.get(groupKey)) {
+				if (predicate.apply(actionc)) {
+					add(mm, actionc);
+					atLeastOnce = true;
+				}
+			}
+
+			if (atLeastOnce)
+				mm.add(new Separator());
 		}
+	}
+
+	private Map<String, List<ActionContribution<T>>> groupActions(List<ActionContribution<T>> ungroupedActions) {
+		Map<String, List<ActionContribution<T>>> result = new HashMap<String, List<ActionContribution<T>>>();
+		for (ActionContribution<T> actionc : ungroupedActions) {
+			List<ActionContribution<T>> l = result.get(actionc.group()); // FIXME
+																			// puede
+																			// devolver
+																			// null
+			if (l == null)
+				l = Lists.newArrayList();
+			l.add(actionc);
+			result.put(actionc.group(), l);
+
+		}
+		return result;
 	}
 
 	private void add(IContributionManager mm, ActionContribution<T> actionc) {
@@ -64,10 +104,13 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 	@Override
 	public void contributeToCoolBar(ICoolBarManager coolBarManager) {
 		ToolBarManager tbm = new ToolBarManager();
-		for (ActionContribution<T> actionc : actions) {
-			if (actionc.onToolbar())
-				add(tbm, actionc);
-		}
+		populateGrouped(tbm, new Predicate<ActionContribution<?>>() {
+
+			@Override
+			public boolean apply(ActionContribution<?> input) {
+				return input.onToolbar();
+			}
+		});
 		coolBarManager.add(tbm);
 	}
 
@@ -80,13 +123,14 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 		ExtensionPointLoader.create("edu.medicine.bioplat.rcp.editor.operation.contribution").load(new DefaultExtensionLoaderRunnable() {
 			@Override
 			protected void runOn(IConfigurationElement celement) throws Exception {
+				@SuppressWarnings("unchecked")
 				ActionContribution<T> ac = (ActionContribution<T>) celement.createExecutableExtension("class");
 				ac.modelProvider(AbstractEditorActionBarContributor.this);
 				ac.caption(celement.getAttribute("caption"));
 				ac.image(Activator.imageDescriptorFromPlugin(celement.getAttribute("image")));
 				ac.onMenu(Boolean.valueOf(celement.getAttribute("onMenu")));
 				ac.onToolbar(Boolean.valueOf(celement.getAttribute("onToolbar")));
-
+				ac.group(celement.getAttribute("groupId"));
 				IConfigurationElement[] c = celement.getChildren("selection");
 				String selectionClass = c[0].getAttribute("class");
 				if (selectionClass == null) // es opcional, en caso de no estar
