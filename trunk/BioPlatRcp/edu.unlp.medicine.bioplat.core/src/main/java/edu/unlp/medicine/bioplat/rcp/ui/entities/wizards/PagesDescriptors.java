@@ -222,9 +222,8 @@ public class PagesDescriptors {
 				validationAttrName.getCombo().setLayoutData(gdf.create());
 				validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
 				Text other = new Text(groupForValidationAtt1, SWT.BORDER);
-//				GridData gd = gdf.create();
-//				gd.horizontalSpan=1;
-//				other.setLayoutData(gd);
+				GridData gd = gdf.grab(true, false).create();
+				other.setLayoutData(gd);
 				dbc.bindValue(SWTObservables.observeText(other, SWT.Modify), wmodel.valueHolder(OTHER_ATTRIBUTE_NAME_TO_VALIDATION));
 				
 				
@@ -237,9 +236,8 @@ public class PagesDescriptors {
 				validationAttrName2.getCombo().setLayoutData(gdf.create());
 				validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
 				Text other2 = new Text(groupForValidationAtt2, SWT.BORDER);
-//				GridData gd2 = gdf.create();
-//				gd2.horizontalSpan=1;
-//				other2.setLayoutData(gd2);
+				GridData gd2 = gdf.grab(true, false).create();
+				other2.setLayoutData(gd2);
 				dbc.bindValue(SWTObservables.observeText(other2, SWT.Modify), wmodel.valueHolder(OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION));
 				
 
@@ -248,7 +246,7 @@ public class PagesDescriptors {
 
 			private Composite getGroupFoRClusteringAttribute(Composite parent) {
 				Composite container = new Composite(parent, SWT.NONE);
-				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+				container.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).numColumns(2).create());
 				container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 				return container;
 			}
