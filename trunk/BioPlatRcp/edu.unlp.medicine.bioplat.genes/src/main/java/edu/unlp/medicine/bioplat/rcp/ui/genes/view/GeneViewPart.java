@@ -292,7 +292,6 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 	}
 
 	private void setMeFocus() {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>><fucking focus!!!");
 		if (isDirty()) // hay browsers cargando, ignoro el foco
 			return;
 		int i = 0;
