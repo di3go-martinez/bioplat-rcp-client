@@ -196,15 +196,16 @@ public class PagesDescriptors {
 
 				new Label(clusterginGroup, SWT.NONE).setText("Number of clusters:");
 				Text t = new Text(clusterginGroup, SWT.BORDER);
-				t.setLayoutData(gdf.create());
 				dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
+				GridData gdClusters = gdf.grab(false, false).create();
+				t.setLayoutData(gdClusters);
 
 				new Label(clusterginGroup, SWT.NONE).setText("\nTimes to repeat de k-means clustering (It keeps the best):");
 				Text t2 = new Text(clusterginGroup, SWT.BORDER);
 				//t2.setText("10");
-				t2.setLayoutData(gdf.create());
 				dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
-
+				GridData gdRepeat = gdf.grab(false, false).create();
+				t2.setLayoutData(gdRepeat);
 
 				//addValidationTypeAndStatissticaSigTestComponents(result, dbc, wmodel);
 				

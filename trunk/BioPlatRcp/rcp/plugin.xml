@@ -304,7 +304,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
         icon="intro/contents/images/CSV.gif"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
-        name="Importar desde archivo de texto">
+        name="Import experiment from text file">
   </wizard>
   <wizard
         canFinishEarly="false"
