@@ -13,7 +13,7 @@ public abstract class ReadOnlyAccesor implements Accesor {
 	@Override
 	public final void set(Object element, Object value) {
 		// throw new RuntimeException("Read only!");
-
+		logger.warn("Intentando asignar un valor mediante un accesor de solo lectura. object -->" + element + "; value=" + value);
 	}
 
 }
