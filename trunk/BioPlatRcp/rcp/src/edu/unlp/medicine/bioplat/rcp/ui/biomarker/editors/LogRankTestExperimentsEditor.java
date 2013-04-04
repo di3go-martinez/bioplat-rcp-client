@@ -119,7 +119,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				// creo las nuevas columnas
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
-				tc.setText("View result details");
+				tc.setText("View Result Details");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 				tc.setWidth(150);
@@ -127,7 +127,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
 				tc.setWidth(200);
-				tc.setText("Export experiment used for validation");
+				tc.setText("Export Experiment Used for Validation");
 				// ok, ya inicializado
 				mustinitialize = false;
 			}
@@ -140,7 +140,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				TableEditor editor;
 				editor = new TableEditor(table);
 				Button c = new Button(table, SWT.FLAT);
-				c.setText("...");
+				c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
 				c.addSelectionListener(openExperimentAppliedDialog(exp));
 				editor.grabHorizontal = true;
 				// editor.minimumHeight = 100;
@@ -152,6 +152,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				editor = new TableEditor(table);
 				try {
 					c = createOpenEditorButton(exp.getOriginalExperiment(), table, "Open Original Experiment", EditorsId.experimentEditorId());
+					c.setImage(PlatformUIUtils.findImage("Open original experiment.png"));
 					editor.grabHorizontal = true;
 					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 				} catch (ExperimentBuildingException e) {
@@ -162,7 +163,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				editor = new TableEditor(table);
 				c = new Button(table, SWT.FLAT);
 				// c.setText("Export to MEV");;
-				c.setImage(PlatformUIUtils.findImage("Export to MEV"));
+				c.setImage(PlatformUIUtils.findImage("Export experiment used for validation.16.png"));
 				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
