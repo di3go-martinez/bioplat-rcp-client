@@ -60,8 +60,8 @@ public class PlatformUIUtils {
 		return page;
 	}
 
-	public static void openView(final String viewId) {
-		openView(viewId, false);
+	public static <T extends IViewPart> T openView(final String viewId) {
+		return openView(viewId, false);
 	}
 
 	public static Shell findShell() {
@@ -92,7 +92,7 @@ public class PlatformUIUtils {
 	}
 
 	// TODO actualizar comentarios!
-	public static void openView(final String viewId, final boolean forceFocus) {
+	public static <T extends IViewPart> T openView(final String viewId, final boolean forceFocus) {
 		// al abrir la vista se lleva el foco... no debería, por eso se le
 		// devuelve al editor que estaba activo... si era una vista la que
 		// estaba activa, qué pasa? uhmmm
@@ -122,6 +122,7 @@ public class PlatformUIUtils {
 
 			}
 		});
+		return findView(viewId);
 
 	}
 
@@ -210,7 +211,12 @@ public class PlatformUIUtils {
 	public static void center(Shell shell) {
 		Point p = centerPointFor(shell);
 		shell.setLocation(p.x, p.y);
+	}
 
+	// ni idea si anda esto.. revisar
+	public static void center(Shell relativee, Shell target) {
+		Point p = centerPointFor(relativee);
+		target.setLocation(p.x, p.y);
 	}
 
 	// FIXME no anda bien...
