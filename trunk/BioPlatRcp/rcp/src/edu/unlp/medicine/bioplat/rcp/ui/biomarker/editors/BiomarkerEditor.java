@@ -104,7 +104,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 		final TableBuilder tb = TableBuilder.createVirtual(parent)//
 				.model(model(), "genes")
-				//TODO .hasRadioBehavior();
+		// TODO .hasRadioBehavior()
+		;
 		// .input(model().getGenes());
 
 		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("entrezId").addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(this, "copy", OgnlAccesor.createFor("entrezId"))))//
