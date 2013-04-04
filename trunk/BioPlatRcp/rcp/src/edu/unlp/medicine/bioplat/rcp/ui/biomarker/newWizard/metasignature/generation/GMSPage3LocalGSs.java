@@ -294,6 +294,14 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 				public String getFriendlyDescription() {
 					return "Editing Gene Signatures";
 				}
+				@Override
+				public List<GeneSignature> getGeneSignatures(
+						List<String> keywordOnName, List<String> signatureIdsOrNames,
+						List<String> geneNameOrEntrez)
+						throws ProblemsGettingTheGeneSiganturesException {
+					// TODO Auto-generated method stub
+					return this.getGeneSignatures();
+				}
 			});
 		}
 	}

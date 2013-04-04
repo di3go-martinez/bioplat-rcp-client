@@ -222,7 +222,7 @@ public class Filters extends WizardPageDescriptor {
 				monitor.beginTask("Calculating...", IProgressMonitor.UNKNOWN);
 
 				holder.hold(smg/* .monitor(monitor) *///
-						.getSignaturesFromProvidersAndFilterThem(keyword, //
+						.getSignaturesFromProvidersAndFilterThem(toList(keyword), //
 								toList(signatures_id_or_names), //
 								toList(geneNameOrEntrez)));
 				monitor.done();

@@ -228,6 +228,15 @@ public class Providers extends WizardPageDescriptor {
 				}
 
 				@Override
+				public List<GeneSignature> getGeneSignatures(
+						List<String> keywordOnName, List<String> signatureIdsOrNames,
+						List<String> geneNameOrEntrez)
+						throws ProblemsGettingTheGeneSiganturesException {
+					// TODO Auto-generated method stub
+					return this.getGeneSignatures();
+				}
+
+				@Override
 				public String getFriendlyDescription() {
 					return "Editing Gene Signatures";
 				}

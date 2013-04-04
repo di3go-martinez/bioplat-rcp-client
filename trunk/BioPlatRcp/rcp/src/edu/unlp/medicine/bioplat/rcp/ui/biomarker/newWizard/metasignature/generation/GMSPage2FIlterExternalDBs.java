@@ -42,15 +42,12 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.ext.providers.geneSigDB.fromSecondaryDBImprotedInBioplat.ProviderFromSecondaryDBImportedInBioplat;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
-import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGeneSiganturesException;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.SingleMetasignatureGenerator;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.StringFilter;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
@@ -74,6 +71,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 	
 	private TableReference tref;
+	private Button selectAllElementsButton;
 	int resultSize;
 	
 	//////////////////////////INITIALIZATION OF THE PAGE. It is executed when the wizard is started.////////////////////////////////
@@ -237,6 +235,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 
 			// FIXME los newss
 			tref = TableBuilder.create(c).input(Lists.newArrayList(new HashSet(holder.value())))//
+					.addColumn(ColumnBuilder.create().property("id").title("ID").width(250))
 					.addColumn(ColumnBuilder.create().property("name").title("Name").width(400))//
 					.addColumn(ColumnBuilder.create().property("geneCount").title("Genes"))//
 					//.addColumn(ColumnBuilder.create().property("author").title("Author"))//
@@ -272,14 +271,14 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 		// true).create());
 		// ec.setLayout(GridLayoutFactory.fillDefaults().create());
 
-		final Button b = new Button(c, SWT.CHECK);
-		b.setText("Include All (" + resultSize + " gene Signatures)");
+		selectAllElementsButton = new Button(c, SWT.CHECK);
+		selectAllElementsButton.setText("Include All (" + resultSize + " gene Signatures)");
 
-		b.addSelectionListener(new SelectionAdapter() {
+		selectAllElementsButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				includeAll = b.getSelection();
+				includeAll = selectAllElementsButton.getSelection();
 				if (includeAll) {
 					selection = tref.selectedElements();
 					wizardModel.set(SELECTED_EXTERNAL_SIGNATURES, elements);
@@ -288,7 +287,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 				resultPage.setPageComplete(isResultPageComplete(wizardModel));
 			}
 		});
-		b.setSelection(includeAll);
+		selectAllElementsButton.setSelection(includeAll);
 
 	}
 
@@ -309,7 +308,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 				monitor.beginTask("Querying Gene Signature Databases...", IProgressMonitor.UNKNOWN);
 
 				holder.hold(smg/* .monitor(monitor) *///
-						.getSignaturesFromProvidersAndFilterThem(keyword, //
+						.getSignaturesFromProvidersAndFilterThem(toList(keyword), //
 								toList(signatures_id_or_names), //
 								toList(geneNameOrEntrez)));
 				monitor.done();
@@ -353,6 +352,8 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor {
 		// TODO re input si se cambio algo, no va a recalcular lo mismo...
 		try {
 			elements = getGeneSignaturesPassedTheFilters(wizardModel, wizard).value();
+			resultSize = elements.size();
+			selectAllElementsButton.setText("Include All (" + resultSize + " gene Signatures)");
 			tref.input(elements);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
