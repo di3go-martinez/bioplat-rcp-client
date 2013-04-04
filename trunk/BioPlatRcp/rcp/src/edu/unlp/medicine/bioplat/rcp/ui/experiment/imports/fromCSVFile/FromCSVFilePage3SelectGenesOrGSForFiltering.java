@@ -174,6 +174,18 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 				public String getFriendlyDescription() {
 					return "Editing Gene Signatures";
 				}
+
+				@Override
+				public List<GeneSignature> getGeneSignatures(
+						List<String> keywordOnName,
+						List<String> signatureIdsOrNames,
+						List<String> geneNameOrEntrez)
+						throws ProblemsGettingTheGeneSiganturesException {
+					List<GeneSignature> gs = Lists.newArrayList();
+					for (Biomarker b : l)
+						gs.add(new GeneSignature(b));
+					return gs;
+				}
 			});
 		}
 	}
