@@ -83,7 +83,11 @@ public class LoadRLibraries implements IStartup {
 				List<RLibrary> librariesNotInstalled = rlibraryManager.getLibrariesNotInstalled(libraries);
 				Iterator<RLibrary> librariesNotInstalledIterator = librariesNotInstalled.iterator();
 				while (librariesNotInstalledIterator.hasNext()) {
-					MessageManager.INSTANCE.add(Message.error("The " + librariesNotInstalledIterator.next().getName() + " library is not installed. Install it in R because it is necessary for Bioplat to work properly."));
+					// TODO por qué no intentar instalar las librerías que
+					// faltan automáticamente??
+					final RLibrary library = librariesNotInstalledIterator.next();
+					logger.warn("The library " + library.getName() + " seems not to be present in R. Try to install it by running: " + library.getInstallation());
+					MessageManager.INSTANCE.add(Message.error("The " + library.getName() + " library is not installed. Install it in R because it is necessary for Bioplat to work properly."));
 				}
 				return librariesNotInstalled;
 			}
