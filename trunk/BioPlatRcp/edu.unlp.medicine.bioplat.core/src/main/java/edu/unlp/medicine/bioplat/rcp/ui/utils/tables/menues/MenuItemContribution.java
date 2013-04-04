@@ -37,14 +37,15 @@ public class MenuItemContribution implements MenuContribution {
 	}
 
 	@Override
-	public void addSelectionListener(SelectionListener listener) {
+	public MenuContribution addSelectionListener(SelectionListener listener) {
 		item.addSelectionListener(listener);
-
+		return this;
 	}
 
 	@Override
-	public void removeSelectionListener(SelectionListener listener) {
+	public MenuContribution removeSelectionListener(SelectionListener listener) {
 		item.removeSelectionListener(listener);
+		return this;
 	}
 
 	@Override

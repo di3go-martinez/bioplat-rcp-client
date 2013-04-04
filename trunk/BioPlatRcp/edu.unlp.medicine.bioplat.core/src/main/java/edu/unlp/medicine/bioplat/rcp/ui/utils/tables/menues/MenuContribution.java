@@ -12,9 +12,9 @@ public interface MenuContribution {
 
 	MenuContribution text(String label);
 
-	void addSelectionListener(SelectionListener listener);
+	MenuContribution addSelectionListener(SelectionListener listener);
 
-	void removeSelectionListener(SelectionListener listener);
+	MenuContribution removeSelectionListener(SelectionListener listener);
 
 	boolean selection();
 
