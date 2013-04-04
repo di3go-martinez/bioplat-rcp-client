@@ -51,7 +51,7 @@ public class RLibraryScanner {
 			return new RLibrary(name, value);
 
 		} else {
-			logger.info("Empty or invalid line. Unable to process.");
+			logger.warn("Empty or invalid line. Unable to process.");
 		}
 		// no need to call scanner.close(), since the source is a String
 		return null;
