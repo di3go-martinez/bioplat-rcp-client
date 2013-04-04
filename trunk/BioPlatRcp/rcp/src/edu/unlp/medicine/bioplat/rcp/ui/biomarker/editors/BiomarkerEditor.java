@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.nls.Messages;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.CopyColumnTextMenuItemDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -102,10 +103,11 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	private void createTable(Composite parent) {
 
 		final TableBuilder tb = TableBuilder.createVirtual(parent)//
-				.model(model(), "genes");
+				.model(model(), "genes")
+				//TODO .hasRadioBehavior();
 		// .input(model().getGenes());
 
-		tb.addColumn(ColumnBuilder.create().rightAligned().property("EntrezId").title("entrezId"))//
+		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("entrezId").addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(this, "copy", OgnlAccesor.createFor("entrezId"))))//
 				.addColumn(ColumnBuilder.create().title("Name").centered().accesor(OgnlAccesor.createFor("name")))//
 				.addColumn(ColumnBuilder.create().property("description").title("Description").width(500));
 
@@ -159,5 +161,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		String filename = dialog.open();
 		if (filename != null)
 			marshaller.marshal(this.model(), filename);
+	}
+
+	public TableReference tableref() {
+		return tr;
 	}
 }
