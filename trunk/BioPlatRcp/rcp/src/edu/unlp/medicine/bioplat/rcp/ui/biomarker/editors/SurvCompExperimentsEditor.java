@@ -113,11 +113,11 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 			if (mustinitialize) {
 				newBaseColumnIndex = table.getColumnCount();
 				// creo las nuevas columnas
-//				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
-//				tc.setWidth(150);
-//				tc.setText("View result details");
+				// tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
+				// tc.setWidth(150);
+				// tc.setText("View result details");
 
-				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex );
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
 				tc.setText("Open Original Experiment");
 
@@ -136,6 +136,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				TableEditor editor;
 				editor = new TableEditor(table);
 				Button c = createOpenEditorButton(survCompValidationResult, table, "Open Applied Experiment", AppliedExperimentEditor.id());
+
 				editor.grabHorizontal = true;
 				// editor.minimumHeight = 100;
 				editor.setEditor(c, items[i], newBaseColumnIndex);
@@ -146,6 +147,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				editor = new TableEditor(table);
 				try {
 					c = createOpenEditorButton(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), table, "open original experiment", EditorsId.experimentEditorId());
+					c.setImage(PlatformUIUtils.findImage("Open original experiment.png"));
 					editor.grabHorizontal = true;
 					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 				} catch (ExperimentBuildingException e) {
@@ -156,13 +158,13 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				editor = new TableEditor(table);
 				c = new Button(table, SWT.FLAT);
 				// c.setText("Export to MEV");;
-				c.setImage(PlatformUIUtils.findImage("Export to MEV"));
-				 c.addSelectionListener(new SelectionAdapter() {
-				 @Override
-				 public void widgetSelected(SelectionEvent e) {
-					 new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate()).blockOnOpen().open();
-				 }
-				 });
+				c.setImage(PlatformUIUtils.findImage("Export experiment used for validation.16.png"));
+				c.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate()).blockOnOpen().open();
+					}
+				});
 				editor.grabHorizontal = true;
 				editor.setEditor(c, items[i], newBaseColumnIndex + 2);
 				// createAndConfigureEditor(table, c, items[i],
