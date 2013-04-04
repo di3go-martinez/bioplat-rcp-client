@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -18,6 +19,7 @@ import org.eclipse.ui.part.EditorActionBarContributor;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
@@ -67,7 +69,7 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 	private void populateGrouped(IContributionManager mm, Predicate<ActionContribution<?>> predicate) {
 		boolean atLeastOnce = false;
 		Map<String, List<ActionContribution<T>>> groupedActions = groupActions(actions);
-		for (String groupKey : groupedActions.keySet()) {
+		for (String groupKey : ordered(groupedActions.keySet())) {
 			atLeastOnce = false;
 			for (ActionContribution<T> actionc : groupedActions.get(groupKey)) {
 				if (predicate.apply(actionc)) {
@@ -79,6 +81,11 @@ public abstract class AbstractEditorActionBarContributor<T> extends EditorAction
 			if (atLeastOnce)
 				mm.add(new Separator());
 		}
+	}
+
+	private List<String> ordered(Set<String> set) {
+		Ordering<String> ordening = Ordering.natural().nullsLast();
+		return ordening.sortedCopy(set);
 	}
 
 	/**
