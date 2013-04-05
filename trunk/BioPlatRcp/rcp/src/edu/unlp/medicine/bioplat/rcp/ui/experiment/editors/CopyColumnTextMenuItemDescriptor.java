@@ -67,7 +67,7 @@ public class CopyColumnTextMenuItemDescriptor implements MenuItemDescriptor {
 			}
 
 			protected String itemSeparator() {
-				return "\t";
+				return "\n";
 			}
 		});
 		return mic;

@@ -99,7 +99,7 @@ public class GeneralBlindSearchConfiguration extends WizardPageDescriptor {
 		
 		Text t2 = new Text(group, SWT.BORDER);
 		t2.setLayoutData(new GridData(30, 13));
-		IValidator toValidator = new IntegerInRangeValidator((Integer)wmodel.value(NUMBER_OF_GENES_FROM),  this.biomarker.getNumberOfGenes(), "The gene signature size can not be higher than the size of the original Gene Signature(" + this.biomarker.getNumberOfGenes() +")", "The From value must be lower than the To value", "To value");
+		IValidator toValidator = new IntegerInRangeValidator(1,  this.biomarker.getNumberOfGenes(), "The gene signature size can not be higher than the size of the original Gene Signature(" + this.biomarker.getNumberOfGenes() +")", "The From value must be a higher than 0", "To value");
 		dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(NUMBER_OF_GENES_TO), new UpdateValueStrategy().setAfterConvertValidator(toValidator), null);
 		
 		
