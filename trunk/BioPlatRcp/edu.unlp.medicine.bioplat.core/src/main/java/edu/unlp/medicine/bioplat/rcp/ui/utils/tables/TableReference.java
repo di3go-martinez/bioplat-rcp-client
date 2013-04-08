@@ -49,6 +49,8 @@ public interface TableReference {
 
 	<T> List<T> focusedElements();
 
+	<T> List<T> elements();
+
 	void addSelectionChangeListener(ISelectionChangedListener listener);
 
 	/**
@@ -65,4 +67,5 @@ public interface TableReference {
 	 * Rompe el paginado, es decir, trae todos los elementos disponibles
 	 */
 	void breakPaging();
+
 }

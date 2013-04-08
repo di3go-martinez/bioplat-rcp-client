@@ -21,6 +21,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -67,6 +69,7 @@ public class TableBuilder implements TableConfigurer {
 	});
 
 	private TableViewer viewer;
+	private List<ISelectionChangedListener> viewerlisteners = Lists.newArrayList();
 
 	// TODO revisar.... usar input resolver?
 	private List<?> input = Lists.newArrayList();
@@ -92,13 +95,10 @@ public class TableBuilder implements TableConfigurer {
 		table.setHeaderVisible(true); // TODO configurable
 		table.setLinesVisible(viewTableLines);
 
-		
 		// viewer.setContentProvider(new ArrayContentProvider());
 		// Make the selection available to other views
 		// getSite().setSelectionProvider(viewer);
 
-		
-		
 		// Layout the viewer
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gridData.horizontalSpan = 1;
@@ -152,6 +152,8 @@ public class TableBuilder implements TableConfigurer {
 	 * @return
 	 * @deprecated Se recomienda usar model+propertyPath
 	 */
+	// TODO analizar "desdeprecar" e implementar como model(InternalList,
+	// "data")
 	@Deprecated
 	public <T> TableBuilder input(List<T> input) {
 		return input(input, Object.class);
@@ -159,6 +161,11 @@ public class TableBuilder implements TableConfigurer {
 
 	public TableBuilder hideTableLines() {
 		viewTableLines = false;
+		return this;
+	}
+
+	public TableBuilder hasRadioBehavior() {
+		radioButtonBeheavior = true;
 		return this;
 	}
 
@@ -184,6 +191,8 @@ public class TableBuilder implements TableConfigurer {
 	private boolean showSelectionColumn = true;
 
 	private Map<String, TableColumnReference> columnsHolder = Maps.newHashMap();
+
+	private boolean radioButtonBeheavior = false;;
 
 	/**
 	 * Construye la grilla preconfigurada. Esta operación es idempotente
@@ -218,7 +227,8 @@ public class TableBuilder implements TableConfigurer {
 		built = true;
 
 		// TODO sacar a una clase afuera...
-		return table = new TableReference() {
+		// TODO sacar a una clase afuera...
+		table = new TableReference() {
 
 			@Override
 			public void refresh() {
@@ -324,6 +334,7 @@ public class TableBuilder implements TableConfigurer {
 
 			@Override
 			public void addSelectionChangeListener(ISelectionChangedListener listener) {
+				viewerlisteners.add(listener);
 				viewer.addSelectionChangedListener(listener);
 			}
 
@@ -362,6 +373,11 @@ public class TableBuilder implements TableConfigurer {
 				paging.breakPaging();
 			}
 
+			@Override
+			public <T> List<T> elements() {
+				return ImmutableList.copyOf(realInput);
+			}
+
 			// @Override
 			// public void input(AbstractEntity model) {
 			// model(model, propertyPath);
@@ -369,6 +385,41 @@ public class TableBuilder implements TableConfigurer {
 			// }
 
 		};
+
+		// ver más arriba también
+		if (radioButtonBeheavior)
+			table.addSelectionChangeListener(new ListenerC(viewer));
+
+		// TODO analizar mejor qué hace falta limpiar y qué no...
+		table.getTable().addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				for (ISelectionChangedListener listener : viewerlisteners) {
+					viewer.removeSelectionChangedListener(listener);
+				}
+				viewerlisteners.clear();
+				viewerlisteners = null;
+				viewer = null;
+
+				columns.clear();
+				columns = null;
+
+				for (TableColumnReference tcr : columnsHolder.values()) {
+					tcr.column().dispose();
+				}
+				columnsHolder.clear();
+				columnsHolder = null;
+				paging = null;
+
+				realInput.clear();
+				realInput = null;
+
+			}
+		});
+
+		return table;
 	}
 
 	// TODO analizar el InputResolver... ya no va más... no?

@@ -7,6 +7,8 @@ import ognl.OgnlException;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -104,6 +106,15 @@ public class Paging<T> {
 				};
 				scrollbar.addSelectionListener((SelectionAdapter) listener);
 			}
+			table.addDisposeListener(new DisposeListener() {
+
+				@Override
+				public void widgetDisposed(DisposeEvent e) {
+					unplug();
+					listener = null;
+
+				}
+			});
 		}
 
 	}
