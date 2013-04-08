@@ -23,7 +23,8 @@ import com.google.common.collect.ImmutableMap;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.nls.Messages;
-import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.CopyColumnTextMenuItemDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.CopyColumnTextMenuItemDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ShowHideColumnMenuItemDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
@@ -36,7 +37,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.save.MetaSignatureMarshaller;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener {
+public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener, TableReferenceProvider {
 
 	private static Logger logger = LoggerFactory.getLogger(BiomarkerEditor.class);
 
@@ -108,8 +109,17 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		;
 		// .input(model().getGenes());
 
-		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("entrezId").addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(this, "Copy genes", OgnlAccesor.createFor("entrezId"))))//
-				.addColumn(ColumnBuilder.create().title("Name").centered().accesor(OgnlAccesor.createFor("name")))//
+		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("entrezId")//
+				.addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, "Copy Genes Entrez Id", OgnlAccesor.createFor("entrezId"))) {
+					// FIXME si se usa el default (\n) no copia bien los genes
+					// en la acción de agregado de genes: ver por qué y/o
+					// dejarlo así
+					@Override
+					protected String itemSeparator() {
+						return "\t";
+					}
+				}).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Alternative Ids", "alternativeIds")))//
+				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Alternative Ids").hidden().resizable(false).fixed()).addColumn(ColumnBuilder.create().title("Name").centered().accesor(OgnlAccesor.createFor("name")))//
 				.addColumn(ColumnBuilder.create().property("description").title("Description").width(500));
 
 		tr = tb.build();
@@ -164,7 +174,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 			marshaller.marshal(this.model(), filename);
 	}
 
-	public TableReference tableref() {
+	@Override
+	public TableReference tableReference() {
 		return tr;
 	}
+
 }
