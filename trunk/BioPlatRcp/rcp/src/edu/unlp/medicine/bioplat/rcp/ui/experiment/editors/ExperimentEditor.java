@@ -31,7 +31,6 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 	}
 
 	public ExperimentEditor() {
-
 	}
 
 	private ExperimentEditor0 innerEditor;

@@ -6,27 +6,28 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.TableReferenceProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemDescriptor;
 
-public class ShowColumnMenuItemDescriptor implements MenuItemDescriptor {
+public class ShowHideColumnMenuItemDescriptor implements MenuItemDescriptor {
 
 	private static final int DEFAULT = 50;
 	private static final String SHOW = "Show";
 	private static final String HIDE = "Hide";
 
-	private ExperimentEditor0 editor;
+	private TableReferenceProvider provider;
 	private String title;
 	private String columnId;
 	private boolean startedHide;
 
-	public ShowColumnMenuItemDescriptor(ExperimentEditor0 editor, String title, String columnId) {
-		this(editor, title, columnId, true);
+	public ShowHideColumnMenuItemDescriptor(TableReferenceProvider provider, String title, String columnId) {
+		this(provider, title, columnId, true);
 	}
 
-	public ShowColumnMenuItemDescriptor(ExperimentEditor0 editor, String title, String columnId, boolean startedHide) {
-		this.editor = editor;
+	public ShowHideColumnMenuItemDescriptor(TableReferenceProvider provider, String title, String columnId, boolean startedHide) {
+		this.provider = provider;
 		this.title = title;
 		this.columnId = columnId;
 		this.startedHide = startedHide;
@@ -43,7 +44,7 @@ public class ShowColumnMenuItemDescriptor implements MenuItemDescriptor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TableColumn c = editor.tableref().column(columnId);
+				TableColumn c = provider.tableReference().column(columnId);
 				if (c.getWidth() != 0) {
 					c.setWidth(0);
 					c.setResizable(false);
