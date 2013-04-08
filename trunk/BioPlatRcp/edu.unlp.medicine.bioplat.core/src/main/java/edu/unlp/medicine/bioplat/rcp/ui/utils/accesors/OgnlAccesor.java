@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Accede a la propiedad de un objeto, propertyPath mediante
  * 
- * @author diego
+ * @author diego martínez
  * 
  */
 public class OgnlAccesor implements Accesor {
