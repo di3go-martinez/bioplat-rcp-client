@@ -67,9 +67,10 @@ public class WizardModel {
 		// if (!values.containsKey(key))
 		// throw new RuntimeException("No se agregó el observable para " + key);
 		final IObservableValue iObservableValue = values.get(key);
+		final Object value = commonValues.get(key);
 		// TODO analizar de agregarlos por default (add(key))... igualmente
 		// tirar el warning... pros y constras
-		if (iObservableValue == null)
+		if (iObservableValue == null && value == null)
 			logger.warn("The holder for the key " + key + " is null");
 		return iObservableValue;
 	}
@@ -111,9 +112,8 @@ public class WizardModel {
 
 	private static Logger logger = LoggerFactory.getLogger(WizardModel.class);
 
-	public void replace(String key,
-			WritableValue writableValue) {
+	public void replace(String key, WritableValue writableValue) {
 		values.put(key, writableValue);
-		
+
 	}
 }
