@@ -1,5 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.actions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -60,11 +63,20 @@ public class CopyColumnTextMenuItemDescriptor implements MenuItemDescriptor {
 					return;
 
 				StringBuilder sb = new StringBuilder();
+				List<Integer> genes = new ArrayList<Integer>();
 				for (Object item : tableItems)
-					sb.append(accesor.get(item)).append(itemSeparator());
+					genes.add(Integer.valueOf(accesor.get(item).toString()));
+				
+				Collections.sort(genes); 
+						
+				for (Integer id : genes) {
+					sb.append(id).append(itemSeparator());	
+				}
+				String result = sb.toString().substring(0, sb.length()-1);
+				
 				// FIXME remove the las separator..
 				TextTransfer textTransfer = TextTransfer.getInstance();
-				clipboard.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
+				clipboard.setContents(new Object[] { result }, new Transfer[] { textTransfer });
 
 			}
 

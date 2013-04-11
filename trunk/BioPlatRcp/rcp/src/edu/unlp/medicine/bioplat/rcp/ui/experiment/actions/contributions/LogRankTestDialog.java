@@ -126,7 +126,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		close();
-		final String mmsg = "Applying Validation Configs";
+		final String mmsg = "Log rank test validation";
 		// TODO migrar a EJob cuando este esté
 		Job j = new Job(mmsg) {
 			@Override
@@ -142,23 +142,25 @@ public class LogRankTestDialog extends TitleAreaDialog {
 					} catch (ClusteringException e) {
 						// Agrego el mensaje de error.
 						MessageManager.INSTANCE.add(Message.error(e.getSpecificError() + ". Details: " + e.getGenericError(), e));
-						// PlatformUIUtils.openInformation("Experiments Applied",
-						// e.getSpecificError() + ". Details: " +
-						// e.getGenericError());
 
 					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment......", e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying Log Rank test......", e));
 						// PlatformUIUtils.openInformation("Experiments Applied",
 						// "Unexpected error applying an experiment......");
 					}
 					monitor.worked(1);
 				}
-				final String msg = "Succesfully commands applied: " + count;
-				MessageManager.INSTANCE.add(Message.info(msg));
-				if (count == experimentsWizard.commands2apply().size())
-					PlatformUIUtils.openInformation("Experiments Applied", "All validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture");
-				else
-					PlatformUIUtils.openInformation("Experiments Applied", "There were " + (experimentsWizard.commands2apply().size() - count) + " validations with error and " + count + " were succesfully executed. Please see the Message view for more details.");
+				
+				if (count == experimentsWizard.commands2apply().size()){
+					String msg = "All log rank test validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture"; 
+					PlatformUIUtils.openInformation("Log rank test validation", msg);
+					MessageManager.INSTANCE.add(Message.info(msg));
+				}
+					
+				else{
+					PlatformUIUtils.openWarning("LogRank test Validation", " LogRank test validations succesfully executed: " + count + ". \n LogRank test validations with error: " + (experimentsWizard.commands2apply().size() - count)  + ". \n For error details, see rows above in this the Message view.");
+				
+				}
 				monitor.done();
 				return ValidationStatus.ok();
 			}

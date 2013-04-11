@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.utils;
 
 import java.awt.Container;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -47,6 +48,16 @@ public class GUIUtils {
 		fD[0].setStyle(SWT.BOLD);
 		
 		return new Font(container.getDisplay(),fD[0]);
+	}
+	
+	public static String getGeneListAsString(List<String> genesAddedList) {
+		StringBuffer result = new StringBuffer("");
+		for (String id : genesAddedList) {
+			result.append(", " + id);
+		}
+		return result.toString().substring(2, result.toString().length());
+		
+		
 	}
 	
 	

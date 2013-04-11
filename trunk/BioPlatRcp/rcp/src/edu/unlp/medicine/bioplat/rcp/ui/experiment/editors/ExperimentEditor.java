@@ -44,7 +44,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		innerEditor = new ExperimentEditor0();
 		// TODO revisar el title, por qué lo pone vacío al principio sino le
 		// mando el model.id?...
-		EditorDescription ed = new EditorDescription(getEditorInput(), innerEditor, getEditorInput().model().id());
+		EditorDescription ed = new EditorDescription(getEditorInput(), innerEditor, "Expression data");
 
 		// sincronizo el nombre del editor con la primera solapa
 		innerEditor.addPropertyListener(new IPropertyListener() {

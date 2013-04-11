@@ -5,13 +5,16 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 
 import com.google.common.collect.Maps;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs.GenesInputDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
@@ -41,6 +44,7 @@ public class AddClinicalAttributteAC extends AbstractActionContribution<Abstract
 		String newAttrName = findAttributeName();
 		Map<Sample, String> newAtrrValues = findAttributeValues();
 		addAttribute(newAttrName, newAtrrValues);
+		
 	}
 
 	private String findAttributeName() {
@@ -63,7 +67,8 @@ public class AddClinicalAttributteAC extends AbstractActionContribution<Abstract
 			return newClinicalAttributeName;
 		}
 
-		throw new RuntimeException("Text present in the clipboard is not in the correct format");
+		throw new RuntimeException("The text in the clipboard do not have the expected format. The text must have the attribute name and the " + model().getSampleCount()  + " values for each sample, separated by tab (as in the original file you have imported)");
+		
 
 	}
 

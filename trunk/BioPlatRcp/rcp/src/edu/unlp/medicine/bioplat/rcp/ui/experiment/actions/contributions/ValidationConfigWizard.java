@@ -262,7 +262,12 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected String getTaskName() {
-		return "Applying Experiments...";
+		return "Add new validation to apply...";
+	}
+	
+	@Override
+	public boolean logInTheMessageView(){
+		return false;
 	}
 
 }

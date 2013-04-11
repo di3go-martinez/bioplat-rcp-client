@@ -109,8 +109,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		;
 		// .input(model().getGenes());
 
-		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("entrezId")//
-				.addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, "Copy Genes Entrez Id", OgnlAccesor.createFor("entrezId"))) {
+		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("Gene Entrez ID")//
+				.addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, "Copy Selected Genes (Entrez Id)", OgnlAccesor.createFor("entrezId"))) {
 					// FIXME si se usa el default (\n) no copia bien los genes
 					// en la acción de agregado de genes: ver por qué y/o
 					// dejarlo así
@@ -118,9 +118,10 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 					protected String itemSeparator() {
 						return "\t";
 					}
-				}).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Alternative Ids", "alternativeIds")))//
-				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Alternative Ids").hidden().resizable(false).fixed()).addColumn(ColumnBuilder.create().title("Name").centered().accesor(OgnlAccesor.createFor("name")))//
-				.addColumn(ColumnBuilder.create().property("description").title("Description").width(500));
+				}).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
+				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Gene alternative IDs (e.g EnsemblID)").width(350).hidden().resizable(false).fixed())
+				.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")))
+				.addColumn(ColumnBuilder.create().property("description").title("Gene Description").width(800));
 
 		tr = tb.build();
 

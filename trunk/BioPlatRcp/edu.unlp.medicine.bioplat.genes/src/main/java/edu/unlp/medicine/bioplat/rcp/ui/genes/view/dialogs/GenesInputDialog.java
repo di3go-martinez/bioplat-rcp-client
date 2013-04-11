@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +19,7 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
@@ -59,14 +61,16 @@ public class GenesInputDialog extends Dialog {
 
 	public List<Gene> genes() {
 		List<Gene> result = Lists.newArrayList();
+		List<String> genesNotGenes=new ArrayList<String>();
 		for (String id : getids())
 			try {
 				result.add(MetaPlat.getInstance().findGene(id));
 			} catch (GeneNotFoundByIdException e) {
-				MessageManager.INSTANCE.add(Message.warn("Gene '" + id + "' not found"));
+				genesNotGenes.add(id);
 			} catch (Exception e) {
 				MessageManager.INSTANCE.add(Message.error(e.getLocalizedMessage()));
 			}
+		if (genesNotGenes.size()>0) MessageManager.INSTANCE.add(Message.warn("Entered IDs not found in Bioplat database (Take into account that you can use GeneSymbol, EntrezId or EnsmblID for identify genes): " + GUIUtils.getGeneListAsString(genesNotGenes)));
 		return result;
 	}
 

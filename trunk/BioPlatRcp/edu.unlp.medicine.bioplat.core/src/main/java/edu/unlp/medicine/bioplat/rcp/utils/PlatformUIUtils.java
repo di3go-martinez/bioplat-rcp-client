@@ -208,6 +208,28 @@ public class PlatformUIUtils {
 		});
 	}
 
+
+	public static void openWarning(final String title, final String message) {
+		findDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				MessageDialog.openWarning(findShell(), title, message);
+			}
+		});
+	}
+	
+	public static void openError(final String title, final String message) {
+		findDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				MessageDialog.openError(findShell(), title, message);
+			}
+		});
+	}
+	
+	
 	public static void center(Shell shell) {
 		Point p = centerPointFor(shell);
 		shell.setLocation(p.x, p.y);

@@ -97,7 +97,14 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 
 	@Override
 	protected String getTaskName() {
-		return "Generation of metasignature using " + algorithm.getName() + " on " + externalSelectedGS.size() + openedSelectedGeneSignatures.size() + " Gene Signatures" ;
+		StringBuilder sb = new StringBuilder("");
+		sb.append("Generation of metasignature using ");
+		sb.append(algorithm.getName());
+		sb.append(" on ");
+		int selected = externalSelectedGS.size();
+		sb.append(selected);
+		sb.append(" Gene Signatures");
+		return  sb.toString();
 	}
 
 	@Override

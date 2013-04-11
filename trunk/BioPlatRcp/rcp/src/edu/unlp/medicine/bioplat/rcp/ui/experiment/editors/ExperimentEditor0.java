@@ -31,8 +31,11 @@ import com.google.common.collect.Maps;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.FromTabletMenuItemDescriptorProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.TableReferenceProvider;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.CopyColumnTextMenuItemDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -102,10 +105,22 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// .input(inputHolder.value())
 		;
 
+		
+		
+		
 		// data[0] es porque ahí está el gen, ver ExpressionDataModel
-		tb.addColumn(ColumnBuilder.create().title("Gen id").numeric().property("data[0].value.entrezId")//
-				.addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name"), new ShowHideColumnMenuItemDescriptor(this, "Alternative Ids", "alternativeIds")))//
-				.addColumn(ColumnBuilder.create().title("Nombre").id("name").resizable(false).property("data[0].value.name").hidden().fixed())//
+		tb.addColumn(ColumnBuilder.create().title("Gene Entrez ID").numeric().property("data[0].value.entrezId")//
+				.addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, "Copy Selected Genes (Entrez Id)", OgnlAccesor.createFor("data[0].value.entrezId"))) {
+					// FIXME si se usa el default (\n) no copia bien los genes
+					// en la acción de agregado de genes: ver por qué y/o
+					// dejarlo así
+					@Override
+					protected String itemSeparator() {
+						return "\t";
+					}
+				})
+				.addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name"), new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
+				.addColumn(ColumnBuilder.create().title("Nombre").id("name").resizable(false).property("data[0].value.name").fixed())//
 				.addColumn(ColumnBuilder.create().title("Alternative Ids").resizable(false).id("alternativeIds").property("data[0].value.alternativeIds").hidden().fixed());
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();

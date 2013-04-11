@@ -71,7 +71,7 @@ public class MessageViewPart extends ViewPart {
 						return PlatformUI.getWorkbench().getSharedImages().getImage(msgtype);
 					}
 				})) //
-				.addColumn(ColumnBuilder.create().property("createdAt").transformer(new AbstractDataTransformer<Date, String>() {
+				.addColumn(ColumnBuilder.create().title("Create at").property("createdAt").transformer(new AbstractDataTransformer<Date, String>() {
 					private final DateFormat df = DateFormat.getInstance();
 
 					@Override
@@ -79,7 +79,7 @@ public class MessageViewPart extends ViewPart {
 						return df.format(fecha);
 					}
 				})) //
-				.addColumn(ColumnBuilder.create().property("text").width(750)) //
+				.addColumn(ColumnBuilder.create().title("Message").property("text").width(1000)) //
 				.input(MessageManager.INSTANCE.getMessages());
 
 		tr = tb.build();

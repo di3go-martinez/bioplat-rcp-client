@@ -17,6 +17,8 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.wizards.GenericPage1ForIntroduction;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
@@ -36,37 +38,46 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	public MevWizard(AbstractExperiment e) {
 		this.experiment = e;
+		this.setWindowTitle("Export");
 	}
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
-		WizardPageDescriptor d = new WizardPageDescriptor("Mev") {
+		
+		
+		WizardPageDescriptor d = new WizardPageDescriptor("Export experiment to text file") {
 
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
+				
+				wizardPage.setTitle("Export to text file, the experiment data used for this validation");
 				Composite container = new Composite(parent, SWT.NONE);
+				wizardPage.setDescription("Export to text file the experiment data. It will export the expression data of genes contained in this biomarker and the clinical data");
 
+				GUIUtils.addWrappedText(container, "\n", 8, false);
+				
 				new Label(container, SWT.NONE).setText("File: ");
 				TextWithSelectionButton ft = new FileText(container);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME));
 
 				Button check = new Button(container, SWT.CHECK);
-				check.setText("Clinical Data");
+				check.setText("Include Clinical Data");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(INCLUDE_CLINICAL_DATA));
 
 				check = new Button(container, SWT.CHECK);
-				check.setText("Header");
+				check.setText("Include Header");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(INCLUDE_HEADER));
 
 				check = new Button(container, SWT.CHECK);
-				check.setText("Expression Data");
+				check.setText("Include Expression Data");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(INCLUDE_EXPRESSION_DATA));
 
-				GridLayoutFactory.fillDefaults().numColumns(2).applyTo(container);
+				GridLayoutFactory.fillDefaults().numColumns(1).applyTo(container);
 				return container;
 			}
 		};
+		
 		result.add(d);
 		return result;
 	}

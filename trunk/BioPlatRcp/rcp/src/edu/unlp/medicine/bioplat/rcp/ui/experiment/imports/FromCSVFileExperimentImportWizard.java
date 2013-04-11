@@ -107,6 +107,13 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 		return null;
 	}
 
+	
+	@Override
+	public boolean logInTheMessageView() {
+	
+		return false;
+	}
+	
 	@Override
 	protected String getTaskName() {
 		return "Import experiment from CSV file";

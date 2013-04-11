@@ -26,7 +26,7 @@ public class AsyncAction {
 							monitor.beginTask("Processing Request...", IProgressMonitor.UNKNOWN);
 							targetAction.run();
 						} catch (Exception e) {
-							MessageManager.INSTANCE.add(Message.error("Unexpected Exception running the action " + targetAction.getText(), e));
+							MessageManager.INSTANCE.add(Message.error("Unexpected Exception running the action \"" + targetAction.getText() + "\"", e));
 							return ValidationStatus.error(e.getMessage());
 						} finally {
 							monitor.done();

@@ -411,10 +411,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	}
 
 	public void addMessageToMessageView(T oo) {
-		MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed"));
+		if (this.logInTheMessageView()) MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed."));
 
 	}
 
+	
+	public boolean logInTheMessageView(){
+		return true;
+	}
+	
 	private void addMessageErrorToMessageView(Throwable t) {
 		MessageManager.INSTANCE.add(Message.error(t.getMessage(), t));
 

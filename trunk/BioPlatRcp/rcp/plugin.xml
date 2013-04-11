@@ -374,7 +374,7 @@
       <actionContribution
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
-            groupId="abm3"
+            groupId="01-Biomarker-abm"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
@@ -387,7 +387,7 @@
       <actionContribution
             caption="Remove Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
-            groupId="abm"
+            groupId="01-Biomarker-abm"
             image="resources/icons/removeItem.png"
             onMenu="false"
             onToolbar="true">
@@ -395,62 +395,21 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
-            caption="Change 0&apos;s"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
-            onMenu="true">
+            caption="Validate using Surv Comp"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
+            groupId="02-Biomarker-validation"
+            image="resources/icons/validateSurvComp.png"
+            onMenu="true"
+            onToolbar="true">
          <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Absolute Value"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue"
-            image="resources/icons/absolutevalue.png"
-            onMenu="true">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
-         </selection>
-      </actionContribution>
-      
-      <actionContribution
-            caption="Apply Experiment"
+            caption="Validate using Kaplan-Meier and Log Rank Test"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
-            image="resources/icons/validate.png"
-            onMenu="true"
-            onToolbar="true">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-         </selection>
-      </actionContribution>
-      
-      <actionContribution
-            caption="Delete Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.RemoveGenesContribution"
-            image="resources/icons/removeItem.png"
-            onMenu="true">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Keep Only Genes..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
-            onMenu="true">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
-      </actionContribution>
-      <actionContribution
-            caption="Apply Logarithm"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC"
-            onMenu="true">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.Experiment">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="PSO..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
-            image="resources/icons/pso.png"
+            groupId="02-Biomarker-validation"
+            image="resources/icons/validateLogRank.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -458,26 +417,9 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Calculate Best Variations"
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
-            groupId="g1"
-            image="resources/icons/tree.png"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-      </actionContribution>
-      <actionContribution
-            caption="Add Clinical Attribute"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.AddClinicalAttributteAC"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.Experiment"></selection>
-      </actionContribution>
-      <actionContribution
-            caption="Blind search Optimizer"
+            caption="Optimize using Blind search Optimizer"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
+            groupId="03-Biomarker-optimizer"
             image="resources/icons/blindSearch.png"
             onMenu="true"
             onToolbar="true">
@@ -486,13 +428,82 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Apply Experiment"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
-            image="resources/icons/tree.png"
+            caption="Optimize using PSO"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
+            groupId="03-Biomarker-optimizer"
+            image="resources/icons/pso.png"
             onMenu="true"
             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using Keep Best Variations optimizer"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
+            groupId="03-Biomarker-optimizer"
+            image="resources/icons/tree.png"
+            onMenu="false"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Filter genes on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
+            groupId="01-Experiment"
+            image="resources/icons/KeepOnlyGenes.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Paste New Clinical Attribute from clipboard"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.AddClinicalAttributteAC"
+            groupId="01-Experiment"
+            image="resources/icons/PasteClinicalData.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment">
+         </selection>
+      </actionContribution>
+      
+      
+      <actionContribution
+            caption="Apply Logarithm"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC"
+            groupId="02-Experiment"
+            image="resources/icons/log.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Change 0&apos;s by other value on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
+            groupId="02-Experiment"
+            image="resources/icons/Zero.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Absolute Value on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue"
+            groupId="02-Experiment"
+            image="resources/icons/absolutevalue.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
    </extension>

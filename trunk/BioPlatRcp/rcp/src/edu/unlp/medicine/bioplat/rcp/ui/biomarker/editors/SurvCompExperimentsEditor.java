@@ -106,9 +106,10 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 		public void refreshView() {
 			final List<SurvCompValidationResult> eas = model().getSurvCompValidationResults();
 			tr.input(eas);
-
+			
 			// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 			Table table = tr.getTable();
+			
 			TableColumn tc;
 			if (mustinitialize) {
 				newBaseColumnIndex = table.getColumnCount();
@@ -134,22 +135,22 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 				final SurvCompValidationResult survCompValidationResult = eas.get(i);
 				TableEditor editor;
-				editor = new TableEditor(table);
-				Button c = createOpenEditorButton(survCompValidationResult, table, "Open Applied Experiment", AppliedExperimentEditor.id());
 
-				editor.grabHorizontal = true;
+				
+				//Button c = createOpenEditorButton(survCompValidationResult, table, "Open Applied Experiment", AppliedExperimentEditor.id());
 				// editor.minimumHeight = 100;
-				editor.setEditor(c, items[i], newBaseColumnIndex);
-
+				//editor.setEditor(c, items[i], newBaseColumnIndex);
 				// createAndConfigureEditor(table, c, items[i],
 				// newBaseColumnIndex).minimumHeight = 100;
-
+				
+				Button c;
 				editor = new TableEditor(table);
+				
 				try {
 					c = createOpenEditorButton(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), table, "open original experiment", EditorsId.experimentEditorId());
 					c.setImage(PlatformUIUtils.findImage("Open original experiment.png"));
 					editor.grabHorizontal = true;
-					editor.setEditor(c, items[i], newBaseColumnIndex + 1);
+					editor.setEditor(c, items[i], newBaseColumnIndex);
 				} catch (ExperimentBuildingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -166,7 +167,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 					}
 				});
 				editor.grabHorizontal = true;
-				editor.setEditor(c, items[i], newBaseColumnIndex + 2);
+				editor.setEditor(c, items[i], newBaseColumnIndex + 1);
 				// createAndConfigureEditor(table, c, items[i],
 				// newBaseColumnIndex + 2);
 

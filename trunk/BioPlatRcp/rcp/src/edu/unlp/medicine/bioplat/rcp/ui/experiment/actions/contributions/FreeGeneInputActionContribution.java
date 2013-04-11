@@ -50,7 +50,7 @@ public abstract class FreeGeneInputActionContribution<T extends AbstractEntity> 
 			if (!genes.isEmpty())
 				executeOn(genes);
 			else
-				MessageManager.INSTANCE.add(Message.warn("There is no selected genes"));
+				MessageManager.INSTANCE.add(Message.warn("You provide an empty gene list."));
 		} catch (NullPointerException npe) {
 			logger.warn("nullpointer en la acción, catcheado apropósito");
 		}

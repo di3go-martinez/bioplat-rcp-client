@@ -128,7 +128,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		close();
-		final String mmsg = "Applying Validation Configs";
+		final String mmsg = "SurvComp validation";
 		// TODO migrar a EJob cuando este esté
 		Job j = new Job(mmsg) {
 			@Override
@@ -148,17 +148,25 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 						
 					}
 					catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying an experiment......" , e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying survComp test......" , e));
 						//PlatformUIUtils.openInformation("Experiments Applied", "Unexpected error applying an experiment......");
 					}
 					monitor.worked(1);
 				}
-				final String msg = "Succesfully commands applied: " + count;
-				MessageManager.INSTANCE.add(Message.info(msg));
-				if (count == experimentsWizard.commands2apply().size())
-					PlatformUIUtils.openInformation("Experiments Applied", "All validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture");
-				else
-					PlatformUIUtils.openInformation("Experiments Applied", "There were " + (experimentsWizard.commands2apply().size()-count) + " validations with error and " + count + " were succesfully executed. Please see the Message view for more details.");
+
+				
+				
+				if (count == experimentsWizard.commands2apply().size()){
+					String msg = "All survComp validations (" + count + ") were  sucessfully executed. You can see the results on the 'SurvComp' tab of the Gene Siganture"; 
+					PlatformUIUtils.openInformation("SurvComp Validation", msg);
+					MessageManager.INSTANCE.add(Message.info(msg));
+				}
+					
+				else{
+					PlatformUIUtils.openWarning("SurvComp Validation", " SurvComp validations succesfully executed: " + count + ". \n SurvComp validations with error: " + (experimentsWizard.commands2apply().size() - count)  + ". \n For error details, see rows above in this the Message view.");
+				}
+				
+				
 				monitor.done();
 				return ValidationStatus.ok();
 			}

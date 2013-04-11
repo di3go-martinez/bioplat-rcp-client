@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.action.Action;
@@ -171,6 +173,16 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 
 	}
 
+	private String getGeneListAsString(List<String> genesAddedList) {
+		StringBuffer result = new StringBuffer("");
+		for (String id : genesAddedList) {
+			result.append(", " + id);
+		}
+		return result.toString().substring(2, result.toString().length());
+		
+		
+	}
+	
 	private Logger logger = LoggerFactory.getLogger(AbstractActionContribution.class);
 
 }
