@@ -189,6 +189,7 @@
          restorable="false">
    </view>
    <view
+         allowMultiple="true"
          class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart"
          icon="resources/icons/blindSearch.png"
          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view"
