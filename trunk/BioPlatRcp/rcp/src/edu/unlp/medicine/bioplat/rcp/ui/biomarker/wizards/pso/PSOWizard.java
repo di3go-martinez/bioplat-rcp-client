@@ -9,11 +9,14 @@ import static edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descri
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.ValidationConfigPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
@@ -22,6 +25,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.optimizers.BiomarkerOptimizationResult;
+import edu.unlp.medicine.domainLogic.framework.optimizers.IObjectWithFitness;
 import edu.unlp.medicine.domainLogic.framework.optimizers.commands.PsoOptimizerCommand;
 import edu.unlp.medicine.domainLogic.optimizations.configuration.PSOConfiguration;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -30,7 +34,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 /**
  * @author Diego Martínez
  */
-public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
+public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> implements Observer{
 
 	public static final String TESTING_VALIDATION_CONFIG = "TESTING_VALIDATION_CONFIG";
 	public static final String VALIDATION_VALIDATION_CONFIG = "VALIDATION_VALIDATION_CONFIG";
@@ -43,7 +47,8 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 	private List<ValidationConfig4DoingCluster> forTraining=new ArrayList<ValidationConfig4DoingCluster>();
 	private List<ValidationConfig4DoingCluster> forValidation=new ArrayList<ValidationConfig4DoingCluster>();
 	
-	
+	private PSOResultViewPart resultView;
+	PsoOptimizerCommand optimizerCommand;	
 
 	public PSOWizard(Biomarker biomarker) {
 		this.biomarker = biomarker;
@@ -85,7 +90,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 
 	@Override
 	protected BiomarkerOptimizationResult backgroundProcess(Monitor monitor) throws Exception {
-		PsoOptimizerCommand optimizerCommand = new PsoOptimizerCommand(biomarker, new HashMap<String, String>());
+		optimizerCommand = new PsoOptimizerCommand(biomarker, new HashMap<String, String>());
 		PSOConfiguration psoConfig = new PSOConfiguration();
 		psoConfig.setName(processName);
 		psoConfig.setNumberOfGenes(miniumNumberOfGenes);
@@ -98,6 +103,19 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		if (forValidation != null) optimizerCommand.setValidationConfig4Clustering4Validation(forValidation.get(0));
 		if (forTesting != null) optimizerCommand.setValidationConfig4Clustering4Testing(forTesting.get(0));
 
+		
+		resultView = PlatformUIUtils.openView(PSOResultViewPart.id());
+		resultView.setForTraining(forTraining.get(0));
+		if (forTesting != null && forTesting.size() > 0)
+			resultView.setForTesting(forTesting.get(0));
+		if (forValidation != null && forValidation.size() > 0)
+			resultView.setForValidation(forValidation.get(0));
+		
+		
+		
+		// va escuchando y completando con resultados a medida que los tiene
+		optimizerCommand.addObserver(this);
+		
 		optimizerCommand.monitor(monitor).execute();
 		return optimizerCommand.getPsoResult();
 	}
@@ -133,5 +151,16 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> {
 		forValidation = wm.value(VALIDATION_VALIDATION_CONFIG);
 		forTesting = wm.value(TESTING_VALIDATION_CONFIG);
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		List<Biomarker> biomarkers = new ArrayList<Biomarker>();
+		for (IObjectWithFitness biomarker : optimizerCommand.getActualBettersDuringTheTrip()) {
+			biomarkers.add((Biomarker)biomarker);
+		}
+		
+		resultView.updateResults(biomarkers);
+		
 	}
 }
