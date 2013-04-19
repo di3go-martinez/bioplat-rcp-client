@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.views.messages;
 
 import java.util.Date;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.ISharedImages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,19 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 			if (this.equals(ERROR))
 				messageManager.openView();
 
+		}
+
+		public int kindForDialog() {
+			switch (this) {
+			case ERROR:
+				return MessageDialog.ERROR;
+			case INFO:
+				return MessageDialog.INFORMATION;
+			case WARN:
+				return MessageDialog.WARNING;
+			default:
+				return MessageDialog.NONE;
+			}
 		}
 	}
 
