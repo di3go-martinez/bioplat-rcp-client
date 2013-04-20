@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import ognl.Ognl;
 import ognl.OgnlException;
 
+import org.apache.commons.lang.Validate;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -190,6 +191,8 @@ public class TableBuilder implements TableConfigurer {
 	private TableReference table;
 	private boolean showSelectionColumn = true;
 
+	// mantiene las columnas creadas en la tabla, la clave es el id de la
+	// columna
 	private Map<String, TableColumnReference> columnsHolder = Maps.newHashMap();
 
 	private boolean radioButtonBeheavior = false;;
@@ -222,6 +225,11 @@ public class TableBuilder implements TableConfigurer {
 
 		viewer.refresh(true);
 		viewer.setComparator(new MyViewerComparator());
+		// TODO PROBAR Y ANALIZAR PARA QUE AL AGREGAR ELEMENTOS EN LA GRILLA SE
+		// AGREGUEN ORDENADOS (SI LA GRILLA ESTÁ ORDENADA CON LA OPCIÓN DE LA
+		// CABECERA FUNCIONA BIEN, VER MÉTODO SORT QUE NO ANDA AL AGREGAR
+		// ELEMENTOS)
+		// viewer.setSorter(new ViewerSorter());
 		viewer.getTable().setLinesVisible(viewTableLines);
 
 		built = true;
@@ -239,6 +247,7 @@ public class TableBuilder implements TableConfigurer {
 						if (!viewer.isBusy()) {
 							resolver.resolveInput(viewer);
 							viewer.refresh();
+
 						}
 					}
 				});
@@ -249,7 +258,7 @@ public class TableBuilder implements TableConfigurer {
 			 * 
 			 * <b>si el input fue configurado se requerirá que tenga una
 			 * newInput, si no es porque la tabla fue configurada con un
-			 * modelo</b>
+			 * modelo</b> Crea un nuevo paging
 			 * 
 			 * @param newInput
 			 *            puede ser null, si es null será necesario que la tabla
@@ -367,15 +376,23 @@ public class TableBuilder implements TableConfigurer {
 
 			@Override
 			public void breakPaging() {
-				if (paging == null)
+				if (paging == null) {
 					input((model == null) ? input : null);
-
+					// notar que se crea un paging
+				}
 				paging.breakPaging();
 			}
 
 			@Override
 			public <T> List<T> elements() {
 				return ImmutableList.copyOf(realInput);
+			}
+
+			@Override
+			public void sort(String columnId, int direction) {
+				Validate.isTrue(columnsHolder.containsKey(columnId));
+				viewer.getTable().setSortDirection(direction);
+				viewer.getTable().setSortColumn(columnsHolder.get(columnId).column());
 			}
 
 			// @Override
@@ -433,7 +450,7 @@ public class TableBuilder implements TableConfigurer {
 
 	/**
 	 * 
-	 * <b>tiene que ser lo último en configurar</b>
+	 * <b>TIENE QUE SER LO ÚLTIMO EN SER CONFIGURADO</b>
 	 * 
 	 * @param model
 	 * @param propertyPath

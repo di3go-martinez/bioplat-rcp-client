@@ -68,4 +68,13 @@ public interface TableReference {
 	 */
 	void breakPaging();
 
+	/**
+	 * 
+	 * @param columnId
+	 * @param direction
+	 *            es uno de: SWT.{UP,DOWN,NONE}
+	 * 
+	 */
+	void sort(String columnId, int direction);
+
 }

@@ -3,7 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 /**
  * Transformer para celdas abstracto
  * 
- * @author diego
+ * @author diego martínez
  * 
  * @param <From>
  *            tipo origen

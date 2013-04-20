@@ -189,7 +189,7 @@ public class ColumnBuilder {
 	 * 
 	 * 
 	 * 
-	 * <b>inner use</b>
+	 * <b>**************INNER USE**************</b>
 	 * 
 	 * @param viewer
 	 * @param column
@@ -396,5 +396,15 @@ public class ColumnBuilder {
 	void reconfigureMenu() {
 		// TODO propias?
 		tableConfigurer.configureMenu();
+	}
+
+	/**
+	 * Analizar usos y ver si con hidden alcanza
+	 * 
+	 * @return
+	 */
+	public ColumnBuilder isHiden() {
+		fixed().hidden().resizable(false);
+		return this;
 	}
 }
