@@ -222,7 +222,8 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 			// FIXME los newss
 			tref = TableBuilder.create(c).input(Lists.newArrayList(new HashSet(holder.value())))//
 					.addColumn(ColumnBuilder.create().property("id").title("ID").width(250))//
-					.addColumn(ColumnBuilder.create().property("name").title("Name").width(400).addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(fromMenuProvider = new FromTabletMenuItemDescriptorProvider(this, "Copy Genes Signatures Name", OgnlAccesor.createFor("name")))))//
+					.addColumn(ColumnBuilder.create().property("name").title("Name").width(400)//
+							.addHeadeMenuItemDescriptor(createCopyMenuForNameColumn(false), createCopyMenuForNameColumn(true)))//
 					.addColumn(ColumnBuilder.create().property("geneCount").title("Genes"))//
 					// .addColumn(ColumnBuilder.create().property("author").title("Author"))//
 					// .noPaging()
@@ -248,6 +249,16 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	protected CopyColumnTextMenuItemDescriptor createCopyMenuForNameColumn(boolean all) {
+		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes Signatures Name";
+		FromTabletMenuItemDescriptorProvider prov = new FromTabletMenuItemDescriptorProvider(this, name, OgnlAccesor.createFor("name"));
+		// si no es el que selecciona siempre todos, seteo el flag que "mira" si
+		// se selecciona el checkbox de incluir a todos
+		if (!all)
+			fromMenuProvider = prov;
+		return new CopyColumnTextMenuItemDescriptor(prov);
 	}
 
 	private void createFilter(Composite c) {
