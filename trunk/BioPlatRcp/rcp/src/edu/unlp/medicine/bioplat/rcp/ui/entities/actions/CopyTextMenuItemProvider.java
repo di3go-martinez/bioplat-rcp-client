@@ -5,6 +5,9 @@ import java.util.List;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 
 /**
+ * 
+ * Proveedor de información para el {@link CopyColumnTextMenuItemDescriptor}
+ * 
  * @see CopyColumnTextMenuItemDescriptor
  * @author diego martínez
  * 
