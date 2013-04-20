@@ -5,6 +5,12 @@ import java.util.List;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.CopyTextMenuItemProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 
+/**
+ * Calcula la información desde una tabla básicamente
+ * 
+ * @author diego martínez
+ * 
+ */
 public class FromTabletMenuItemDescriptorProvider implements CopyTextMenuItemProvider {
 
 	private String name;
