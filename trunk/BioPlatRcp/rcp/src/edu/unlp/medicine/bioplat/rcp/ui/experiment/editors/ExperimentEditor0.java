@@ -105,22 +105,16 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		// .input(inputHolder.value())
 		;
 
-		
-		
-		
 		// data[0] es porque ahí está el gen, ver ExpressionDataModel
 		tb.addColumn(ColumnBuilder.create().title("Gene Entrez ID").numeric().property("data[0].value.entrezId")//
-				.addHeadeMenuItemDescriptor(new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, "Copy Selected Genes (Entrez Id)", OgnlAccesor.createFor("data[0].value.entrezId"))) {
-					// FIXME si se usa el default (\n) no copia bien los genes
-					// en la acción de agregado de genes: ver por qué y/o
-					// dejarlo así
-					@Override
-					protected String itemSeparator() {
-						return "\t";
-					}
-				})
-				.addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name"), new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
-				.addColumn(ColumnBuilder.create().title("Nombre").id("name").resizable(false).property("data[0].value.name").fixed())//
+				.addHeadeMenuItemDescriptor(createCopyMenuForEntrezId(false), createCopyMenuForEntrezId(true)).addHeadeMenuItemDescriptor(//
+						new ShowHideColumnMenuItemDescriptor(this, "Name", "name", false), //
+						new ShowHideColumnMenuItemDescriptor(this, "Gene Alternative IDs (e.g EnsemblID)", "alternativeIds"), //
+						new ShowHideColumnMenuItemDescriptor(this, "Gene Description)", "description"),//
+						new ShowHideColumnMenuItemDescriptor(this, "Gene Chromosome Location", "chromosomeLocation")))//
+				.addColumn(ColumnBuilder.create().title("Name").id("name").resizable(false).property("data[0].value.name").fixed())//
+				.addColumn(ColumnBuilder.create().title("Description").id("description").isHiden().property("data[0].value.description"))//
+				.addColumn(ColumnBuilder.create().title("Chromosome Location").id("chromosomeLocation").isHiden().property("data[0].value.chromosomeLocation"))//
 				.addColumn(ColumnBuilder.create().title("Alternative Ids").resizable(false).id("alternativeIds").property("data[0].value.alternativeIds").hidden().fixed());
 		int index = 1;
 		final List<Sample> sampleToLoad = resolveSamplesToLoad();
@@ -133,6 +127,19 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		tr = tb.build();
 		tr.addSelectionChangeListener(this);
 		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(container);
+	}
+
+	protected CopyColumnTextMenuItemDescriptor createCopyMenuForEntrezId(boolean all) {
+		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes (Entrez Id)";
+		return new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, name, OgnlAccesor.createFor("data[0].value.entrezId")).includeAll(all)) {
+			// FIXME si se usa el default (\n) no copia bien los genes
+			// en la acción de agregado de genes: ver por qué y/o
+			// dejarlo así
+			@Override
+			protected String itemSeparator() {
+				return "\t";
+			}
+		};
 	}
 
 	@Override
