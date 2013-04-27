@@ -173,12 +173,14 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 							}
 						});
 					} catch (Exception e) {
-						final String msg = "Couldn't import the experiment";
+						final String msg = "The experiment could not be imported from inSilicoDB.";
 						MessageManager.INSTANCE.add(Message.error(msg, e));
 						return ValidationStatus.error(msg, e);
 					}
-
-					MessageManager.INSTANCE.add(Message.info("Experiment " + gse + " imported succesfully"));
+					String importClinicalDataString="NO"; if (importClinicalData) importClinicalDataString="YES";
+					String normalizedString="NO"; if (normalized) normalizedString="YES";
+					
+					MessageManager.INSTANCE.add(Message.info("Experiment " + gse + " imported succesfully from inSilicoDB. Normalized(FRMA)? " + normalizedString + ". Clinical data Imported? " + importClinicalDataString + "."  ));
 					return ValidationStatus.ok();
 				} finally {
 					progressMonitor.done();
@@ -215,9 +217,10 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 		ExperimentFromInSilicoDBImporter importer = new ExperimentFromInSilicoDBImporter(this.gse, this.importClinicalData, this.normalized);
 		Experiment experiment = null;
 		try {
-			experiment = importer.execute();
+			experiment = importer.monitor(m).execute();
 		} catch (ExperimentBuildingException e) {
 			logger.error("Experiment Building Exception:", e);
+			throw e;
 		}
 
 		return experiment;

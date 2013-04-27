@@ -379,7 +379,7 @@
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
-            onMenu="false"
+            onMenu="true"
             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
@@ -390,7 +390,7 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
             groupId="01-Biomarker-abm"
             image="resources/icons/removeItem.png"
-            onMenu="false"
+            onMenu="true"
             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>

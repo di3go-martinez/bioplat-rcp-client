@@ -51,7 +51,7 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	@Override
 	protected String getTaskName() {
-		return " Copy of " + geneSignatureNameOrId + " from  "+ database + " ";
+		return "Copy of " + geneSignatureNameOrId + " from  "+ database + " ";
 	}
 
 	@Override

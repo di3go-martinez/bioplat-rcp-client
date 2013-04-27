@@ -93,7 +93,7 @@ public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> 
 
 	@Override
 	protected String getTaskName() {
-		return "Open the gene signature from " + fileName;
+		return "'Open the gene signature from: " + wizardModel().value(FILE_NAME) + " '";
 	}
 
 	@Override

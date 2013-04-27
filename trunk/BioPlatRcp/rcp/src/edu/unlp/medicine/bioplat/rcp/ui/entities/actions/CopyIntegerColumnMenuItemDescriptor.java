@@ -27,7 +27,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
  * @author diego martínez
  * 
  */
-public class CopyColumnTextMenuItemDescriptor implements MenuItemDescriptor {
+public class CopyIntegerColumnMenuItemDescriptor implements MenuItemDescriptor {
 
 	private CopyTextMenuItemProvider provider;
 	private String name;
@@ -40,7 +40,7 @@ public class CopyColumnTextMenuItemDescriptor implements MenuItemDescriptor {
 	// this.accesor = accesor;
 	// }
 
-	public CopyColumnTextMenuItemDescriptor(CopyTextMenuItemProvider provider) {
+	public CopyIntegerColumnMenuItemDescriptor(CopyTextMenuItemProvider provider) {
 		this.name = provider.name();
 		this.accesor = provider.accesor();
 		this.provider = provider;
@@ -83,6 +83,7 @@ public class CopyColumnTextMenuItemDescriptor implements MenuItemDescriptor {
 		});
 		return mic;
 	}
+	
 
 	protected String itemSeparator() {
 		return "\n";

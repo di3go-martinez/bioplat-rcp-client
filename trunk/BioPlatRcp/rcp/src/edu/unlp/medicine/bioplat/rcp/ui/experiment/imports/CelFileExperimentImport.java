@@ -133,16 +133,18 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	@Override
 	protected String getTaskName() {
-		return "Import experiment from .Cel files. Folder:\" " + folderName + "\"";
+		return "Import experiment from .CEL files (Folder:\" " + folderName + "\")";
 	}
 
 	@Override
 	protected Experiment backgroundProcess(Monitor monitor) throws Exception {
 		ExperimentFromCelFileImporter importer = new ExperimentFromCelFileImporter(this.folderName, getNormalizationMethod());
 		try {
-			experiment = importer.execute();
+			experiment = importer.monitor(monitor).execute();
 		} catch (ExperimentBuildingException e) {
+			
 			logger.error("Experiment Building Exception:", e);
+			throw e;
 		}
 
 		return experiment;
