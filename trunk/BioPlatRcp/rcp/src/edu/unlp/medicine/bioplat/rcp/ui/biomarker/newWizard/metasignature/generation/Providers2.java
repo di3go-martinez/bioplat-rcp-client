@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Group;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.DBImportes.geneSignature.geneSigDB.ProviderFromSecondaryDBImportedInBioplat;
 import edu.unlp.medicine.DBimporters.geneSignature.geneSigDB.*;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;

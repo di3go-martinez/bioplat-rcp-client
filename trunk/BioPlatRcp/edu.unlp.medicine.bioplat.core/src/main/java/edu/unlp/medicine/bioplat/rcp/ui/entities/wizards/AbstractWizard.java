@@ -347,7 +347,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			//
 			//
 			private String defaultErrorMsg(Throwable t) {
-				return "Unexpected error executing " + getTaskName() + ": " + t.getMessage();
+				String msg = "Error executing the operation:  " + getTaskName(); 
+				if (t.getMessage()!=null && !t.getMessage().equals("")) msg = msg +  ". Message:  " + t.getMessage() ;
+				return msg;
 			}
 
 		};

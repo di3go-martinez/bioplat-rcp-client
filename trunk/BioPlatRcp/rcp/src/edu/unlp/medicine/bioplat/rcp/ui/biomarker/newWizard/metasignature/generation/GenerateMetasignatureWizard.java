@@ -67,7 +67,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	
 			descriptors.add(createAlgorithmPage());
 				
-		this.setWindowTitle("Import experimento from text file.");
+		this.setWindowTitle("Import experimento from text file");
 		
 		
 		return descriptors;
