@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
 import edu.unlp.medicine.r4j.environments.R4JSession;
 import edu.unlp.medicine.r4j.exceptions.R4JConnectionException;
+import edu.unlp.medicine.r4j.values.R4JValue;
 
 public class RLibraryManager {
 	/**
@@ -34,6 +35,7 @@ public class RLibraryManager {
 				library = libraries.next();
 				if (!isInstalled(library)) {
 					// libreria no instalada
+					logger.warn("Library not installed: " + library.getName());
 					librariesNotInstalled.add(library);
 				}
 			}
@@ -54,7 +56,8 @@ public class RLibraryManager {
 	 * @return
 	 */
 	private boolean isInstalled(RLibrary library) {
-		return RRunnerUsingJRI.getInstance().parseAndEval("suppressWarnings(require('" + library.getName() + "',quietly=TRUE))").asInteger() > 0;
+		R4JValue value = RRunnerUsingJRI.getInstance().parseAndEval("suppressWarnings(require('" + library.getName() + "',quietly=TRUE))");
+		return value.asInteger() > 0;
 	}
 
 	/**
