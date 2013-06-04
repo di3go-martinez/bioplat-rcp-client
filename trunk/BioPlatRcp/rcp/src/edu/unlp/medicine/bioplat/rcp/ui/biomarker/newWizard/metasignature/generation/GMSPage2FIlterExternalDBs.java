@@ -293,38 +293,41 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 	private Holder<List<GeneSignature>> getGeneSignaturesPassedTheFilters(final WizardModel wizardModel, IWizard wizard) throws InvocationTargetException, InterruptedException {
 		final List<GeneSignature> value = Collections.emptyList();
 		final Holder<List<GeneSignature>> holder = Holder.create(value);
-		final SingleMetasignatureGenerator smg = createGenerator(wizardModel);
-
-		final String geneNameOrEntrez = wizardModel.value(GENE_NAME_OR_ENTREZ);
-		final String signatures_id_or_names = wizardModel.value(SIGNATURES_ID_OF_NAMES);
-		final String keyword = wizardModel.value(KEYWORD_ON_NAME);
-
-		wizard.getContainer().run(true, false, new IRunnableWithProgress() {
-
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				monitor.beginTask("Querying Gene Signature Databases...", IProgressMonitor.UNKNOWN);
-
-				holder.hold(smg/* .monitor(monitor) *///
-						.getSignaturesFromProvidersAndFilterThem(toList(keyword), //
-								toList(signatures_id_or_names), //
-								toList(geneNameOrEntrez)));
-				monitor.done();
-			}
-
-			/**
-			 * 
-			 * @param value
-			 *            es un string de "claves" separadas por coma
-			 * @return
-			 */
-			private List<String> toList(String value) {
-				if (value == null)
-					return Collections.emptyList();
-				else
-					return Lists.newArrayList(StringUtils.split(value, ","));
-			}
-		});
+		
+		//if (this.resolveProviders(wizardModel).size()>0){
+			//The calculus is done if it is any of the databases selected.
+			final SingleMetasignatureGenerator smg = createGenerator(wizardModel);
+			final String geneNameOrEntrez = wizardModel.value(GENE_NAME_OR_ENTREZ);
+			final String signatures_id_or_names = wizardModel.value(SIGNATURES_ID_OF_NAMES);
+			final String keyword = wizardModel.value(KEYWORD_ON_NAME);
+	
+			wizard.getContainer().run(true, false, new IRunnableWithProgress() {
+	
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Querying Gene Signature Databases...", IProgressMonitor.UNKNOWN);
+	
+					holder.hold(smg/* .monitor(monitor) *///
+							.getSignaturesFromProvidersAndFilterThem(toList(keyword), //
+									toList(signatures_id_or_names), //
+									toList(geneNameOrEntrez)));
+					monitor.done();
+				}
+	
+				/**
+				 * 
+				 * @param value
+				 *            es un string de "claves" separadas por coma
+				 * @return
+				 */
+				private List<String> toList(String value) {
+					if (value == null)
+						return Collections.emptyList();
+					else
+						return Lists.newArrayList(StringUtils.split(value, ","));
+				}
+			});
+			
 		elements = holder.value();
 		return holder;
 	}
@@ -361,6 +364,8 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 		if (tref == null)
 			return false;
 
+		if (elements.isEmpty()) return true;
+		
 		if (PlatformUIUtils.openedEditors(Biomarker.class).isEmpty()) {
 
 			if (includeAll) {

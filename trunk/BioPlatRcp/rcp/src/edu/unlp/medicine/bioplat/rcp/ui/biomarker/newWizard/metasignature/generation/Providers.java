@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.DBImportes.geneSignature.msigDB.MSigDBProviderFromFile;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
@@ -29,7 +30,6 @@ import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.ext.providers.geneSigDB.fromFile.generatedByMetaPlatXML.XMLLocalFileProvider;
 import edu.unlp.medicine.domainLogic.ext.providers.geneSigDB.online.GeneSigDBProvider;
-import edu.unlp.medicine.domainLogic.ext.providers.msigdb.fromFile.MSigDBProviderFromFile;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGeneSiganturesException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;

@@ -46,7 +46,7 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		wp.setDescription("Would you like to add Gene Signatures from your Bioplat Desktop?");
-		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
+		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, true);
 		
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(30, 30).spacing(20, 20).create());

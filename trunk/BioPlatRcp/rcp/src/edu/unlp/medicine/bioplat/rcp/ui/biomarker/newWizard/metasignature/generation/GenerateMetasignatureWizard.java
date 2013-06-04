@@ -101,10 +101,19 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		sb.append("Generation of metasignature using ");
 		sb.append(algorithm.getName());
 		sb.append(" on ");
-		int selected = externalSelectedGS.size();
+		int selected = this.calculateNumberOfSelectedGS();
 		sb.append(selected);
 		sb.append(" Gene Signatures");
 		return  sb.toString();
+	}
+
+	private int calculateNumberOfSelectedGS() {
+		int res = 0; 
+		if (externalSelectedGS!=null) res = res +  externalSelectedGS.size();
+		if (openedSelectedGeneSignatures!=null) res = res +  openedSelectedGeneSignatures.size();
+		
+		
+		return res;
 	}
 
 	@Override
