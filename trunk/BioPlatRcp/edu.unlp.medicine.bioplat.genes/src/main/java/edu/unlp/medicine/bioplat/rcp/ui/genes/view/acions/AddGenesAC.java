@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs.GenesInputDialog;
@@ -16,7 +18,7 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.gene.Gene;
 
 public class AddGenesAC extends AbstractActionContribution<Biomarker> {
-
+	private static Logger logger = LoggerFactory.getLogger(AddGenesAC.class);
 	@Override
 	public void run() {
 
@@ -54,9 +56,21 @@ public class AddGenesAC extends AbstractActionContribution<Biomarker> {
 					}
 					
 					
-					if (genesAddedList.size()>0) mm.add(Message.info("Genes added to the Gene Signature: " + GUIUtils.getGeneListAsString(genesAddedList)));
-					if (genesAlreadyInList.size()>0) mm.add(Message.warn("Genes already in the Gene Signature (they were discarded): " + GUIUtils.getGeneListAsString(genesAlreadyInList)));
-					if (genesNotFoundList.size()>0) mm.add(Message.warn("Genes not added because they were not found in Bioplat database (Take into account that you can use GeneSymbol, EntrezId or EnsmblID for identify genes): " +  GUIUtils.getGeneListAsString(genesNotFoundList)));
+					if (genesAddedList.size()>0){
+						String geneList= GUIUtils.getGeneListAsString(genesAddedList);
+						mm.add(Message.info("Genes added to the Gene Signature(" + genesAddedList.size() + "): " + geneList));
+						//logger.info("Genes added: " + geneList);
+					}
+					if (genesAlreadyInList.size()>0){ 
+						String geneAlreadyInList= GUIUtils.getGeneListAsString(genesAlreadyInList);
+						mm.add(Message.warn("Genes already in the Gene Signature; they were discarded (" + genesAlreadyInList.size() + "): " + geneAlreadyInList));
+						//logger.info("Genes alreadt in GS: " + geneAlreadyInList);
+					}
+						if (genesNotFoundList.size()>0){
+							String genesNotFound= GUIUtils.getGeneListAsString(genesNotFoundList);
+							mm.add(Message.warn("Genes not added because they were not found in Bioplat database(" +  genesNotFoundList.size() + "). Remember you can use GeneSymbol, EntrezId or EnsmblID for identify genes: " +  genesNotFound));
+							//logger.info("Genes not  found: " + genesNotFound);	
+						}
 
 			}
 
