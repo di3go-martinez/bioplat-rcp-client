@@ -44,46 +44,43 @@ public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> 
 	private String fileName;
 	private MetaSignatureMarshaller marshaller = new MetaSignatureMarshaller();
 
-	
 	@Override
 	public int getWizardWidth() {
-		
+
 		return 770;
 	}
-	
+
 	@Override
 	public int getWizardHeight() {
-		
+
 		return 370;
 	}
-	
+
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
 		WizardPageDescriptor d = new WizardPageDescriptor("Select file") {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-				
+
 				wizardPage.setDescription("When you are working on a gene Signature using Bioplat, you can save it in a .BPL file. Later, you can recover it (with all its information), using this option.");
-				
-				
+
 				GridData gridData = new GridData();
-				gridData.horizontalAlignment=SWT.FILL;
-				gridData.grabExcessHorizontalSpace=true;
-				
-				
+				gridData.horizontalAlignment = SWT.FILL;
+				gridData.grabExcessHorizontalSpace = true;
+
 				Composite group = new Group(parent, SWT.NONE);
-				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(2, 20).create());
+				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).spacing(2, 20).create());
 				group.setLayoutData(gridData);
 
-				
 				new Label(group, SWT.NONE).setText("BPL File: ");
 				FileText ft = new FileText(group, SWT.BORDER);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.bpl", "BPL File");
 				ft.setFilter(filters);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("File")), null);
-				//dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME),  null, null);
+				// dbc.bindValue(SWTObservables.observeText(ft.textControl(),
+				// SWT.Modify), wmodel.valueHolder(FILE_NAME), null, null);
 				return group;
 			}
 		};
@@ -93,7 +90,7 @@ public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> 
 
 	@Override
 	protected String getTaskName() {
-		return "'Open the gene signature from: " + wizardModel().value(FILE_NAME) + " '";
+		return "'Open the gene signature from: " + fileName + " '";
 	}
 
 	@Override
@@ -124,14 +121,9 @@ public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> 
 				.add(FILE_NAME, new WritableValue("", File.class));
 	}
 
-	
-	
-	public ImportGeneSignatureFromBPLWizard(){
+	public ImportGeneSignatureFromBPLWizard() {
 		this.setWindowTitle("Open Gene Signature from BPL file");
-		
+
 	}
 
-
-	
-	
 }
