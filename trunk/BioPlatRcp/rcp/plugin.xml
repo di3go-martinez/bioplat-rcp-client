@@ -486,10 +486,10 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Change 0&apos;s by other value on expression data"
+            caption="Change a value by other value on expression data"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
             groupId="02-Experiment"
-            image="resources/icons/Zero.png"
+            image="resources/icons/ChangeValue.png"
             onMenu="true"
             onToolbar="true">
          <selection
