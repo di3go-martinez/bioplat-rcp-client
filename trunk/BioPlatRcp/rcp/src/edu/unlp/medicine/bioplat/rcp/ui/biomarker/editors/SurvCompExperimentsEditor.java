@@ -27,6 +27,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
 //TODO sacar este copy&paste de LogRankTestExperimentsEditor!!
@@ -163,7 +166,8 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate()).blockOnOpen().open();
+						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), survCompValidationResult.getBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), null);
+						new MevWizard(exp).blockOnOpen().open();
 					}
 				});
 				editor.grabHorizontal = true;

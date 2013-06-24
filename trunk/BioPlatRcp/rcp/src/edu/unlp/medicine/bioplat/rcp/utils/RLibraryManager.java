@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
 import edu.unlp.medicine.r4j.environments.R4JSession;
+import edu.unlp.medicine.r4j.environments.RServeConfigurator;
 import edu.unlp.medicine.r4j.exceptions.R4JConnectionException;
 import edu.unlp.medicine.r4j.values.R4JValue;
 
@@ -16,7 +17,7 @@ public class RLibraryManager {
 	/**
 	 * Representa el número máximo de intentos para conectarse a Rserve.
 	 */
-	private static final int TEST_MAX_NUMBER = 6;
+	private static final int TEST_MAX_NUMBER = 12;
 	/**
 	 * Logger Object
 	 */
@@ -61,8 +62,8 @@ public class RLibraryManager {
 	}
 
 	/**
-	 * This method validates if the server is running. Otherwise it returns
-	 * false.
+	 * This method validates if the server is running. Otherwise it returns false.
+	 * 
 	 * 
 	 */
 	public boolean isTheRserveRunning() {
@@ -73,9 +74,10 @@ public class RLibraryManager {
 			try {
 				session.open();
 				result = true;
+				logger.info("The connection with RServe was established on port: " + RServeConfigurator.getInstance().getPort());
 			} catch (R4JConnectionException e) {
-				logger.error(e.getMessage());
-				e.printStackTrace();
+				logger.error("Cannot start RServe on free port: " +  RServeConfigurator.getInstance().getPort() + ". Attempt " + (testNumber+1) + "/" + TEST_MAX_NUMBER);
+				//e.printStackTrace();
 			} finally {
 				session.close();
 			}

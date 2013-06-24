@@ -1,14 +1,19 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards;
 
+import java.awt.TextField;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Lists;
 
@@ -30,6 +35,8 @@ public class ApplyLogarithmWizard extends AbstractWizard<Void> {
 
 	public ApplyLogarithmWizard(Experiment experiment) {
 		this.experiment = experiment;
+		this.setWindowTitle("Apply logarithm on expression data");
+		
 	}
 
 	@Override
@@ -42,17 +49,22 @@ public class ApplyLogarithmWizard extends AbstractWizard<Void> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
-		WizardPageDescriptor wpd = new WizardPageDescriptor("Base") {
+		WizardPageDescriptor wpd = new WizardPageDescriptor("Logarithm base") {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = Widgets.createDefaultContainer(parent);
-
-				ComboViewer cv = Utils.newComboViewer(c, "Base Logarithmical", Arrays.asList(ENUM_LOGARITHM_BASE.values()));
+				wizardPage.setDescription("It will apply logarithm on each expression data, using the logarithm base you have selected.");
+				
+				GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(c);
+				new CLabel(c, SWT.BOLD).setText("");new CLabel(c, SWT.BOLD).setText("");
+				
+				ComboViewer cv = Utils.newComboViewer(c, "Logarithm base", Arrays.asList(ENUM_LOGARITHM_BASE.values()));
 				dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(BASE), UpdateStrategies.nonNull("Base"), UpdateStrategies.nullStrategy());
 
 				return c;
 			}
 		};
+		
 		result.add(wpd);
 		return result;
 	}

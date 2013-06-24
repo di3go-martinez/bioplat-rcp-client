@@ -19,6 +19,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.RLibrary;
 import edu.unlp.medicine.bioplat.rcp.utils.RLibraryManager;
 import edu.unlp.medicine.bioplat.rcp.utils.RLibraryScanner;
 import edu.unlp.medicine.r4j.constants.OSDependentConstants;
+import edu.unlp.medicine.r4j.environments.RServeConfigurator;
 
 public class LoadRLibraries implements IStartup {
 	// Logger Object
@@ -35,11 +36,10 @@ public class LoadRLibraries implements IStartup {
 				RLibraryManager rlibraryManager = new RLibraryManager();
 				String msg;
 				try {
-					Thread.sleep(5000);
+					//Thread.sleep(5000);
 					if (!rlibraryManager.isTheRserveRunning()) {
-						msg = "Install the Rserve package by opening R environment and running the following statement: install.packages (Rserve)";
-						MessageManager.INSTANCE.add(Message.error(msg));
-						return ValidationStatus.error(msg);
+						//It is not ok, but it doesnt return validation.error because it is informed again. The best solution should be to not execute this startup if the StartupRServe failed. 
+						return Status.OK_STATUS;
 					}
 					List<RLibrary> librariesNotInstalled = this.validateRLibrary(rlibraryManager);
 					if (!librariesNotInstalled.isEmpty()) {
@@ -54,10 +54,10 @@ public class LoadRLibraries implements IStartup {
 					// install libraries
 					// this.validateInstallationOfLibraries(rlibraryManager,
 					// librariesNotInstalled);
-				} catch (InterruptedException e) {
-					logger.error(e.getMessage());
-					MessageManager.INSTANCE.add(Message.error("Failed to validate the installation of the libraries"));
-					e.printStackTrace();
+//				} catch (InterruptedException e) {
+//					logger.error(e.getMessage());
+//					MessageManager.INSTANCE.add(Message.error("Failed to validate the installation of the libraries"));
+//					e.printStackTrace();
 				} catch (FileNotFoundException e) {
 					logger.error(e.getMessage());
 					MessageManager.INSTANCE.add(Message.error("Failed to validate the installation of the libraries"));

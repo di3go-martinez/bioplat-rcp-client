@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -21,7 +23,13 @@ public class AbsoluteValue extends AbstractActionContribution<AbstractExperiment
 
 			}
 		}
-
+		MessageManager.INSTANCE.add(Message.info("Absolute value on expression data...was successfully executed"));
 	}
 
+	
+	public static void main(String[] args) {
+		System.out.println("Total Memory"+(Runtime.getRuntime().totalMemory()/1024)/1024);    
+	       System.out.println("Free Memory"+(Runtime.getRuntime().freeMemory()/1024)/1024);
+	}
+	
 }

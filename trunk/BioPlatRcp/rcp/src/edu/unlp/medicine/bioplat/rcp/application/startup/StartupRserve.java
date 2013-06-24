@@ -29,23 +29,25 @@ public class StartupRserve implements IStartup {
 		new Job("Rserve - Initializing...") {
 
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Initializing rserve", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Initializing rServe(bridge between Bioplat and R)", IProgressMonitor.UNKNOWN);
 
 				int port = RServeConfigurator.getInstance().getPort();
+				final String rcmd = R_PATH + " --save --restore -q -e library('Rserve');Rserve(port=" + port + ")";
 				try {
-					final String rcmd = R_PATH + " --save --restore -q -e library('Rserve');Rserve(port=" + port + ")";
-					logger.debug("Ejecutando: " + rcmd);
-
+					
+					logger.debug("Starting RServe (bridge between Bioplat and R). R Script: " + rcmd);
 					process = Runtime.getRuntime().exec(rcmd);
 					process.getInputStream();
 					// sleep
 					Thread.sleep(5000);
 				} catch (Exception e) {
-					final String msg = "Failed to run the Rserve on port " + port + " on the path:" + R_PATH;
-					logger.error(msg, e);
+					final String msg1 = "Failed to start the Rserve (bridge between Bioplat and R) on port " + port + ". You can use Bioplat but it will not be able to run any R statistics";
+					final String msg2 = "Failed to start the Rserve on port " + port + ". You can use Bioplat but it will not be able to run any R statistics. See details on message view.";
+					final String details = "4 possible reasons: 1) you don't have permission to open the free port " + port + " for starting RServe on this machine. Ask the system admin. 2) the operating system asked you to start RServe.exe (for connecting Bioplat and R) and you said no. In this case, restart Bioplat and accept to establish the connection with R. 3) you don't have R installed on this folder: " + R_PATH + " 4) the R doesnt have the RServe package installed (it should not happen if you are using the R coming on Bioplat distribution). In this last case check if you have " + R_PATH + "\\library\\Rserve" + " folder. If not, install RServe using the following R script: install.packages (Rserve)";
+					logger.error(msg1+details, e);
 					e.printStackTrace();
-					MessageManager.INSTANCE.add(Message.error(msg, e));
-					return ValidationStatus.error(msg, e);
+					MessageManager.INSTANCE.add(Message.error(msg1+". " + details));
+					return ValidationStatus.error(msg2, new Throwable(details));
 				}
 
 				return Status.OK_STATUS;

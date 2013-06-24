@@ -1,15 +1,19 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.exports;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -17,21 +21,32 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.widgets.DirectoryText;
+import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
+import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
+import edu.unlp.medicine.domainLogic.framework.constants.Constants;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.r4j.constants.OSDependentConstants;
 
 public class ExportExperimentToFileWizard extends Wizard implements IExportWizard {
 
 	private Experiment experiment;
+	final static String TAB = "Tab";
+	final static String COMMA = "Comma";
+	final static String SPACE = "Space";
+	final static String DOT = "Dot";
+	
 
 	@Override
 	public void init(IWorkbench arg0, IStructuredSelection selection) {
@@ -69,6 +84,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 		IObservableValue includeClinicalData = new WritableValue(false, Boolean.class);
 		IObservableValue includeExpressionData = new WritableValue(false, Boolean.class);
 		IObservableValue includeHeader = new WritableValue(false, Boolean.class);
+		IObservableValue includeCluster = new WritableValue(false, Boolean.class);
 
 		IObservableValue filename = new WritableValue("experiment", String.class);
 		IObservableValue numericSeparator = new WritableValue(".", String.class);
@@ -110,11 +126,31 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				new CLabel(c, SWT.BOLD).setText("File name:");
 				Text filenameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(filenameHolder, SWT.Modify), getModel().filename);
+				getModel().filename.setValue(experiment.getName());
 
-				new CLabel(c, SWT.BOLD).setText("Folder:");
-				Text directoryHolder = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(directoryHolder, SWT.Modify), getModel().directory);
+//				new CLabel(c, SWT.BOLD).setText("Folder:");
+//				Text directoryHolder = new Text(c, SWT.BORDER);
+//				dbc.bindValue(SWTObservables.observeText(directoryHolder, SWT.Modify), getModel().directory);
 
+				new Label(c, SWT.NONE).setText("Folder: ");
+				TextWithSelectionButton ft = new DirectoryText(c);
+				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
+				getModel().filename.setValue("");
+				
+
+				
+				ComboViewer numerSeparatorCombo = Utils.newComboViewer(c, "Number separator character:", Arrays.asList(COMMA, DOT));
+				IObservableValue widgetObservable4Column = ViewersObservables.observeSingleSelection(numerSeparatorCombo);
+				dbc.bindValue(widgetObservable4Column,  getModel().numericSeparator, new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("NumberSeparator")), null);
+				getModel().numericSeparator.setValue(COMMA);
+
+				
+				ComboViewer separatorCombo = Utils.newComboViewer(c, "Column separator character:", Arrays.asList(TAB, COMMA, SPACE, DOT));
+				IObservableValue widgetObservable = ViewersObservables.observeSingleSelection(separatorCombo);
+				dbc.bindValue(widgetObservable,  getModel().columnSeparator, new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("Separator")), null);
+				getModel().columnSeparator.setValue(TAB);
+				
+				
 				// checkboxes
 				new CLabel(c, SWT.BOLD).setText("Include expression data");
 				Button exprData_cbholder = new Button(c, SWT.CHECK);
@@ -130,14 +166,8 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				Button clinicalData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(clinicalData_cbholder), getModel().includeClinicalData);
 
-				new CLabel(c, SWT.BOLD).setText("Number separator character:");
-				Text numericSeparatorHolder = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(numericSeparatorHolder, SWT.Modify), getModel().numericSeparator);
-
-				new CLabel(c, SWT.BOLD).setText("Column separator character:");
-				Text columnSeparatorHolder = new Text(c, SWT.BORDER);
-				dbc.bindValue(SWTObservables.observeText(columnSeparatorHolder, SWT.Modify), getModel().columnSeparator);
-
+				
+				
 				GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(c);
 				setControl(c);
 				
@@ -152,9 +182,18 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 	public boolean performFinish() {
 		String absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString();
 
-		new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), this.getModel().numericSeparator.getValue().toString().charAt(0), this.getModel().columnSeparator.getValue().toString()).execute();
-
+		new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString())).execute();
+											
+		
 		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
 		return true;
+	}
+
+	private String convertSeparator(String separator) {
+		if (separator.equals(TAB)) return "\t";
+		if (separator.equals(COMMA)) return ",";
+		if (separator.equals(SPACE)) return " ";
+		if (separator.equals(DOT)) return ".";
+		return "\t";
 	}
 }

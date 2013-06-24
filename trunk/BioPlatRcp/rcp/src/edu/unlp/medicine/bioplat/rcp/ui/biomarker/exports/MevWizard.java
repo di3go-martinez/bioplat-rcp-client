@@ -32,6 +32,7 @@ public class MevWizard extends AbstractWizard<Void> {
 	private static final String INCLUDE_EXPRESSION_DATA = "INCLUDE_EXPRESSION_DATA";
 	private static final String INCLUDE_HEADER = "INCLUDE_HEADER";
 	private static final String INCLUDE_CLINICAL_DATA = "INCLUDE_CLINICAL_DATA";
+	private static final String INCLUDE_CLUSTER = "INCLUDE_CLUSTER";
 	private static final String FILE_NAME = "FILE_NAME";
 
 	private AbstractExperiment experiment;
@@ -73,6 +74,11 @@ public class MevWizard extends AbstractWizard<Void> {
 				check.setText("Include Expression Data");
 				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(INCLUDE_EXPRESSION_DATA));
 
+				check = new Button(container, SWT.CHECK);
+				check.setText("Include Cluster");
+				dbc.bindValue(SWTObservables.observeSelection(check), wmodel.valueHolder(INCLUDE_CLUSTER));
+
+				
 				GridLayoutFactory.fillDefaults().numColumns(1).applyTo(container);
 				return container;
 			}
@@ -94,13 +100,13 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, '\t', "\t");
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t");
 		command.execute();
 		return null;
 	}
 
 	private String filename;
-	private Boolean includeClinicalData, includeHeader, includeExpressionData;
+	private Boolean includeClinicalData, includeHeader, includeExpressionData, includeCluster;
 
 	@Override
 	protected void configureParameters() {
@@ -109,6 +115,7 @@ public class MevWizard extends AbstractWizard<Void> {
 		includeClinicalData = m.value(INCLUDE_CLINICAL_DATA);
 		includeHeader = m.value(INCLUDE_HEADER);
 		includeExpressionData = m.value(INCLUDE_EXPRESSION_DATA);
+		includeCluster = m.value(INCLUDE_CLUSTER);
 	}
 
 	@Override
@@ -117,6 +124,7 @@ public class MevWizard extends AbstractWizard<Void> {
 				.add(FILE_NAME, new WritableValue("", File.class))//
 				.add(INCLUDE_CLINICAL_DATA, new WritableValue(true, Boolean.class))//
 				.add(INCLUDE_HEADER, new WritableValue(true, Boolean.class))//
-				.add(INCLUDE_EXPRESSION_DATA, new WritableValue(true, Boolean.class));
+				.add(INCLUDE_EXPRESSION_DATA, new WritableValue(true, Boolean.class))
+				.add(INCLUDE_CLUSTER, new WritableValue(true, Boolean.class));
 	}
 }
