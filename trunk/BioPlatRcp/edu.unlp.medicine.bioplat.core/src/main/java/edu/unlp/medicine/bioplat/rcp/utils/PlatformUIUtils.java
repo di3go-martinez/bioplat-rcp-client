@@ -218,6 +218,18 @@ public class PlatformUIUtils {
 			}
 		});
 	}
+
+	public static boolean openQuestion(final String title, final String message) {
+		final BooleanHolder result = new BooleanHolder();
+		findDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				result.value = MessageDialog.openQuestion(findShell(), title, message); 
+			}
+		});
+		return result.value;
+	}
 	
 	public static void openError(final String title, final String message) {
 		findDisplay().syncExec(new Runnable() {
