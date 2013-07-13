@@ -18,8 +18,6 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import edu.unlp.medicine.r4j.environments.R4JSession;
-
 public class ConvertByteImageUtils {
 
 	private static final String EXPRESSION = "#52, Vanvijver-C3: 2064,2886,6678,3169,5214,9232,3872,9493,4175,10403,2353,2237,2099,9319,6241,3161,7802,983,7031,991,10615,25800,990,1153,701,7494,4602,11130,890,7033,6422,1846,716,9133,1058,2568,1033,4171,4605,4085,9787,2625,7083,2305,999,7043,771,9768,11065,2146,1164,5347" //
