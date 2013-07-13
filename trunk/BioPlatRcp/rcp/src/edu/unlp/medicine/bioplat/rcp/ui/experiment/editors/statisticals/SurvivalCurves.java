@@ -12,14 +12,16 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.rosuda.REngine.REXP;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.ConvertByteImageUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
-import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
+import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerFromBioplatUsingR4J;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
-import edu.unlp.medicine.r4j.exceptions.R4JConnectionException;
+import edu.unlp.medicine.r4j.exceptions.R4JScriptExecutionException;
+import edu.unlp.medicine.r4jServer.BioplatR4JServer;
 
 /**
  * 
@@ -61,16 +63,43 @@ class SurvivalCurves extends CompositeGenerator {
 		}
 	}
 
-	private File resolveImage(String script) throws R4JConnectionException, IOException {
-		RRunnerUsingJRI.getInstance().openSession();
-		byte[] image = RRunnerUsingJRI.getInstance().plotSurvivalCurve(script);
-		File imageFile = null;
-		if (image != null) {
-			imageFile = ConvertByteImageUtils.toImage(image, script.hashCode() + ".jpg");
+	private File resolveImage(String script) throws IOException {
+		
+		try {
+			
+			RRunnerFromBioplatUsingR4J.getInstance().getConnection().voidEval(linesBeforePlotLine(script));
+			byte[] image = RRunnerFromBioplatUsingR4J.getInstance().getConnection().executePlotAndGetImage(plotLine(script));
+			//RRunnerFromBioplatUsingR4J.getInstance().getConnection().voidEval(linesAfterPlotLine(script));
+			
+			File imageFile = null;
+			if (image != null) {
+				imageFile = ConvertByteImageUtils.toImage(image, script.hashCode() + ".jpg");
+			}
+			// TODO retornar una imágen de "no disponible" en vez de null
+			return imageFile;
+
+		} catch (R4JScriptExecutionException e) {
+			
+			e.printStackTrace();
 		}
-		// TODO retornar una imágen de "no disponible" en vez de null
-		RRunnerUsingJRI.getInstance().closeSession();
-		return imageFile;
+		return null;
 	}
+
+	private String plotLine(String script) {
+		
+		return "plot" + script.split("plot")[1].split("\n")[0];
+	}
+
+	private String linesBeforePlotLine(String script) {
+		
+		return script.split("plot")[0];
+		
+	}
+	
+	
+	
+	
+
+	
 
 }

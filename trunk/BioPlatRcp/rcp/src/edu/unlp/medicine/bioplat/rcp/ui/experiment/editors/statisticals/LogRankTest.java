@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.rosuda.REngine.REXP;
 
-import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerUsingJRI;
+import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerFromBioplatUsingR4J;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
 public class LogRankTest extends CompositeGenerator {
@@ -29,10 +29,8 @@ public class LogRankTest extends CompositeGenerator {
 
 	private void showScriptResult(Composite container, String label, String script) {
 		int style = SWT.READ_ONLY;
-		final RRunnerUsingJRI rrunner = RRunnerUsingJRI.getInstance();
 		try {
-			rrunner.openSession();
-			REXP r = rrunner.eval(script, new StringBuilder());
+			REXP r = RRunnerFromBioplatUsingR4J.getInstance().getConnection().eval(script).getNativeValue();
 			String result = r.asString();
 
 			toolkit().createLabel(container, label);
@@ -43,9 +41,6 @@ public class LogRankTest extends CompositeGenerator {
 		} catch (Exception e) {
 			script = "Error evaluating the script '" + label + "'...";
 			toolkit().createLabel(container, script, style).setLayoutData(GridDataFactory.fillDefaults().span(3, 1).create());
-		} finally {
-			if (rrunner != null)
-				rrunner.closeSession();
-		}
+		} 
 	}
 }

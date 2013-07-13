@@ -63,9 +63,6 @@
       <startup
             class="edu.unlp.medicine.bioplat.rcp.application.startup.StartupRserve">
       </startup>
-      <startup
-            class="edu.unlp.medicine.bioplat.rcp.application.startup.LoadRLibraries">
-      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -280,6 +277,17 @@
         name="Create Empty GeneSignature">
        <description>Create an empty gene signature</description>
 	</wizard>
+  <wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateRandomBiomarkerWizard"
+        icon="intro/contents/images/emptyBiomarker.jpg"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Create Random GeneSignature">
+     <description>
+        Create an empty gene signature
+     </description>
+  </wizard>
     
 	<wizard
        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
@@ -375,6 +383,19 @@
       <actionContribution
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
+            groupId="01-Biomarker-abm"
+            image="resources/icons/plus.gif"
+            imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Add Random Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddRandomGenesAction"
             groupId="01-Biomarker-abm"
             image="resources/icons/plus.gif"
             imagepath="resources/icons/checked.gif"
