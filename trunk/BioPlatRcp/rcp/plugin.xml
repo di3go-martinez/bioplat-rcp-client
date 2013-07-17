@@ -281,7 +281,7 @@
         canFinishEarly="true"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateRandomBiomarkerWizard"
-        icon="intro/contents/images/emptyBiomarker.jpg"
+        icon="resources/icons/random.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
         name="Create Random GeneSignature">
      <description>
@@ -384,7 +384,7 @@
             caption="Add Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
             groupId="01-Biomarker-abm"
-            image="resources/icons/plus.gif"
+            image="resources/icons/plus2.png"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
             onMenu="true"
@@ -397,7 +397,7 @@
             caption="Add Random Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddRandomGenesAction"
             groupId="01-Biomarker-abm"
-            image="resources/icons/plus.gif"
+            image="resources/icons/random.png"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
             onMenu="true"
@@ -410,7 +410,7 @@
             caption="Remove Genes..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
             groupId="01-Biomarker-abm"
-            image="resources/icons/removeItem.png"
+            image="resources/icons/removeItem2.png"
             onMenu="true"
             onToolbar="true">
          <selection
