@@ -10,10 +10,12 @@ import java.util.Set;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 
 import com.google.common.base.Function;
-import com.google.common.collect.DiscreteDomains;
+import com.google.common.collect.ContiguousSet;
+import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ranges;
+import com.google.common.collect.Range;
 
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.CalculateClusterOrUseExistingPage;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
@@ -40,22 +42,19 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	private Biomarker biomarker;
 	private boolean acceptRange;
 	ValidationTestGUIProvider validationTestGUIProvider;
-	 
-
 
 	@Override
 	public int getWizardWidth() {
-		
+
 		return 700;
 	}
-	
+
 	@Override
 	public int getWizardHeight() {
-		
+
 		return 670;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param biomarker
@@ -65,16 +64,15 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		this.biomarker = biomarker;
 		this.acceptRange = acceptRange;
 		this.validationTestGUIProvider = validationTestGUIProvider;
-	
-		this.validationTestGUIProvider.declareVariablesInWizardModel(wizardModel());
-		
-		this.setWindowTitle(this.validationTestGUIProvider.getName() + " Validation");
-		
-		//Se invoca al replace porque la variable acceptRange no esta inicializada al momento de crear el modelo.
-	    wizardModel().replace(PagesDescriptors.NUMBER_OF_CLUSTERS, getClusterWriatableValue());
 
-	    
-		
+		this.validationTestGUIProvider.declareVariablesInWizardModel(wizardModel());
+
+		this.setWindowTitle(this.validationTestGUIProvider.getName() + " Validation");
+
+		// Se invoca al replace porque la variable acceptRange no esta
+		// inicializada al momento de crear el modelo.
+		wizardModel().replace(PagesDescriptors.NUMBER_OF_CLUSTERS, getClusterWriatableValue());
+
 	}
 
 	@Override
@@ -100,43 +98,41 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	@Override
 	protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
 
-		//boolean shouldGenerateCluster = wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
+		// boolean shouldGenerateCluster =
+		// wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
 		// numberOfCluster puede ser un rango o no
-		String numberOfClusters = getClusterRangeAsString(); 
-		
-		
-	//no va 	wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-		
-		
-		
+		String numberOfClusters = getClusterRangeAsString();
+
+		// no va wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
 		String secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
-		
-		if (secondAttributeNameToDoTheValidation .equals(PagesDescriptors.OTHER)){
+
+		if (secondAttributeNameToDoTheValidation.equals(PagesDescriptors.OTHER)) {
 			secondAttributeNameToDoTheValidation = wizardModel().value(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION);
 		}
-		
 
-		if (attributeNameToValidation .equals(PagesDescriptors.OTHER)){
+		if (attributeNameToValidation.equals(PagesDescriptors.OTHER)) {
 			attributeNameToValidation = wizardModel().value(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION);
 		}
 
-		
-		//IStatisticsSignificanceTest statisticsSignificanceTest = wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
+		// IStatisticsSignificanceTest statisticsSignificanceTest =
+		// wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
 		int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
 		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE);
-		
-		//It adds additional parameters for the validation. It will delegate on the validationTestGUIProvider
+
+		// It adds additional parameters for the validation. It will delegate on
+		// the validationTestGUIProvider
 		Map<String, String> specificParametersForTheValidationTest = this.getSpecificParametersForTheValidationTest();
-		
 
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
-				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters , attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				final ValidationConfig4DoingCluster validationConfig = ((Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER)) ? //
+				ValidationConfig4DoingCluster.withPrecalculatedCluster(aed) //
+						: new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
-				
-				
+
 				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 				// FIXME hacer un poquito más generico con una
@@ -160,34 +156,30 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	}
 
 	private Map<String, String> getSpecificParametersForTheValidationTest() {
-		
+
 		Map<String, String> result = new HashMap<String, String>();
 		this.validationTestGUIProvider.getSpecificParametersForTheValidationTest(result, wizardModel());
-		
+
 		return result;
-		
+
 	}
 
-	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker,
-			ArrayList<ValidationConfig4DoingCluster> newArrayList);
-	
+	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker, ArrayList<ValidationConfig4DoingCluster> newArrayList);
+
 	protected String getClusterRangeAsString() {
-		
-		if (acceptRange){
-			return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);	
-		}
-		else{
+
+		if (acceptRange) {
+			return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+		} else {
 			Integer cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-			return String.valueOf(cluster);	
+			return String.valueOf(cluster);
 		}
-		
-		
-		
+
 	}
 
 	// TODO mejorar el nombre
 	protected void afterExecution() {
-		
+
 	}
 
 	// TODO mejorar el nombre
@@ -212,7 +204,8 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		if (!numberOfClusters.contains(".."))
 			numberOfClusters = numberOfClusters + ".." + numberOfClusters;
 		String[] r = numberOfClusters.split("\\.\\.");
-		return Ranges.closed(new Integer(r[0]), new Integer(r[1])).asSet(DiscreteDomains.integers());
+		return ContiguousSet.create(Range.closed(new Integer(r[0]), new Integer(r[1])), DiscreteDomain.integers());
+
 	}
 
 	@Override
@@ -221,10 +214,13 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		WizardModel wm = new WizardModel()//
 				.add(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE, new WritableValue(true, Boolean.class))//
 
-				//.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new WritableValue(10, Integer.class))//
-//				.add(PagesDescriptors.VALIDATION_TYPE)//
-//				.add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null, AttributeTypeEnum.class))//
-//				.add(PagesDescriptors.STATISTICAL_TEST_VALUE, new WritableValue("", String.class))//
+				// .add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, new
+				// WritableValue(10, Integer.class))//
+				// .add(PagesDescriptors.VALIDATION_TYPE)//
+				// .add(PagesDescriptors.ATTRIBUTE_TYPE, new WritableValue(null,
+				// AttributeTypeEnum.class))//
+				// .add(PagesDescriptors.STATISTICAL_TEST_VALUE, new
+				// WritableValue("", String.class))//
 				.add(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
@@ -235,20 +231,22 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		WritableValue wv;
 		wv = getClusterWriatableValue();
 		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, wv);
-		
-		
-		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);;
+
+		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
+		;
 		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
 		wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
-		
-		
+
+		wm.add(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER, Boolean.class, false);
 
 		return wm;
 	}
 
 	private WritableValue getClusterWriatableValue() {
-		if (acceptRange) return new WritableValue("2..3", String.class);
-		else return new WritableValue(2, Integer.class);
+		if (acceptRange)
+			return new WritableValue("2..3", String.class);
+		else
+			return new WritableValue(2, Integer.class);
 	}
 
 	protected WritableValue clusterWritableValue() {
@@ -257,16 +255,18 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
-		return Arrays.asList(PagesDescriptors.experimentsWPD(this.validationTestGUIProvider), PagesDescriptors.configurationPage(this.validationTestGUIProvider));
+		return Arrays.asList(PagesDescriptors.experimentsWPD(this.validationTestGUIProvider),//
+				new CalculateClusterOrUseExistingPage("Choose if you want to use the existing cluster or calculate a new one"),//
+				PagesDescriptors.configurationPage(this.validationTestGUIProvider));
 	}
 
 	@Override
 	protected String getTaskName() {
 		return "Add new validation to apply...";
 	}
-	
+
 	@Override
-	public boolean logInTheMessageView(){
+	public boolean logInTheMessageView() {
 		return false;
 	}
 
