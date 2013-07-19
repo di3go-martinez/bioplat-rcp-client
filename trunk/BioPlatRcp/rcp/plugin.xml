@@ -528,6 +528,14 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      <actionContribution
+            caption="Configure Cluster..."
+            class="edu.medicine.bioplat.rcp.CalculateClusterActionContribution"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
