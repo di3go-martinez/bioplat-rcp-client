@@ -1,14 +1,13 @@
 package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 
-import javax.annotation.Nullable;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import edu.unlp.medicine.bioplat.core.Activator;
+import com.google.common.annotations.Beta;
+
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 
 /**
@@ -61,7 +60,7 @@ public abstract class WizardPageDescriptor {
 	 *            en el proceso de "finish()"
 	 * @return el composite creado
 	 */
-	public abstract Composite create(@Nullable WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel);
+	public abstract Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel);
 
 	@Override
 	public String toString() {
@@ -128,12 +127,17 @@ public abstract class WizardPageDescriptor {
 		return true;
 	}
 
-	public WizardPageDescriptor setImageDescriptor(
-			ImageDescriptor imageDescriptorFromPlugin) {
-		
-		this.imageDescriptor =imageDescriptorFromPlugin;
+	public WizardPageDescriptor setImageDescriptor(ImageDescriptor imageDescriptorFromPlugin) {
+
+		this.imageDescriptor = imageDescriptorFromPlugin;
 		return this;
 	}
 
+	// TODO mejorar nombre
+	@Beta
+	public boolean allowContinueWizardSetup() {
+		return true; // por default siempre se podría pasar a una página
+						// siguiente
+	}
 
 }

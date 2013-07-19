@@ -74,15 +74,14 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private Map<IWizardPage, WizardPageDescriptor> map = Maps.newHashMap();
 
-	
-	public int getWizardWidth(){
+	public int getWizardWidth() {
 		return 300;
 	}
-	
-	public int getWizardHeight(){
+
+	public int getWizardHeight() {
 		return 600;
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 
@@ -104,11 +103,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					fillDefaultsIfNecesary(control);
 
 					setControl(control);
-					
+
 					Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
 					getShell().setSize(size);
-					
-					
 
 				}
 
@@ -124,7 +121,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean canFlipToNextPage() {
-					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null);
+					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null) && pageDescriptor.allowContinueWizardSetup();
 				}
 
 				// @Override
@@ -150,7 +147,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		// Caso especial...
+		// Caso especial... //TODO por qué, cómo y cuándo...
 		if (initialPage) {
 			initialPage = false;
 			return super.getNextPage(page);
@@ -247,7 +244,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			if (page.getErrorMessage() != null)
 				return false;
 
-		return super.canFinish();
+		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
+		return !wpd.allowContinueWizardSetup() || super.canFinish();
 	}
 
 	/**
@@ -294,7 +292,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				T o = null;
 
 				try {
-					o = holder.get(); // join
+					o = holder.get(); // threads' join
 				} catch (Exception e) {
 					Throwable t = (e.getCause() != null) ? e.getCause() : e;
 					errorHolder.hold(t);
@@ -306,13 +304,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					@Override
 					public void run() {
 						try {
+							progressMonitor.done();
 							if (errorHolder.value() != null) {
-								progressMonitor.done();
 								doInUIError(errorHolder.value());
-								addMessageErrorToMessageView(errorHolder.value());
-
+								addErrorMessageToMessageView(errorHolder.value());
 							} else {
-								progressMonitor.done();
 								doInUI(oo);
 								addMessageToMessageView(oo);
 							}
@@ -347,8 +343,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			//
 			//
 			private String defaultErrorMsg(Throwable t) {
-				String msg = "Error executing the operation:  " + getTaskName(); 
-				if (t.getMessage()!=null && !t.getMessage().equals("")) msg = msg +  ". Message:  " + t.getMessage() ;
+				String msg = "Error executing the operation:  " + getTaskName();
+				if (t.getMessage() != null && !t.getMessage().equals(""))
+					msg = msg + ". Message:  " + t.getMessage();
 				return msg;
 			}
 
@@ -377,9 +374,13 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 * Permite configurar los parámetros dentro del Realm/ui-thread, el cual es
 	 * necesario para poder acceder a los valores del model.
 	 * 
+	 * @deprecated no va a ser más necesario cuando se haga el cambio de acceso
+	 *             en la clase#método WizardModal#value (solo resta habilitarlo,
+	 *             planificado para "largo plazo")
 	 */
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
 	// realm que va
+	@Deprecated
 	protected void configureParameters() {
 	}
 
@@ -408,21 +409,22 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 */
 	protected abstract void doInUI(T result) throws Exception;
 
+	// TODO javadoc
 	public void doInUIError(Throwable e) throws Exception {
 
 	}
 
 	public void addMessageToMessageView(T oo) {
-		if (this.logInTheMessageView()) MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed."));
+		if (this.logInTheMessageView())
+			MessageManager.INSTANCE.add(Message.info(getTaskName() + " was succesfully executed."));
 
 	}
 
-	
-	public boolean logInTheMessageView(){
+	public boolean logInTheMessageView() {
 		return true;
 	}
-	
-	private void addMessageErrorToMessageView(Throwable t) {
+
+	private void addErrorMessageToMessageView(Throwable t) {
 		MessageManager.INSTANCE.add(Message.error(t.getMessage(), t));
 
 	}
