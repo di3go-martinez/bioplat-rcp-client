@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.core;
 
-import javax.annotation.Nullable;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -33,7 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	 * 
 	 * @see Activator#imageDescriptorFromPlugin(String, String)
 	 */
-	public static ImageDescriptor imageDescriptorFromPlugin(@Nullable String imageFilePath) {
+	public static ImageDescriptor imageDescriptorFromPlugin(String imageFilePath) {
 
 		if (imageFilePath == null)
 			return DEFAULT;
