@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 import ognl.Ognl;
 import ognl.OgnlException;
 
 import org.apache.commons.lang.Validate;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -41,6 +40,7 @@ import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.MenuBuilder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
@@ -267,7 +267,7 @@ public class TableBuilder implements TableConfigurer {
 			 */
 			// TODO acomodar la desprolijidad del newInput=null
 			@Override
-			public void input(@Nullable final List newInput) {
+			public void input(final List newInput) {
 				// si el model es null es porque la input fue configurada
 				// "estáticamente", se usa newInput
 				if (model == null)
