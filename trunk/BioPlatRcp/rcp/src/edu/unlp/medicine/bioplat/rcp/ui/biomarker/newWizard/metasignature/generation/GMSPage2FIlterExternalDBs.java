@@ -31,14 +31,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import edu.unlp.medicine.DBImportes.geneSignature.geneSigDB.*;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.DBImportes.geneSignature.geneSigDB.ProviderFromSecondaryDBImportedInBioplat;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.FromTabletMenuItemDescriptorProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.TableReferenceProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.actions.CopyColumnTextMenuItemDescriptor;
-
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;

@@ -8,21 +8,16 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import com.google.common.collect.Lists;
 
-import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.DBImportes.geneSignature.geneSigDB.ProviderFromSecondaryDBImportedInBioplat;
-import edu.unlp.medicine.DBimporters.geneSignature.geneSigDB.*;
+import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.GeneSignatureProvider.IGeneSignatureProvider;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
-import edu.unlp.medicine.domainLogic.framework.exceptions.ProblemsGettingTheGeneSiganturesException;
-import edu.unlp.medicine.entity.biomarker.Biomarker;
-import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class Providers2 extends GMSPage1Introduction {
 
@@ -38,10 +33,10 @@ public class Providers2 extends GMSPage1Introduction {
 	 * @param wmodel
 	 * @param dbc
 	 */
-	//@Override
+	// @Override
 	protected void createSecondaryProvidersGroup(Composite container, GridLayoutFactory glf, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
 
-		//new CLabel(container, SWT.BOLD).setText("\nThe configuration you have to do for getting a metasignatures is: \n1-(This wizzard page): Select the providers. You can pick up GeneSigDB, MolSigDB and any of the biomarkers you have previously opened (if there is someone) \n2-(Next wizzard Page): Select the filters. You can filter by cancer location, or giving a gene list which have to be in the signature. \n3-(Last wizzard page): Pick up the algorithm responsible of getting all the gene signature which have passed the filter (step 2) and applying its logic for get the Metasignature                                              \n\n");
+		// new CLabel(container, SWT.BOLD).setText("\nThe configuration you have to do for getting a metasignatures is: \n1-(This wizzard page): Select the providers. You can pick up GeneSigDB, MolSigDB and any of the biomarkers you have previously opened (if there is someone) \n2-(Next wizzard Page): Select the filters. You can filter by cancer location, or giving a gene list which have to be in the signature. \n3-(Last wizzard page): Pick up the algorithm responsible of getting all the gene signature which have passed the filter (step 2) and applying its logic for get the Metasignature                                              \n\n");
 
 		Group providersGroup = new Group(container, SWT.NONE);
 		providersGroup.setText("External Gene Signatures Databases");
@@ -59,7 +54,7 @@ public class Providers2 extends GMSPage1Introduction {
 
 	}
 
-	//@Override
+	// @Override
 	public GMSPage1Introduction addParameters(WizardModel wizardModel) {
 		wizardModel.//
 				add(GENESIGDB, new WritableValue(true, Boolean.class))//
@@ -68,20 +63,19 @@ public class Providers2 extends GMSPage1Introduction {
 
 	}
 
-	//@Override
-//	public boolean isPageComplete(WizardModel model) {
-//		//return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
-//	}
+	// @Override
+	// public boolean isPageComplete(WizardModel model) {
+	// //return isOpenedAvailable(model) || isAnySecondaryAvailable(model);
+	// }
 
 	private boolean isAnySecondaryAvailable(WizardModel model) {
 		return model.value(GENESIGDB) != null || model.value(MSIGDB) != null;
 	}
 
-	
 	public List<IGeneSignatureProvider> resolveProviders(WizardModel model) {
 
 		List<IGeneSignatureProvider> result = Lists.newArrayList();
-		//resolveOpenedProvider(model, result);
+		// resolveOpenedProvider(model, result);
 
 		if (isAnySecondaryAvailable(model)) {
 			ProviderFromSecondaryDBImportedInBioplat provider = new ProviderFromSecondaryDBImportedInBioplat();
@@ -99,8 +93,5 @@ public class Providers2 extends GMSPage1Introduction {
 		return result;
 
 	}
-	
-	
-	
-	
+
 }
