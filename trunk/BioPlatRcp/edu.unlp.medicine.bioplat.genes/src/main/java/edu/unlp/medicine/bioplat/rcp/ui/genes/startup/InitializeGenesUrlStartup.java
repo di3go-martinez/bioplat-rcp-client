@@ -10,6 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -18,6 +20,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInfor
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 
 public class InitializeGenesUrlStartup implements IStartup {
+
+	private static final String DEFAULT_GENES_URLS_FILE = "default_genes_urls_file";
+	private static Logger logger = LoggerFactory.getLogger(InitializeGeneSetUrlStartup.class);
 
 	@Override
 	public void earlyStartup() {
@@ -45,11 +50,15 @@ public class InitializeGenesUrlStartup implements IStartup {
 
 	}
 
+	// TODO hacer private
 	public static String[] fillDefaults() {
 		List<String> result = Lists.newArrayList();
 		Scanner scanner;
 		try {
-			scanner = new Scanner(new File(System.getProperty("default_genes_urls_file")));
+			final String filepath = System.getProperty(DEFAULT_GENES_URLS_FILE, null);
+			if (!checks(filepath))
+				return new String[0];
+			scanner = new Scanner(new File(filepath));
 			while (scanner.hasNextLine()) {
 				String newUrl = scanner.nextLine();
 				result.add(newUrl);
@@ -60,5 +69,17 @@ public class InitializeGenesUrlStartup implements IStartup {
 		}
 
 		return result.toArray(new String[0]);
+	}
+
+	private static boolean checks(final String filepath) {
+		if (filepath == null) {
+			logger.warn("No está configurada la variable " + DEFAULT_GENES_URLS_FILE + ". No se inicializarán las urls por default en la vista de genes");
+			return false;
+		}
+		if (!new File(filepath).exists()) {
+			logger.warn("El archivo '" + filepath + "' no existe.");
+			return false;
+		}
+		return true;
 	}
 }
