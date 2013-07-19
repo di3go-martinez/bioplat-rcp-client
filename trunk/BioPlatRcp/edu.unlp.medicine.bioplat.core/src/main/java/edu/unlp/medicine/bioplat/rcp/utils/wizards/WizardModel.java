@@ -8,6 +8,7 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -31,6 +32,13 @@ public class WizardModel {
 		return add(key, new WritableValue());
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 * @throws org.eclipse.core.runtime.AssertionFailedException
+	 *             assertion failed: Getter called outside realm...
+	 */
 	public <T> T value(final String key) {
 		IObservableValue ov = valueHolder(key);
 		if (ov != null)
@@ -112,6 +120,7 @@ public class WizardModel {
 
 	private static Logger logger = LoggerFactory.getLogger(WizardModel.class);
 
+	@Beta
 	public void replace(String key, WritableValue writableValue) {
 		values.put(key, writableValue);
 
