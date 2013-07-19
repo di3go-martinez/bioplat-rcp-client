@@ -15,6 +15,11 @@ public class Widgets {
 	private Widgets() {
 	}
 
+	public static void retarget(AbstractEntity newmodel, Widget... widgets) {
+		for (Widget w : widgets)
+			w.retarget(newmodel);
+	}
+
 	/**
 	 * createLabel(container, label); createText(container, model, property);
 	 * 
@@ -90,9 +95,8 @@ public class Widgets {
 		new CList(parent, model, property, SWT.BORDER);
 	}
 
-	public static void retarget(AbstractEntity newmodel, Widget... widgets) {
-		for (Widget w : widgets)
-			w.retarget(newmodel);
+	public static Widget createCheckBox(Composite group, String label, AbstractEntity model, String property) {
+		return new CCheckBox(group, label, model, property);
 	}
 
 }

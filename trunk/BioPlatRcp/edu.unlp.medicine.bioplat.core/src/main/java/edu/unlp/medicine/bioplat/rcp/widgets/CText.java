@@ -88,7 +88,7 @@ public class CText implements Widget {
 	}
 
 	@Override
-	public void addModificationListener(final ModificationListener listener) {
+	public Widget addModificationListener(final ModificationListener listener) {
 		final ModifyListener modifyListener = new ModifyListener() {
 
 			@Override
@@ -99,6 +99,7 @@ public class CText implements Widget {
 		Collection<EventListener> l = listeners.get(ModificationListener.class);
 		l.add(modifyListener);
 		text.addModifyListener(modifyListener);
+		return this;
 	}
 
 	private Multimap<Class<?>, EventListener> listeners = ArrayListMultimap.create();
