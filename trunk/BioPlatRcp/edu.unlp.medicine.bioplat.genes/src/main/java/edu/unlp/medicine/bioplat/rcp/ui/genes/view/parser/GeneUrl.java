@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser;
 
-import javax.annotation.Nullable;
-
 import edu.unlp.medicine.entity.gene.Gene;
 
 public class GeneUrl {
@@ -42,7 +40,7 @@ public class GeneUrl {
 				.replace(GEN_ENSEMBLID, input.getEnsemblId());
 	}
 
-	private CharSequence esc(@Nullable String str) {
+	private CharSequence esc(String str) {
 		if (str == null)
 			return "";
 		return str.replaceAll(" ", "%20");
