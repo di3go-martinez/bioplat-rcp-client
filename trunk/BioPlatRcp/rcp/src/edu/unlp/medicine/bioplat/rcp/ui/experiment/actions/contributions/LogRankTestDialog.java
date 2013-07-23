@@ -43,7 +43,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	protected LogRankTestDialog(Shell parentShell, Biomarker biomarker) {
 		super(parentShell);
 		this.biomarker = biomarker;
-		
+
 		// TODO mejorar
 		experimentsWizard = createExperimentSelectorWizard(biomarker);
 		// TODO conseguir la selección actual
@@ -76,13 +76,12 @@ public class LogRankTestDialog extends TitleAreaDialog {
 
 		String help = "Help: In the table you can see the validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
 		GUIUtils.addWrappedText(c, help, 8, true);
-		
-		
+
 		tr = TableBuilder.create(c)//
 				.hideSelectionColumn()//
-				.addColumn(ColumnBuilder.create().property("experimentToValidate.name").title("experiment"))//
+				.addColumn(ColumnBuilder.create().property("experimentToValidate.name").title("Experiment"))//
 				// .addColumn(ColumnBuilder.create().property("shouldGenerateCluster").checkbox().centered().width(20).title("cluster?"))//
-				.addColumn(ColumnBuilder.create().property("numberOfClusters").title("clusters"))//
+				.addColumn(ColumnBuilder.create().property("numberOfClusters").title("Clusters"))//
 				// .addColumn(ColumnBuilder.create().property("numberOfTimesToRepeatTheCluster").title("times"))//
 				// .addColumn(ColumnBuilder.create().property("statisticsSignificanceTest.friendlyName").title("Statistics Significance Test"))//
 				.addColumn(ColumnBuilder.create().property("attribtueNameToDoTheValidation").title("Validation Attributte Name"))//
@@ -94,8 +93,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 		// buttons.setLayout(GridLayoutFactory.fillDefaults().create());
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,
 		// true).create());
-		
-		
+
 		return container;
 	}
 
@@ -131,7 +129,6 @@ public class LogRankTestDialog extends TitleAreaDialog {
 		Job j = new Job(mmsg) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				int cantOK = 0;
 
 				monitor.beginTask("", experimentsWizard.commands2apply().size());
 				int count = 0;
@@ -150,16 +147,16 @@ public class LogRankTestDialog extends TitleAreaDialog {
 					}
 					monitor.worked(1);
 				}
-				
-				if (count == experimentsWizard.commands2apply().size()){
-					String msg = "All log rank test validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture"; 
+
+				if (count == experimentsWizard.commands2apply().size()) {
+					String msg = "All log rank test validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture";
 					PlatformUIUtils.openInformation("Log rank test validation", msg);
 					MessageManager.INSTANCE.add(Message.info(msg));
 				}
-					
-				else{
-					PlatformUIUtils.openWarning("LogRank test Validation", " LogRank test validations succesfully executed: " + count + ". \n LogRank test validations with error: " + (experimentsWizard.commands2apply().size() - count)  + ". \n For error details, see rows above in this the Message view.");
-				
+
+				else {
+					PlatformUIUtils.openWarning("LogRank test Validation", " LogRank test validations succesfully executed: " + count + ". \n LogRank test validations with error: " + (experimentsWizard.commands2apply().size() - count) + ". \n For error details, see rows above in this the Message view.");
+
 				}
 				monitor.done();
 				return ValidationStatus.ok();
@@ -178,7 +175,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	private TableReference tr;
 
 	private ValidationConfigWizard createExperimentSelectorWizard(Biomarker biomarker) {
-		
+
 		return new ApplyLogRankTestWizard(biomarker, true) {
 			@Override
 			protected void register(ValidationConfig4DoingCluster validationConfig) {

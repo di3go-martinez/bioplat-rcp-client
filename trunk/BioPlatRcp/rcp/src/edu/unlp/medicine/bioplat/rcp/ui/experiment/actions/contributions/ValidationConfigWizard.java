@@ -97,12 +97,21 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
+		final Boolean useExistingCluster = (Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER);
 
+		// cuando se usa un cluster precalculado no se hace tomados de a x..y,
+		// si no de un número z fijo
+		acceptRange = !useExistingCluster;
 		// boolean shouldGenerateCluster =
 		// wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
 		// numberOfCluster puede ser un rango o no
-		String numberOfClusters = getClusterRangeAsString();
-
+		String numberOfClusters;
+		if (!(Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER))
+			numberOfClusters = getClusterRangeAsString();
+		else
+			numberOfClusters = "1"; // ver for más abajo, con este número
+									// configura una sola vez (correcto) el
+									// validation config
 		// no va wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
@@ -128,7 +137,8 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		for (AbstractExperimentDescriptor aed : appliedExperiments) {
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
-				final ValidationConfig4DoingCluster validationConfig = ((Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER)) ? //
+
+				final ValidationConfig4DoingCluster validationConfig = useExistingCluster ? //
 				ValidationConfig4DoingCluster.withPrecalculatedCluster(aed) //
 						: new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
