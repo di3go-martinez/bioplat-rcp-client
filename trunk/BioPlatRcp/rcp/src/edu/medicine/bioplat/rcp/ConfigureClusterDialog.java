@@ -50,7 +50,7 @@ public class ConfigureClusterDialog extends Dialog {
 //		Label introdudctionLabel = new Label(parent, SWT.WRAP);
 //		introdudctionLabel.setText("Use shift and control for select multiple samples. Then, right click and use set cluster to assign a clusterID to all selected samples"); 
 		tref = TableBuilder.create(container).input(data = createData())//
-				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(60))//
+				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(200))//
 				.addColumn(ColumnBuilder.create().editable().property("groupid").title("CLuster ID")).contextualMenuBuilder(menuBuilder()).build();
 		Button ok = new Button(container, SWT.NONE);
 		ok.setText("OK");
