@@ -498,7 +498,7 @@
             class="edu.medicine.bioplat.rcp.CalculateClusterActionContribution"
             image="resources/icons/clustering.png"
             onMenu="true"
-            onToolbar="false">
+            onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
       </actionContribution>
