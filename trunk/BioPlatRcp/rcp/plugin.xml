@@ -493,6 +493,15 @@
                class="edu.unlp.medicine.entity.experiment.Experiment">
          </selection>
       </actionContribution>
+      <actionContribution
+            caption="Configure Cluster..."
+            class="edu.medicine.bioplat.rcp.CalculateClusterActionContribution"
+            image="resources/icons/clustering.png"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+      </actionContribution>
       
       
       <actionContribution
@@ -527,14 +536,6 @@
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Configure Cluster..."
-            class="edu.medicine.bioplat.rcp.CalculateClusterActionContribution"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
       </actionContribution>
    </extension>
    <extension
