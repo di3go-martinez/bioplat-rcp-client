@@ -106,7 +106,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		// wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
 		// numberOfCluster puede ser un rango o no
 		String numberOfClusters;
-		if (!(Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER))
+		if (!useExistingCluster)
 			numberOfClusters = getClusterRangeAsString();
 		else
 			numberOfClusters = "1"; // ver for más abajo, con este número
@@ -177,6 +177,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker, ArrayList<ValidationConfig4DoingCluster> newArrayList);
 
 	protected String getClusterRangeAsString() {
+	//TODO revisar cuando tira error de casting
 		Integer cluster=null;
 		if (acceptRange) {
 			try{
