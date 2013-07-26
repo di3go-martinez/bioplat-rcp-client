@@ -177,14 +177,17 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker, ArrayList<ValidationConfig4DoingCluster> newArrayList);
 
 	protected String getClusterRangeAsString() {
-
+		Integer cluster=null;
 		if (acceptRange) {
-			return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-		} else {
-			Integer cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-			return String.valueOf(cluster);
-		}
-
+			try{
+				cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
+					
+			}
+			catch (NumberFormatException e){
+				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS); 
+			}
+		} 
+		return String.valueOf(cluster);
 	}
 
 	// TODO mejorar el nombre
