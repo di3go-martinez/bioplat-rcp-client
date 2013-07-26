@@ -15,7 +15,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 
 import com.google.common.collect.Lists;
@@ -46,12 +45,13 @@ public class ConfigureClusterDialog extends Dialog {
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite container = Widgets.createDefaultContainer(parent);
-		
-//		Label introdudctionLabel = new Label(parent, SWT.WRAP);
-//		introdudctionLabel.setText("Use shift and control for select multiple samples. Then, right click and use set cluster to assign a clusterID to all selected samples"); 
+
+		// Label introdudctionLabel = new Label(parent, SWT.WRAP);
+		// introdudctionLabel.setText("Use shift and control for select multiple samples. Then, right click and use set cluster to assign a clusterID to all selected samples");
 		tref = TableBuilder.create(container).input(data = createData())//
+				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(200))//
-				.addColumn(ColumnBuilder.create().editable().property("groupid").title("CLuster ID")).contextualMenuBuilder(menuBuilder()).build();
+				.addColumn(ColumnBuilder.create().editable().property("groupid").title("Cluster ID")).contextualMenuBuilder(menuBuilder()).build();
 		Button ok = new Button(container, SWT.NONE);
 		ok.setText("OK");
 		ok.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
@@ -66,7 +66,7 @@ public class ConfigureClusterDialog extends Dialog {
 	}
 
 	private MenuBuilder menuBuilder() {
-		
+
 		return new MenuBuilder() {
 
 			@Override

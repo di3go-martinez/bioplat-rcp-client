@@ -10,7 +10,6 @@ import ognl.Ognl;
 import ognl.OgnlException;
 
 import org.apache.commons.lang.Validate;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -40,7 +39,6 @@ import com.google.common.collect.Sets;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.MenuBuilder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
@@ -112,7 +110,11 @@ public class TableBuilder implements TableConfigurer {
 	}
 
 	public static TableBuilder create(Composite container) {
-		return new TableBuilder(container, false);
+		return new TableBuilder(container, false)//
+				// FIXME porqué el addColumn con esa columna dummy... porque hay
+				// un BUG que hace que no se ordene bien la primera columna la
+				// primera vez...
+				.addColumn(ColumnBuilder.create().width(0));
 	}
 
 	/**
