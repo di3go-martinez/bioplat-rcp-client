@@ -30,12 +30,12 @@ public class CalculateClusterOrUseExistingPage extends WizardPageDescriptor {
 		this.wmodel = wmodel;
 		Composite container = Widgets.createDefaultContainer(parent);
 		useExistingCluster = new Button(container, SWT.RADIO);
-		useExistingCluster.setText("Use existing cluster");
+		useExistingCluster.setText("Use sample cluster configured on experiment");
 
 		dbc.bindValue(SWTObservables.observeSelection(useExistingCluster), wmodel.valueHolder(USE_EXISTING_CLUSTER), null, null);
 
 		Button calculateNewCluster = new Button(container, SWT.RADIO);
-		calculateNewCluster.setText("Calculate a new cluster");
+		calculateNewCluster.setText("Calculate new cluster");
 
 		// dbc.bindValue(SWTObservables.observeSelection(b),
 		// wmodel.valueHolder(USE_EXISTING_CLUSTER), new UpdateValueStrategy() {
