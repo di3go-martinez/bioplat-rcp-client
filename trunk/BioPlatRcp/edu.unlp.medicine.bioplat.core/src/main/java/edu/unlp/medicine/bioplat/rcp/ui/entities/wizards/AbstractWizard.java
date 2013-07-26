@@ -245,7 +245,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				return false;
 
 		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
-		return !wpd.allowContinueWizardSetup() || super.canFinish();
+		// TODO acomodar por si la páginas de resultados deciden si parar el
+		// curso del wizard
+		boolean resultPage = wpd == null;
+		return (!resultPage && !wpd.allowContinueWizardSetup()) || super.canFinish();
 	}
 
 	/**
