@@ -15,12 +15,21 @@ body > div.page-style {
 	padding-left:10%;
 	}
 
-
+/*
 #content {
 	text-align:left;
 	width:23em;
 	} 
+*/
 
+.experiment {
+	align:left;
+}
+
+
+.signature {
+	align:right;
+}
 
 
 
