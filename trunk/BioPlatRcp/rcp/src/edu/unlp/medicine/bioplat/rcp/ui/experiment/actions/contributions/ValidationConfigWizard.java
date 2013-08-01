@@ -184,7 +184,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 					
 			}
-			catch (NumberFormatException e){
+			catch (ClassCastException e){
 				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS); 
 			}
 		} 
