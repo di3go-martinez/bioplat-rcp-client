@@ -170,6 +170,8 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 		};
 		j.setUser(true);
 		j.setPriority(Job.LONG);
+		// FIXME código de creación del Job duplicaaado
+		j.setRule(ValidationConfigWizard.getMutexRule());
 		j.schedule();
 
 	}

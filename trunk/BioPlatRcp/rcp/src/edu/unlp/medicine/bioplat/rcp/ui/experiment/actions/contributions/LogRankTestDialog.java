@@ -164,6 +164,9 @@ public class LogRankTestDialog extends TitleAreaDialog {
 		};
 		j.setUser(true);
 		j.setPriority(Job.LONG);
+		// FIXME unificar con la implementación de AbstractWizards!! Hacer
+		// EjOB!! ver ValidationConfigWizard
+		j.setRule(ValidationConfigWizard.getMutexRule());
 		j.schedule();
 
 	}

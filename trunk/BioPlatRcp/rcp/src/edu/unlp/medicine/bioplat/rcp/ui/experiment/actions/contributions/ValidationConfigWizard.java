@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
+import com.google.common.annotations.Beta;
 import com.google.common.base.Function;
 import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
@@ -38,6 +40,36 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  */
 
 public abstract class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
+
+	// mutex para el job, operaciones K, S, que interactúan con R y se deben
+	// ejecutar exclusivamente
+	private static ISchedulingRule mutex = new ISchedulingRule() {
+
+		@Override
+		public boolean isConflicting(ISchedulingRule rule) {
+			return this == rule;
+		}
+
+		@Override
+		public boolean contains(ISchedulingRule rule) {
+			return this == rule;
+		}
+	};
+
+	@Override
+	protected ISchedulingRule getJobRule() {
+		return mutex;
+	};
+
+	/**
+	 * <b>uso interno</b>
+	 * 
+	 * @return
+	 */
+	@Beta
+	static ISchedulingRule getMutexRule() {
+		return mutex;
+	}
 	private Biomarker biomarker;
 	private boolean acceptRange;
 	ValidationTestGUIProvider validationTestGUIProvider;
