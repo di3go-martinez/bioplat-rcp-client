@@ -11,6 +11,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.Dialog;
@@ -355,10 +356,28 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		};
 		j.setUser(true);
 		j.setPriority(Job.LONG);
+		j.setRule(getJobRule());
 		j.schedule();
 
 		return true;
 
+	}
+
+	private ISchedulingRule rule = new ISchedulingRule() {
+
+		@Override
+		public boolean isConflicting(ISchedulingRule rule) {
+			return contains(rule);
+		}
+
+		@Override
+		public boolean contains(ISchedulingRule rule) {
+			return this.equals(rule);
+		}
+	};
+
+	private ISchedulingRule getJobRule() {
+		return rule;
 	}
 
 	Message errorMessage = null;

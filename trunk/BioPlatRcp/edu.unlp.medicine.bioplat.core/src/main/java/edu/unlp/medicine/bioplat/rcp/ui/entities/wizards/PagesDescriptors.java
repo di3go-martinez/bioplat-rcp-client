@@ -61,6 +61,8 @@ public class PagesDescriptors {
 	public static final String REMOVE_GENES_IN_GENE_SIGNATURE = "REMOVE_GENES_IN_BIOMARKER";
 	public static final String OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String OTHER_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_ATTRIBUTE_NAME_TO_VALIDATION";
+	@Deprecated
+	public static final String USE_EXISTING_CLUSTER = "USE_EXISTING_CLUSTER";
 
 	// GUI
 	public static String OTHER = "Other";
@@ -125,6 +127,7 @@ public class PagesDescriptors {
 
 	public static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider) {
 		return new WizardPageDescriptor("Validation strategy configuration ( " + validationTestGUIProvider.getName() + ")") {
+			// private Button useExistingCluster;
 
 			@Override
 			public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
@@ -132,13 +135,47 @@ public class PagesDescriptors {
 				GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
 				Composite container = new Composite(parent, SWT.CENTER);
-				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).spacing(5, 1).create());
+				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
 
+				// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
 				createGroup4CLusteringInfo(container, gdf, dbc, wmodel);
 				createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
 
 				return container;
 			}
+
+			// private void createGroup4ClusteringChoise(Composite container,
+			// GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel)
+			// {
+			// useExistingCluster = new Button(container, SWT.RADIO);
+			// useExistingCluster.setText("Use sample cluster configured on experiment");
+			//
+			// useExistingCluster.addSelectionListener(new SelectionAdapter() {
+			// @Override
+			// public void widgetSelected(SelectionEvent e) {
+			// for (Control c : clusterginGroup.getChildren())
+			// c.setEnabled(!useExistingCluster.getSelection());
+			// }
+			// });
+			//
+			// dbc.bindValue(SWTObservables.observeSelection(useExistingCluster),
+			// wmodel.valueHolder(USE_EXISTING_CLUSTER), null, null);
+			//
+			// Button calculateNewCluster = new Button(container, SWT.RADIO);
+			// calculateNewCluster.setText("Calculate new cluster");
+			//
+			// // dbc.bindValue(SWTObservables.observeSelection(b),
+			// // wmodel.valueHolder(USE_EXISTING_CLUSTER), new
+			// // UpdateValueStrategy() {
+			// // @Override
+			// // public Object convert(Object value) {
+			// // return false;
+			// // }
+			// // }, null);
+			//
+			// calculateNewCluster.setSelection(true);
+			//
+			// }
 
 			private void createGroup4AdditionalParameters(Composite container, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
 
@@ -147,7 +184,7 @@ public class PagesDescriptors {
 					Group additionalParameters = new Group(container, SWT.NONE);
 					additionalParameters.setText("Additional parameters of " + validationTestGUIProvider.getName());
 					additionalParameters.setFont(GUIUtils.getFontForGrouptTitle(container));
-					additionalParameters.setLayout(GridLayoutFactory.fillDefaults().margins(40, 15).create());
+					additionalParameters.setLayout(GridLayoutFactory.fillDefaults().margins(20, 15).create());
 					additionalParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 					validationTestGUIProvider.addAdditionComposite(additionalParameters, wmodel, dbc, gdf);
@@ -160,7 +197,7 @@ public class PagesDescriptors {
 				Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
 				clusterginGroup.setText("Clustering parameters");
 				clusterginGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
-				clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().margins(40, 20).spacing(10, 10).create());
+				clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().margins(20, 10).create());
 				clusterginGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 				// Button check = new Button(result, SWT.CHECK);
@@ -200,6 +237,13 @@ public class PagesDescriptors {
 				// validationAttrName.setSelection(new
 				// StructuredSelection(OS_MONTHS));
 				//
+
+				// Group clusterginGroup2 = new Group(container,
+				// SWT.SHADOW_OUT);
+				// clusterginGroup2.setLayout(GridLayoutFactory.fillDefaults().margins(20,
+				// 10).create());
+				// clusterginGroup2.setLayoutData(GridDataFactory.fillDefaults().grab(true,
+				// false).create());
 
 				new Label(clusterginGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
 				Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);

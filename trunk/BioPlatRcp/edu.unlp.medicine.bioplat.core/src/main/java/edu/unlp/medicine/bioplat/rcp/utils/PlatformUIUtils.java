@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -29,6 +30,8 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 
 //TODO ejecutar en el contexto del ui-thread
 public class PlatformUIUtils {
+	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(PlatformUIUtils.class);
+
 	private PlatformUIUtils() {
 		// TODO Auto-generated constructor stub
 	}
@@ -165,11 +168,12 @@ public class PlatformUIUtils {
 
 				@Override
 				public Image call() throws Exception {
+					logger.debug("Loading " + imagename);
 					return Activator.imageDescriptorFromPlugin(imagename).createImage();
 				}
 			});
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			logger.warn("No se encontró la imagen" + imagename, e);
 			// default.png existe...
 			return findImage("default.png");
 		}
@@ -208,7 +212,6 @@ public class PlatformUIUtils {
 		});
 	}
 
-
 	public static void openWarning(final String title, final String message) {
 		findDisplay().syncExec(new Runnable() {
 
@@ -225,12 +228,12 @@ public class PlatformUIUtils {
 
 			@Override
 			public void run() {
-				result.value = MessageDialog.openQuestion(findShell(), title, message); 
+				result.value = MessageDialog.openQuestion(findShell(), title, message);
 			}
 		});
 		return result.value;
 	}
-	
+
 	public static void openError(final String title, final String message) {
 		findDisplay().syncExec(new Runnable() {
 
@@ -240,8 +243,7 @@ public class PlatformUIUtils {
 			}
 		});
 	}
-	
-	
+
 	public static void center(Shell shell) {
 		Point p = centerPointFor(shell);
 		shell.setLocation(p.x, p.y);
