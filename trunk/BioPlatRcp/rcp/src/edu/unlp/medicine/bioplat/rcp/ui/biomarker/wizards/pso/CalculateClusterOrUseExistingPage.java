@@ -15,6 +15,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 
+@Deprecated
 public class CalculateClusterOrUseExistingPage extends WizardPageDescriptor {
 
 	public static final String USE_EXISTING_CLUSTER = "USE_EXISTING_CLUSTER";
