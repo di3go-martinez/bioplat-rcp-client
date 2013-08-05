@@ -15,7 +15,6 @@ import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.CalculateClusterOrUseExistingPage;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
@@ -97,21 +96,9 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected void doInUI(List<AbstractExperimentDescriptor> appliedExperiments) throws Exception {
-		final Boolean useExistingCluster = (Boolean) wizardModel().value(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER);
 
-		// cuando se usa un cluster precalculado no se hace tomados de a x..y,
-		// si no de un número z fijo
-		acceptRange = !useExistingCluster;
-		// boolean shouldGenerateCluster =
-		// wizardModel().value(PagesDescriptors.GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE);
-		// numberOfCluster puede ser un rango o no
-		String numberOfClusters;
-		if (!useExistingCluster)
-			numberOfClusters = getClusterRangeAsString();
-		else
-			numberOfClusters = "1"; // ver for más abajo, con este número
-									// configura una sola vez (correcto) el
-									// validation config
+		String numberOfClusters = getClusterRangeAsString();
+
 		// no va wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 
 		String attributeNameToValidation = wizardModel().value(PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION);
@@ -138,9 +125,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
 
-				final ValidationConfig4DoingCluster validationConfig = useExistingCluster ? //
-				ValidationConfig4DoingCluster.withPrecalculatedCluster(aed) //
-						: new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
 				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
 
 				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
@@ -177,17 +162,16 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker, ArrayList<ValidationConfig4DoingCluster> newArrayList);
 
 	protected String getClusterRangeAsString() {
-	//TODO revisar cuando tira error de casting
-		Integer cluster=null;
+		// TODO revisar cuando tira error de casting
+		String cluster = null;
 		if (acceptRange) {
-			try{
+			try {
 				cluster = wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
-					
+
+			} catch (NumberFormatException e) {
+				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 			}
-			catch (ClassCastException e){
-				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS); 
-			}
-		} 
+		}
 		return String.valueOf(cluster);
 	}
 
@@ -251,8 +235,6 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
 		wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
 
-		wm.add(CalculateClusterOrUseExistingPage.USE_EXISTING_CLUSTER, Boolean.class, false);
-
 		return wm;
 	}
 
@@ -270,7 +252,8 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		return Arrays.asList(PagesDescriptors.experimentsWPD(this.validationTestGUIProvider),//
-				new CalculateClusterOrUseExistingPage("Choose if you want to use the existing cluster or calculate a new one"),//
+				// new
+				// CalculateClusterOrUseExistingPage("Choose if you want to use the existing cluster or calculate a new one"),//
 				PagesDescriptors.configurationPage(this.validationTestGUIProvider));
 	}
 
