@@ -356,7 +356,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		};
 		j.setUser(true);
 		j.setPriority(Job.LONG);
-		j.setRule(getJobRule());
+		//j.setRule(getJobRule());
 		j.schedule();
 
 		return true;
