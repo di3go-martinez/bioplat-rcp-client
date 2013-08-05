@@ -356,28 +356,21 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		};
 		j.setUser(true);
 		j.setPriority(Job.LONG);
-		//j.setRule(getJobRule());
+		if (hasRule())
+			j.setRule(getJobRule());
 		j.schedule();
 
 		return true;
 
 	}
 
-	private ISchedulingRule rule = new ISchedulingRule() {
+	private boolean hasRule() {
+		return getJobRule() != null;
+	}
 
-		@Override
-		public boolean isConflicting(ISchedulingRule rule) {
-			return contains(rule);
-		}
-
-		@Override
-		public boolean contains(ISchedulingRule rule) {
-			return this.equals(rule);
-		}
-	};
-
-	private ISchedulingRule getJobRule() {
-		return rule;
+	// no hay rule por defecto
+	protected ISchedulingRule getJobRule() {
+		return null;
 	}
 
 	Message errorMessage = null;
