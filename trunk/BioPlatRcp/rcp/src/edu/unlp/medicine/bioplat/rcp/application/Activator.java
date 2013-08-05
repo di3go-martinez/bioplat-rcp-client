@@ -3,6 +3,8 @@ package edu.unlp.medicine.bioplat.rcp.application;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -10,7 +12,7 @@ import org.osgi.framework.BundleContext;
  * 
  */
 public class Activator extends AbstractUIPlugin {
-
+	private static Logger logger = LoggerFactory.getLogger(Activator.class);
 	private static final ImageDescriptor DEFAULT = imageDescriptorFromPlugin("resources/icons/default.png");
 	private static final String RESOURCES_ICONS = "resources/icons/";
 
@@ -50,7 +52,7 @@ public class Activator extends AbstractUIPlugin {
 
 		if (!imageFilePath.contains(RESOURCES_ICONS))
 			imageFilePath = RESOURCES_ICONS + imageFilePath;
-
+		logger.debug("retrieving the image " + imageFilePath + "@" + id());
 		ImageDescriptor id = imageDescriptorFromPlugin(id(), imageFilePath);
 		if (id == null)
 			id = DEFAULT;
