@@ -620,6 +620,10 @@
             name="createEmptyMetasignatureAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CreateEmptyMetasignatureAction">
       </action>
+      <action
+            name="createRandomGeneSignature"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CreateRandomGeneSignatureIntroAction">
+      </action>
    </extension>
    
    <extension point="org.eclipse.ui.intro.configExtension">

@@ -24,11 +24,13 @@ body > div.page-style {
 
 .experiment {
 	align:left;
+	word-wrap: break-word;
 }
 
 
 .signature {
-	align:right;
+	width:25%;
+	word-wrap: break-word;
 }
 
 
