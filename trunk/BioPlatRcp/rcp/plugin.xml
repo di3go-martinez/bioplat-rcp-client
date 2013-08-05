@@ -311,7 +311,7 @@
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
-        icon="intro/contents/images/CSV.gif"
+        icon="intro/contents/images/GEO.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
         name="Import experiment from text file">
   </wizard>
@@ -537,6 +537,15 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      <!--actionContribution
+            caption="Enrichr"
+            class="edu.medicine.bioplat.rcp.EnrichActionContribution"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution-->
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
