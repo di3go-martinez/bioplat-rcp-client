@@ -58,7 +58,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	protected ISchedulingRule getJobRule() {
-		return mutex;
+		return null;
 	};
 
 	/**
@@ -70,6 +70,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 	static ISchedulingRule getMutexRule() {
 		return mutex;
 	}
+
 	private Biomarker biomarker;
 	private boolean acceptRange;
 	ValidationTestGUIProvider validationTestGUIProvider;
