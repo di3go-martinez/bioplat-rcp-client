@@ -546,6 +546,24 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
       </actionContribution-->
+      <actionContribution
+            caption="Surv Comp with manual clustering (K)...."
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+       <actionContribution
+            caption="Log Rank Test with manual clustering (S)...."
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
