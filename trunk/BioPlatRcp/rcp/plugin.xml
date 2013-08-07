@@ -274,7 +274,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
         icon="intro/contents/images/emptyBiomarker.jpg"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create Empty GeneSignature">
+        name="Create empty gene signature">
        <description>Create an empty gene signature</description>
 	</wizard>
   <wizard
@@ -283,7 +283,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateRandomBiomarkerWizard"
         icon="resources/icons/random.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create Random GeneSignature">
+        name="Create random gene signature">
      <description>
         Create an empty gene signature
      </description>
@@ -292,18 +292,18 @@
 	<wizard
        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportGeneSignatureFromBPLWizard"
-       icon="resources/icons/archivo.jpg"
+       icon="intro/contents/images/openFromBPL.png"
        id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
-       name="Open Gene Signature From .BPL (BioPlat) File ">
+       name="Open gene signature from .BPL (BioPlat) file ">
          </wizard>
   <wizard
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
         hasPages="true"
-        icon="resources/icons/generateMetasignature.png"
+        icon="intro/contents/images/GenerateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generate Metasignature">
+        name="Generate metasignature">
      <description>
         Generate a gene signature from sigDB, MSigDB.
      </description>
@@ -321,7 +321,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
         icon="intro/contents/images/From_external_database.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
-        name="Copy From External Signature-Database (GeneSigDB, MolSigDB)">
+        name="Import from external signature-database (GeneSigDB, MSigDB)">
      <description>
         Create a new Gene Signature from the Genes Signatures in the Platform
      </description>
@@ -331,7 +331,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromInSilicoWizard"
         icon="intro/contents/images/InSilico.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
-        name="Import Experiment from InSilico Using GSE">
+        name="Import experiment from InSilico using GSE">
   </wizard>
   
   <wizard
@@ -339,7 +339,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
         icon="intro/contents/images/import_experiment.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
-        name="Import Experiment from .CEL File">
+        name="Import experiment from .CEL File">
   </wizard>
    </extension>
    <extension

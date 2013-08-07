@@ -30,7 +30,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(false);
 		configurer.setShowPerspectiveBar(false);
 		configurer.setShowProgressIndicator(true);
-		configurer.setTitle("Bio PLat"); //$NON-NLS-1$
+		configurer.setTitle("BioPlat"); //$NON-NLS-1$
 
 		// seteo el flag para que se abra siempre la vista de welcome
 		PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_INTRO, true);

@@ -101,7 +101,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 				
 				
 				
-				wp.setDescription("You can later add genes (Entrez Id, Ensembl ID or geneName) writing them or copying&pasting");
+				wp.setDescription("You can later add genes (EntrezID, EnsemblID or Gene name), writing them or copying and pasting.");
 				Composite group = new Group(parent, SWT.NONE);
 				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(2, 20).create());
 				group.setLayoutData(gridData);
@@ -117,7 +117,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 				authorHolder.setLayoutData(gridData);
 				dbc.bindValue(SWTObservables.observeText(authorHolder, SWT.Modify), wizardModel().valueHolder(AUTHOR));
 				
-				new CLabel(group, SWT.BOLD).setText("Gene signature Description:");
+				new CLabel(group, SWT.BOLD).setText("Gene signature description:");
 				Text descriptionHolder = new Text(group, SWT.BORDER);
 				descriptionHolder.setLayoutData(gridData);
 				dbc.bindValue(SWTObservables.observeText(descriptionHolder, SWT.Modify), wizardModel().valueHolder(DESCRIPTION));
@@ -137,7 +137,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	}
 
 	public CreateEmptyBiomarkerWizard(){
-		this.setWindowTitle("Create empty bioplat gene Signature");	
+		this.setWindowTitle("Create empty BioPlat gene signature");	
 	}
 	
 	

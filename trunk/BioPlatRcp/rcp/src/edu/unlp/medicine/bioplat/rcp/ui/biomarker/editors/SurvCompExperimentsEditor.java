@@ -59,7 +59,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				// .model(model(), "experiemntsApplied")//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("experimentName").title("Experiment"))//
-				.addColumn(ColumnBuilder.create().property("survCompIndex").title("SurvComp index").width(270))//
+				.addColumn(ColumnBuilder.create().property("survCompIndex").title("Concordance index").width(270))//
 				// .addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//
 				// TODO .addContextualMenu(new MyMenu())//
 				.build();
@@ -123,11 +123,11 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
-				tc.setText("Open Original Experiment");
+				tc.setText("Open original experiment");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 				tc.setWidth(200);
-				tc.setText("Export experiment used for validation");
+				tc.setText("Export gene signature data matrix");
 				// ok, ya inicializado
 				mustinitialize = false;
 			}

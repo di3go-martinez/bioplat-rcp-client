@@ -109,7 +109,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		;
 		// .input(model().getGenes());
 
-		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("Gene Entrez ID")//
+		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("Gene EntrezID")//
 				.addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
 				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Gene alternative IDs (e.g EnsemblID)").width(350).hidden().resizable(false).fixed())//
 				.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")))//

@@ -61,7 +61,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				// .model(model(), "experiemntsApplied")//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("name").title("Experiment"))//
-				.addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//
+				.addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log-Rank test p-value").width(160))//
 				// TODO .addContextualMenu(new MyMenu())//
 				.build();
 
@@ -119,7 +119,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 				// creo las nuevas columnas
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 				tc.setWidth(150);
-				tc.setText("View Result Details");
+				tc.setText("View Kaplan-Meier");
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 				tc.setWidth(150);
@@ -127,7 +127,7 @@ public class LogRankTestExperimentsEditor extends AbstractEditorPart<Biomarker> 
 
 				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
 				tc.setWidth(200);
-				tc.setText("Export Experiment Used for Validation");
+				tc.setText("Export gene signature data matrix");
 				// ok, ya inicializado
 				mustinitialize = false;
 			}
