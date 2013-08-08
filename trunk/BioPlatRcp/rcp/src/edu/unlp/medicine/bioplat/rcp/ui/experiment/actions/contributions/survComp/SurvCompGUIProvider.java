@@ -34,7 +34,7 @@ public class SurvCompGUIProvider extends ValidationTestGUIProvider {
 		
 
 		List methodsList = Arrays.asList(CONSERVATIVE,NOETHER,NAME);		
-		ComboViewer methodCombo = Utils.newComboViewer(parent, "Surv comp attribute name (see paper Pencina et al.)", "Surv comp method name (" + CONSERVATIVE + ", " + NOETHER + " or " + NAME+ ")", methodsList);
+		ComboViewer methodCombo = Utils.newComboViewer(parent, "Concordance index attribute name (see paper Pencina et al.)", "Concordance index method name (" + CONSERVATIVE + ", " + NOETHER + " or " + NAME+ ")", methodsList);
 		methodCombo.setSelection(new StructuredSelection(methodsList.get(0)));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(methodCombo), wmodel.valueHolder(SURV_COMP_METHOD), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 		methodCombo.getCombo().setLayoutData(gdf.create());
@@ -49,7 +49,7 @@ public class SurvCompGUIProvider extends ValidationTestGUIProvider {
 	
 	
 	public String getName(){
-		return "SurvComp";
+		return "Concordance index";
 	}
 
 

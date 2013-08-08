@@ -122,7 +122,7 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 	private void addValidationColumn(TableBuilder tableBuilder) {
 		String title = "Validation (" + StatisticConfig.getDescription() + ")";
 
-		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(150);
+		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(180);
 
 		if (forValidation != null) {
 
@@ -150,7 +150,7 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 	private void addTestingColumn(TableBuilder tableBuilder) {
 		String title = "Testing (" + StatisticConfig.getDescription() + ")";
-		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(150);
+		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(180);
 
 		if (forTesting != null) {
 
@@ -178,7 +178,7 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 	private void addTrainingColumn(TableBuilder tableBuilder) {
 		String title = "Training (" + StatisticConfig.getDescription() + ")";
-		tableBuilder.addColumn(ColumnBuilder.create().numeric().title(title).width(150)
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().title(title).width(180)
 		// .labelprovider(new ColumnLabelProvider() {
 		// @Override
 		// public String getText(Object biomarker) {

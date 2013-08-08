@@ -62,15 +62,15 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Surv comp validation");
+		newShell.setText("Concordance index validation");
 	}
 
 	private final List<ValidationConfig4DoingCluster> data = Lists.newArrayList();
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		this.setTitle("Validate biomarker using survComp");
-		setMessage("In this dialog you can set up all the validations you would like to do using survComp. Each validation will be applied on a particular experiment previously loaded in the platform. ");
+		this.setTitle("Validate biomarker using Concordance index");
+		setMessage("In this dialog you can set up all the validations you would like to do using Concordance index. Each validation will be applied on a particular experiment previously loaded in the platform. ");
 
 		Composite container = (Composite) super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);
@@ -126,7 +126,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		close();
-		final String mmsg = "SurvComp validation";
+		final String mmsg = "Concordance index validation";
 		// TODO migrar a EJob cuando este esté
 		Job j = new Job(mmsg) {
 			@Override
@@ -147,7 +147,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 						// e.getGenericError());
 
 					} catch (Exception e) {
-						MessageManager.INSTANCE.add(Message.error("Unexpected error applying survComp test......", e));
+						MessageManager.INSTANCE.add(Message.error("Unexpected error applying Concordance index validation......", e));
 						// PlatformUIUtils.openInformation("Experiments Applied",
 						// "Unexpected error applying an experiment......");
 					}
@@ -155,13 +155,13 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 				}
 
 				if (count == experimentsWizard.commands2apply().size()) {
-					String msg = "All survComp validations (" + count + ") were  sucessfully executed. You can see the results on the 'SurvComp' tab of the Gene Siganture";
-					PlatformUIUtils.openInformation("SurvComp Validation", msg);
+					String msg = "All Concordance index validations (" + count + ") were  sucessfully executed. You can see the results on the 'SurvComp' tab of the Gene Siganture";
+					PlatformUIUtils.openInformation("Concordance index Validation", msg);
 					MessageManager.INSTANCE.add(Message.info(msg));
 				}
 
 				else {
-					PlatformUIUtils.openWarning("SurvComp Validation", " SurvComp validations succesfully executed: " + count + ". \n SurvComp validations with error: " + (experimentsWizard.commands2apply().size() - count) + ". \n For error details, see rows above in this the Message view.");
+					PlatformUIUtils.openWarning("Concordance index Validation", " Concordance index validations succesfully executed: " + count + ". \n SurvComp validations with error: " + (experimentsWizard.commands2apply().size() - count) + ". \n For error details, see rows above in this the Message view.");
 				}
 
 				monitor.done();

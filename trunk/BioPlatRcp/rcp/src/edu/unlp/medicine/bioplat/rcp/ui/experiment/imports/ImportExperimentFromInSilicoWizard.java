@@ -113,7 +113,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 				gseGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).margins(0, 10).spacing(10, 0).create());
 				new CLabel(gseGroup, SWT.BOLD).setText("GSE (GEO Series):");
 				Text gseHolder = new Text(gseGroup, SWT.BORDER);
-				//gseHolder.setLayoutData(GridDataFactory.fillDefaults().span(3, 1));
+				gseHolder.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).create());
 				Button clinicalDataHolder = new Button(gseGroup, SWT.CHECK);
 				clinicalDataHolder.setText("Import clinical data");
 

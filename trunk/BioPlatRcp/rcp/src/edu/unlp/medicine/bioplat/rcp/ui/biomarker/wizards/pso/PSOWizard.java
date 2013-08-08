@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.poi.hssf.model.Model;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.core.Activator;
@@ -49,6 +52,8 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 
 	public PSOWizard(Biomarker biomarker) {
 		this.biomarker = biomarker;
+		wizardModel().replace(MINIMUM_NUMBER_OF_GENES, new WritableValue(this.biomarker.getNumberOfGenes()/3, Integer.class));
+				
 	}
 
 	@Override
@@ -124,7 +129,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 	protected WizardModel createWizardModel() {
 		WizardModel wmodel = super.createWizardModel()//
 				.add(PROCESS_NAME, String.class, "")//
-				.add(MINIMUM_NUMBER_OF_GENES, Integer.class, 3)//
+				.add(MINIMUM_NUMBER_OF_GENES, Integer.class,3)//
 				.add(NUMBER_OF_ROUNDS, Integer.class, 100)//
 				.add(NUMBER_OF_PARTICLES, Integer.class, 5)//
 		//
