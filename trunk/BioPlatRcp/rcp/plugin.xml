@@ -176,7 +176,7 @@
          class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.PSOResultViewPart"
          icon="resources/icons/pso.png"
          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.result.view"
-         name="PSO Result"
+         name="Top Ten PSO Result"
          restorable="false">
    </view>
    <view
@@ -190,7 +190,7 @@
          class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart"
          icon="resources/icons/blindSearch.png"
          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view"
-         name="Blind Search Result"
+         name="Top Ten Blind Search Result"
          restorable="false">
    </view>
 </extension>
@@ -417,7 +417,7 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Surv Comp"
+            caption="Validate using Concordance index"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
