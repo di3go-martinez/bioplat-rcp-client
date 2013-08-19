@@ -33,6 +33,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 	public ValidationConfigManualClusterWizard(Experiment experiment, ValidationTestGUIProvider provider) {
 		this.experiment = experiment;
 		this.provider = provider;
+		provider.declareVariablesInWizardModel(wizardModel());
 	}
 
 	@Override
