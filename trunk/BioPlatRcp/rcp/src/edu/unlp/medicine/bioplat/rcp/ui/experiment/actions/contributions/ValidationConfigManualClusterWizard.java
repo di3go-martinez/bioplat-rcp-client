@@ -34,6 +34,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		this.experiment = experiment;
 		this.provider = provider;
 		provider.declareVariablesInWizardModel(wizardModel());
+		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, experiment.getGroups().keySet().size());
 	}
 
 	@Override
@@ -154,11 +155,9 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
 		;
 
-		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, 1);
-
-		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
+		WritableValue wv4RepeatCLuster = new WritableValue(1, Integer.class);
 		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
-		wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
+		// wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 1);
 
 		return wm;
 	}
