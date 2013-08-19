@@ -56,34 +56,27 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		}
 	};
 
-	@Override
-	protected ISchedulingRule getJobRule() {
-		return null;
-	};
-
 	/**
-	 * <b>uso interno</b>
+	 * <b>uso interno</b> <b>probablemente se mueva de lugar</b>
 	 * 
 	 * @return
 	 */
 	@Beta
-	static ISchedulingRule getMutexRule() {
+	public static ISchedulingRule getMutexRule() {
 		return mutex;
 	}
 
 	private Biomarker biomarker;
 	private boolean acceptRange;
-	ValidationTestGUIProvider validationTestGUIProvider;
+	private ValidationTestGUIProvider validationTestGUIProvider;
 
 	@Override
 	public int getWizardWidth() {
-
 		return 700;
 	}
 
 	@Override
 	public int getWizardHeight() {
-
 		return 670;
 	}
 
@@ -204,8 +197,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 			} catch (NumberFormatException e) {
 				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 			}
-		}
-		else{
+		} else {
 			cluster = String.valueOf(wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS));
 		}
 		return String.valueOf(cluster);
