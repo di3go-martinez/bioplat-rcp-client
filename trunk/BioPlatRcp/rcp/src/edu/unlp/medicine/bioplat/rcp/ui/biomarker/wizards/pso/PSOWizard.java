@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.apache.poi.hssf.model.Model;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 import com.google.common.collect.Lists;
 
@@ -21,6 +21,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.Validatio
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ValidationConfigWizard;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
@@ -52,8 +53,13 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 
 	public PSOWizard(Biomarker biomarker) {
 		this.biomarker = biomarker;
-		wizardModel().replace(MINIMUM_NUMBER_OF_GENES, new WritableValue(this.biomarker.getNumberOfGenes()/3, Integer.class));
-				
+		wizardModel().replace(MINIMUM_NUMBER_OF_GENES, new WritableValue(this.biomarker.getNumberOfGenes() / 3, Integer.class));
+
+	}
+
+	@Override
+	protected ISchedulingRule getJobRule() {
+		return ValidationConfigWizard.getMutexRule();
 	}
 
 	@Override
@@ -129,7 +135,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 	protected WizardModel createWizardModel() {
 		WizardModel wmodel = super.createWizardModel()//
 				.add(PROCESS_NAME, String.class, "")//
-				.add(MINIMUM_NUMBER_OF_GENES, Integer.class,3)//
+				.add(MINIMUM_NUMBER_OF_GENES, Integer.class, 3)//
 				.add(NUMBER_OF_ROUNDS, Integer.class, 100)//
 				.add(NUMBER_OF_PARTICLES, Integer.class, 5)//
 		//
