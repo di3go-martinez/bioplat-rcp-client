@@ -109,7 +109,7 @@ public class PagesDescriptors {
 	}
 
 	private static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider, boolean forManualClustering) {
-		return new ConfigurationWizardPageDescriptor(validationTestGUIProvider, "Validation strategy configuration ( " + validationTestGUIProvider.getName() + ")");
+		return new ConfigurationWizardPageDescriptor(validationTestGUIProvider, "Validation strategy configuration ( " + validationTestGUIProvider.getName() + ")", forManualClustering);
 	}
 
 	public static WizardPageDescriptor configurationPageForManualClustering(ValidationTestGUIProvider provider) {

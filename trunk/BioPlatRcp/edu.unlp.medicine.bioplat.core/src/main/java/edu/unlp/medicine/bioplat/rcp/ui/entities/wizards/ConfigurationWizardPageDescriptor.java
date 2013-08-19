@@ -50,12 +50,14 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	private ValidationTestGUIProvider validationTestGUIProvider;
+	private boolean forManualClustering;
 
 	// private Button useExistingCluster;
 
-	public ConfigurationWizardPageDescriptor(ValidationTestGUIProvider validationTestGUIProvider, String string) {
+	public ConfigurationWizardPageDescriptor(ValidationTestGUIProvider validationTestGUIProvider, String string, boolean forManualClustering) {
 		super(string);
 		this.validationTestGUIProvider = validationTestGUIProvider;
+		this.forManualClustering = forManualClustering;
 	}
 
 	@Override
@@ -140,6 +142,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
 		GridData gdClusters = gdf.grab(false, false).create();
 		t.setLayoutData(gdClusters);
+		t.setEnabled(!forManualClustering);
 
 		new Label(clusterginGroup, SWT.NONE).setText("\nTimes to repeat de k-means clustering (It keeps the best):");
 		Text t2 = new Text(clusterginGroup, SWT.BORDER);
@@ -147,6 +150,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
 		GridData gdRepeat = gdf.grab(false, false).create();
 		t2.setLayoutData(gdRepeat);
+		t2.setEnabled(!forManualClustering);
 
 		// addValidationTypeAndStatissticaSigTestComponents(result, dbc,
 		// wmodel);
