@@ -22,8 +22,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.Validat
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
-import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
-import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
@@ -103,9 +101,9 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 					@Override
 					public OneBiomarkerCommand createCommand(Biomarker aBiomarker, ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
-						// TODO Auto-generated method stub
 						return new LogRankTestCommand(aBiomarker, validationConfigs);
 					}
+
 				};
 
 				vcw.open();
@@ -114,13 +112,17 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 			private void update(final ValidationConfig4DoingCluster config) {
 
 				if (!contentsCreated) {
-					useExistingExperimentGroup = Widgets.createCheckBox(group, "Use cluster configured in the experiment", config, "useExperimentGroups").readOnly().addModificationListener(new ModificationListener() {
-
-						@Override
-						public void modify(ModificationTextEvent event) {
-							innerContainer.setVisible(!config.isUseExperimentGroups());
-						}
-					});
+					// useExistingExperimentGroup =
+					// Widgets.createCheckBox(group,
+					// "Use cluster configured in the experiment", config,
+					// "useExperimentGroups").readOnly().addModificationListener(new
+					// ModificationListener() {
+					//
+					// @Override
+					// public void modify(ModificationTextEvent event) {
+					// innerContainer.setVisible(!config.isUseExperimentGroups());
+					// }
+					// });
 
 					experimentName = Widgets.createTextWithLabel(innerContainer, "Experiment Name", config, "experimentToValidate.name").readOnly();
 					numberOfClusters = Widgets.createTextWithLabel(innerContainer, "Clusters", config, "numberOfClusters").readOnly();
@@ -137,7 +139,10 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 					contentsCreated = true;
 				}
 
-				Widgets.retarget(config, experimentName, numberOfClusters, numberOfTimesToRepeatTheCluster, attribtueNameToDoTheValidation, attribtueNameToDoTheValidation2, useExistingExperimentGroup);
+				Widgets.retarget(config, experimentName, numberOfClusters, numberOfTimesToRepeatTheCluster, attribtueNameToDoTheValidation, attribtueNameToDoTheValidation2/*
+																																											 * ,
+																																											 * useExistingExperimentGroup
+																																											 */);
 				// TODO hacer que en función del useExistingExperimentGroup se
 				// muestre o no y/o como los datos de la configuración!!!
 				wmodel.set(wizardModelKey, ImmutableList.of(config));
