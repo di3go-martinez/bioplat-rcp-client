@@ -13,7 +13,6 @@ import org.eclipse.ui.progress.IProgressConstants;
  * Extensión de Jobs de Eclipse<br/>
  * fecha 01/03/2011
  * 
- * @version $Revision:$
  * @author Diego Martínez <a>diemar@mecon.gov.ar</a>
  */
 public abstract class EJob extends Job {
@@ -74,7 +73,7 @@ public abstract class EJob extends Job {
 
 	/**
 	 * Una vez que termina el procesamiento de doWork, se ejecuta un
-	 * postprocesamiento, de la siguiente manera: <li>Si el usuario mandó el job
+	 * postprocesamiento de la siguiente manera: <li>Si el usuario mandó el job
 	 * al background se ejecutará una vez que el usuario lo solicite <li>se
 	 * ejecuta inmediatamnete si el usuario no mando el job al back
 	 */
