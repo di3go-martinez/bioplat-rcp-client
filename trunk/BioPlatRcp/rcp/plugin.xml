@@ -495,7 +495,7 @@
       </actionContribution>
       <actionContribution
             caption="Configure Cluster..."
-            class="edu.medicine.bioplat.rcp.CalculateClusterActionContribution"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.CalculateClusterActionContribution"
             image="resources/icons/clustering.png"
             onMenu="true"
             onToolbar="true">
