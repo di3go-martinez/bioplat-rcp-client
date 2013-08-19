@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,11 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		this.experiment = experiment;
 		this.provider = provider;
 		provider.declareVariablesInWizardModel(wizardModel());
-		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, experiment.getGroups().keySet().size());
+		/*
+		 * FIXME sacar el cáculculo del número de clusters de acá!!... TODO
+		 * refactorrrrr.
+		 */
+		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, new HashSet(experiment.getGroups().values()).size());
 	}
 
 	@Override
