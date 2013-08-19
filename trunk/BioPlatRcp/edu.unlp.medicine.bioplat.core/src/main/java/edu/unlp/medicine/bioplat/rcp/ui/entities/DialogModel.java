@@ -28,7 +28,7 @@ public class DialogModel<T extends AbstractEntity> extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		final Composite container = Widgets.createDefaultContainer((Composite) super.createDialogArea(parent));
-		Widgets.createText(container, modelProvider().model(), "name").readOnly();
+		Widgets.createText(container, modelProvider().model(), "name");
 		return container;
 	}
 
