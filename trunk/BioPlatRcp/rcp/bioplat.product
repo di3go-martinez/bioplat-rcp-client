@@ -24,7 +24,10 @@
    <launcher name="bioplat">
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <bmp
+            winSmallHigh="/edu.medicine.bioplat.rcp/resources/icons/window/adn.16x16.bmp"
+            winMediumHigh="/edu.medicine.bioplat.rcp/resources/icons/window/adn.32x32.bmp"
+            winLargeHigh="/edu.medicine.bioplat.rcp/resources/icons/window/adn.48x48.bmp"/>
       </win>
    </launcher>
 
