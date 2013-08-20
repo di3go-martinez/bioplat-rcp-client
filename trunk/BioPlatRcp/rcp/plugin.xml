@@ -417,7 +417,7 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Concordance index"
+            caption="Validate using Concordance index (automatic cluster using expression data on genes of this gene signature)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
@@ -428,7 +428,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Kaplan-Meier and Log Rank Test"
+            caption="Validate using Kaplan-Meier and Log Rank Test (automatic cluster using expression data on genes of this gene signature)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateLogRank.png"
@@ -548,21 +548,21 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Kaplan-Meier and Log Rank Test"
+            caption="Validate using Concordance index (using clusters configured on this experiment)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
-            image="resources/icons/validateLogRank.png"
+            image="resources/icons/validateSurvComp.png"
             onMenu="true"
-            onToolbar="false">
+            onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
        <actionContribution
-             caption="Validate using Concordance index"
+             caption="Validate using Kaplan-Meier and Log Rank Test (using clusters configured on this experiment)"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
-             image="resources/icons/validateSurvComp.png"
+             image="resources/icons/validateLogRank.png"
              onMenu="true"
-             onToolbar="false">
+             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
