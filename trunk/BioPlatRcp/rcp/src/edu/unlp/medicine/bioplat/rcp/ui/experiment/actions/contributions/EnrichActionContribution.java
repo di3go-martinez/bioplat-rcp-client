@@ -12,7 +12,11 @@ public class EnrichActionContribution extends AbstractActionContribution<Biomark
 
 			@Override
 			public void run() {
-				new EnrichrDialog().openWith(model());
+				if ("true".equals(System.getProperty("INTERNAL_ENRICHR_BROWSER", "false")))
+					// por ahora no anda...
+					new EnrichrDialog().openWith(model());
+				else
+					new ExternalEnrichR().openWith(model());
 			}
 		});
 	}
