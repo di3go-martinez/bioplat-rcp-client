@@ -537,18 +537,20 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
-      <!--actionContribution
+      <actionContribution
             caption="Enrichr"
-            class="edu.medicine.bioplat.rcp.EnrichActionContribution"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
+            image="resources/icons/enrichr.png"
             onMenu="true"
             onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
-      </actionContribution-->
+      </actionContribution>
       <actionContribution
-            caption="Surv Comp with manual clustering (K)...."
+            caption="Validate using Kaplan-Meier and Log Rank Test"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
+            image="resources/icons/validateLogRank.png"
             onMenu="true"
             onToolbar="false">
          <selection
@@ -556,10 +558,11 @@
          </selection>
       </actionContribution>
        <actionContribution
-            caption="Log Rank Test with manual clustering (S)...."
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
-            onMenu="true"
-            onToolbar="false">
+             caption="Validate using Concordance index"
+             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
+             image="resources/icons/validateSurvComp.png"
+             onMenu="true"
+             onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
