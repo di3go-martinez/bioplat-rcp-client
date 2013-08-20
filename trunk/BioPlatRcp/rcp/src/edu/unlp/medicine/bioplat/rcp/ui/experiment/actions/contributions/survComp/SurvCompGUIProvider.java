@@ -62,7 +62,6 @@ public class SurvCompGUIProvider extends ValidationTestGUIProvider {
 
 	@Override
 	public boolean isThereAdditionalParameters() {
-
 		return true;
 	}
 
