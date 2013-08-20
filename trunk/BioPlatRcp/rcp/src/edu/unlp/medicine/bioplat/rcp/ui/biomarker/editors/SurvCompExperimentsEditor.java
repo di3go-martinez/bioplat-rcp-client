@@ -166,7 +166,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), survCompValidationResult.getBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), null);
+						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), null);
 						new MevWizard(exp).blockOnOpen().open();
 					}
 				});

@@ -17,6 +17,7 @@ import edu.unlp.medicine.r4j.exceptions.R4JServerShutDownException;
 import edu.unlp.medicine.r4j.rLibrary.RLibrary;
 import edu.unlp.medicine.r4j.systemProperties.R4JSystemPropertiesExpected;
 import edu.unlp.medicine.r4jServer.BioplatR4JServer;
+import edu.unlp.medicine.utils.fileSystem.BioplatFileSystemUtils;
 
 public class StartupRserve implements IStartup {
 	// Logger Object
@@ -77,6 +78,7 @@ public class StartupRserve implements IStartup {
 			public void run() {
 				try {
 					BioplatR4JServer.getInstance().getServer().shutDown();
+					BioplatFileSystemUtils.deleteImagesFolder();
 				} catch (R4JServerShutDownException e) {
 					logger.error("Problem shutting down the Rserve on port: " + BioplatR4JServer.getInstance().getServer().getPort());
 					e.printStackTrace();

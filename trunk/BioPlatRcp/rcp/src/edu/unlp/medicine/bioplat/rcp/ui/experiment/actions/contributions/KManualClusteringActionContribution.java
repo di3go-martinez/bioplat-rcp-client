@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.survComp.SurvCompGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.domainLogic.ext.experimentCommands.validation.SurvCompTestUsingManualClusterCommand;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.SurvCompTestCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
-import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.tests.SurvCompExecutor;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 public class KManualClusteringActionContribution extends DoManualClusteringActionContribution {
@@ -29,7 +28,8 @@ public class KManualClusteringActionContribution extends DoManualClusteringActio
 
 					@Override
 					protected void run(ValidationConfig4DoingCluster validationConfig) {
-						SurvCompExecutor.getInstance().execute(dummyBiomarker(), new SurvCompValidationConfig(validationConfig));
+						//SurvCompExecutor.getInstance().execute(dummyBiomarker(), new SurvCompValidationConfig(validationConfig));
+						 new SurvCompTestUsingManualClusterCommand(validationConfig).execute();
 					}
 
 				};
