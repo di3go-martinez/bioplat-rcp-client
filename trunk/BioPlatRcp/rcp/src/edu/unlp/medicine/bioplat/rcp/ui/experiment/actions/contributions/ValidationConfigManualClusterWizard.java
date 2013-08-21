@@ -15,13 +15,11 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
-import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
@@ -36,7 +34,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		this.provider = provider;
 		provider.declareVariablesInWizardModel(wizardModel());
 		/*
-		 * FIXME sacar el cáculculo del número de clusters de acá!!... TODO
+		 * FIXME sacar el cálculo del número de clusters de acá!!... TODO
 		 * refactorrrrr.
 		 */
 		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, new HashSet(experiment.getGroups().values()).size());
@@ -92,7 +90,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		//
 		// for (Integer clusters : calculateRange(numberOfClusters)) {
 
-		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result);
+		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result, attributeNameToValidation, secondAttributeNameToDoTheValidation);
 		validationConfig.setAttribtueNameToDoTheValidation(attributeNameToValidation);
 		validationConfig.setSecondAttribtueNameToDoTheValidation(secondAttributeNameToDoTheValidation);
 
@@ -131,12 +129,6 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 	protected abstract void run(final ValidationConfig4DoingCluster validationConfig);
 
 	protected abstract OneBiomarkerCommand createCommand(Biomarker biomarker, ArrayList<ValidationConfig4DoingCluster> list);
-
-	private Biomarker findBiomarker() {
-		Biomarker biomarker = new EditedBiomarker("dummy");
-		biomarker.addGene(MetaPlat.getInstance().findGene("1"));
-		return biomarker;
-	}
 
 	@Override
 	protected WizardModel createWizardModel() {
