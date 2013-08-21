@@ -28,7 +28,9 @@ public class InitializeGeneSetUrlStartup implements IStartup {
 	public void earlyStartup() {
 
 		File f;
-		if (!(f = new File(".geneSigUrlsInitialized")).exists()) {
+		final String filepath = System.getProperty(DEFAULT_GENE_SIGNATURE_URLS_FILE);
+		//if (!(f = new File(".geneSigUrlsInitialized")).exists()) {
+		if ((f = new File(filepath)).exists()) {
 			String[] defaults = fillDefaults();
 			String urls = StringUtils.join(defaults, '|');
 			PlatformUtils.preferences(Activator.id()).put(ExternalURLInformationPage.EXTERNAL_URLS, urls);

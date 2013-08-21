@@ -99,7 +99,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 			@Override
 			public void createControl(Composite parent) {
 
-				this.setDescription("Bioplat will connect with InSilicoDB for importing the experiment you are asking for. Please specify the following information.");
+				this.setDescription("BioPlat will connect with InSilicoDB for importing the experiment you are asking for. Please specify the following information.");
 				
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
@@ -110,11 +110,12 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 
 				
 				Composite gseGroup = new Group(group, SWT.NONE);
-				gseGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).margins(0, 10).spacing(10, 0).create());
+				gseGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).margins(0, 10).spacing(10, 0).create());
 				new CLabel(gseGroup, SWT.BOLD).setText("GSE (GEO Series):");
 				Text gseHolder = new Text(gseGroup, SWT.BORDER);
 				gseHolder.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).create());
 				Button clinicalDataHolder = new Button(gseGroup, SWT.CHECK);
+				clinicalDataHolder.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).create());
 				clinicalDataHolder.setText("Import clinical data");
 
 				Composite plGroup = new Group(group, SWT.NONE);

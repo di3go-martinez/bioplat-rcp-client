@@ -64,7 +64,6 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
-
 		Composite container = new Composite(parent, SWT.CENTER);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
 
@@ -180,7 +179,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 		new Label(clusterginGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
 		Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);
-		ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
+		ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName.getCombo().setLayoutData(gdf.create());
 		validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
@@ -191,7 +190,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 		new Label(clusterginGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
 		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(clusterginGroup);
-		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute)", Arrays.asList(OS_EVENT, RFS_EVENT, "Evento", OTHER));
+		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_EVENT, RFS_EVENT, "Evento", OTHER));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName2.getCombo().setLayoutData(gdf.create());
 		validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));

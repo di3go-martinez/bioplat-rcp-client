@@ -142,7 +142,7 @@ public class GMSPage4Algorithm extends WizardPageDescriptor {
 		fD[0].setHeight(8);
 		fD[0].setStyle(SWT.ITALIC);
 		introdudctionLabel.setFont( new Font(container.getDisplay(),fD[0]));
-		introdudctionLabel.setText("Bioplat was designed to easily incorporate new algorithms for datamining Gene Signatures. We are working on new algorithms. Any idea? Tell us");
+		introdudctionLabel.setText("BioPlat was designed to easily incorporate new algorithms for datamining Gene Signatures. We are working on new algorithms. Any idea? Tell us");
 		
 		
 	}

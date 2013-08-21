@@ -70,8 +70,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		this.setTitle("Validate biomarker using Concordance index");
-		setMessage("In this dialog you can set up all the validations you would like to do using Concordance index. Each validation will be applied on a particular experiment previously loaded in the platform. ");
-
+		setMessage("In this dialog you can set up all the Gene Signature validations you would like to do using Concordance index. Each 'gene signature concordance index' validation... uses the expression and clinical data  of an experiment you pick up. The validation firstly clusters the samples using the expression data of just the genes in the Gene Signature, and then calculates concordance index.");
 		Composite container = (Composite) super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());

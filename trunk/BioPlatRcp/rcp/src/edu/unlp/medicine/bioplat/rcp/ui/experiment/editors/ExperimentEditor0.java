@@ -130,7 +130,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 	}
 
 	protected CopyColumnTextMenuItemDescriptor createCopyMenuForEntrezId(boolean all) {
-		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes (Entrez Id)";
+		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes (EntrezID)";
 		return new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, name, OgnlAccesor.createFor("data[0].value.entrezId")).includeAll(all)) {
 			// FIXME si se usa el default (\n) no copia bien los genes
 			// en la acción de agregado de genes: ver por qué y/o

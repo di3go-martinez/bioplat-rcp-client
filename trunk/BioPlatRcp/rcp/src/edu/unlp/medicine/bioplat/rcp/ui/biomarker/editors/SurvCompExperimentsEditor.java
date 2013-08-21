@@ -25,6 +25,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
@@ -166,7 +167,8 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), null);
+						Biomarker aBiomarker = survCompValidationResult.getBiomarker()!=null?survCompValidationResult.getBiomarker():Biomarker.getFakeBiomarker();
+						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), aBiomarker, survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()));
 						new MevWizard(exp).blockOnOpen().open();
 					}
 				});

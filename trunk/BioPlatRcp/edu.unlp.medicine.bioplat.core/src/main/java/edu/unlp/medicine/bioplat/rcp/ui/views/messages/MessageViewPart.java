@@ -129,6 +129,6 @@ public class MessageViewPart extends ViewPart {
 	}
 
 	private void openDialog(Message message) {
-		MessageDialog.open(message.getType().kindForDialog(), null, "Bioplat", message.getText(), SWT.NONE);
+		MessageDialog.open(message.getType().kindForDialog(), null, "BioPlat", message.getText(), SWT.NONE);
 	}
 }

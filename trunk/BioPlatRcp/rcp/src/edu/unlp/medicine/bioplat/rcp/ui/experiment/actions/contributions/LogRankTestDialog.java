@@ -68,7 +68,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		this.setTitle("Validate biomarker using log rank test");
-		setMessage("In this dialog you can set up all the validations you would like to do using log rank test. Each validation will be applied on a particular experiment previously loaded in the platform. ");
+		setMessage("In this dialog you can set up all the gene siganture validations you would like to do using log rank test. Each 'Gene Signature Log Rank test' validation, uses the expression and... clinical data of an experiment you pick up. The validation firstly clusters the samples using the expression data of just the genes in the Gene Signature, and then calculates Log Rank Test and Kaplan-Meier curves using the group assigned to each sample.");
 		Composite container = parent;// (Composite)
 										// super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);

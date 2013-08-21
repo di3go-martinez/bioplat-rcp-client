@@ -46,7 +46,7 @@ public class GeneSearchDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite container = Widgets.createDefaultContainer(parent);
 
-		Widgets.createTextWithLabel(container, "Entrez Id", model, "entrezId");
+		Widgets.createTextWithLabel(container, "EntrezID", model, "entrezId");
 		// Widgets.createTextWithLabel(container, "Nombre", model, "name");
 
 		GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 10).generateLayout(container);
