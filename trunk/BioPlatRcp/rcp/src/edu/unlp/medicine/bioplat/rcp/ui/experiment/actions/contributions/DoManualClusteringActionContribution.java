@@ -1,19 +1,13 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
-import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
-import edu.unlp.medicine.entity.gene.Gene;
 
 /**
  * Aplica un cluster precalculado en el experimento actual, si es que lo tiene
@@ -82,8 +76,7 @@ public abstract class DoManualClusteringActionContribution extends AbstractActio
 	@Deprecated
 	protected final Biomarker dummyBiomarker() {
 		Biomarker b = new EditedBiomarker("dummy");
-		List<Gene> genes = Lists.newArrayList();
-		genes.add(MetaPlat.getInstance().findGene("1"));
+		b.addRandomGenes(1);
 		return b;
 	}
 
