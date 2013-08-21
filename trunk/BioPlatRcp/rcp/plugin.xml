@@ -441,7 +441,7 @@
       <actionContribution
             caption="Enrichr"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
-            groupId="04-Biomarker-enrich"
+            groupId="03-Biomarker-enrich"
             image="resources/icons/enrichr.png"
             onMenu="true"
             onToolbar="true">
@@ -452,7 +452,7 @@
       <actionContribution
             caption="Optimize using Blind search Optimizer"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
-            groupId="03-Biomarker-optimizer"
+            groupId="04-Biomarker-optimizer"
             image="resources/icons/blindSearch.png"
             onMenu="true"
             onToolbar="true">
@@ -463,7 +463,7 @@
       <actionContribution
             caption="Optimize using PSO"
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
-            groupId="03-Biomarker-optimizer"
+            groupId="04-Biomarker-optimizer"
             image="resources/icons/pso.png"
             onMenu="true"
             onToolbar="true">
@@ -550,7 +550,7 @@
       </actionContribution>
       <actionContribution
             caption="Validate using Concordance index (cluster samples using groups configured on this experiment)"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
             image="resources/icons/validateSurvComp.png"
             onMenu="true"
             onToolbar="true">
@@ -560,7 +560,7 @@
       </actionContribution>
        <actionContribution
              caption="Validate using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
-             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
+             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
              image="resources/icons/validateLogRank.png"
              onMenu="true"
              onToolbar="true">
