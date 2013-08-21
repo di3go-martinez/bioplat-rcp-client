@@ -417,7 +417,7 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Concordance index (automatic cluster using expression data on genes of this gene signature)"
+            caption="Validate using Concordance index (cluster samples using expression data of gene signature genes)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
@@ -428,10 +428,21 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Kaplan-Meier and Log Rank Test (automatic cluster using expression data on genes of this gene signature)"
+            caption="Validate using Kaplan-Meier and Log Rank Test (cluster samples using expression data of gene signature genes)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateLogRank.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Enrichr"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
+            groupId="04-Biomarker-enrich"
+            image="resources/icons/enrichr.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -538,17 +549,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Enrichr"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
-            image="resources/icons/enrichr.png"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Validate using Concordance index (using clusters configured on this experiment)"
+            caption="Validate using Concordance index (cluster samples using groups configured on this experiment)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
             image="resources/icons/validateSurvComp.png"
             onMenu="true"
@@ -558,7 +559,7 @@
          </selection>
       </actionContribution>
        <actionContribution
-             caption="Validate using Kaplan-Meier and Log Rank Test (using clusters configured on this experiment)"
+             caption="Validate using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
              image="resources/icons/validateLogRank.png"
              onMenu="true"
