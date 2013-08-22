@@ -133,7 +133,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			});
 
 			map.put(page, pageDescriptor);
-
+			page.setDescription(pageDescriptor.getDescription());
 			if (pageDescriptor.hasResultPage()) {
 				// TODO pd.createResultPage();
 				IWizardPage p = new ResultPage(this, pageDescriptor);

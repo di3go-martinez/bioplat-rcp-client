@@ -71,7 +71,7 @@ public class PagesDescriptors {
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
-				wp.setDescription("Select the experiments for validating your biomarker.");
+				wp.setDescription("Select the experiments for validating your Gene Signature.");
 
 				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
 
@@ -105,14 +105,18 @@ public class PagesDescriptors {
 	}
 
 	public static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider) {
-		return configurationPage(validationTestGUIProvider, false);
+		WizardPageDescriptor cpw = configurationPage(validationTestGUIProvider, false, validationTestGUIProvider.getName() + " configuration, using cluster based on expression data"); 
+		cpw.setDescription("Configure the 'Time' attribute and the 'Event' attribute for executing " + validationTestGUIProvider.getName() + ". The cluster will be calculated using the expression data of the experiment for the genes in the Gene Signature. So, you have to also configure the number of clusters you would like to use.");
+		return cpw;
 	}
 
-	private static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider, boolean forManualClustering) {
-		return new ConfigurationWizardPageDescriptor(validationTestGUIProvider, "Validation strategy configuration ( " + validationTestGUIProvider.getName() + ")", forManualClustering);
+	private static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider, boolean forManualClustering, String title) {
+		return new ConfigurationWizardPageDescriptor(validationTestGUIProvider, title, forManualClustering); 
 	}
 
 	public static WizardPageDescriptor configurationPageForManualClustering(ValidationTestGUIProvider provider) {
-		return configurationPage(provider, true);
+		WizardPageDescriptor cpw = configurationPage(provider, true, provider.getName() + " configuration, using preassigned experiment clusters"); 
+		cpw.setDescription("Configure the 'Time' attribute name and the 'Event' attribute name for executing " + provider.getName() + ". The algorithm will use the clusters you have defined in the experiment using the 'Configure cluster' operation");
+		return cpw;
 	}
 }

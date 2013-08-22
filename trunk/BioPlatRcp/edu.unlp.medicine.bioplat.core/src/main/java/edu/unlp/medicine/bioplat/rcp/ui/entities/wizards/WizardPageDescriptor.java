@@ -26,6 +26,7 @@ public abstract class WizardPageDescriptor {
 	private String name;
 	private String title;
 	private ImageDescriptor imageDescriptor;
+	private String description;
 
 	public WizardPageDescriptor(String name, String title, ImageDescriptor imageDescriptor) {
 		this.name = name;
@@ -67,6 +68,10 @@ public abstract class WizardPageDescriptor {
 		return "Wizard page " + getPageName();
 	}
 
+	public void setTitle(String title){
+		this.title = title;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -140,4 +145,15 @@ public abstract class WizardPageDescriptor {
 						// siguiente
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	
+	
+	
 }

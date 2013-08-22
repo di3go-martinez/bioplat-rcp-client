@@ -51,6 +51,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	private ValidationTestGUIProvider validationTestGUIProvider;
 	private boolean forManualClustering;
+	
 
 	// private Button useExistingCluster;
 
@@ -143,14 +144,15 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		t.setLayoutData(gdClusters);
 		t.setEnabled(!forManualClustering);
 
-		new Label(clusterginGroup, SWT.NONE).setText("\nTimes to repeat de k-means clustering (It keeps the best):");
+		Label l = new Label(clusterginGroup, SWT.NONE);
+		l.setText("\nTimes to repeat de k-means clustering (It keeps the best):");
+		l.setVisible(!forManualClustering);
 		Text t2 = new Text(clusterginGroup, SWT.BORDER);
 		// t2.setText("10");
 		dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
 		GridData gdRepeat = gdf.grab(false, false).create();
 		t2.setLayoutData(gdRepeat);
-		t2.setEnabled(!forManualClustering);
-
+		t2.setVisible(!forManualClustering);
 		// addValidationTypeAndStatissticaSigTestComponents(result, dbc,
 		// wmodel);
 

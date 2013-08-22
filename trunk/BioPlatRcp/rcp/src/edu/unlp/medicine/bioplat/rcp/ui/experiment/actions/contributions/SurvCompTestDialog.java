@@ -62,14 +62,14 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Concordance index validation");
+		newShell.setText("Gene Signature validation using Concordance index");
 	}
 
 	private final List<ValidationConfig4DoingCluster> data = Lists.newArrayList();
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		this.setTitle("Validate biomarker using Concordance index");
+		this.setTitle("Validate Gene Signature using Concordance index");
 		setMessage("In this dialog you can set up all the Gene Signature validations you would like to do using Concordance index. Each 'gene signature concordance index' validation... uses the expression and clinical data  of an experiment you pick up. The validation firstly clusters the samples using the expression data of just the genes in the Gene Signature, and then calculates concordance index.");
 		Composite container = (Composite) super.createDialogArea(parent);
 		Composite c = Widgets.createDefaultContainer(container);

@@ -417,7 +417,7 @@
                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Concordance index (the cluster of the samples is done, considering the expression data of just the genes in the gene signature)"
+            caption="Validate Gene Signature using Concordance index  (the sample cluster is done using the expression data of just the genes in the gene signature)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
@@ -428,7 +428,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Kaplan-Meier and Log Rank Test (the cluster of the samples is done, considering the expression data of just the genes in the gene signature)"
+            caption="Validate Gene Signature using Kaplan-Meier and Log Rank Test (the sample cluster is done using the expression data of just the genes in the gene signature)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/validateLogRank.png"
@@ -549,7 +549,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate using Concordance index (cluster samples using groups configured on this experiment)"
+            caption="Validate experiment using Concordance index (cluster samples using groups configured on this experiment)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
             image="resources/icons/validateSurvComp.png"
             onMenu="true"
@@ -559,7 +559,7 @@
          </selection>
       </actionContribution>
        <actionContribution
-             caption="Validate using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
+             caption="Validate experiment using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
              image="resources/icons/validateLogRank.png"
              onMenu="true"

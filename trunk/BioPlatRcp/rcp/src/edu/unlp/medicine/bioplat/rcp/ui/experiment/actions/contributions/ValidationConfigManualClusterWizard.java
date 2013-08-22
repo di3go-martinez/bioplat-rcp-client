@@ -33,11 +33,13 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		this.experiment = experiment;
 		this.provider = provider;
 		provider.declareVariablesInWizardModel(wizardModel());
+		this.setWindowTitle("Validate experiment using " + provider.getName() + " and preassigned cluster");
 		/*
 		 * FIXME sacar el cálculo del número de clusters de acá!!... TODO
 		 * refactorrrrr.
 		 */
 		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, new HashSet(experiment.getGroups().values()).size());
+		
 	}
 
 	@Override
