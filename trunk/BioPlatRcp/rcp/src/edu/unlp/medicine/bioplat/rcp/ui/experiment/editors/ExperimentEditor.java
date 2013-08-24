@@ -14,6 +14,7 @@ import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BrowserEditorManager;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.LogRankTestExperimentExperimentsEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -75,7 +76,11 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 			}, "Platform");
 
 			result.add(ed);
+
 		}
+
+		result.add(new EditorDescription(getEditorInput(), new SurvCompExperimentExperimentsEditor(false), "Concordance index validations"));
+		result.add(new EditorDescription(getEditorInput(), new LogRankTestExperimentExperimentsEditor(false), "Long Rank Test"));
 
 		new BrowserEditorManager(ExternalURLInformationPage.APPLY_TO_EXPERIMENT) {
 			@Override
