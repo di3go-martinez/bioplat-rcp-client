@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.TableItem;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
-import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -29,11 +28,11 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
-import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
 //TODO sacar este copy&paste de LogRankTestExperimentsEditor!!
+@Deprecated
 public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 
 	private TableReference tr;
@@ -110,10 +109,10 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 		public void refreshView() {
 			final List<SurvCompValidationResult> eas = model().getSurvCompValidationResults();
 			tr.input(eas);
-			
+
 			// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 			Table table = tr.getTable();
-			
+
 			TableColumn tc;
 			if (mustinitialize) {
 				newBaseColumnIndex = table.getColumnCount();
@@ -140,16 +139,17 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				final SurvCompValidationResult survCompValidationResult = eas.get(i);
 				TableEditor editor;
 
-				
-				//Button c = createOpenEditorButton(survCompValidationResult, table, "Open Applied Experiment", AppliedExperimentEditor.id());
+				// Button c = createOpenEditorButton(survCompValidationResult,
+				// table, "Open Applied Experiment",
+				// AppliedExperimentEditor.id());
 				// editor.minimumHeight = 100;
-				//editor.setEditor(c, items[i], newBaseColumnIndex);
+				// editor.setEditor(c, items[i], newBaseColumnIndex);
 				// createAndConfigureEditor(table, c, items[i],
 				// newBaseColumnIndex).minimumHeight = 100;
-				
+
 				Button c;
 				editor = new TableEditor(table);
-				
+
 				try {
 					c = createOpenEditorButton(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), table, "open original experiment", EditorsId.experimentEditorId());
 					c.setImage(PlatformUIUtils.findImage("Open original experiment.png"));
@@ -167,7 +167,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 				c.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						Biomarker aBiomarker = survCompValidationResult.getBiomarker()!=null?survCompValidationResult.getBiomarker():Biomarker.getFakeBiomarker();
+						Biomarker aBiomarker = survCompValidationResult.getBiomarker() != null ? survCompValidationResult.getBiomarker() : Biomarker.getFakeBiomarker();
 						AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), aBiomarker, survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()));
 						new MevWizard(exp).blockOnOpen().open();
 					}

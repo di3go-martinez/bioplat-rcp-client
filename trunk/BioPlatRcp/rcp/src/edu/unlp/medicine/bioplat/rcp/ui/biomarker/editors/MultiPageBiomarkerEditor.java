@@ -36,8 +36,8 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 			}
 		});
 		result.add(new EditorDescription(input, editor, "General"));
-		result.add(new EditorDescription(input, new SurvCompExperimentsEditor(false), "Concordance index validations"));
-		result.add(new EditorDescription(input, new LogRankTestExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
+		result.add(new EditorDescription(input, new SurvCompBiomarkerExperimentsEditor(false), "Concordance index validations"));
+		result.add(new EditorDescription(input, new LogRankTestBiomarkerExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
 		
 
 		// Estaría configurado en las preferences ahora
