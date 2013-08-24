@@ -139,6 +139,7 @@ public abstract class WizardPageDescriptor {
 	}
 
 	// TODO mejorar nombre
+	//FIXME no se usa más esto... por ahora...
 	@Beta
 	public boolean allowContinueWizardSetup() {
 		return true; // por default siempre se podría pasar a una página
