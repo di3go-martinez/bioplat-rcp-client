@@ -23,6 +23,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -31,16 +32,17 @@ import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException
 
 public class LongRankTestHelper implements Observer {
 
+	private static final String KAPLAN_MEIER = "Kaplan-Meier";
 	// indica si se tiene que inicializar
 	private Boolean mustinitialize = true;
 	// índice de la columna a la cual se le agregan las nuevas columnas
 	private Integer newBaseColumnIndex;
-	private List<ExperimentAppliedToAMetasignature> experiments;
 	private TableReferenceProvider2 provider;
+	private Provider<List<ExperimentAppliedToAMetasignature>> experimentProvider;
 
-	public LongRankTestHelper(TableReferenceProvider2 provider, List<ExperimentAppliedToAMetasignature> experimentsApplied) {
+	public LongRankTestHelper(TableReferenceProvider2 provider, Provider<List<ExperimentAppliedToAMetasignature>> experimentProvider) {
 		this.provider = provider;
-		this.experiments = experimentsApplied;
+		this.experimentProvider = experimentProvider;
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class LongRankTestHelper implements Observer {
 	}
 
 	public void refreshView() {
-		final List<ExperimentAppliedToAMetasignature> eas = experiments;
+		final List<ExperimentAppliedToAMetasignature> eas = experimentProvider.get();
 		TableReference tr = provider.tableReference();
 		tr.input(eas);
 
@@ -61,7 +63,7 @@ public class LongRankTestHelper implements Observer {
 			// creo las nuevas columnas
 			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 			tc.setWidth(150);
-			tc.setText("View Kaplan-Meier");
+			tc.setText("View " + KAPLAN_MEIER);
 
 			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 			tc.setWidth(150);
@@ -148,6 +150,12 @@ public class LongRankTestHelper implements Observer {
 					@Override
 					protected Point getInitialLocation(Point initialSize) {
 						return PlatformUIUtils.centerPointFor(this.getShell());
+					}
+
+					@Override
+					protected void configureShell(Shell newShell) {
+						super.configureShell(newShell);
+						newShell.setText(KAPLAN_MEIER);
 					}
 				};
 				dialog.create();

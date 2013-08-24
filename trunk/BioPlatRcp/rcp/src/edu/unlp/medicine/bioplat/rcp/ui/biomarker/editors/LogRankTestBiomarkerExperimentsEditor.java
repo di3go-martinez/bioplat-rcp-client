@@ -1,12 +1,15 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
+import java.util.List;
 import java.util.Observer;
 
 import org.eclipse.swt.widgets.Composite;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
 public class LogRankTestBiomarkerExperimentsEditor extends AbstractEditorPart<Biomarker> implements TableReferenceProvider2 {
 
@@ -20,8 +23,7 @@ public class LogRankTestBiomarkerExperimentsEditor extends AbstractEditorPart<Bi
 
 	@Override
 	protected void doCreatePartControl(Composite parent) {
-
-		guiMaker = new LongRankGUIMaker(this, getHelper(), model().getExperimentsApplied());
+		guiMaker = new LogRankGUIMaker(this, getHelper(), model().getExperimentsApplied());
 		guiMaker.build(parent);
 	}
 
@@ -49,7 +51,13 @@ public class LogRankTestBiomarkerExperimentsEditor extends AbstractEditorPart<Bi
 
 	protected LongRankTestHelper getHelper() {
 		if (helper == null)
-			helper = new LongRankTestHelper(this, model().getExperimentsApplied());
+			helper = new LongRankTestHelper(this, new Provider<List<ExperimentAppliedToAMetasignature>>() {
+
+				@Override
+				public List<ExperimentAppliedToAMetasignature> get() {
+					return model().getExperimentsApplied();
+				}
+			});
 		return helper;
 	}
 
