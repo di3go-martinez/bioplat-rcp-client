@@ -39,6 +39,13 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 
+/**
+ * 
+ * Editor que muestra en una grilla los datos clínicos de los experimentos
+ * 
+ * @author Diego Martínez
+ * 
+ */
 public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperiment> {
 
 	private static final Image ascimg = PlatformUIUtils.findImage("asc.png");
@@ -152,15 +159,20 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 							// la de selección
 		newOrder[1] = 1; // la segunda tampoco se ordena es la columna
 							// de nombre de atributo
+		newOrder[2] = 2; // hay una columna fija oculta por un bug!! ver
+							// TableBuilder.create
+
+		final int FIXED_COLUMNS = 3;
 
 		final List<CustomCellData> originalAsList = Arrays.asList(original);
 		// · voy buscando los elementos en orden de sorted, y poniendo
 		// su índice en la colección newOrder, la cual se usara para
 		// indicarle a la tabla como ordenar las columnas
-		// · 2 porque son dos fijas
+		// · 3 porque es la cantidad de columnas fijas! que no se ordenan
 		int i;
-		for (i = 2; i < sorted.length + 2; i++) {
-			int newIndex = originalAsList.indexOf(sorted[i - 2]) + 2;
+
+		for (i = FIXED_COLUMNS; i < sorted.length + FIXED_COLUMNS; i++) {
+			int newIndex = originalAsList.indexOf(sorted[i - FIXED_COLUMNS]) + FIXED_COLUMNS;
 			newOrder[i] = newIndex;
 		}
 

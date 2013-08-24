@@ -114,6 +114,8 @@ public class TableBuilder implements TableConfigurer {
 				// FIXME porqué el addColumn con esa columna dummy... porque hay
 				// un BUG que hace que no se ordene bien la primera columna la
 				// primera vez...
+				// OJO cuando se saque este addColumn, revisar
+				// ExperimentClinicalData#resort
 				.addColumn(ColumnBuilder.create().hidden().resizable(false).fixed());
 	}
 
