@@ -23,7 +23,7 @@ public class LogRankTestBiomarkerExperimentsEditor extends AbstractEditorPart<Bi
 
 	@Override
 	protected void doCreatePartControl(Composite parent) {
-		guiMaker = new LogRankGUIMaker(this, getHelper(), model().getExperimentsApplied());
+		guiMaker = new LogRankGUIEditorMaker(this, getHelper(), model().getExperimentsApplied());
 		guiMaker.build(parent);
 	}
 

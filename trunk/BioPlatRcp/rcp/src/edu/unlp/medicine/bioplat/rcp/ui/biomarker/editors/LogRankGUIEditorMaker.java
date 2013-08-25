@@ -12,13 +12,13 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
-public class LogRankGUIMaker extends GuiMaker {
+public class LogRankGUIEditorMaker extends GuiMaker {
 
 	private LongRankTestHelper helper;
 	private TableReferenceProvider2 provider;
 	private List<ExperimentAppliedToAMetasignature> expApplied;
 
-	public LogRankGUIMaker(TableReferenceProvider2 provider, LongRankTestHelper helper, List<ExperimentAppliedToAMetasignature> list) {
+	public LogRankGUIEditorMaker(TableReferenceProvider2 provider, LongRankTestHelper helper, List<ExperimentAppliedToAMetasignature> list) {
 		this.helper = helper;
 		this.provider = provider;
 		this.expApplied = list;

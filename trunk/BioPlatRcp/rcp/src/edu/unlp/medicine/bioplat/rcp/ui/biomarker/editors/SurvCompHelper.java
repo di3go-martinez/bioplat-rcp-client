@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
@@ -77,6 +79,11 @@ public class SurvCompHelper implements Observer {
 			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
 			tc.setWidth(200);
 			tc.setText("Export gene signature data matrix");
+
+			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
+			tc.setWidth(100);
+			tc.setText("View Cluster");
+
 			// ok, ya inicializado
 			mustinitialize = false;
 		}
@@ -128,8 +135,25 @@ public class SurvCompHelper implements Observer {
 			// createAndConfigureEditor(table, c, items[i],
 			// newBaseColumnIndex + 2);
 
+			// View Cluster
+			editor = new TableEditor(table);
+			c = new Button(table, SWT.FLAT);
+			c.setImage(PlatformUIUtils.findImage("View cluster.16.png"));
+			c.addSelectionListener(openViewClusterDialog(survCompValidationResult));
+			editor.grabHorizontal = true;
+			// editor.minimumHeight = 100;
+			editor.setEditor(c, items[i], newBaseColumnIndex + 2);
 		}
 
+	}
+
+	private SelectionListener openViewClusterDialog(final SurvCompValidationResult result) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new ConfigureClusterDialog(result.getSurvCompValidationConfig().getGroups()).open();
+			}
+		};
 	}
 
 	private TableEditor createAndConfigureEditor(Table t, Control c, TableItem ti, int index) {

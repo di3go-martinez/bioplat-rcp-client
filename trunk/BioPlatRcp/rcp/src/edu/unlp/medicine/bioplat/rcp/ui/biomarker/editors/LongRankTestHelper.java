@@ -72,6 +72,7 @@ public class LongRankTestHelper implements Observer {
 			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
 			tc.setWidth(200);
 			tc.setText("Export gene signature data matrix");
+
 			// ok, ya inicializado
 			mustinitialize = false;
 		}
