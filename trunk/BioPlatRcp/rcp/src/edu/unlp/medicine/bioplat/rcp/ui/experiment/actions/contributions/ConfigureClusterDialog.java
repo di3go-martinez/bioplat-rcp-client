@@ -34,6 +34,7 @@ import edu.unlp.medicine.entity.experiment.Sample;
 
 public class ConfigureClusterDialog extends Dialog {
 
+	// puede ser null
 	private AbstractExperiment experiment;
 	private List<Data> data;
 	private TableReference tref;
@@ -41,11 +42,16 @@ public class ConfigureClusterDialog extends Dialog {
 	protected ConfigureClusterDialog(AbstractExperiment experiment) {
 		super(PlatformUIUtils.findShell());
 		this.experiment = experiment;
+		data = createData(experiment);
+	}
+
+	public ConfigureClusterDialog(Map<Sample, Integer> groups) {
+		super(PlatformUIUtils.findShell());
+		data = createData(groups);
 	}
 
 	@Override
 	protected void configureShell(Shell newShell) {
-
 		super.configureShell(newShell);
 		newShell.setText("Cluster Configuration");
 	}
@@ -56,10 +62,14 @@ public class ConfigureClusterDialog extends Dialog {
 
 		// Label introdudctionLabel = new Label(parent, SWT.WRAP);
 		// introdudctionLabel.setText("Use shift and control for select multiple samples. Then, right click and use set cluster to assign a clusterID to all selected samples");
-		tref = TableBuilder.create(container).input(data = createData())//
+		final ColumnBuilder titleColumnBuilder = ColumnBuilder.create().editable(!readOnly()).property("groupid").title("Cluster ID");
+		final TableBuilder tableBuilder = TableBuilder.create(container).input(data)//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(200))//
-				.addColumn(ColumnBuilder.create().editable().property("groupid").title("Cluster ID")).contextualMenuBuilder(menuBuilder()).build();
+				.addColumn(titleColumnBuilder);
+		if (!readOnly())
+			tableBuilder.contextualMenuBuilder(menuBuilder());
+		tref = tableBuilder.build();
 		Button ok = new Button(container, SWT.NONE);
 		ok.setText("OK");
 		ok.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
@@ -71,6 +81,10 @@ public class ConfigureClusterDialog extends Dialog {
 			}
 		});
 		return container;
+	}
+
+	private boolean readOnly() {
+		return experiment == null;
 	}
 
 	private MenuBuilder menuBuilder() {
@@ -113,10 +127,12 @@ public class ConfigureClusterDialog extends Dialog {
 		};
 	}
 
-	private List<Data> createData() {
-		List<Data> result = Lists.newArrayList();
+	private List<Data> createData(AbstractExperiment experiment) {
+		return createData(experiment.getGroups());
+	}
 
-		Map<Sample, Integer> groups = experiment.getGroups();
+	private List<Data> createData(Map<Sample, Integer> groups) {
+		List<Data> result = Lists.newArrayList();
 
 		if (groups != null && !groups.isEmpty())
 			for (Map.Entry<Sample, Integer> entry : groups.entrySet())
@@ -134,6 +150,8 @@ public class ConfigureClusterDialog extends Dialog {
 	}
 
 	private void setGroups() {
+		if (readOnly())
+			return;
 		Map<Sample, Integer> groups = Maps.newHashMap();
 		for (Data datum : data)
 			groups.put(datum.getSample(), new Integer(datum.getGroupid()));
