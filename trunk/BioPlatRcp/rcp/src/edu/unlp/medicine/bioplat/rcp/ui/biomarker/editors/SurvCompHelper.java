@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.TableItem;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.LogRankTestValidationConfig;
@@ -41,13 +42,12 @@ public class SurvCompHelper implements Observer {
 	// índice de la columna a la cual se le agregan las nuevas columnas
 	private Integer newBaseColumnIndex;
 
-	private List<SurvCompValidationResult> eas;// =
-												// model().getSurvCompValidationResults();
+	private Provider<List<SurvCompValidationResult>> dataProvider;
 	private TableReferenceProvider trp;
 
-	public SurvCompHelper(TableReferenceProvider trp, List<SurvCompValidationResult> eas) {
+	public SurvCompHelper(TableReferenceProvider trp, Provider<List<SurvCompValidationResult>> dataProvider) {
 		this.trp = trp;
-		this.eas = eas;
+		this.dataProvider = dataProvider;
 	}
 
 	@Override
@@ -56,6 +56,7 @@ public class SurvCompHelper implements Observer {
 	}
 
 	public void refreshView() {
+		List<SurvCompValidationResult> eas = dataProvider.get();
 
 		TableReference tr = trp.tableReference();
 		// TODO creo que no se refrescaaaa!!! hacer más dinámico

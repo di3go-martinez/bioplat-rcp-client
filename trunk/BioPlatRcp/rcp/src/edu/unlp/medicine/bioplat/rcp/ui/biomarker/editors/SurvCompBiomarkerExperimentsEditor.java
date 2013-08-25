@@ -1,11 +1,14 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
+import java.util.List;
 import java.util.Observer;
 
 import org.eclipse.swt.widgets.Composite;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
 //TODO sacar este copy&paste de LogRankTestExperimentsEditor!!
@@ -32,7 +35,13 @@ public class SurvCompBiomarkerExperimentsEditor extends AbstractEditorPart<Bioma
 
 	protected SurvCompHelper getHelper() {
 		if (helper == null)
-			helper = new SurvCompHelper(this, model().getSurvCompValidationResults());
+			helper = new SurvCompHelper(this, new Provider<List<SurvCompValidationResult>>() {
+
+				@Override
+				public List<SurvCompValidationResult> get() {
+					return model().getSurvCompValidationResults();
+				}
+			});
 		return helper;
 	}
 
