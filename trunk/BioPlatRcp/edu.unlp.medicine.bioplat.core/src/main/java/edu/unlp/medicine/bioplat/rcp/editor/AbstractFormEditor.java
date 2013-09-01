@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.editor;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -14,6 +15,7 @@ import org.eclipse.ui.part.EditorPart;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.input.AbstractEditorInput;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
 
 /**
@@ -33,6 +35,7 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 
 	}
 
+	
 	private void configureEditors() {
 		this.editors = Lists.newLinkedList(createEditors());
 	}
@@ -111,9 +114,10 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 
 	@Override
 	public final void doSave(IProgressMonitor monitor) {
-		IProgressMonitor submonitor = new Submonitor(monitor);
-		doSave0(submonitor);
-		monitor.done();
+//		IProgressMonitor submonitor = new Submonitor(monitor);
+//		doSave0(submonitor);
+//		monitor.done();
+		MessageDialog.openInformation(PlatformUIUtils.findShell(), "Export", "Use export instead of save");
 	}
 
 	/**
@@ -136,4 +140,6 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 		return false;
 	}
 
+	
+	
 }
