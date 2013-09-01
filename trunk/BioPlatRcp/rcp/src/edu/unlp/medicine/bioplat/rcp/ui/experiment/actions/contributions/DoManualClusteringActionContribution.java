@@ -4,6 +4,7 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
@@ -50,8 +51,12 @@ public abstract class DoManualClusteringActionContribution extends AbstractActio
 
 			run0();
 
-		} else
-			MessageManager.INSTANCE.add(Message.warn("The experiment " + model().getName() + " has no configuration for clustering"));
+		} else{
+			String errorMsg = "The experiment '" + model().getName() + "' has not got configuration for clustering. This configuration is needed for doing experiment validation.";
+			MessageManager.INSTANCE.add(Message.warn(errorMsg));
+			PlatformUIUtils.openError("Experiment Validation", errorMsg);
+			
+		}
 
 	}
 

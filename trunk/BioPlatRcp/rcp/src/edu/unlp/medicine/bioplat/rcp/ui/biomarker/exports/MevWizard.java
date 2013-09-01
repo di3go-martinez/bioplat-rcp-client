@@ -17,15 +17,12 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.wizards.GenericPage1ForIntroduction;
 import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
-import edu.unlp.medicine.entity.experiment.Experiment;
-import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class MevWizard extends AbstractWizard<Void> {
@@ -36,10 +33,12 @@ public class MevWizard extends AbstractWizard<Void> {
 	private static final String FILE_NAME = "FILE_NAME";
 
 	private AbstractExperiment experiment;
+	boolean isExperimentValidation;
 
-	public MevWizard(AbstractExperiment e) {
+	public MevWizard(AbstractExperiment e, boolean isExperimentValidation) {
 		this.experiment = e;
 		this.setWindowTitle("Export");
+		this.isExperimentValidation = isExperimentValidation;
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t");
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation);
 		command.execute();
 		return null;
 	}

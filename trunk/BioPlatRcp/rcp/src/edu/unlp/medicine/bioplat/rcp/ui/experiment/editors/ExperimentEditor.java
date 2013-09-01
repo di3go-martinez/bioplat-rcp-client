@@ -80,7 +80,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		}
 
 		result.add(new EditorDescription(getEditorInput(), new SurvCompExperimentExperimentsEditor(false), "Concordance index validations"));
-		result.add(new EditorDescription(getEditorInput(), new LogRankTestExperimentExperimentsEditor(false), "Long Rank Test"));
+		result.add(new EditorDescription(getEditorInput(), new LogRankTestExperimentExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
 
 		new BrowserEditorManager(ExternalURLInformationPage.APPLY_TO_EXPERIMENT) {
 			@Override

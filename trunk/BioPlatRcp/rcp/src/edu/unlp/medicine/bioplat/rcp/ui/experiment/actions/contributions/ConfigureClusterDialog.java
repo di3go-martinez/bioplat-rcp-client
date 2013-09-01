@@ -93,7 +93,7 @@ public class ConfigureClusterDialog extends Dialog {
 
 			@Override
 			public void build(Menu menu) {
-				Image openImage = PlatformUIUtils.findImage("setcluster.gif");
+				Image openImage = PlatformUIUtils.findImage("clustering.png");
 				MenuItemContribution.create(menu).image(openImage).text("Set cluster...").addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {

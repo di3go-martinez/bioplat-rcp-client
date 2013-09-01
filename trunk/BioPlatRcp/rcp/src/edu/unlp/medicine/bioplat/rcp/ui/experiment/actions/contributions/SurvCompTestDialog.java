@@ -154,7 +154,7 @@ public class SurvCompTestDialog extends TitleAreaDialog {
 				}
 
 				if (count == experimentsWizard.commands2apply().size()) {
-					String msg = "All Concordance index validations (" + count + ") were  sucessfully executed. You can see the results on the 'SurvComp' tab of the Gene Siganture";
+					String msg = "All Concordance index validations (" + count + ") were  sucessfully executed. You can see the results on the gene signature 'Concordance index validations' tab";
 					PlatformUIUtils.openInformation("Concordance index Validation", msg);
 					MessageManager.INSTANCE.add(Message.info(msg));
 				}

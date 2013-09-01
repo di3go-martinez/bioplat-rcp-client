@@ -14,6 +14,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ValidationTestGUIProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
@@ -106,7 +109,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		// Lists.newArrayList(validationConfig)).execute();
 
 		run(validationConfig);
-
+		
 		// FIXME hacer un poquito más generico con una
 		// interface MultipageEditor#addPage(Editor, Input,
 		// [title])...
@@ -125,8 +128,16 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		//
 		// }
 		// afterExecution();
-
+		this.showResultMessage();
 	}
+
+	protected void showResultMessage(){
+			String msg = this.getResultMessage();
+			PlatformUIUtils.openInformation("Log rank test validation", msg);
+			MessageManager.INSTANCE.add(Message.info(msg));
+	}
+
+	protected abstract String getResultMessage();
 
 	protected abstract void run(final ValidationConfig4DoingCluster validationConfig);
 
@@ -159,5 +170,12 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		// wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 1);
 
 		return wm;
+	}
+	
+	
+	@Override
+	public boolean logInTheMessageView() {
+		
+		return false;
 	}
 }

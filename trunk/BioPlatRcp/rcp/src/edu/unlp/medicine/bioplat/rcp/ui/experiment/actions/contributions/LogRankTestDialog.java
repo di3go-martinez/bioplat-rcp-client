@@ -149,7 +149,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 				}
 
 				if (count == experimentsWizard.commands2apply().size()) {
-					String msg = "All log rank test validations (" + count + ") were  sucessfully executed. You can see the results on the 'Log Rank Test' tab of the Gene Siganture";
+					String msg = "All Log rank test validations (" + count + ") were  sucessfully executed. You can see the results on the gene signature 'Kaplan-Meier and Log Rank Test' tab";
 					PlatformUIUtils.openInformation("Log rank test validation", msg);
 					MessageManager.INSTANCE.add(Message.info(msg));
 				}

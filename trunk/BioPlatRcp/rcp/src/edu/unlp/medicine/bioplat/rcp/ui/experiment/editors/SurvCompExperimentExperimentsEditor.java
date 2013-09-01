@@ -43,7 +43,7 @@ public class SurvCompExperimentExperimentsEditor extends AbstractEditorPart<Expe
 				public List<SurvCompValidationResult> get() {
 					return model().getSurvCompValidationResults();
 				}
-			});
+			}, true);
 		return helper;
 	}
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.logRankTest.LogRankTestGUIProvider;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.validation.LogRankTestUsingManualClusterCommand;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
@@ -34,8 +36,14 @@ public class KManualClusteringActionContribution extends DoManualClusteringActio
 						//LogRankTestExecutor.getInstance().execute(dummyBiomarker(), new LogRankTestValidationConfig(validationConfig));
 						new LogRankTestUsingManualClusterCommand(validationConfig).execute();
 						List<LogRankTestValidationResult> res = validationConfig.getExperimentToValidate().getLogRankTestValidationResults();
-						System.out.println(res.size());
 					}
+
+					@Override
+					protected String getResultMessage() {
+						return "Kaplan-Meier and Log rank test validations were sucessfully executed. You can see the results on the experiment 'Kaplan-Meier and Log-Rank validations' tab";
+					}
+
+			
 
 				};
 

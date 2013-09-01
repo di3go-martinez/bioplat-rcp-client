@@ -34,6 +34,11 @@ public class SManualClusteringActionContribution extends DoManualClusteringActio
 						 new SurvCompTestUsingManualClusterCommand(validationConfig).execute();
 					}
 
+					@Override
+					protected String getResultMessage() {
+						return "Concordnace index validation was sucessfully executed. You can see the results on the experiment 'Concordance index validations' tab";
+					}
+
 				};
 
 				wizard.open();
