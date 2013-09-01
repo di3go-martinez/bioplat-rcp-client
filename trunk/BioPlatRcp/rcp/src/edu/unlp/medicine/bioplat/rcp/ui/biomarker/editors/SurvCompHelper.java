@@ -44,10 +44,14 @@ public class SurvCompHelper implements Observer {
 
 	private Provider<List<SurvCompValidationResult>> dataProvider;
 	private TableReferenceProvider trp;
+	boolean isExperimentValidation;
+	int exportColIndex;
+	int viewClusterColIndex;
 
-	public SurvCompHelper(TableReferenceProvider trp, Provider<List<SurvCompValidationResult>> dataProvider) {
+	public SurvCompHelper(TableReferenceProvider trp, Provider<List<SurvCompValidationResult>> dataProvider, boolean isExperimentValidation) {
 		this.trp = trp;
 		this.dataProvider = dataProvider;
+		this.isExperimentValidation = isExperimentValidation;
 	}
 
 	@Override
@@ -73,17 +77,25 @@ public class SurvCompHelper implements Observer {
 			// tc.setWidth(150);
 			// tc.setText("View result details");
 
-			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
-			tc.setWidth(150);
-			tc.setText("Open original experiment");
+			exportColIndex=newBaseColumnIndex;
+			viewClusterColIndex=newBaseColumnIndex + 1;
+			if (!isExperimentValidation){
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
+				tc.setWidth(150);
+				tc.setText("Open original experiment");
+				exportColIndex++;
+				viewClusterColIndex++;
+			}
 
-			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
+			tc = new TableColumn(table, SWT.NONE, exportColIndex);
 			tc.setWidth(200);
 			tc.setText("Export gene signature data matrix");
 
-			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
+			if (isExperimentValidation){
+			tc = new TableColumn(table, SWT.NONE, viewClusterColIndex);
 			tc.setWidth(100);
-			tc.setText("View Cluster");
+			tc.setText("View used cluster");
+			}
 
 			// ok, ya inicializado
 			mustinitialize = false;
@@ -103,10 +115,9 @@ public class SurvCompHelper implements Observer {
 			// editor.setEditor(c, items[i], newBaseColumnIndex);
 			// createAndConfigureEditor(table, c, items[i],
 			// newBaseColumnIndex).minimumHeight = 100;
-
 			Button c;
+			if (!isExperimentValidation){
 			editor = new TableEditor(table);
-
 			try {
 				c = createOpenEditorButton(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), table, "open original experiment", EditorsId.experimentEditorId());
 				c.setImage(PlatformUIUtils.findImage("Open original experiment.png"));
@@ -116,7 +127,8 @@ public class SurvCompHelper implements Observer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			}
+			
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			// c.setText("Export to MEV");;
@@ -124,26 +136,28 @@ public class SurvCompHelper implements Observer {
 			c.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					AbstractExperiment exp = new ExperimentAppliedToAMetasignature(//
-							survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(),//
-							Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), //
-							new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()));
-					new MevWizard(exp).blockOnOpen().open();
+//					AbstractExperiment exp = new ExperimentAppliedToAMetasignature(//
+//							survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(),//
+//							Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), //
+//							new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()), true);
+					new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), isExperimentValidation).blockOnOpen().open();
 				}
 			});
 			editor.grabHorizontal = true;
-			editor.setEditor(c, items[i], newBaseColumnIndex + 1);
+			editor.setEditor(c, items[i], exportColIndex);
 			// createAndConfigureEditor(table, c, items[i],
 			// newBaseColumnIndex + 2);
 
 			// View Cluster
+			if (isExperimentValidation){
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
-			c.setImage(PlatformUIUtils.findImage("View cluster.16.png"));
+			c.setImage(PlatformUIUtils.findImage("clustering.png"));
 			c.addSelectionListener(openViewClusterDialog(survCompValidationResult));
 			editor.grabHorizontal = true;
 			// editor.minimumHeight = 100;
-			editor.setEditor(c, items[i], newBaseColumnIndex + 2);
+			editor.setEditor(c, items[i], viewClusterColIndex);
+			}
 		}
 
 	}
@@ -184,4 +198,7 @@ public class SurvCompHelper implements Observer {
 		return b;
 	}
 
+	
+	
+	
 }

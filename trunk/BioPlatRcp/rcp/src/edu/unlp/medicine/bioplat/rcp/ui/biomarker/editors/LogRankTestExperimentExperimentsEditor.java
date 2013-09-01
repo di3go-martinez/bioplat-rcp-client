@@ -58,7 +58,7 @@ public class LogRankTestExperimentExperimentsEditor extends AbstractEditorPart<E
 				public List<ExperimentAppliedToAMetasignature> get() {
 					return model().getExperimentsApplied();
 				}
-			});
+			}, true);
 		return helper;
 	}
 

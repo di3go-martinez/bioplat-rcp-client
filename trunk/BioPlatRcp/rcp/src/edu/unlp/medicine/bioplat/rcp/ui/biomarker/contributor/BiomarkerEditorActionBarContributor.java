@@ -13,6 +13,8 @@ public class BiomarkerEditorActionBarContributor extends AbstractEditorActionBar
 	public BiomarkerEditorActionBarContributor() {
 	}
 
+	
+	
 	// @Override
 	// public void contributeToCoolBar(ICoolBarManager coolBarManager) {
 	// ToolBarManager tbm = new ToolBarManager();

@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -9,6 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -22,12 +24,15 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
+import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
 public class LongRankTestHelper implements Observer {
@@ -39,10 +44,14 @@ public class LongRankTestHelper implements Observer {
 	private Integer newBaseColumnIndex;
 	private TableReferenceProvider2 provider;
 	private Provider<List<ExperimentAppliedToAMetasignature>> experimentProvider;
+	boolean isExperimentValidation;
+	int exportColumnIndex;
+	int viewClusterColIndex;
 
-	public LongRankTestHelper(TableReferenceProvider2 provider, Provider<List<ExperimentAppliedToAMetasignature>> experimentProvider) {
+	public LongRankTestHelper(TableReferenceProvider2 provider, Provider<List<ExperimentAppliedToAMetasignature>> experimentProvider, boolean isExperimentValidation) {
 		this.provider = provider;
 		this.experimentProvider = experimentProvider;
+		this.isExperimentValidation=isExperimentValidation;
 	}
 
 	@Override
@@ -54,7 +63,6 @@ public class LongRankTestHelper implements Observer {
 		final List<ExperimentAppliedToAMetasignature> eas = experimentProvider.get();
 		TableReference tr = provider.tableReference();
 		tr.input(eas);
-
 		// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 		Table table = tr.getTable();
 		TableColumn tc;
@@ -64,15 +72,28 @@ public class LongRankTestHelper implements Observer {
 			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex);
 			tc.setWidth(150);
 			tc.setText("View " + KAPLAN_MEIER);
+			
+			 exportColumnIndex = newBaseColumnIndex + 1;
+			 viewClusterColIndex=newBaseColumnIndex + 2;
+			
+			if (!isExperimentValidation){
+				tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
+				tc.setWidth(150);
+				tc.setText("Open Original Experiment");
+				exportColumnIndex++;
+				viewClusterColIndex++;
+			}
 
-			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 1);
-			tc.setWidth(150);
-			tc.setText("Open Original Experiment");
-
-			tc = new TableColumn(table, SWT.NONE, newBaseColumnIndex + 2);
+			tc = new TableColumn(table, SWT.NONE, exportColumnIndex);
 			tc.setWidth(200);
 			tc.setText("Export gene signature data matrix");
 
+			if (isExperimentValidation){
+			tc = new TableColumn(table, SWT.NONE, viewClusterColIndex);
+			tc.setWidth(100);
+			tc.setText("View used cluster");
+			}
+			
 			// ok, ya inicializado
 			mustinitialize = false;
 		}
@@ -94,6 +115,7 @@ public class LongRankTestHelper implements Observer {
 			// createAndConfigureEditor(table, c, items[i],
 			// newBaseColumnIndex).minimumHeight = 100;
 
+			if (!isExperimentValidation){
 			editor = new TableEditor(table);
 			try {
 				c = createOpenEditorButton(exp.getOriginalExperiment(), table, "Open Original Experiment", EditorsId.experimentEditorId());
@@ -103,7 +125,7 @@ public class LongRankTestHelper implements Observer {
 			} catch (ExperimentBuildingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}}
 
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
@@ -112,14 +134,24 @@ public class LongRankTestHelper implements Observer {
 			c.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					new MevWizard(exp).blockOnOpen().open();
+					new MevWizard(exp, isExperimentValidation).blockOnOpen().open();
 				}
 			});
 			editor.grabHorizontal = true;
-			editor.setEditor(c, items[i], newBaseColumnIndex + 2);
+			editor.setEditor(c, items[i], exportColumnIndex);
 			// createAndConfigureEditor(table, c, items[i],
 			// newBaseColumnIndex + 2);
 
+			// View Cluster
+			if (isExperimentValidation){
+						editor = new TableEditor(table);
+						c = new Button(table, SWT.FLAT);
+						c.setImage(PlatformUIUtils.findImage("clustering.png"));
+						c.addSelectionListener(openViewClusterDialog(exp.getGroups()));
+						editor.grabHorizontal = true;
+						// editor.minimumHeight = 100;
+						editor.setEditor(c, items[i], viewClusterColIndex);
+			}
 		}
 
 	}
@@ -193,4 +225,19 @@ public class LongRankTestHelper implements Observer {
 		return b;
 	}
 
+	
+	
+	private SelectionListener openViewClusterDialog(final Map<Sample, Integer> groups) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new ConfigureClusterDialog(groups).open();
+			}
+		};
+	}
+
+
+
+	
+	
 }

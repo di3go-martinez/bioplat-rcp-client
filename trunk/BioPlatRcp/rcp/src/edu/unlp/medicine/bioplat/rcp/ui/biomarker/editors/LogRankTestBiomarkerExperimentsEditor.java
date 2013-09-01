@@ -57,7 +57,7 @@ public class LogRankTestBiomarkerExperimentsEditor extends AbstractEditorPart<Bi
 				public List<ExperimentAppliedToAMetasignature> get() {
 					return model().getExperimentsApplied();
 				}
-			});
+			}, false);
 		return helper;
 	}
 

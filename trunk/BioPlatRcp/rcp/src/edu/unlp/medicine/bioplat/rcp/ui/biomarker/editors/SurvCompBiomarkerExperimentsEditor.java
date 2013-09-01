@@ -41,7 +41,7 @@ public class SurvCompBiomarkerExperimentsEditor extends AbstractEditorPart<Bioma
 				public List<SurvCompValidationResult> get() {
 					return model().getSurvCompValidationResults();
 				}
-			});
+			},false);
 		return helper;
 	}
 
