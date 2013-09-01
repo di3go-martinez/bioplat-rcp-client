@@ -76,10 +76,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		fileMenu.add(newWizard);
 
-		fileMenu.add(saveAction);
+		// fileMenu.add(saveAction);
 		fileMenu.add(new Separator());
 		// fileMenu.add(importAction);
-		fileMenu.add(exportAction);
+		// fileMenu.add(exportAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
