@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import com.google.common.collect.Maps;
@@ -56,6 +57,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	public AbstractWizard() {
 		setNeedsProgressMonitor(true);
+		
 	}
 
 	private WizardModel model = createWizardModel();
