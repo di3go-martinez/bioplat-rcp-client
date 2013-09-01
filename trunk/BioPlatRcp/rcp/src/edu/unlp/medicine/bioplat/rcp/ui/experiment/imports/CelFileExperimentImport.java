@@ -68,7 +68,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				
-				wizardPage.setTitle("Import your .CEL files to Bioplat");
+				wizardPage.setTitle("Import your .CEL files to BioPlat");
 				wizardPage.setDescription("Import and normalize an experiment you have in your .CEL files. They will be useful for doing validation of your biomarkers.");
 				
 				GridData gridData = new GridData();

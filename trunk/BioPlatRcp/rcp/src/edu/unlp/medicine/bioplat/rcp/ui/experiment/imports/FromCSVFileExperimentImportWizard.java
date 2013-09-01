@@ -76,7 +76,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 			descriptors.add(createPage3ForSelecctingGenesOrGS());
 	
 				
-		this.setWindowTitle("Generate a metasignature.");
+		this.setWindowTitle("Import experiment from .CSV file");
 		
 		
 		return descriptors;
@@ -97,7 +97,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 		String inBlankSmallTitle =  "Import an experiment, from a text file containing expression data and clinical data";
 
-		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating biomarkers, for optimizing biomarkers or just for filtering and visualizing the experiment data in a convenient way. You can also export the experiment into a file.\n\n If your experiment is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
+		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures or just for filtering and visualizing the experiment data in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data has got significantly statistic differences.\n\n If your experiment is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
 		
 		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
 	}

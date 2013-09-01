@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IExportWizard;
@@ -48,20 +49,23 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 	final static String DOT = "Dot";
 	
 
-	@Override
-	public void init(IWorkbench arg0, IStructuredSelection selection) {
+	public ExportExperimentToFileWizard(Experiment e) {
+		experiment = e;
+	}
 
-		if (!selection.isEmpty())
-			experiment = (Experiment) selection.getFirstElement();
+	public void init() {
+//
+//		if (!selection.isEmpty())
+//			experiment = (Experiment) selection.getFirstElement();
+//
+//		else
+//			experiment = findExperimentOnCurrentEditor();
+//
+//		if (experiment == null) {
+//			MessageManager.INSTANCE.add(Message.warn("No Experiment selected"));
+//		}
 
-		else
-			experiment = findExperimentOnCurrentEditor();
-
-		if (experiment == null) {
-			MessageManager.INSTANCE.add(Message.warn("No Experiment selected"));
-		}
-
-		this.setWindowTitle("Export Bioplat experiment to text file");
+		this.setWindowTitle("Export BioPlat experiment to text file");
 		addPage(createWizardPage());
 	}
 
@@ -121,24 +125,19 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
 
-				Composite c = new Composite(parent, SWT.BORDER);
+				Composite c = new Composite(parent, SWT.NONE);
+				c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(50, 100).spacing(2, 50).create());
+				
+				new Label(c, SWT.NONE).setText("Folder: ");
+				TextWithSelectionButton ft = new DirectoryText(c);
+				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
+				getModel().filename.setValue("");
 
 				new CLabel(c, SWT.BOLD).setText("File name:");
 				Text filenameHolder = new Text(c, SWT.BORDER);
 				dbc.bindValue(SWTObservables.observeText(filenameHolder, SWT.Modify), getModel().filename);
 				getModel().filename.setValue(experiment.getName());
 
-//				new CLabel(c, SWT.BOLD).setText("Folder:");
-//				Text directoryHolder = new Text(c, SWT.BORDER);
-//				dbc.bindValue(SWTObservables.observeText(directoryHolder, SWT.Modify), getModel().directory);
-
-				new Label(c, SWT.NONE).setText("Folder: ");
-				TextWithSelectionButton ft = new DirectoryText(c);
-				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
-				getModel().filename.setValue("");
-				
-
-				
 				ComboViewer numerSeparatorCombo = Utils.newComboViewer(c, "Number separator character:", Arrays.asList(COMMA, DOT));
 				IObservableValue widgetObservable4Column = ViewersObservables.observeSingleSelection(numerSeparatorCombo);
 				dbc.bindValue(widgetObservable4Column,  getModel().numericSeparator, new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("NumberSeparator")), null);
@@ -172,7 +171,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				setControl(c);
 				
 				this.setTitle("Export configuration");
-				this.setDescription("Select the file for doing the export. You can also parametrize the data to include.");
+				this.setDescription("Select the destination folder and file. You can also parametrize the data to include.");
 
 			}
 		};
@@ -182,7 +181,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 	public boolean performFinish() {
 		String absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString();
 
-		new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString())).execute();
+		new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString()), true).execute();
 											
 		
 		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
@@ -195,5 +194,11 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 		if (separator.equals(SPACE)) return " ";
 		if (separator.equals(DOT)) return ".";
 		return "\t";
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		// TODO Auto-generated method stub
+		
 	}
 }

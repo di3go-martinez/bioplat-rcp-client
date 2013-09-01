@@ -148,8 +148,8 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 
 				
 
-				String text = "\n\n\n\nImportante Note: Take into account that the connection between both systems it is not as faster as downloading the file from the page. So, if the experiment is so m uch big, you should download it from the inSilico page and then import it in Bioplat using the 'Import Experiment From Text file'.";
-				GUIUtils.addWrappedText(group, text,8,true);
+//				String text = "\n\n\n\nImportante Note: Take into account that the connection between both systems it is not as faster as downloading the file from the page. So, if the experiment is so m uch big, you should download it from the inSilico page and then import it in Bioplat using the 'Import Experiment From Text file'.";
+//				GUIUtils.addWrappedText(group, text,8,true);
 
 				
 				//Label for explaining the possible
