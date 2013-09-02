@@ -118,8 +118,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		tbm.add(new GroupMarker("agroup"));
 		tbm.add(new Separator(MB_ADDITIONS));
 		coolBar.add(tbm);
-		tbm = new ToolBarManager(SWT.FLAT);
-		tbm.add(saveAction);
-		coolBar.add(tbm);
+		// tbm = new ToolBarManager(SWT.FLAT);
+		// tbm.add(saveAction);
+		// coolBar.add(tbm);
 	}
 }
