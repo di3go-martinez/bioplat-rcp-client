@@ -35,7 +35,6 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 
 	}
 
-	
 	private void configureEditors() {
 		this.editors = Lists.newLinkedList(createEditors());
 	}
@@ -114,10 +113,11 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 
 	@Override
 	public final void doSave(IProgressMonitor monitor) {
-//		IProgressMonitor submonitor = new Submonitor(monitor);
-//		doSave0(submonitor);
-//		monitor.done();
+		// IProgressMonitor submonitor = new Submonitor(monitor);
+		// doSave0(submonitor);
+		// monitor.done();
 		MessageDialog.openInformation(PlatformUIUtils.findShell(), "Export", "Use export instead of save");
+		throw new RuntimeException("Use export instead of save");
 	}
 
 	/**
@@ -140,6 +140,4 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 		return false;
 	}
 
-	
-	
 }
