@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
 import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
@@ -48,7 +49,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
 
 public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
-
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationWizardPageDescriptor.class);
 	private ValidationTestGUIProvider validationTestGUIProvider;
 	private boolean forManualClustering;
 
@@ -62,16 +63,27 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
+		try {
+			GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
-		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
-		Composite container = new Composite(parent, SWT.CENTER);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
+			// Composite c = new ScrolledComposite(parent, SWT.V_SCROLL);
+			// c.setLayout(GridLayoutFactory.fillDefaults().create());
+			// c.setLayoutData(GridDataFactory.fillDefaults().grab(true,
+			// true).create());
+			Composite container = new Composite(parent, SWT.BORDER);
+			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
 
-		// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
-		createGroup4CLusteringInfo(container, gdf, dbc, wmodel);
-		createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
+			// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
+			createGroup4CLusteringInfo(container, gdf, dbc, wmodel);
+			createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
 
-		return container;
+			container.redraw();
+			container.pack(true);
+			return container;
+		} catch (Exception e) {
+			logger.error("Error creating Configuration Page", e);
+			return new Composite(parent, SWT.NONE);
+		}
 	}
 
 	// private void createGroup4ClusteringChoise(Composite container,
@@ -142,6 +154,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		GridData gdClusters = gdf.grab(false, false).create();
 		t.setLayoutData(gdClusters);
 		t.setEnabled(!forManualClustering);
+		logger.trace("Number of clusters created");
 
 		if (!forManualClustering) {
 			Label l = new Label(clusterginGroup, SWT.NONE);
@@ -151,6 +164,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
 			GridData gdRepeat = gdf.grab(false, false).create();
 			t2.setLayoutData(gdRepeat);
+			logger.trace("Times to repeat... created");
 		}
 		// addValidationTypeAndStatissticaSigTestComponents(result, dbc,
 		// wmodel);
@@ -188,6 +202,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		GridData gd = gdf.grab(true, false).create();
 		other.setLayoutData(gd);
 		dbc.bindValue(SWTObservables.observeText(other, SWT.Modify), wmodel.valueHolder(OTHER_ATTRIBUTE_NAME_TO_VALIDATION));
+		logger.trace("Time attribute name created");
 
 		new Label(clusterginGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
 		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(clusterginGroup);
@@ -199,7 +214,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		GridData gd2 = gdf.grab(true, false).create();
 		other2.setLayoutData(gd2);
 		dbc.bindValue(SWTObservables.observeText(other2, SWT.Modify), wmodel.valueHolder(OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION));
-
+		logger.trace("Status attribute name created");
 	}
 
 	private Composite getGroupFoRClusteringAttribute(Composite parent) {

@@ -30,6 +30,8 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.progress.IProgressConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
@@ -54,10 +56,10 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * @see #createWizardmodel
  */
 public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWizard {
+	private static Logger logger = LoggerFactory.getLogger(AbstractWizard.class);
 
 	public AbstractWizard() {
 		setNeedsProgressMonitor(true);
-		
 	}
 
 	private WizardModel model = createWizardModel();
@@ -102,6 +104,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 					WizardPageSupport.create(this, dbc);
 					Composite control = pageDescriptor.create(this, parent, dbc, wizardModel());
+					logger.trace("control created");
 
 					fillDefaultsIfNecesary(control);
 
@@ -109,12 +112,14 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 					Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
 					getShell().setSize(size);
+					logger.trace("Shell size " + size);
 
 				}
 
 				private void fillDefaultsIfNecesary(Composite control) {
-					if (control.getLayout() == null)
+					if (control.getLayout() == null) {
 						GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(control);
+					}
 				}
 
 				@Override
@@ -152,15 +157,18 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	public IWizardPage getNextPage(IWizardPage page) {
 		// Caso especial... //TODO por qué, cómo y cuándo...
 		if (initialPage) {
+			logger.trace("get the next page by 'initialPage'; delegando a super");
 			initialPage = false;
 			return super.getNextPage(page);
 		}
 
 		IWizardPage next = super.getNextPage(page);
 		if (next instanceof ResultPage) {
+			logger.trace("Next is resulting page, lazy creation");
 			ResultPage p = (ResultPage) next;
 			p.lazyCreateControl();
 		}
+		logger.trace("returning the next wizard page for " + next.getDescription());
 		return next;
 	}
 
@@ -225,8 +233,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		d.getShell().setSize(Math.max(500, d.getShell().getSize().x), Math.max(500, d.getShell().getSize().y));
 		PlatformUIUtils.center(d.getShell());
 		// TODO resolver con scrollbars
-		// d.setPageSize(400, 450);
-		// d.setMinimumPageSize(this.getMinimumWith(), 450);
+		//d.setPageSize(400, 450);
+		//d.setMinimumPageSize(this.getMinimumWith(), 450);
 
 		return d.open() == Dialog.OK;
 	}
