@@ -79,7 +79,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 	}
 
 	private WizardPageDescriptor createIntroductionPage() {
-		String introText = "A Bioplat Metasignature is the result of datamining many input Gene Signatures you selected.\n\n You can select the input Gene Signatures from external databases but you can also use the GeneSignatures you have previously opened in Bioplat. The algorithm will take as input all the GeneSignatures you selected and it will suggest a list of genes which conforms the MetaSIgnature";
+		String introText = "A Bioplat Metasignature is the result of datamining many input Gene Signatures you selected.\n\n You can select the input Gene Signatures from external databases but you can also use the GeneSignatures you have previously opened in Bioplat. The algorithm will take as input all the GeneSignatures you selected and it will suggest a list of genes which conforms the MetaSignature.";
 		return new GenericPage1ForIntroduction("What is a Metasignature?", "What is a metasignature? How does it work?", introText);
 	}
 

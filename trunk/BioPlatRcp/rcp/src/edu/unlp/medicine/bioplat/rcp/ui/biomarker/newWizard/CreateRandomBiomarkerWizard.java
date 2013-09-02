@@ -108,7 +108,7 @@ public class CreateRandomBiomarkerWizard extends AbstractWizard<Biomarker> imple
 				gridData.horizontalAlignment=SWT.FILL;
 				gridData.grabExcessHorizontalSpace=true;
 				
-				wp.setDescription("It will create a random Gene Signature, with N human genes selected randomdly (N configurable). You can later edit it.");
+				wp.setDescription("It will create a random Gene Signature, with N human genes selected randomly (N configurable). You can later edit it.");
 				Composite group = new Group(parent, SWT.NONE);
 				group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(2, 20).create());
 				group.setLayoutData(gridData);
