@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.progress.IProgressConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -168,7 +167,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			ResultPage p = (ResultPage) next;
 			p.lazyCreateControl();
 		}
-		logger.trace("returning the next wizard page for " + next.getDescription());
+		if (next != null)
+			logger.trace("returning the next wizard page for " + next.getDescription());
+		else
+			logger.trace("No more pages");
 		return next;
 	}
 
@@ -233,8 +235,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		d.getShell().setSize(Math.max(500, d.getShell().getSize().x), Math.max(500, d.getShell().getSize().y));
 		PlatformUIUtils.center(d.getShell());
 		// TODO resolver con scrollbars
-		//d.setPageSize(400, 450);
-		//d.setMinimumPageSize(this.getMinimumWith(), 450);
+		// d.setPageSize(400, 450);
+		// d.setMinimumPageSize(this.getMinimumWith(), 450);
 
 		return d.open() == Dialog.OK;
 	}
