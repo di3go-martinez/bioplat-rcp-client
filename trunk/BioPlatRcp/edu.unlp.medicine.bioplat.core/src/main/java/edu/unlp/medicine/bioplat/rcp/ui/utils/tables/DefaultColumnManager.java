@@ -1,8 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.utils.tables;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.jface.viewers.TableViewer;
-import org.jboss.util.NotImplementedException;
-
 public class DefaultColumnManager implements ColumnManager {
 
 	private TableViewer tableViewer;
