@@ -77,6 +77,7 @@ public class ImportGeneSignatureFromBPLWizard extends AbstractWizard<Biomarker> 
 				FileText ft = new FileText(group, SWT.BORDER);
 				Map<String, String> filters = Maps.newHashMap();
 				filters.put("*.bpl", "BPL File");
+				filters.put("*.*", "All files");
 				ft.setFilter(filters);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), wmodel.valueHolder(FILE_NAME), new UpdateValueStrategy().setAfterConvertValidator(RequiredValidator.create("File")), null);
 				// dbc.bindValue(SWTObservables.observeText(ft.textControl(),
