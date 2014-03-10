@@ -32,7 +32,7 @@ public class PagesDescriptors {
 	public static final String ATTRIBUTE_TYPE = "ATTRIBUTE_TYPE";
 	public static final String GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE = "GENERATE_CLUSTER_&_CALCULATE_BIOLOGICAL_VALUE";
 	public static final String NUMBER_OF_CLUSTERS = "NUMBER_OF_CLUSTERS";
-	public static final String TIMES_TO_REPEAT_CLUSTERING = "TIMES_TO_REPEAT_CLUSTERING";
+	//public static final String TIMES_TO_REPEAT_CLUSTERING = "TIMES_TO_REPEAT_CLUSTERING";
 	public static final String VALIDATION_TYPE = "VALIDATION_TYPE";
 	public static final String STATISTICAL_TEST_VALUE = "STATISTICAL TEST VALUE";
 	public static final String ATTRIBUTE_NAME_TO_VALIDATION = "ATTRIBUTE_NAME_TO_VALIDATION";
@@ -40,6 +40,8 @@ public class PagesDescriptors {
 	public static final String REMOVE_GENES_IN_GENE_SIGNATURE = "REMOVE_GENES_IN_BIOMARKER";
 	public static final String OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String OTHER_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_ATTRIBUTE_NAME_TO_VALIDATION";
+	public static final String CLUSTERING_STRATEGY = "CLUSTERING_STRATEGY";
+	
 	@Deprecated
 	public static final String USE_EXISTING_CLUSTER = "USE_EXISTING_CLUSTER";
 

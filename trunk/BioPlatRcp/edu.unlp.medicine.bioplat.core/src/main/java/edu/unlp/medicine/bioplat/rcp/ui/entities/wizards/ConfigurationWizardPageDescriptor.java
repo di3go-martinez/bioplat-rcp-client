@@ -11,9 +11,10 @@ import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.RFS_MONTHS;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.STATISTICAL_TEST_VALUE;
-import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.VALIDATION_TYPE;
+import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.CLUSTERING_STRATEGY;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,6 +48,8 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
+import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClustererFactory;
+import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClusterersEnum;
 
 public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationWizardPageDescriptor.class);
@@ -157,14 +160,28 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		logger.trace("Number of clusters created");
 
 		if (!forManualClustering) {
-			Label l = new Label(clusterginGroup, SWT.NONE);
-			l.setText("\nTimes to repeat de k-means clustering (It keeps the best):");
-			Text t2 = new Text(clusterginGroup, SWT.BORDER);
-			// t2.setText("10");
-			dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
-			GridData gdRepeat = gdf.grab(false, false).create();
-			t2.setLayoutData(gdRepeat);
-			logger.trace("Times to repeat... created");
+			
+//			Label l = new Label(clusterginGroup, SWT.NONE);
+//			l.setText("\nTimes to repeat de k-means clustering (It keeps the best):");
+//			Text t2 = new Text(clusterginGroup, SWT.BORDER);
+//			dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify), wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
+
+			new Label(clusterginGroup, SWT.NONE).setText("\nClustering strategy");
+			//Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);
+			ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginGroup, "Select the strategy to do your clustering.", ClustererFactory.getInstance().getClustererNames());
+			dbc.bindValue(ViewersObservables.observeSingleSelection(clusteringStrategy), wmodel.valueHolder(CLUSTERING_STRATEGY), UpdateStrategies.nonNull("Clustering strategy"), UpdateStrategies.nullStrategy());
+			clusteringStrategy.getCombo().setLayoutData(gdf.create());
+			clusteringStrategy.setSelection(new StructuredSelection(ClusterersEnum.KMEANS.getFriendlyName()));
+			logger.trace("Clustering strategy created");
+			
+			
+			
+			
+			
+			
+			//GridData gdRepeat = gdf.grab(false, false).create();
+			//t2.setLayoutData(gdRepeat);
+			//logger.trace("Times to repeat... created");
 		}
 		// addValidationTypeAndStatissticaSigTestComponents(result, dbc,
 		// wmodel);
@@ -279,4 +296,6 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		});
 	}
 
+
+	
 }
