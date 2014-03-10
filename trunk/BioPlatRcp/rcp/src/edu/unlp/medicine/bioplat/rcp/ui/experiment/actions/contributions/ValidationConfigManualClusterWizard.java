@@ -22,6 +22,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarke
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
+import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.RClustererManualSetting;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -95,7 +96,7 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		//
 		// for (Integer clusters : calculateRange(numberOfClusters)) {
 
-		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result, attributeNameToValidation, secondAttributeNameToDoTheValidation);
+		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result, attributeNameToValidation, secondAttributeNameToDoTheValidation, new RClustererManualSetting());
 		validationConfig.setAttribtueNameToDoTheValidation(attributeNameToValidation);
 		validationConfig.setSecondAttribtueNameToDoTheValidation(secondAttributeNameToDoTheValidation);
 
@@ -163,10 +164,12 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
+				.add(PagesDescriptors.CLUSTERING_STRATEGY)
 		;
 
-		WritableValue wv4RepeatCLuster = new WritableValue(1, Integer.class);
-		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
+		//WritableValue wv4RepeatCLuster = new WritableValue(1, Integer.class);
+		//wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
+		
 		// wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 1);
 
 		return wm;

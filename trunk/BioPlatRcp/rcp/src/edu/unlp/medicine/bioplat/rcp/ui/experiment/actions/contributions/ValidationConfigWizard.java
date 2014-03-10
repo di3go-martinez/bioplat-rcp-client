@@ -26,6 +26,8 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarke
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
+import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClustererFactory;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.IClusterer;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
@@ -140,8 +142,12 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		// IStatisticsSignificanceTest statisticsSignificanceTest =
 		// wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
-		int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
+		//int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
 		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE);
+		
+		String clusteringStrategy = wizardModel().value(PagesDescriptors.CLUSTERING_STRATEGY);
+		IClusterer clusterer = ClustererFactory.getInstance().getClusterer(clusteringStrategy);
+		
 
 		// It adds additional parameters for the validation. It will delegate on
 		// the validationTestGUIProvider
@@ -151,7 +157,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 			for (Integer clusters : calculateRange(numberOfClusters)) {
 
-				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, numberOfTimesToRepeatTheCluster, removeInBiomarkerTheGenesThatAreNotInTheExperiment);
+				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, 1, removeInBiomarkerTheGenesThatAreNotInTheExperiment, clusterer);
 				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
 
 				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
@@ -252,6 +258,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
+				.add(PagesDescriptors.CLUSTERING_STRATEGY)//
 		;
 
 		WritableValue wv;
@@ -260,8 +267,8 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
 		;
-		wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
-		wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
+		//wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
+		//wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
 
 		return wm;
 	}

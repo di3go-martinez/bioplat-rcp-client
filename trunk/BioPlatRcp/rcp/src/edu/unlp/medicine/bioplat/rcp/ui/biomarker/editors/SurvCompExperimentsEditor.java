@@ -57,7 +57,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 	private void createWorkAreaPart(Composite parent) {
 		tr = TableBuilder.create(parent).input(model().getSurvCompValidationResults())//
 				// .model(model(), "experiemntsApplied")//
-				.hideSelectionColumn()//
+				.hideSelectionColumn()// 
 				.addColumn(ColumnBuilder.create().property("experimentName").title("Experiment"))//
 				.addColumn(ColumnBuilder.create().property("survCompIndex").title("Concordance index").width(270))//
 				// .addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log Rank test p-value").width(160))//

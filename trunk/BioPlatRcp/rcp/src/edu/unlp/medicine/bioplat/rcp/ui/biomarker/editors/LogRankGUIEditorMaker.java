@@ -40,7 +40,7 @@ public class LogRankGUIEditorMaker extends GuiMaker {
 		TableReference tr = TableBuilder.create(parent).input(expApplied)//
 				// .model(model(), "experiemntsApplied")//
 				.hideSelectionColumn()//
-				.addColumn(ColumnBuilder.create().property("name").title("Experiment"))//
+				.addColumn(ColumnBuilder.create().property("name").title("Experiment").width(270))//
 				.addColumn(ColumnBuilder.create().property("significanceValue.pvalue").title("Log-Rank test p-value").width(160))//
 				// TODO .addContextualMenu(new MyMenu())//
 				.build();

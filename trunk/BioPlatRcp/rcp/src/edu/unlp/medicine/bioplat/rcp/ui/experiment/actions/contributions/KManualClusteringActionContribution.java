@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.logRankTest.LogRankTestGUIProvider;
-import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
-import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.validation.LogRankTestUsingManualClusterCommand;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
