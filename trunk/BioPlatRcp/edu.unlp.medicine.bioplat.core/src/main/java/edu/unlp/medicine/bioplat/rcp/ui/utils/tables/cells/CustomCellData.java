@@ -14,7 +14,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 public class CustomCellData implements Accesor, Comparable<CustomCellData> {
 	private CellValueResolver resolver;
 
-	public CustomCellData(CellValueResolver resolver) {
+	public CustomCellData(CellValueResolver<?> resolver) {
 		this.resolver = resolver;
 	}
 
@@ -43,6 +43,6 @@ public class CustomCellData implements Accesor, Comparable<CustomCellData> {
 
 	@Override
 	public String toString() {
-		return "(" + getValue().toString() + ")";
+		return "(" + getValue() + ")";
 	}
 }
