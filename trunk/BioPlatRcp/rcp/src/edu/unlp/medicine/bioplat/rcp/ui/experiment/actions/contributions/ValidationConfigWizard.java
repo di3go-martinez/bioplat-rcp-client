@@ -40,7 +40,6 @@ import edu.unlp.medicine.utils.monitor.Monitor;
  * @author diego martínez
  * 
  */
-
 public abstract class ValidationConfigWizard extends AbstractWizard<List<AbstractExperimentDescriptor>> {
 
 	// mutex para el job, operaciones K, S, que interactúan con R y se deben
@@ -142,12 +141,12 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		// IStatisticsSignificanceTest statisticsSignificanceTest =
 		// wizardModel().value(PagesDescriptors.STATISTICAL_TEST_VALUE);
-		//int numberOfTimesToRepeatTheCluster = wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
+		// int numberOfTimesToRepeatTheCluster =
+		// wizardModel().value(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING);
 		boolean removeInBiomarkerTheGenesThatAreNotInTheExperiment = wizardModel().value(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE);
-		
+
 		String clusteringStrategy = wizardModel().value(PagesDescriptors.CLUSTERING_STRATEGY);
 		IClusterer clusterer = ClustererFactory.getInstance().getClusterer(clusteringStrategy);
-		
 
 		// It adds additional parameters for the validation. It will delegate on
 		// the validationTestGUIProvider
@@ -267,8 +266,9 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
 		;
-		//wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, wv4RepeatCLuster);
-		//wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
+		// wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING,
+		// wv4RepeatCLuster);
+		// wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
 
 		return wm;
 	}
