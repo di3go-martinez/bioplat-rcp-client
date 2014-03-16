@@ -154,6 +154,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+
 		// Caso especial... //TODO por qué, cómo y cuándo...
 		if (initialPage) {
 			logger.trace("get the next page by 'initialPage'; delegando a super");
