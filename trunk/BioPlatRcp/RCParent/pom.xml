@@ -20,7 +20,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-runtime.version>1.1.0-SNAPSHOT</maven-runtime.version>
-		<tycho-version>0.15.0</tycho-version>
+		<tycho-version>0.19.0</tycho-version>
 		<!-- eclipse version bioplat is built against -->
 		<eclipse-repo.url>http://download.eclipse.org/releases/indigo</eclipse-repo.url>
 	</properties>
