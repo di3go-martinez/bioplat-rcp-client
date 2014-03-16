@@ -1,8 +1,5 @@
 package edu.medicine.bioplat.rcp;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -26,6 +23,7 @@ public class EnrichrDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
+
 		return new Point(400, 600);
 	}
 
@@ -36,6 +34,7 @@ public class EnrichrDialog extends Dialog {
 		browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 		return container;
+
 	}
 
 	public void openWith(Biomarker model) {
@@ -45,18 +44,17 @@ public class EnrichrDialog extends Dialog {
 		ac.append("\"}");
 		this.setBlockOnOpen(false);
 		open();
-		 browser.setText("<head><script>" + ENRICHR_JS_FUNCTION +
- "</script></head> <body onload='enrich(" + ac.toString() +
-		 ")'></body>");
-//		File tmpf;
-//		try {
-//			tmpf = File.createTempFile("_kjkj", "tmp");
-//			String tmpfs = tmpf.getAbsolutePath().replace(":", "").replace("\\", "/");
-//			browser.setUrl("file:/" + tmpfs);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		browser.setText("<head><script>" + ENRICHR_JS_FUNCTION + "</script></head> <body onload='enrich(" + ac.toString() + ")'></body>");
+		// File tmpf;
+		// try {
+		// tmpf = File.createTempFile("_kjkj", "tmp");
+		// String tmpfs = tmpf.getAbsolutePath().replace(":", "").replace("\\",
+		// "/");
+		// browser.setUrl("file:/" + tmpfs);
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 	}
 
