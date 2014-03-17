@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2007, 2008 Sonatype, Inc.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="editor.operation.contribution" name="%operations.menu.name" schema="schema/contribution.exsd"/>
+   <extension
+         id="id1"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="edu.unlp.medicine.bioplat.rcp.application.Application">
+         </run>
+      </application>
+   </extension>
+      <extension
+            id="product"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="edu.medicine.bioplat.rcp.id1"
+               name="bioplat">
+            <property
+                  name="appName"
+                  value="bioplat">
+            </property>
+            <property
+                  name="preferenceCustomization"
+                  value="preferences.ini">
+            </property>
+            <property
+                  name="startupForegroundColor"
+                  value="000000">
+            </property>
+            <property
+                  name="startupMessageRect"
+                  value="7,252,445,20">
+            </property>
+            <property
+                  name="startupProgressRect"
+                  value="5,275,445,15">
+            </property>
+            <property
+                  name="windowImages"
+                  value="resources/icons/window/adn.16x16.png,resources/icons/window/adn.32x32.png,resources/icons/window/adn.48x48.png,resources/icons/window/adn.64x64.png,resources/icons/window/adn.128x128.png">
+            </property>
+         </product>
+      </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.LoadBasicData"></startup>
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.SWT_UI_Context_Configurator">
+      </startup>
+      <startup
+            class="edu.unlp.medicine.bioplat.rcp.application.startup.StartupRserve">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="edu.unlp.medicine.bioplat.rcp.application.BioPlatPerspective"
+            id="bioplatrcp.perspective"
+            name="%main.perspective.name">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.MultiPageBiomarkerEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorActionBarContributor"
+            default="false"
+            icon="resources/icons/biomarker.PNG"
+            id="edu.unlp.medicine.biomarker.editor.multipage"
+            name="%editor.name">
+      </editor>
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.ExperimetEditorActionBarContributor"
+            default="false"
+            icon="resources/icons/experiment.png"
+            id="bio.plat.experiment.editor"
+            name="%experiment.editor.name">
+      </editor>
+      <editor
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor"
+            contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.AppliedExperimetEditorActionBarContributor"
+            default="false"
+            icon="resources/icons/applied.experiment.png"
+            id="bio.plat.applied.experiment.editor"
+            name="%applied.experiment.editor.name">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="bio.plat.rcp.actionSet1"
+            label="%actionSet.label"
+            visible="true">
+         <menu
+               id="bioplat.menu"
+               label="%menu.label">
+            <separator
+                  name="bio.plat.rcp.biomarker.menu.separator">
+            </separator>
+         </menu>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.OpenBiomarkerAction"
+               icon="resources/icons/newBiomarker.PNG"
+               id="bio.plat.rcp.biomarker.actions.new"
+               label="%new.action.label"
+               menubarPath="bioplat.menu/new.menu/additions"
+               style="push">
+         </action>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGeneAction"
+               id="bio.plat.rcp.biomarker.actions.gen.add"
+               label="%biomarker.addgen.action.label"
+               style="push">
+         </action>
+         <action
+               class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.OpenExperimentAction"
+               icon="resources/icons/experiment.png"
+               id="bio.plat.rcp.experiment.actions.new"
+               label="%experiment.new.action.label"
+               style="push">
+         </action>
+      </actionSet>
+      <actionSet
+            id="operations"
+            label="Operations (d)"
+            visible="true">
+         <menu
+               id="operations.menu1"
+               label="menu1"
+               path="operations.menu.path">
+            <groupMarker
+                  name="edu.medicine.bioplat.rcp.groupMarker1">
+            </groupMarker>
+         </menu>
+      </actionSet>
+      
+   </extension>
+      <extension
+      point="org.eclipse.ui.views">
+   <view
+         category="org.eclipse.ui"
+         class="org.eclipse.ui.ExtensionFactory:progressView"
+         icon="resources/icons/progress.png"
+         id="org.eclipse.ui.views.ProgressView"
+         name="%progress.view.name">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
+         icon="resources/icons/gene.gif"
+         id="edu.medicine.bioplat.rcp.gene.view"
+         name="%gene.view.name"
+         restorable="false">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageViewPart"
+         icon="resources/icons/messages.png"
+         id="edu.medicine.bioplat.rcp.message.view"
+         name="%message.view.name"
+         restorable="true">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.PSOResultViewPart"
+         icon="resources/icons/pso.png"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.result.view"
+         name="Top Ten PSO Result"
+         restorable="false">
+   </view>
+   <view
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeACResultViewPart"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.tree.result.view"
+         name="Best Variations"
+         restorable="false">
+   </view>
+   <view
+         allowMultiple="true"
+         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart"
+         icon="resources/icons/blindSearch.png"
+         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.view"
+         name="Top Ten Blind Search Result"
+         restorable="false">
+   </view>
+</extension>
+      <extension
+            point="org.eclipse.ui.importWizards">
+         <category
+               id="edu.medicine.bioplat.rcp.other"
+               name="%experiment.other.category.name">
+         </category>
+      </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <!--wizard
+            category="edu.medicine.bioplat.rcp.export.biomarker.root/"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToFileWizard"
+            icon="resources/icons/archivo.jpg"
+            id="edu.medicine.bioplat.rcp.export.biomarker.file"
+            name="%biomarker.export.to.file.wizard.entry.name">
+      </wizard-->
+      <!--wizard
+            category="edu.medicine.bioplat.rcp.export.biomarker.root"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToPdfWizard"
+            icon="resources/icons/pdf_file_export.png"
+            id="edu.medicine.bioplat.rcp.wizard1"
+            name="Export to PDF file">
+      </wizard-->
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+         
+    <category
+          name="Gene Signature"
+          id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root">
+    </category>
+  <category
+        id="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        name="%experiment.wizard.category.name">
+  </category>
+ 	<wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
+        icon="intro/contents/images/emptyBiomarker.jpg"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Create empty gene signature">
+       <description>Create an empty gene signature</description>
+	</wizard>
+  <wizard
+        canFinishEarly="true"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateRandomBiomarkerWizard"
+        icon="resources/icons/random.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
+        name="Create random gene signature">
+     <description>
+        Create an empty gene signature
+     </description>
+  </wizard>
+    
+	<wizard
+       category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+       class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportGeneSignatureFromBPLWizard"
+       icon="intro/contents/images/openFromBPL.png"
+       id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
+       name="Open gene signature from .BPL (BioPlat) file ">
+         </wizard>
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.metasignature.generation.GenerateMetasignatureWizard"
+        hasPages="true"
+        icon="intro/contents/images/GenerateMetasignature.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
+        name="Generate metasignature">
+     <description>
+        Generate a gene signature from sigDB, MSigDB.
+     </description>
+  </wizard>
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
+        icon="intro/contents/images/GEO.png"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
+        name="Import experiment from text file">
+  </wizard>
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
+        icon="intro/contents/images/From_external_database.png"
+        id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
+        name="Import from external signature-database (GeneSigDB, MSigDB)">
+     <description>
+        Create a new Gene Signature from the Genes Signatures in the Platform
+     </description>
+  </wizard>
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromInSilicoWizard"
+        icon="intro/contents/images/InSilico.png"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
+        name="Import experiment from InSilico using GSE">
+  </wizard>
+  
+  <wizard
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
+        icon="intro/contents/images/import_experiment.png"
+        id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
+        name="Import experiment from .CEL File">
+  </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.experimento.general"
+            name="Experiments">
+      </page>
+      <page
+            category="edu.medicine.bioplat.rcp.experimento.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage"
+            id="edu.medicine.bioplat.rcp.experimento.editor"
+            name="Editor">
+      </page>
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.genes.general"
+            name="Genes">
+      </page>
+      <page
+            category="edu.medicine.bioplat.rcp.genes.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage"
+            id="edu.medicine.bioplat.rcp.genes.external"
+            name="External Information">
+      </page>
+      <page
+            class="edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage"
+            id="edu.medicine.bioplat.rcp.preferences.general"
+            name="External Urls">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.AbstractPreferenceInitializer1">
+      </initializer>
+   </extension>
+   <extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
+      <actionContribution
+            caption="Add Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
+            groupId="02-Biomarker-abm"
+            image="resources/icons/plus2.png"
+            imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Add Random Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddRandomGenesAction"
+            groupId="02-Biomarker-abm"
+            image="resources/icons/random.png"
+            imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Remove Genes..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
+            groupId="02-Biomarker-abm"
+            image="resources/icons/removeItem2.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+      </actionContribution>
+      <actionContribution
+            caption="Validate Gene Signature using Concordance index  (the sample cluster is done using the expression data of just the genes in the gene signature)"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
+            groupId="03-Biomarker-validation"
+            image="resources/icons/validateSurvComp.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Validate Gene Signature using Kaplan-Meier and Log Rank Test (the sample cluster is done using the expression data of just the genes in the gene signature)"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
+            groupId="03-Biomarker-validation"
+            image="resources/icons/validateLogRank.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Enrichr"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
+            groupId="04-Biomarker-enrich"
+            image="resources/icons/enrichr.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using Blind search Optimizer"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
+            groupId="05-Biomarker-optimizer"
+            image="resources/icons/blindSearch.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using PSO"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
+            groupId="05-Biomarker-optimizer"
+            image="resources/icons/pso.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using Keep Best Variations optimizer"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeAC"
+            groupId="03-Biomarker-optimizer"
+            image="resources/icons/tree.png"
+            onMenu="false"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Filter genes on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
+            groupId="02-Experiment"
+            image="resources/icons/KeepOnlyGenes.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Paste New Clinical Attribute from clipboard"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.AddClinicalAttributteAC"
+            groupId="02-Experiment"
+            image="resources/icons/PasteClinicalData.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Configure Cluster..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.CalculateClusterActionContribution"
+            groupId="04-Experiment"
+            image="resources/icons/clustering.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+      </actionContribution>
+      
+      
+      <actionContribution
+            caption="Apply Logarithm"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogarithmAC"
+            groupId="03-Experiment"
+            image="resources/icons/log.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.Experiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Change a value by other value on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
+            groupId="03-Experiment"
+            image="resources/icons/ChangeValue.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Absolute Value on expression data"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.AbsoluteValue"
+            groupId="03-Experiment"
+            image="resources/icons/absolutevalue.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Validate experiment using Concordance index (cluster samples using groups configured on this experiment)"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
+            groupId="04-Experiment"
+            image="resources/icons/validateSurvCompExperiment.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+       <actionContribution
+             caption="Validate experiment using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
+             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
+             groupId="04-Experiment"
+             image="resources/icons/validateLogRankExperiment.png"
+             onMenu="true"
+             onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+       <actionContribution
+             caption="Export experiment to text file"
+             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentActionContribution"
+             groupId="01-Experiment"
+             image="resources/icons/export2.png"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+       </actionContribution>
+       <actionContribution
+             caption="Export gene information of your gene signature"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
+             groupId="01-Biomarker"
+             image="resources/icons/export2.png"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
+       <actionContribution
+             caption="Export Gene Signature to .BPL file"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportToBPLActionContribution"
+             groupId="01-Biomarker"
+             image="resources/icons/exportToBPL.png"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>tion>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="edu.medicine.bioplat.rcp.Factory1"
+            class="edu.medicine.bioplat.rcp.AdapterFactory1">
+         <adapter
+               type="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </adapter>
+      </factory>
+   </extension>
+   
+   <!--extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="edu.unlp.medicine.bioplat.rcp.intro.BioplatIntro"
+            id="edu.unlp.medicine.bioplat.rcp.intro">
+      </intro>
+      <introProductBinding
+            introId="edu.unlp.medicine.bioplat.rcp.intro"
+            productId="edu.medicine.bioplat.rcp.product">
+      </introProductBinding>
+   </extension-->
+   
+
+
+<!-- ··············· -->
+<!--      Intro      -->
+<!-- ··············· -->   
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            
+            id="edu.unlp.medicine.bioplat.rcp.intro"
+            label="Welcome"/>
+      <introProductBinding
+            introId="edu.unlp.medicine.bioplat.rcp.intro"
+            productId="edu.medicine.bioplat.rcp.product">
+      </introProductBinding>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introcontent.xml"
+            id="org.eclipse.intro.minimal.config"
+            introId="edu.unlp.medicine.bioplat.rcp.intro">
+         <presentation
+               home-page-id="root" standby-page-id="standby">
+            <implementation
+                  kind="html">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   
+  <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="openGenerateMetasignatureWizardAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.OpenGenerateMetasignatureWizardAction">
+      </action>
+      <action
+            name="importFromCSVFileIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportFromCSVFileIntroAction">
+      </action>
+   </extension>
+  
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="createEmptyMetasignatureAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CreateEmptyMetasignatureAction">
+      </action>
+      <action
+            name="createRandomGeneSignature"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CreateRandomGeneSignatureIntroAction">
+      </action>
+   </extension>
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="importFromInSilicoIntroAction" 							
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportFromInSilicoIntroAction">
+      </action>
+   </extension>
+   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="copyFromExternalDatabaseIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CopyFromExternalDatabaseIntroAction">
+      </action>
+   </extension>
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="celFileExperimentImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.CelFileExperimentImportIntroAction">
+      </action>
+      <action
+            name="bPLFileBiomarkerImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.BPLFileBiomarkerImportIntroAction">
+      </action>
+   </extension>
+   <extension
+         id="splashID"
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="edu.medicine.bioplat.rcp.AbstractSplashHandler1"
+            id="edu.medicine.bioplat.rcp.splashHandler1">
+      </splashHandler>
+      <splashHandlerProductBinding
+            productId="edu.medicine.bioplat.rcp.product"
+            splashId="splashID">
+      </splashHandlerProductBinding>
+   </extension>
+   
+  
+    
+<!-- ············· -->
+<!--    /Intro     -->
+<!-- ············· -->   
+</plugin>
