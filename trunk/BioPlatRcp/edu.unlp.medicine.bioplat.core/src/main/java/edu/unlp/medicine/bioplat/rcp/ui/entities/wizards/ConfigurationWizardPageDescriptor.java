@@ -50,6 +50,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.IStatisticsSignificanceTest;
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClustererFactory;
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClusterersEnum;
+import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.RClustererManualSetting;
 
 public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationWizardPageDescriptor.class);
@@ -172,6 +173,19 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			dbc.bindValue(ViewersObservables.observeSingleSelection(clusteringStrategy), wmodel.valueHolder(CLUSTERING_STRATEGY), UpdateStrategies.nonNull("Clustering strategy"), UpdateStrategies.nullStrategy());
 			clusteringStrategy.getCombo().setLayoutData(gdf.create());
 			clusteringStrategy.setSelection(new StructuredSelection(ClusterersEnum.KMEANS.getFriendlyName()));
+			clusteringStrategy.addSelectionChangedListener(new ISelectionChangedListener() {
+				
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					
+					ComboViewer csc = (ComboViewer) event.getSource();
+					String clusteringStrategy = (String) ((StructuredSelection) csc.getSelection()).getFirstElement();
+					if (clusteringStrategy.equals(RClustererManualSetting.getClustererName())){
+						//t.setData(experiment)
+					}
+					
+				}
+			});
 			logger.trace("Clustering strategy created");
 			
 			
