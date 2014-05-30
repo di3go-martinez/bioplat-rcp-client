@@ -140,7 +140,8 @@ public class SurvCompHelper implements Observer {
 //							survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(),//
 //							Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), //
 //							new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()), true);
-					new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), isExperimentValidation).blockOnOpen().open();
+					boolean itUsesManualPredefinedCluster = survCompValidationResult.itUsesManualPredefinedCluster();
+					new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), isExperimentValidation,itUsesManualPredefinedCluster).blockOnOpen().open();
 				}
 			});
 			editor.grabHorizontal = true;

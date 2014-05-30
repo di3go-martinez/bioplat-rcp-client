@@ -34,11 +34,13 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	private AbstractExperiment experiment;
 	boolean isExperimentValidation;
-
-	public MevWizard(AbstractExperiment e, boolean isExperimentValidation) {
+	boolean itUsesManualPredefinedCluster;
+	
+	public MevWizard(AbstractExperiment e, boolean isExperimentValidation, boolean itUsesManualPredefinedCluster) {
 		this.experiment = e;
 		this.setWindowTitle("Export");
 		this.isExperimentValidation = isExperimentValidation;
+		this.itUsesManualPredefinedCluster = itUsesManualPredefinedCluster;
 	}
 
 	@Override
@@ -99,7 +101,7 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation);
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster);
 		command.execute();
 		return null;
 	}
