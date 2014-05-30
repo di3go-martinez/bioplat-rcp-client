@@ -170,7 +170,7 @@ public class SurvCompExperimentsEditor extends AbstractEditorPart<Biomarker> {
 						Biomarker aBiomarker = survCompValidationResult.getBiomarker() != null ? survCompValidationResult.getBiomarker() : Biomarker.getFakeBiomarker();
 						//AbstractExperiment exp = new ExperimentAppliedToAMetasignature(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), aBiomarker, survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()));
 						//exp.setSamplesExplessionProfiles(experiment.getSamplesExplessionProfiles());
-						new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true).blockOnOpen().open();
+						new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
 					}
 				});
 				editor.grabHorizontal = true;
