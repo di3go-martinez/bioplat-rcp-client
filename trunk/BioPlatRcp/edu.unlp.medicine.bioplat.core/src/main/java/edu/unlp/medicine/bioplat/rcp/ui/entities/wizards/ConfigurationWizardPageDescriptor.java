@@ -155,11 +155,11 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		// check.setSelection(true);
 
 		new Label(clusterginGroup, SWT.NONE).setText("Number of clusters:");
-		final Text t = new Text(clusterginGroup, SWT.BORDER);
-		dbc.bindValue(SWTObservables.observeText(t, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
+		final Text numberOfClusterText = new Text(clusterginGroup, SWT.BORDER);
+		dbc.bindValue(SWTObservables.observeText(numberOfClusterText, SWT.Modify), wmodel.valueHolder(NUMBER_OF_CLUSTERS), uvsNumberOfClusters(), null);
 		GridData gdClusters = gdf.grab(false, false).create();
-		t.setLayoutData(gdClusters);
-		t.setEnabled(!forManualClustering);
+		numberOfClusterText.setLayoutData(gdClusters);
+		numberOfClusterText.setEnabled(!forManualClustering);
 		logger.trace("Number of clusters created");
 
 		if (!forManualClustering) {
@@ -182,7 +182,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
-					//es una lista porque en otros casos puede haber varios seleccionados, acá hay solo uno
+					// es una lista porque en otros casos puede haber varios
+					// seleccionados, acá hay solo uno
 					Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
 
 					ComboViewer csc = (ComboViewer) event.getSource();
@@ -195,10 +196,14 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 							// válida
 							clusteringStrategy.setSelection(defaultStrategySelection);
 						} else {
-							wmodel.set(PagesDescriptors.NUMBER_OF_CLUSTERS, exp.getNumberOfClusters());
-							// t.setText(exp.getNumberOfClusters());
+							// por qué string? porque en ese campo se puede
+							// poner un rango (ej: 2..3)... y eso es un string
+							wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, String.valueOf(exp.getNumberOfClusters()));
+							numberOfClusterText.setEnabled(false);
+
 						}
-					}
+					} else
+						numberOfClusterText.setEnabled(true);
 
 				}
 			});
