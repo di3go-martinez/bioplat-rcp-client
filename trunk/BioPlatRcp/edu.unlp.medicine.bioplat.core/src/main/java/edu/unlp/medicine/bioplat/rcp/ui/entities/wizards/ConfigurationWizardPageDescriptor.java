@@ -22,9 +22,11 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -39,6 +41,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
@@ -58,6 +61,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationWizardPageDescriptor.class);
 	private ValidationTestGUIProvider validationTestGUIProvider;
 	private boolean forManualClustering;
+
+	// TODO private boolean badClusterconfiguration = false;
 
 	// private Button useExistingCluster;
 
@@ -80,7 +85,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
 
 			// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
-			createGroup4CLusteringInfo(container, gdf, dbc, wmodel);
+			createGroup4CLusteringInfo(container, gdf, dbc, wmodel, wp);
 			createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
 
 			container.redraw();
@@ -140,7 +145,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	}
 
-	private void createGroup4CLusteringInfo(Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
+	private void createGroup4CLusteringInfo(Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel, final WizardPage wp) {
 
 		Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
 		clusterginGroup.setText("Clustering parameters");
@@ -183,7 +188,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
 					// es una lista porque en otros casos puede haber varios
-					// seleccionados, acá hay solo uno
+					// seleccionados, acá habría solo uno
 					Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
 
 					ComboViewer csc = (ComboViewer) event.getSource();
@@ -191,10 +196,11 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 					if (clusteringStrategyStr.equals(RClustererManualSetting.getClustererName())) {
 
 						if (!exp.hasGotEnoughClustersForValidation()) {
-							MessageManager.INSTANCE.add(Message.warn("The experiment you have selected must have at least two clusters. Your experiment have just " + exp.getNumberOfClusters() + ". Please go to the experiment and set at least 2 clusters manually."));
 							// recambio la estategia, ya que la manual no es
 							// válida
 							clusteringStrategy.setSelection(defaultStrategySelection);
+							putmessage(wp, "The experiment you have selected must have at least two clusters. Your experiment have just " + exp.getNumberOfClusters() + ". Please go to the experiment and set at least 2 clusters manually.");
+
 						} else {
 							// por qué string? porque en ese campo se puede
 							// poner un rango (ej: 2..3)... y eso es un string
@@ -202,9 +208,32 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 							numberOfClusterText.setEnabled(false);
 
 						}
-					} else
+					} else {
+						// la estrategia no es manual, entonces activo el input
 						numberOfClusterText.setEnabled(true);
+					}
 
+				}
+
+				/**
+				 * pone un mensaje en la página del wizard y luego de un
+				 * determinado tiempo lo borra
+				 * 
+				 * @param wp
+				 * @param message
+				 */
+				private void putmessage(final WizardPage wp, String message) {
+					MessageManager.INSTANCE.add(Message.warn(message));
+					wp.setMessage(message, IMessageProvider.WARNING);
+					new UIJob("") {
+
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							// limpio el mensaje
+							wp.setMessage(null);
+							return ValidationStatus.ok();
+						}
+					}.schedule(9000);
 				}
 			});
 			logger.trace("Clustering strategy created");
