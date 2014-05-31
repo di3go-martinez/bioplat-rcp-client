@@ -191,7 +191,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 					if (clusteringStrategyStr.equals(RClustererManualSetting.getClustererName())) {
 
 						if (!exp.hasGotEnoughClustersForValidation()) {
-							MessageManager.INSTANCE.add(Message.warn("The experiment you have selected must have at least two clusters. Your experiment have just x. Please go to the experiment and set at least 2 clusters manually."));
+							MessageManager.INSTANCE.add(Message.warn("The experiment you have selected must have at least two clusters. Your experiment have just " + exp.getNumberOfClusters() + ". Please go to the experiment and set at least 2 clusters manually."));
 							// recambio la estategia, ya que la manual no es
 							// válida
 							clusteringStrategy.setSelection(defaultStrategySelection);
