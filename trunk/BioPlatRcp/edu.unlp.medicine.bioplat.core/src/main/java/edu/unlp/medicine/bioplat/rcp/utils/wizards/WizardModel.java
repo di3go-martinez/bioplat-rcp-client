@@ -83,6 +83,27 @@ public class WizardModel {
 		return iObservableValue;
 	}
 
+	/**
+	 * 
+	 * @param key
+	 *            un parámetro válido
+	 * @param value
+	 *            un valor de igual tipo con el que fue definido
+	 * @return
+	 */
+	public WizardModel update(String key, Object value) {
+		valueHolder(key).setValue(value);
+		return this;
+	}
+
+	/**
+	 * <b>no actualiza valores observables por la vista, para eso usar
+	 * update(aKey, aValue)</b>
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	// TODO analizar...
 	public WizardModel set(String key, Object value) {
 		commonValues.put(key, value);
@@ -120,6 +141,13 @@ public class WizardModel {
 
 	private static Logger logger = LoggerFactory.getLogger(WizardModel.class);
 
+	/**
+	 * <b>ojo que al actualizar la referencia del writableValue se pierde el
+	 * binding! USAR CUIDADOSAMENTE O PREFERENTEMENTE NO USAR</b>
+	 * 
+	 * @param key
+	 * @param writableValue
+	 */
 	@Beta
 	public void replace(String key, WritableValue writableValue) {
 		values.put(key, writableValue);
