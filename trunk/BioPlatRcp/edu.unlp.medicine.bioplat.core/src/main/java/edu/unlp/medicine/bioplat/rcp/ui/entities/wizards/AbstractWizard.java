@@ -403,7 +403,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 * necesario para poder acceder a los valores del model.
 	 * 
 	 * @deprecated no va a ser más necesario cuando se haga el cambio de acceso
-	 *             en la clase#método WizardModal#value (solo resta habilitarlo,
+	 *             en la clase#método WizardModel#value (solo resta habilitarlo,
 	 *             planificado para "largo plazo")
 	 */
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
