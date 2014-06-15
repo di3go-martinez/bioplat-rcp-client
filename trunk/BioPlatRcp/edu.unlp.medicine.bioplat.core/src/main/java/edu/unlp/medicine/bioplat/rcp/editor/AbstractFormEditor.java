@@ -116,6 +116,7 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 		// IProgressMonitor submonitor = new Submonitor(monitor);
 		// doSave0(submonitor);
 		// monitor.done();
+		// FIXME abrir export en vez de un error...
 		MessageDialog.openInformation(PlatformUIUtils.findShell(), "Export", "Use export instead of save");
 		throw new RuntimeException("Use export instead of save");
 	}
