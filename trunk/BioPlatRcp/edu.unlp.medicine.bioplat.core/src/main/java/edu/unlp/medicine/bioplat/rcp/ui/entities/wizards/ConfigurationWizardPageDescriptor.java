@@ -204,7 +204,15 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 						} else {
 							// por qué string? porque en ese campo se puede
 							// poner un rango (ej: 2..3)... y eso es un string
-							wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, String.valueOf(exp.getNumberOfClusters()));
+							// TODO alternativa, el que crea el wmodel debería
+							// saber qué value devolver...
+							Object value;
+							if (wmodel.valueHolder(NUMBER_OF_CLUSTERS).getValueType().equals(Integer.class))
+								value = exp.getNumberOfClusters();
+							else
+								value = String.valueOf(exp.getNumberOfClusters());
+
+							wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, value);
 							numberOfClusterText.setEnabled(false);
 
 						}

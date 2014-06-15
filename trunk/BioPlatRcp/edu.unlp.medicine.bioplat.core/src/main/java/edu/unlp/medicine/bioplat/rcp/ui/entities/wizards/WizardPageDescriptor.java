@@ -132,9 +132,9 @@ public abstract class WizardPageDescriptor {
 		return true;
 	}
 
-	public WizardPageDescriptor setImageDescriptor(ImageDescriptor imageDescriptorFromPlugin) {
+	public WizardPageDescriptor setImageDescriptor(ImageDescriptor imageDescriptor) {
 
-		this.imageDescriptor = imageDescriptorFromPlugin;
+		this.imageDescriptor = imageDescriptor;
 		return this;
 	}
 
