@@ -7,6 +7,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<distributionManagement>
+		<repository>
+			<id>dropbox-local</id>
+			<url>file://${dropbox.repo}</url>
+		</repository>
+	</distributionManagement>
+
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
@@ -219,6 +226,27 @@
 				<module>runtime</module>
 			</modules>
 		</profile>
+		
+		<profile>
+			<id>dropbox-local</id>
+			<repositories>
+				<repository>
+					<id>dropbox-local-repository</id>
+					<name>DropBox Local Repository</name>
+					<url>file://${dropbox.repo}</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
+		
 	</profiles>
 
 	<developers>
