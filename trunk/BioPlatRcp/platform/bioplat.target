@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?><target name="Bioplat Target" sequenceNumber="67">
+<?pde version="3.8"?><target name="Bioplat Target" sequenceNumber="68">
 <locations>
-<location path="${DROPBOX_HOME}\BioPlat\m2repo\eclipse\target.all" type="Directory"/>
-<location path="${DROPBOX_HOME}\BioPlat\m2repo\eclipse\" type="Directory"/>
-<location path="${eclipse_home}" type="Directory"/>
 <location path="${M2_REPO}\bioplat\edu.medicine.bioplat.base.lib\1.2.0-SNAPSHOT" type="Directory"/>
+<location path="${DROPBOX_HOME}\BioPlat\m2repo\eclipse\" type="Directory"/>
+<location path="${DROPBOX_HOME}\BioPlat\m2repo\eclipse\target.all" type="Directory"/>
 </locations>
 <environment>
 <arch>x86</arch>
