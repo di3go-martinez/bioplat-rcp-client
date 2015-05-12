@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.wizard.WizardPage;
@@ -74,11 +75,12 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 					}
 
 					@Override
-					public OneBiomarkerCommand createCommand(
-							Biomarker biomarker,
-							ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
-						
-						return new LogRankTestCommand(biomarker, validationConfigs);
+					public List<OneBiomarkerCommand> createCommand(Biomarker biomarker,
+							List<ValidationConfig4DoingCluster> validationConfigs) {
+						List<OneBiomarkerCommand> commandList = new ArrayList<OneBiomarkerCommand>();
+						commandList.add(new LogRankTestCommand(biomarker, validationConfigs));
+						return commandList;
+
 					}
 
 					

@@ -128,6 +128,6 @@
 			<artifactId>edu.medicine.bioplat.base.lib</artifactId>
 			<version>1.2.0-SNAPSHOT</version>
 		</dependency>
-		
+
 	</dependencies>
 </project>

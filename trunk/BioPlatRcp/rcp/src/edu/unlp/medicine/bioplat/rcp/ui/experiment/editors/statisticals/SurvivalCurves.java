@@ -12,16 +12,14 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.rosuda.REngine.REXP;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.ConvertByteImageUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
 import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerFromBioplatUsingR4J;
-import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.r4j.exceptions.R4JScriptExecutionException;
-import edu.unlp.medicine.r4jServer.BioplatR4JServer;
 
 /**
  * 
@@ -29,9 +27,10 @@ import edu.unlp.medicine.r4jServer.BioplatR4JServer;
  * 
  */
 class SurvivalCurves extends CompositeGenerator {
-	private final ExperimentAppliedToAMetasignature experiment;
+	
+	private final Validation experiment;
 
-	SurvivalCurves(FormToolkit toolkit, ExperimentAppliedToAMetasignature experiment) {
+	SurvivalCurves(FormToolkit toolkit, Validation experiment) {
 		super(toolkit);
 		this.experiment = experiment;
 	}
@@ -40,7 +39,7 @@ class SurvivalCurves extends CompositeGenerator {
 	protected void fill(Composite c) throws Exception {
 		try {
 			c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
-			final String script = experiment.getScriptForSurvivalCurves();
+			final String script = this.experiment.getSurvivalCurve().getScript();
 
 			File imageFile = resolveImage(script);
 			imageFile.deleteOnExit();

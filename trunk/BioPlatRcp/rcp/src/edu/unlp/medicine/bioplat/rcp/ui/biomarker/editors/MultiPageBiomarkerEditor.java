@@ -35,9 +35,10 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 					setPartName(((BiomarkerEditor) arg0).model().id());
 			}
 		});
-		result.add(new EditorDescription(input, editor, "General"));
+		result.add(new EditorDescription(input, editor, "General"));		
 		result.add(new EditorDescription(input, new SurvCompBiomarkerExperimentsEditor(false), "Concordance index validations"));
 		result.add(new EditorDescription(input, new LogRankTestBiomarkerExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
+		result.add(new EditorDescription(input, new BiomarkerExperimentsEditor(false), "Validations"));
 		
 
 		// Estaría configurado en las preferences ahora

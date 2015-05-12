@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.logRankTest.LogRankTestGUIProvider;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.LogRankTestCommand;
@@ -17,19 +18,17 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
  */
 public class ApplyLogRankTestWizard extends ValidationConfigWizard {
 
-
 	public ApplyLogRankTestWizard(Biomarker biomarker, boolean acceptRange) {
 		super(biomarker, acceptRange, new LogRankTestGUIProvider());
-		
+
 	}
 
 	@Override
-	public OneBiomarkerCommand createCommand(Biomarker biomarker,
-			ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
-		 
-		return new LogRankTestCommand(biomarker, validationConfigs);
-		
+	public List<OneBiomarkerCommand> createCommand(Biomarker biomarker,
+			List<ValidationConfig4DoingCluster> validationConfigs) {
+		List<OneBiomarkerCommand> commandList = new ArrayList<OneBiomarkerCommand>();
+		commandList.add(new LogRankTestCommand(biomarker, validationConfigs));
+		return commandList;
+
 	}
-
-
 }

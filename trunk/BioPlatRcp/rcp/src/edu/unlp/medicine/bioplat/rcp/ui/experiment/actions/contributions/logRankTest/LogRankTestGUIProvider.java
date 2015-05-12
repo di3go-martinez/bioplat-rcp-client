@@ -34,8 +34,7 @@ public class LogRankTestGUIProvider extends ValidationTestGUIProvider{
 
 	@Override
 	public boolean isThereAdditionalParameters() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

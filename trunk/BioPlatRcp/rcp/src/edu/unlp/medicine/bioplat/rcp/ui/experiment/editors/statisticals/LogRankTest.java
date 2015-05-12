@@ -8,13 +8,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.rosuda.REngine.REXP;
 
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
 import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerFromBioplatUsingR4J;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 
 public class LogRankTest extends CompositeGenerator {
-	private final ExperimentAppliedToAMetasignature experiment;
+	
+	private final Validation experiment;
 
-	LogRankTest(FormToolkit toolkit, ExperimentAppliedToAMetasignature experiment) {
+	LogRankTest(FormToolkit toolkit, Validation experiment) {
 		super(toolkit);
 		this.experiment = experiment;
 	}
@@ -23,8 +25,8 @@ public class LogRankTest extends CompositeGenerator {
 	public void fill(Composite container) throws Exception {
 		final Composite c = toolkit().createComposite(container, SWT.FLAT);
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
-		showScriptResult(c, "pvalue", experiment.getScriptForDoingTheClusterValidationThroughStatitiscsTest_pValue());
-		showScriptResult(c, "Chi Squared", experiment.generateScript4LogRankTestChiSqured());
+		showScriptResult(c, "pvalue", experiment.getClusteringResult().getScriptForLogRankTestChiSquaredPValue());
+		showScriptResult(c, "Chi Squared", experiment.getClusteringResult().getScriptForLogRankTestChiSqured());		
 	}
 
 	private void showScriptResult(Composite container, String label, String script) {

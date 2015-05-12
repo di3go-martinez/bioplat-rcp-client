@@ -401,6 +401,17 @@
          </selection>
       </actionContribution>
       <actionContribution
+            caption="Validate Gene Signature"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyValidationTestActionContribution"
+            groupId="03-Biomarker-validation"
+            image="resources/icons/validateSurvComp.png"
+            onMenu="true"
+            onToolbar="true">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
             caption="Enrichr"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
             groupId="04-Biomarker-enrich"

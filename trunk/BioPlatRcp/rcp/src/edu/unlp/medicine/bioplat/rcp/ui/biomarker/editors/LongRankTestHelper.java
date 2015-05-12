@@ -171,7 +171,7 @@ public class LongRankTestHelper implements Observer {
 					@Override
 					protected Control createDialogArea(Composite parent) {
 						final Composite container = Widgets.createDefaultContainer((Composite) super.createDialogArea(parent));
-						AppliedExperimentEditor.makeView(container, model());
+						//AppliedExperimentEditor.makeView(container, model());
 						return container;
 					}
 

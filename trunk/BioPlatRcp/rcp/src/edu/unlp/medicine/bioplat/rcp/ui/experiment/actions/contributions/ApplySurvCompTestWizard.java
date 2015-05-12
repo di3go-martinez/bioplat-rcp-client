@@ -1,6 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.survComp.SurvCompGUIProvider;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.SurvCompTestCommand;
@@ -17,19 +19,18 @@ import edu.unlp.medicine.entity.biomarker.Biomarker;
  */
 public class ApplySurvCompTestWizard extends ValidationConfigWizard {
 
-
-
 	public ApplySurvCompTestWizard(Biomarker biomarker, boolean acceptRange) {
 		super(biomarker, acceptRange, new SurvCompGUIProvider());
-		
+
 	}
 
 	@Override
-	public OneBiomarkerCommand createCommand(Biomarker biomarker,
-			ArrayList<ValidationConfig4DoingCluster> validationConfigs) {
-		 return new SurvCompTestCommand(biomarker, validationConfigs);
-		
-	}
+	public List<OneBiomarkerCommand> createCommand(Biomarker biomarker,
+			List<ValidationConfig4DoingCluster> validationConfigs) {
+		List<OneBiomarkerCommand> commandList = new ArrayList<OneBiomarkerCommand>();
+		commandList.add(new SurvCompTestCommand(biomarker, validationConfigs));
+		return commandList;
 
+	}
 
 }

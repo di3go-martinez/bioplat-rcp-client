@@ -10,14 +10,14 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
-import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
 
 /**
  * 
  * @author Diego Martínez
  * 
  */
-public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedToAMetasignature> {
+public class StatisticalDataEditor extends AbstractEditorPart<Validation> {
 
 	public StatisticalDataEditor(boolean autoUpdatableTitle) {
 		super(autoUpdatableTitle);
@@ -54,7 +54,7 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 		super.dispose();
 	}
 
-	public static void makeView(Composite parent, ExperimentAppliedToAMetasignature model) {
+	public static void makeView(Composite parent, Validation model) {
 		toolkit = new FormToolkit(parent.getDisplay());
 
 		ScrolledForm container = toolkit.createScrolledForm(parent);
@@ -62,11 +62,10 @@ public class StatisticalDataEditor extends AbstractEditorPart<ExperimentAppliedT
 		container.getBody().setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-		final ExperimentAppliedToAMetasignature experiment = model;
 
-		createExpandable(container, "Survival Curves", new SurvivalCurves(toolkit, experiment));
+		createExpandable(container, "Survival Curves", new SurvivalCurves(toolkit, model));
 
-		createExpandable(container, "LogRankTestChiSqured", new LogRankTest(toolkit, experiment));
+		createExpandable(container, "LogRankTestChiSqured", new LogRankTest(toolkit, model));
 
 	}
 }

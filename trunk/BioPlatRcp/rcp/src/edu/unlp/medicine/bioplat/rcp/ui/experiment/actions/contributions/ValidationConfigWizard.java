@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +158,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				final ValidationConfig4DoingCluster validationConfig = new ValidationConfig4DoingCluster(aed, clusters, attributeNameToValidation, secondAttributeNameToDoTheValidation, 1, removeInBiomarkerTheGenesThatAreNotInTheExperiment, clusterer);
 				validationConfig.setSpecificParametersForTheValidationTest(specificParametersForTheValidationTest);
 
-				commands2apply.add(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
+				commands2apply.addAll(this.createCommand(findBiomarker(), Lists.newArrayList(validationConfig)));
 
 				// FIXME hacer un poquito más generico con una
 				// interface MultipageEditor#addPage(Editor, Input,
@@ -190,7 +189,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	}
 
-	public abstract OneBiomarkerCommand createCommand(Biomarker findBiomarker, ArrayList<ValidationConfig4DoingCluster> newArrayList);
+	public abstract List<OneBiomarkerCommand> createCommand(Biomarker findBiomarker, List<ValidationConfig4DoingCluster> list);
 
 	protected String getClusterRangeAsString() {
 		// TODO revisar cuando tira error de casting

@@ -31,7 +31,7 @@
 		<property name="current_session_context_class">thread</property>
 
 		<!-- Second level cache -->
-		<property name="hibernate.cache.use_second_level_cache">fale</property>
+		<property name="hibernate.cache.use_second_level_cache">false</property>
 		<property name="hibernate.cache.use_query_cache">false</property>
 <!-- 		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.infinispan.InfinispanRegionFactory</property>		 -->
 
