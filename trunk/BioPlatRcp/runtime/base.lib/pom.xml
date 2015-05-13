@@ -19,7 +19,7 @@
 	<packaging>bundle</packaging>
 	<version>1.2.0-SNAPSHOT</version>
 	<name>base lib</name>
-	<description>third basic libraries</description>
+	<description>basic third libraries</description>
 	<inceptionYear>20111031</inceptionYear>
 	<!-- <parent> <groupId>bioplat</groupId> <artifactId>parent</artifactId> 
 		<version>0.0.2-SNAPSHOT</version> </parent> -->
