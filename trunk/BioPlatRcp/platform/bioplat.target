@@ -13,7 +13,8 @@
 <vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms100m -Xmx1g&#13;
 -Dh2.connection.url=jdbc:h2:${DROPBOX_HOME}/database/desarrollo/bioplat;AUTO_SERVER=TRUE&#13;
 -DR_HOME_BIOPLAT="${R_HOME}"&#13;
--Drlog=true</vmArgs>
+-Drlog=true&#13;
+-DR_REQUIRED_LIBRARIES_FILE_PATH=${DROPBOX_HOME}/R/bioplatRequiredLibraries</vmArgs>
 <programArgs>-consolelog</programArgs>
 </launcherArgs>
 </target>
