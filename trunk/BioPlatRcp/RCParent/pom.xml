@@ -57,7 +57,7 @@
 		<module>../rcp</module>
 		<module>../platform</module>
 		<module>../edu.unlp.medicine.bioplat.poc</module>
-		<!--module>../runtime</module-->
+		<!--module>../runtime</module -->
 		<module>../edu.unlp.medicine.bioplat.genes</module>
 		<module>../edu.unlp.medicine.bioplat.core</module>
 	</modules>
@@ -95,33 +95,33 @@
 						</artifact>
 					</target>
 
-	<environments>
-		<environment>
-			<os>linux</os>
-			<ws>gtk</ws>
-			<arch>x86</arch>
-		</environment>
-		<environment>
-			<os>win32</os>
-			<ws>win32</ws>
-			<arch>x86</arch>
-		</environment>
-		<environment>
-			<os>linux</os>
-			<ws>gtk</ws>
-			<arch>x86_64</arch>
-		</environment>
-		<environment>
-			<os>win32</os>
-			<ws>win32</ws>
-			<arch>x86_64</arch>
-		</environment>
-		<environment>
-			<os>macosx</os>
-			<ws>cocoa</ws>
-			<arch>x86_64</arch>
-		</environment>
-	</environments>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
 
 				</configuration>
 				<!-- configuration> <target> <artifact> <groupId>bioplat</groupId> <artifactId>edu.medicine.bioplat.rcp</artifactId> 
@@ -132,6 +132,14 @@
 
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-packaging-plugin</artifactId>
@@ -226,7 +234,7 @@
 				<module>runtime</module>
 			</modules>
 		</profile>
-		
+
 		<profile>
 			<id>dropbox-local</id>
 			<repositories>
@@ -246,7 +254,7 @@
 				</repository>
 			</repositories>
 		</profile>
-		
+
 	</profiles>
 
 	<developers>
