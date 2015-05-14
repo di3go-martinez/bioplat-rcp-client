@@ -32,9 +32,9 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>bioplat.target</file>
+									<file>luna.target</file>
 									<type>target</type>
-									<classifier>indigo</classifier>
+									<classifier>luna</classifier>
 								</artifact>
 							</artifacts>
 						</configuration>
