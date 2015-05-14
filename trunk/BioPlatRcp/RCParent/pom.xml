@@ -29,7 +29,7 @@
 		<maven-runtime.version>1.1.0-SNAPSHOT</maven-runtime.version>
 		<tycho-version>0.19.0</tycho-version>
 		<!-- eclipse version bioplat is built against -->
-		<eclipse-repo.url>http://download.eclipse.org/releases/indigo</eclipse-repo.url>
+		<eclipse-repo.url>http://download.eclipse.org/releases/luna</eclipse-repo.url>
 	</properties>
 
 
@@ -259,9 +259,9 @@
 
 	<developers>
 		<developer>
-			<id>Json</id>
-			<name>John Sonatype</name>
-			<organization>Sonatype Inc.</organization>
+			<id>diego</id>
+			<name>Diego Martínez</name>
+			<organization>Bioplat RCP Inc.</organization>
 		</developer>
 	</developers>
 
