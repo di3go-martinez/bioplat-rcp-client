@@ -383,8 +383,8 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplySurvCompTestActionContribution"
             groupId="03-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
-            onMenu="true"
-            onToolbar="true">
+            onMenu="false"
+            onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -394,8 +394,8 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             groupId="03-Biomarker-validation"
             image="resources/icons/validateLogRank.png"
-            onMenu="true"
-            onToolbar="true">
+            onMenu="false"
+            onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
          </selection>
@@ -573,6 +573,13 @@
              onToolbar="true">
           <selection
                 class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
+       <actionContribution
+             caption="edu.medicine.bioplat.rcp.actionContribution2"
+             class="edu.medicine.bioplat.rcp.ActionContribution2"
+             onMenu="true"
+             onToolbar="false">
+          <selection></selection>
        </actionContribution>tion>
    </extension>
    <extension
@@ -688,6 +695,9 @@
             productId="edu.medicine.bioplat.rcp.product"
             splashId="splashID">
       </splashHandlerProductBinding>
+   </extension>
+   <extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
    </extension>
    
   
