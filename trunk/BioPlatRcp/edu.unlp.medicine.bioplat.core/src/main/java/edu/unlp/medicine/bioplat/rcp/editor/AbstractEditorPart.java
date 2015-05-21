@@ -161,9 +161,9 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 
 			@Override
 			public ISelection getSelection() {
-				MultipleSelection cs = new MultipleSelection();
-				cs.put(Constants.MODEL, new StructuredSelection(model())).add(getAdditionalSelections());
-				return cs;
+				MultipleSelection selection = new MultipleSelection();
+				selection.put(Constants.MODEL, new StructuredSelection(model())).add(getAdditionalSelections());
+				return selection;
 			}
 
 			@Override
