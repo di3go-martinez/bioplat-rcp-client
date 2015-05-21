@@ -171,7 +171,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 		String from = wizardModel().value(GMSPage4Algorithm.ALGORITHM);
 		IGeneSelectorAlgorithm result = null;
 		if (from == null)
-			result = null;
+			return null;
 
 		if (from.equals(ALIX))
 			result = new ALIX((Integer) (wizardModel().value(ALIX + SEPARATOR + ALIX_X_PARAMETER)));
