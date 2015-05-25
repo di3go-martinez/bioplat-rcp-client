@@ -575,11 +575,13 @@
                 class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
        </actionContribution>
        <actionContribution
-             caption="edu.medicine.bioplat.rcp.actionContribution2"
-             class="edu.medicine.bioplat.rcp.ActionContribution2"
+             caption="Export to PDF"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.GeneratePDFFromBiomarkerActionContribution"
+             image="resources/icons/archivo.jpg"
              onMenu="true"
-             onToolbar="false">
-          <selection></selection>
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
        </actionContribution>tion>
    </extension>
    <extension
