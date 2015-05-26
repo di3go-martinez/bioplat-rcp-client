@@ -577,7 +577,7 @@
        <actionContribution
              caption="Export to PDF"
              class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.GeneratePDFFromBiomarkerActionContribution"
-             image="resources/icons/archivo.jpg"
+             image="resources/icons/Reporte1.gif"
              onMenu="true"
              onToolbar="true">
           <selection
