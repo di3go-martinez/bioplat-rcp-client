@@ -263,8 +263,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 		wv = getClusterWriatableValue();
 		wm.add(PagesDescriptors.NUMBER_OF_CLUSTERS, wv);
 
-		WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
-		;
+		//WritableValue wv4RepeatCLuster = new WritableValue(10, Integer.class);
 		// wm.add(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING,
 		// wv4RepeatCLuster);
 		// wm.set(PagesDescriptors.TIMES_TO_REPEAT_CLUSTERING, 10);
