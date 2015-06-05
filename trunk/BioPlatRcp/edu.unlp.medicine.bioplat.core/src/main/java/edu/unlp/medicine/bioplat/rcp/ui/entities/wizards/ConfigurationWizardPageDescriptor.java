@@ -181,7 +181,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			final ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginGroup, "Select the strategy to do your clustering.", ClustererFactory.getInstance().getClustererNames());
 			dbc.bindValue(ViewersObservables.observeSingleSelection(clusteringStrategy), wmodel.valueHolder(CLUSTERING_STRATEGY), UpdateStrategies.nonNull("Clustering strategy"), UpdateStrategies.nullStrategy());
 			clusteringStrategy.getCombo().setLayoutData(gdf.create());
-			final StructuredSelection defaultStrategySelection = new StructuredSelection(ClusterersEnum.KMEANS.getFriendlyName());
+			final StructuredSelection defaultStrategySelection = new StructuredSelection(ClusterersEnum.PAM.getFriendlyName());
 			clusteringStrategy.setSelection(defaultStrategySelection);
 			clusteringStrategy.addSelectionChangedListener(new ISelectionChangedListener() {
 
