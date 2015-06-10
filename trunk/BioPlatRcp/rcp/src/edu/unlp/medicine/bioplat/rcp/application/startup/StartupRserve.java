@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
-import edu.unlp.medicine.r4j.constants.OSDependentConstants;
 import edu.unlp.medicine.r4j.exceptions.R4JServerShutDownException;
 import edu.unlp.medicine.r4j.rLibrary.RLibrary;
 import edu.unlp.medicine.r4j.systemProperties.R4JSystemPropertiesExpected;
@@ -23,14 +22,14 @@ public class StartupRserve implements IStartup {
 	// Logger Object
 	private static Logger logger = LoggerFactory.getLogger(StartupRserve.class);
 
-	private static final String R_PATH = OSDependentConstants.PATH_TO_R;
-	private Process process;
+
 
 	@Override
 	public void earlyStartup() {
 
 		new Job("Rserve - Initializing...") {
 
+			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Initializing rServe (bridge between Bioplat and R) and checking R Libraries...", IProgressMonitor.UNKNOWN);
 				
