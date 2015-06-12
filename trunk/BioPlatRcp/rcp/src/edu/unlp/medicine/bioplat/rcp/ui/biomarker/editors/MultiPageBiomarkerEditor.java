@@ -38,7 +38,6 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 		result.add(new EditorDescription(input, editor, "General"));		
 		result.add(new EditorDescription(input, new BiomarkerExperimentsEditor(false), "Validations"));
 		
-
 		// Estaría configurado en las preferences ahora
 		// result.add(new EditorDescription(input, new BrowserEditor() {
 		// @Override
