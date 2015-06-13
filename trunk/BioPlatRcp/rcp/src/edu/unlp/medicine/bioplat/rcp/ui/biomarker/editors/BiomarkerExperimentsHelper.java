@@ -8,23 +8,33 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
+import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
@@ -45,6 +55,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 	private int newBaseColumnIndex;
 	private int exportColumnIndex;
 	private int viewClusterColIndex;
+	private int kaplanMeierColIndex;
 
 	/**
 	 * 
@@ -93,6 +104,15 @@ public class BiomarkerExperimentsHelper implements Observer {
 
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
+			c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
+			c.addSelectionListener(openExperimentAppliedDialog(exp.getValidationConfig()
+					.getExperimentToValidate()));
+			editor.grabHorizontal = true;
+			editor.setEditor(c, items[i], this.kaplanMeierColIndex);
+
+			
+			editor = new TableEditor(table);
+			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils
 					.findImage("Export experiment used for validation.16.png"));
 			c.addSelectionListener(new SelectionAdapter() {
@@ -125,11 +145,14 @@ public class BiomarkerExperimentsHelper implements Observer {
 			createTableColumn(table, 150, "Open Original Experiment",
 					this.newBaseColumnIndex);
 
-			this.exportColumnIndex = this.newBaseColumnIndex + 1;
+			this.kaplanMeierColIndex = this.newBaseColumnIndex + 1;
+			createTableColumn(table, 150, "View Kaplan-Maier", this.kaplanMeierColIndex);
+			
+			this.exportColumnIndex = this.newBaseColumnIndex + 2;
 			createTableColumn(table, 200, "Export gene signature data matrix",
 					this.exportColumnIndex);
 
-			this.viewClusterColIndex = this.newBaseColumnIndex + 2;
+			this.viewClusterColIndex = this.newBaseColumnIndex + 3;
 			createTableColumn(table, 100, "View used cluster",
 					this.viewClusterColIndex);
 
@@ -186,6 +209,49 @@ public class BiomarkerExperimentsHelper implements Observer {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				new ConfigureClusterDialog(groups).open();
+			}
+		};
+	}
+	
+	//Metodo para el muestreo de graficas de Kaplan-Meier
+	protected SelectionAdapter openExperimentAppliedDialog(final Experiment exp) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final Shell shell = PlatformUIUtils.findShell();
+				Dialog dialog = new DialogModel<Experiment>(shell, new ModelProvider<Experiment>() {
+
+					@Override
+					public Experiment model() {
+						return exp;
+					}
+				}) {
+					@Override
+					protected Control createDialogArea(Composite parent) {
+						final Composite container = Widgets.createDefaultContainer((Composite) super.createDialogArea(parent));
+						//AppliedExperimentEditor.makeView(container, model());
+						return container;
+					}
+
+					@Override
+					protected Point getInitialSize() {
+						return new Point(800, 600);
+					}
+
+					@Override
+					protected Point getInitialLocation(Point initialSize) {
+						return PlatformUIUtils.centerPointFor(this.getShell());
+					}
+
+					@Override
+					protected void configureShell(Shell newShell) {
+						super.configureShell(newShell);
+						newShell.setText("KAPLAN-MEIER");
+					}
+				};
+				dialog.create();
+
+				dialog.open();
 			}
 		};
 	}
