@@ -85,8 +85,13 @@ class SurvivalCurves extends CompositeGenerator {
 	}
 
 	private String plotLine(String script) {
-		
-		return "plot" + script.split("plot")[1].split("\n")[0];
+		String retorno;
+		if (script != null && !script.isEmpty()) {
+			retorno = "plot" + script.split("plot")[1].split("\n")[0];
+		} else {
+			retorno = "";
+		}
+		return retorno;
 	}
 
 	private String linesBeforePlotLine(String script) {
