@@ -28,6 +28,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
@@ -105,8 +106,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
-			c.addSelectionListener(openExperimentAppliedDialog(exp.getValidationConfig()
-					.getExperimentToValidate()));
+			c.addSelectionListener(openExperimentAppliedDialog(exp));
 			editor.grabHorizontal = true;
 			editor.setEditor(c, items[i], this.kaplanMeierColIndex);
 
@@ -214,22 +214,22 @@ public class BiomarkerExperimentsHelper implements Observer {
 	}
 	
 	//Metodo para el muestreo de graficas de Kaplan-Meier
-	protected SelectionAdapter openExperimentAppliedDialog(final Experiment exp) {
+	protected SelectionAdapter openExperimentAppliedDialog(final Validation exp) {
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final Shell shell = PlatformUIUtils.findShell();
-				Dialog dialog = new DialogModel<Experiment>(shell, new ModelProvider<Experiment>() {
+				Dialog dialog = new DialogModel<Validation>(shell, new ModelProvider<Validation>() {
 
 					@Override
-					public Experiment model() {
+					public Validation model() {
 						return exp;
 					}
 				}) {
 					@Override
 					protected Control createDialogArea(Composite parent) {
 						final Composite container = Widgets.createDefaultContainer((Composite) super.createDialogArea(parent));
-						//AppliedExperimentEditor.makeView(container, model());
+						AppliedExperimentEditor.makeView(container, model());
 						return container;
 					}
 
