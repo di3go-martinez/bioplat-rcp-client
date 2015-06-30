@@ -60,7 +60,7 @@ public class IntegerInputDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(350, 100);
+		return new Point(350, 150);
 	}
 
 	private String value = "";
