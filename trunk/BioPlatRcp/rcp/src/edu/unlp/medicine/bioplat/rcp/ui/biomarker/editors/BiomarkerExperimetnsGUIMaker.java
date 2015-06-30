@@ -54,7 +54,7 @@ public class BiomarkerExperimetnsGUIMaker extends GuiMaker {
 		TableReference tr = TableBuilder.create(parent).input(list)//
 				.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("name").title("Experiment"))//
-				.addColumn(ColumnBuilder.create().property("concordanceIndex.value").title("Concordance index").width(270))
+				.addColumn(ColumnBuilder.create().property("concordanceIndex.value").title("Concordance index").width(150))
 				.addColumn(ColumnBuilder.create().property("logRankTest.value").title("Log-Rank test p-value").width(160))				
 				.build();
 		provider.setTableReference(tr);

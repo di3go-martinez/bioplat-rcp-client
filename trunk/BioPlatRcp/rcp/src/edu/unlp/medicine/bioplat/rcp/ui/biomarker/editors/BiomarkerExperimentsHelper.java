@@ -142,18 +142,18 @@ public class BiomarkerExperimentsHelper implements Observer {
 		if (this.mustinitialize) {
 
 			this.newBaseColumnIndex = table.getColumnCount();
-			createTableColumn(table, 150, "Open Original Experiment",
+			createTableColumn(table, 140, "Open Original Experiment",
 					this.newBaseColumnIndex);
 
 			this.kaplanMeierColIndex = this.newBaseColumnIndex + 1;
-			createTableColumn(table, 150, "View Kaplan-Maier", this.kaplanMeierColIndex);
+			createTableColumn(table, 100, "View Kaplan-Maier", this.kaplanMeierColIndex);
 			
 			this.exportColumnIndex = this.newBaseColumnIndex + 2;
-			createTableColumn(table, 200, "Export gene signature data matrix",
+			createTableColumn(table, 180, "Export gene signature data matrix",
 					this.exportColumnIndex);
 
 			this.viewClusterColIndex = this.newBaseColumnIndex + 3;
-			createTableColumn(table, 100, "View used cluster",
+			createTableColumn(table, 95, "View used cluster",
 					this.viewClusterColIndex);
 
 			// ok, ya inicializado
