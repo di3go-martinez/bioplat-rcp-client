@@ -1,6 +1,10 @@
 package edu.unlp.medicine.bioplat.rcp.application;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -9,6 +13,8 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.internal.IPreferenceConstants;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -42,4 +48,18 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void postWindowOpen() {
 		getWindowConfigurer().getWindow().getShell().setMaximized(true);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.application.WorkbenchWindowAdvisor#preWindowShellClose()
+	 */
+	@Override
+	public boolean preWindowShellClose() {
+        int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+        MessageBox messageBox = new MessageBox(PlatformUIUtils.findShell(), style);
+        messageBox.setText("Information");
+        messageBox.setMessage("Do you really want to exit?");
+		return (messageBox.open() == SWT.YES);
+	}
+	
+	
 }

@@ -141,4 +141,12 @@ public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormE
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormEditor#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+//		return super.isDirty();
+		return false;
+	}
 }
