@@ -1,5 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.views.messages;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -14,7 +17,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -49,7 +54,7 @@ public class MessageViewPart extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		Action action = new Action("Clear", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
+		Action actionClean = new Action("Clear Messages", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
 
 			@Override
 			public void run() {
@@ -57,11 +62,24 @@ public class MessageViewPart extends ViewPart {
 				refresh();
 			}
 		};
+		
+		Action actionExport = new Action("Export Messages", Activator.imageDescriptorFromPlugin("resources/icons/export2.png")) {
+
+			@Override
+			public void run() {
+				saveDialog(tr);
+			}
+		};
+		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
-		dropDownMenu.add(action);
-		toolBar.add(action);
+		dropDownMenu.add(actionClean);
+		toolBar.add(actionClean);
+		dropDownMenu.add(actionExport);
+		toolBar.add(actionExport);
+		
+			
 
 		Composite c = new Composite(parent, SWT.BORDER);
 		TableBuilder tb = TableBuilder.create(c)//
@@ -110,6 +128,15 @@ public class MessageViewPart extends ViewPart {
 					}
 
 				});
+				// Exportador
+				Image exportImage = PlatformUIUtils.findImage("export2.png");
+				MenuItemContribution.create(menu).image(exportImage).text("Export Messages").addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+							saveDialog(tr);
+							
+					   }
+				});
 			}
 		};
 	}
@@ -131,4 +158,29 @@ public class MessageViewPart extends ViewPart {
 	private void openDialog(Message message) {
 		MessageDialog.open(message.getType().kindForDialog(), null, "BioPlat", message.getText(), SWT.NONE);
 	}
+	
+	private void saveDialog(TableReference tr){
+		FileDialog fd = new FileDialog(PlatformUIUtils.findShell(), SWT.SAVE);
+		fd.setText("Export");
+        fd.setFilterPath(System.getProperty("user.home"));
+        fd.setFilterExtensions(new String[]{ "*.txt","*.log","*.*" });
+        String selected = fd.open();
+		if(selected != null && !selected.isEmpty()){
+			File file = new File(selected); 
+			try {
+			FileWriter fileWriter = new FileWriter(file);
+			for(TableItem ti : tr.getTable().getItems()){
+				fileWriter.write(ti.getText(2) + "\t" + ti.getText(3) + "\n");
+			}
+			fileWriter.flush();
+			fileWriter.close();
+			MessageDialog.open(MessageDialog.INFORMATION, null, "BioPlat", "Messages were exported successfully.", SWT.NONE);
+			MessageManager.INSTANCE.add(Message.info("Messages were exported successfully."));
+			} catch (IOException e) {
+				MessageDialog.open(MessageDialog.ERROR, null, "BioPlat", "Error when trying to export.", SWT.NONE);
+				MessageManager.INSTANCE.add(Message.error(e.getMessage()));				
+			}	
+		}
+	}
+	
 }
