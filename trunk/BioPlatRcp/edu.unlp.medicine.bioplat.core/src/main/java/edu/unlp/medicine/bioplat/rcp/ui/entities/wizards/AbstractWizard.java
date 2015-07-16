@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -238,8 +239,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// TODO resolver con scrollbars
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
-
-		return d.open() == Dialog.OK;
+		boolean dialogOK = d.open() == Dialog.OK;
+		if (dialogOK){
+			IWorkbenchPage page = PlatformUIUtils.activePage();
+			// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
+			// IWorkbenchPage.STATE_MINIMIZED);
+			page.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+		}
+		
+		return dialogOK;
 	}
 
 	/**
