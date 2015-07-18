@@ -246,9 +246,9 @@
         icon="resources/icons/random.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
         name="Create random gene signature">
-     <description>
-        Create an empty gene signature
-     </description>
+	     <description>
+	        Create a random gene signature
+	     </description>
   </wizard>
     
 	<wizard
@@ -266,9 +266,9 @@
         icon="intro/contents/images/GenerateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
         name="Generate metasignature">
-     <description>
-        Generate a gene signature from sigDB, MSigDB.
-     </description>
+     	<description>
+        	Generate a gene signature from sigDB, MSigDB.
+     	</description>
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
@@ -276,6 +276,9 @@
         icon="intro/contents/images/GEO.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
         name="Import experiment from text file">
+        <description>
+        	Import experiment from text file
+     	</description>
   </wizard>
   <wizard
         canFinishEarly="false"
@@ -284,9 +287,9 @@
         icon="intro/contents/images/From_external_database.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
         name="Import from external signature-database (GeneSigDB, MSigDB)">
-     <description>
-        Create a new Gene Signature from the Genes Signatures in the Platform
-     </description>
+	     <description>
+	        Create a new Gene Signature from the Genes Signatures in the Platform
+	     </description>
   </wizard>
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
@@ -294,6 +297,9 @@
         icon="intro/contents/images/InSilico.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
         name="Import experiment from InSilico using GSE">
+        <description>
+        	Import experiment from InSilico using GSE
+     	</description>
   </wizard>
   
   <wizard
@@ -302,6 +308,9 @@
         icon="intro/contents/images/import_experiment.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
         name="Import experiment from .CEL File">
+        <description>
+        	Import experiment from .CEL File
+     	</description>
   </wizard>
    </extension>
    <extension
