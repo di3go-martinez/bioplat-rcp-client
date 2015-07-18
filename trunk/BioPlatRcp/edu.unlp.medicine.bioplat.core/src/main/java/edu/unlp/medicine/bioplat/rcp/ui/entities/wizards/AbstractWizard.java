@@ -239,15 +239,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// TODO resolver con scrollbars
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
-		boolean dialogOK = d.open() == Dialog.OK;
-		if (dialogOK){
-			IWorkbenchPage page = PlatformUIUtils.activePage();
-			// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
-			// IWorkbenchPage.STATE_MINIMIZED);
-			page.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
-		}
 		
-		return dialogOK;
+		return d.open() == Dialog.OK;
+		
 	}
 
 	/**
@@ -335,6 +329,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 								addErrorMessageToMessageView(errorHolder.value());
 							} else {
 								doInUI(oo);
+								//IWorkbenchPage page = ;
+								// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
+								// IWorkbenchPage.STATE_MINIMIZED);
+								PlatformUIUtils.activePage().hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
 								addMessageToMessageView(oo);
 							}
 						} catch (Exception e) {
