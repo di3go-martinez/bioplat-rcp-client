@@ -591,7 +591,16 @@
              onToolbar="true">
           <selection
                 class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-       </actionContribution>tion>
+       </actionContribution>
+       <actionContribution
+             caption="Export Selected Genes"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerFromBiomarkerContribution"
+             image="resources/icons/exportGene.png"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
