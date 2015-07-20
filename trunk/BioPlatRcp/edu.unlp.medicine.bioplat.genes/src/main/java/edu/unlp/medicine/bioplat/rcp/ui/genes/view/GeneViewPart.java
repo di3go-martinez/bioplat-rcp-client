@@ -1,10 +1,11 @@
 package edu.unlp.medicine.bioplat.rcp.ui.genes.view;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -14,19 +15,24 @@ import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISaveablePart2;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
+import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator;
@@ -34,8 +40,6 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.startup.InitializeGenesUrlStartup;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrl;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrlParser;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage;
-import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
-import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -48,9 +52,9 @@ import edu.unlp.medicine.entity.gene.Gene;
  * @author diego martínez
  * 
  */
-public class GeneViewPart extends ViewPart implements ISaveablePart2 {
+public class GeneViewPart extends ViewPart {
 
-	private static final String LOADING_HTML = "<div style='{position:absolute;right:1;top:1;}'><i>Loading...</i></div>";
+	//private static final String LOADING_HTML = "<div style='{position:absolute;right:1;top:1;}'><i>Loading...</i></div>";
 
 	public static String id() {
 		return "edu.medicine.bioplat.rcp.gene.view";
@@ -65,9 +69,45 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 	private ISelectionListener listener;
 	private Gene currentGene;
 
+	private Composite container;
+	private List<Widget> widgets = Lists.newArrayList();
+	// private List<String> browserTitles = Lists.newArrayList();
+	private List<Browser> browsers = Lists.newArrayList();
+
+	// urls rest configuradas, contiene variables seguramente ej el id del gen
+	// Agrego la de NCBI por default
+	private String[] DEFAULTS = InitializeGenesUrlStartup.fillDefaults();
+
+	private List<GeneUrl> geneUrls = Lists.newArrayList();
+	private CTabFolder tabContainer;
+	
+	
 	@Override
 	public void createPartControl(final Composite parent) {
+		
+		Action actionClean = new Action("Search All", Activator.imageDescriptorFromPlugin("resources/icons/mundo.png")) {
 
+			@Override
+			public void run() {
+				int i = 0;
+				for (GeneUrl gurl : geneUrls) {
+					final String url = gurl.url(currentGene);
+					if (!url.equals(browsers.get(i).getUrl())) {
+						tabContainer.setSelection(i+1);
+						browsers.get(i).setUrl(url);
+					}
+					i++;
+
+				}
+			}
+		};
+		
+		IActionBars actionBars = getViewSite().getActionBars();
+		IMenuManager dropDownMenu = actionBars.getMenuManager();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
+		dropDownMenu.add(actionClean);
+		toolBar.add(actionClean);
+		
 		getSelectionService().addSelectionListener(listener = new ISelectionListener() {
 
 			private Gene oldGene;
@@ -106,8 +146,25 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 			private boolean isMySelf(IWorkbenchPart part) {
 				return part == GeneViewPart.this;
 			}
+			
+			
+			
 
 		});
+		
+		parent.addDisposeListener(new DisposeListener() {
+
+            @Override
+            public void widgetDisposed(DisposeEvent e) {
+               for(Browser browser : browsers){
+            	   browser.stop();
+            	   //PlatformUIUtils.findDisplay().timerExec(-1, freezedPageCheckers.get(browsers.indexOf(browser))); 
+               }
+            }
+        });
+		
+		
+				
 	}
 
 	@Override
@@ -121,17 +178,6 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		return getSite().getWorkbenchWindow().getSelectionService();
 	}
 
-	private Composite container;
-	private List<Widget> widgets = Lists.newArrayList();
-	// private List<String> browserTitles = Lists.newArrayList();
-	private List<Browser> browsers = Lists.newArrayList();
-
-	// urls rest configuradas, contiene variables seguramente ej el id del gen
-	// Agrego la de NCBI por default
-	private String[] DEFAULTS = InitializeGenesUrlStartup.fillDefaults();
-
-	private List<GeneUrl> geneUrls = Lists.newArrayList();
-	private CTabFolder tabContainer;
 
 	private void updateComposite(Composite parent, Gene gene) {
 		currentGene = gene;
@@ -173,14 +219,12 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		for (Widget w : widgets)
 			w.retarget(gene);
 
-		// see setFocus
-		// setBrowsersUrl(gene);
 		for (Browser b : browsers) {
-			b.setUrl("about:blank");
+			b.stop();
+			b.setText("", false);
 		}
-
+				
 		updateTitle(gene);
-
 		tabContainer.setSelection(0);
 	}
 
@@ -196,14 +240,48 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 
 		// para acomodar problemas entre el foco y la selección de una solapa en
 		// la vista de genes y la carga de url "lazy"
-		tabContainer.addMouseListener(new MouseAdapter() {
+		/*tabContainer.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				setMeFocus();
+				setMeFocus();				
+			}
+		});*/
+		
+		tabContainer.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(e.item != null && e.item instanceof CTabItem){
+					CTabItem tabItem = (CTabItem) e.item;
+					int index = tabItem.getParent().getSelectionIndex() - 1; 
+					// Evitamos el primer tab 
+					if(index > -1){
+						final String url = geneUrls.get(index).url(currentGene);
+						Browser browser = browsers.get(index);
+						if (!url.equals(browser.getUrl())) {
+							final String[] header = new String[] {
+					                "Cache-Control: no-cache, no-store, must-revalidate",
+					                "Pragma: no-cache",
+					                "Expires: 0",
+					                "Accept: */*",
+					                "Accept-Encoding: gzip,deflate,sdch",
+					                "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3" };
+							browser.setUrl(url,null,header);
+						}	
+					}
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
-
+		
+	
+		
 		// Creo la solapa cabecera
 		CTabItem headerTab = new CTabItem(tabContainer, SWT.NONE);
 		Composite c = Widgets.createDefaultContainer(tabContainer, 2);
@@ -238,106 +316,59 @@ public class GeneViewPart extends ViewPart implements ISaveablePart2 {
 		}
 
 		geneUrls = GeneUrlParser.parse(urls);
-
+		
+		
+		
 		for (final GeneUrl gurl : geneUrls) {
 
-			final Browser browser = new Browser(t, SWT.BORDER);
+			final Browser browser = new Browser(t, SWT.NONE); 
 			browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
-			// seturl(browser, gurl.url(gene));
+			
 			browsers.add(browser);
 
 			// agrego el tab contendor
 			final CTabItem tab = new CTabItem(t, SWT.NONE);
-			tab.setControl(browser);
 			tab.setText(gurl.title());
+			
 
-			browser.addProgressListener(new ProgressListener() {
-
+			final Composite loadingMessage = Widgets.createDefaultContainer(tabContainer, 1);
+			loadingMessage.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
+			loadingMessage.setBackground(new Color(null, 255, 255, 255));
+			
+			final Label label = new Label(loadingMessage, SWT.NONE);
+			label.setText("Getting required information from server, plase wait");
+			label.setBackground(new Color(null, 255, 255, 255));
+			final ProgressBar progressBar = new ProgressBar(loadingMessage, SWT.INDETERMINATE);
+			
+			browser.addProgressListener( new ProgressListener() {
+				
+				public boolean cargaCompleta = false;
+				
 				@Override
 				public void completed(ProgressEvent event) {
 					// TODO que no cachee las páginas cargadas con error...
 					// genBrowserCache.put(browser.getUrl(), browser.getText());
 					tab.setText(gurl.title());
-					browsersLoading.remove(browser);
-					firePropertyChange(PROP_DIRTY);
+					tab.setControl(browser);
 				}
 
 				@Override
-				public void changed(ProgressEvent event) {
-					// final Browser browser = (Browser) event.widget;
-					// // tab.setText(gurl.title());
-					if (event.current != 0) {
-						tab.setText(gurl.title() + "(Loading...)");
-						browsersLoading.add(browser);
-					}
-
+				public void changed(final ProgressEvent event) {
+						if (event.current != 0) {
+							if(event.current < event.total){
+								tab.setControl(loadingMessage);	
+								tab.setText(gurl.title() + "(Loading: " + (event.current * 100.0 / event.total) + "%)");
+							}
+						}
 				}
 			});
-
+			
 		}
 	}
 
-	private void seturl(Browser browser, final String url) {
-		// TODO hacer uso de la cache
-		// String html = genBrowserCache.getIfPresent(url);
-		//
-		// if (html == null)
-		browser.setUrl(url);
-		// else
-		// browser.setText(html, true);
-	}
-
+	
 	@Override
 	public void setFocus() {
-	}
-
-	private void setMeFocus() {
-		if (isDirty()) // hay browsers cargando, ignoro el foco
-			return;
-		int i = 0;
-		for (GeneUrl gurl : geneUrls) {
-			final String url = gurl.url(currentGene);
-			if (!url.equals(browsers.get(i).getUrl())) {
-				seturl(browsers.get(i), url);
-			}
-			i++;
-
-		}
-	}
-
-	// ISaveable2
-
-	// Parche para que no se cierre la vista cuando se está cargando algun
-	// browser
-	private Set<Browser> browsersLoading = Sets.newHashSet();
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-	}
-
-	@Override
-	public void doSaveAs() {
-	}
-
-	@Override
-	public boolean isDirty() {
-		return !browsersLoading.isEmpty();
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveOnCloseNeeded() {
-		return true;
-	}
-
-	@Override
-	public int promptToSaveOnClose() {
-		MessageManager.INSTANCE.add(Message.info("The gene's view cannot be closed until all browsers have been loaded"));
-		return ISaveablePart2.CANCEL;
 	}
 
 }
