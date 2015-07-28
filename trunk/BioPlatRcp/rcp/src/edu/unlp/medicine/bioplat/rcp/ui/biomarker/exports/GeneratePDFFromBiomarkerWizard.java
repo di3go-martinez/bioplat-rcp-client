@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -23,6 +24,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.widgets.DirectoryText;
@@ -30,11 +33,14 @@ import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.GeneratePDFFromBiomarkerCommand;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.r4j.constants.OSDependentConstants;
+import edu.unlp.medicine.utils.monitor.Monitor;
 
-public class GeneratePDFFromBiomarkerWizard extends Wizard implements
+public class GeneratePDFFromBiomarkerWizard extends AbstractWizard<Void> implements
 		IExportWizard {
 
 	private Biomarker biomarker;
+	private Map<String, String> properties = new HashMap<String, String>();
+	private String absoluteFilename = "";
 	
 	public GeneratePDFFromBiomarkerWizard(Biomarker b) {
 		this.biomarker = b;
@@ -49,19 +55,6 @@ public class GeneratePDFFromBiomarkerWizard extends Wizard implements
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.setWindowTitle("Export BioPlat experiment to 'PDF file");
 		addPage(createWizardPage());
-	}
-
-	@Override
-	public boolean performFinish() {
-		Map<String, String> properties = new HashMap<String, String>();
-		String absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString() + ".pdf";
-		properties.put("targetFile", absoluteFilename);
-
-		new GeneratePDFFromBiomarkerCommand(biomarker, properties).execute();
-											
-		
-		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
-		return true;
 	}
 
 
@@ -121,4 +114,44 @@ public class GeneratePDFFromBiomarkerWizard extends Wizard implements
 			}
 		};
 	}
+
+	@Override
+	protected List<WizardPageDescriptor> createPagesDescriptors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String getTaskName() {
+		return "Generate PDF From Biomarker";
+	}
+
+	@Override
+	protected Void backgroundProcess(Monitor monitor) throws Exception {
+		properties.put("targetFile", absoluteFilename);
+
+		new GeneratePDFFromBiomarkerCommand(biomarker, properties).execute();
+		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
+		
+		return null;
+	}
+
+	@Override
+	protected void doInUI(Void result) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard#performFinish()
+	 */
+	@Override
+	public boolean performFinish() {
+		absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString() + ".pdf";
+		return super.performFinish();
+	}
+
+
+	
+	
 }
