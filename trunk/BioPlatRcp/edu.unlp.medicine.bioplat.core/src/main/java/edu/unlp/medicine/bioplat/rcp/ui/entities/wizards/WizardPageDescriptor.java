@@ -154,7 +154,15 @@ public abstract class WizardPageDescriptor {
 		this.description = description;
 	}
 
+	/**
+	 * Éste metodo se llamará al hacerse visible la pagina (es decir, cuando ingresa)
+	 */
+	public void doOnEnter(){};
 	
-	
+	/**
+	 * Este metodo se llamará UNICAMENTE al pasar a otra pagina, ya sea la proxima, o la anterior, 
+	 * pero no al cancelar
+	 */
+	public void doOnExit(){};
 	
 }

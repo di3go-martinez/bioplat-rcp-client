@@ -131,7 +131,19 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				public boolean canFlipToNextPage() {
 					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null) && pageDescriptor.allowContinueWizardSetup();
 				}
-
+				
+				
+				@Override
+				public void setVisible(boolean visible) {
+					// TODO Auto-generated method stub
+					super.setVisible(visible);
+					if (visible){
+						pageDescriptor.doOnEnter();
+					} else {
+						pageDescriptor.doOnExit();
+					}
+				}
+				
 				// @Override
 				// public Shell getShell() {
 				// return super.getShell();
