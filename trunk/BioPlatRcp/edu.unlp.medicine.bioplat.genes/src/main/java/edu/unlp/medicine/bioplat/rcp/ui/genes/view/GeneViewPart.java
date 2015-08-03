@@ -11,19 +11,16 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.browser.ProgressListener;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
@@ -73,40 +70,61 @@ public class GeneViewPart extends ViewPart {
 	private List<Widget> widgets = Lists.newArrayList();
 	// private List<String> browserTitles = Lists.newArrayList();
 	private List<Browser> browsers = Lists.newArrayList();
-
+	private List<Browser> browsersWaiting = Lists.newArrayList(); 
+	
 	// urls rest configuradas, contiene variables seguramente ej el id del gen
 	// Agrego la de NCBI por default
 	private String[] DEFAULTS = InitializeGenesUrlStartup.fillDefaults();
 
 	private List<GeneUrl> geneUrls = Lists.newArrayList();
 	private CTabFolder tabContainer;
+	final String[] header = new String[] {
+            "Cache-Control: no-cache, no-store, must-revalidate",
+            "Pragma: no-cache",
+            "Expires: 0",
+            "Accept: *",
+            "Accept-Encoding: gzip,deflate,sdch",
+            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3" };
+	
+	final String s= "<html>"+
+            "<head>"+
+            "<title></title>"+
+            "</head>"+
+            "<body>"+
+            "<div id=\"newdiv\" align=\"center\">"+
+            "<img src=\"http://www.schultzlawoffice.com/img/loading/loading-x.gif\" />"+
+            "</div>"+
+            "</body>"+
+            "</html>" ;
+	
+
 	
 	
 	@Override
 	public void createPartControl(final Composite parent) {
 		
-		Action actionClean = new Action("Search All", Activator.imageDescriptorFromPlugin("resources/icons/mundo.png")) {
-
+		Action actionSearchAll = new Action("Search All", Activator.imageDescriptorFromPlugin("resources/icons/mundo.png")) {
+			
 			@Override
 			public void run() {
 				int i = 0;
 				for (GeneUrl gurl : geneUrls) {
 					final String url = gurl.url(currentGene);
 					if (!url.equals(browsers.get(i).getUrl())) {
-						tabContainer.setSelection(i+1);
-						browsers.get(i).setUrl(url);
+						browsers.get(i).stop();
+						browsers.get(i).setUrl(url,null,header);
 					}
 					i++;
-
-				}
+				}				
 			}
+						
 		};
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
-		dropDownMenu.add(actionClean);
-		toolBar.add(actionClean);
+		dropDownMenu.add(actionSearchAll);
+		toolBar.add(actionSearchAll);
 		
 		getSelectionService().addSelectionListener(listener = new ISelectionListener() {
 
@@ -158,7 +176,6 @@ public class GeneViewPart extends ViewPart {
             public void widgetDisposed(DisposeEvent e) {
                for(Browser browser : browsers){
             	   browser.stop();
-            	   //PlatformUIUtils.findDisplay().timerExec(-1, freezedPageCheckers.get(browsers.indexOf(browser))); 
                }
             }
         });
@@ -195,13 +212,14 @@ public class GeneViewPart extends ViewPart {
 
 		container.setVisible(gene != null);
 
-		if (gene != null)
-
+		if (gene != null){
 			if (viewBuilt())
 				refreshView(gene);
 			else
 				buildView(gene);
-
+		}
+		
+			
 		// FIXME no se repinta bien la primera vez que aparece si no se crea el
 		// composite container, se fuerza con el -1
 		parent.setSize(parent.getSize().x, parent.getSize().y);
@@ -218,10 +236,17 @@ public class GeneViewPart extends ViewPart {
 	private void refreshView(Gene gene) {
 		for (Widget w : widgets)
 			w.retarget(gene);
-
-		for (Browser b : browsers) {
-			b.stop();
-			b.setText("", false);
+		
+		for (int i = 1; i < tabContainer.getItems().length; i++) {
+			//browsers.get(i - 1).setText("");
+			//browsers.get(i - 1).setText(null);
+			/*browsers.get(i - 1).setUrl("");*/
+			browsers.get(i - 1).stop();
+			browsers.get(i - 1).setText("",false);
+			tabContainer.getItem(i).setControl(browsersWaiting.get(i - 1));
+			browsers.get(i - 1).setUrl("");
+			Browser.clearSessions();
+			
 		}
 				
 		updateTitle(gene);
@@ -238,37 +263,20 @@ public class GeneViewPart extends ViewPart {
 		tabContainer.setLayout(GridLayoutFactory.swtDefaults().create());
 		tabContainer.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
 
-		// para acomodar problemas entre el foco y la selección de una solapa en
-		// la vista de genes y la carga de url "lazy"
-		/*tabContainer.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				setMeFocus();				
-			}
-		});*/
-		
 		tabContainer.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(e.item != null && e.item instanceof CTabItem){
-					CTabItem tabItem = (CTabItem) e.item;
-					int index = tabItem.getParent().getSelectionIndex() - 1; 
+					final CTabItem tabItem = (CTabItem) e.item;
+					final int index = tabItem.getParent().getSelectionIndex() - 1; 
 					// Evitamos el primer tab 
 					if(index > -1){
 						final String url = geneUrls.get(index).url(currentGene);
-						Browser browser = browsers.get(index);
+						final Browser browser = browsers.get(index);
 						if (!url.equals(browser.getUrl())) {
-							final String[] header = new String[] {
-					                "Cache-Control: no-cache, no-store, must-revalidate",
-					                "Pragma: no-cache",
-					                "Expires: 0",
-					                "Accept: */*",
-					                "Accept-Encoding: gzip,deflate,sdch",
-					                "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3" };
-							browser.setUrl(url,null,header);
-						}	
+							browser.setUrl(url);
+						}
 					}
 				}
 			}
@@ -279,8 +287,6 @@ public class GeneViewPart extends ViewPart {
 				
 			}
 		});
-		
-	
 		
 		// Creo la solapa cabecera
 		CTabItem headerTab = new CTabItem(tabContainer, SWT.NONE);
@@ -317,58 +323,51 @@ public class GeneViewPart extends ViewPart {
 
 		geneUrls = GeneUrlParser.parse(urls);
 		
-		
-		
 		for (final GeneUrl gurl : geneUrls) {
 
-			final Browser browser = new Browser(t, SWT.NONE); 
+
+			final Browser browser = new Browser(tabContainer, SWT.NONE); 
 			browser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
 			
+			final Browser browserWaiting = new Browser(tabContainer, SWT.NONE); 
+			browserWaiting.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
+			browserWaiting.setText(s);
+			
+			
 			browsers.add(browser);
+			browsersWaiting.add(browserWaiting);
 
 			// agrego el tab contendor
 			final CTabItem tab = new CTabItem(t, SWT.NONE);
 			tab.setText(gurl.title());
 			
-
-			final Composite loadingMessage = Widgets.createDefaultContainer(tabContainer, 1);
-			loadingMessage.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
-			loadingMessage.setBackground(new Color(null, 255, 255, 255));
 			
-			final Label label = new Label(loadingMessage, SWT.NONE);
-			label.setText("Getting required information from server, plase wait");
-			label.setBackground(new Color(null, 255, 255, 255));
-			final ProgressBar progressBar = new ProgressBar(loadingMessage, SWT.INDETERMINATE);
+			tab.setControl(browserWaiting);
 			
-			browser.addProgressListener( new ProgressListener() {
-				
-				public boolean cargaCompleta = false;
-				
+			browser.addLocationListener(new LocationListener() {
+					
 				@Override
-				public void completed(ProgressEvent event) {
-					// TODO que no cachee las páginas cargadas con error...
-					// genBrowserCache.put(browser.getUrl(), browser.getText());
-					tab.setText(gurl.title());
-					tab.setControl(browser);
+				public void changing(LocationEvent event) {	
+					
 				}
-
+				
 				@Override
-				public void changed(final ProgressEvent event) {
-						if (event.current != 0) {
-							if(event.current < event.total){
-								tab.setControl(loadingMessage);	
-								tab.setText(gurl.title() + "(Loading: " + (event.current * 100.0 / event.total) + "%)");
-							}
-						}
+				public void changed(LocationEvent event) {
+					tab.setControl(browser);	
+						
 				}
 			});
 			
 		}
+		
 	}
 
 	
 	@Override
-	public void setFocus() {
-	}
+	public void setFocus() {}
+	
+	
+	
+	
 
 }
