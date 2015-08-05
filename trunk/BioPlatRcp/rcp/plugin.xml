@@ -563,6 +563,15 @@
           <selection
                 class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
        </actionContribution>
+        <actionContribution
+             caption="Export Selected Genes"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
+             image="resources/icons/exportGene.png"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
+       </actionContribution>       
        <actionContribution
              caption="Export gene information of your gene signature"
              class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
@@ -594,7 +603,7 @@
        </actionContribution>
        <actionContribution
              caption="Export Selected Genes"
-             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerFromBiomarkerContribution"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
              image="resources/icons/exportGene.png"
              onMenu="true"
              onToolbar="true">
