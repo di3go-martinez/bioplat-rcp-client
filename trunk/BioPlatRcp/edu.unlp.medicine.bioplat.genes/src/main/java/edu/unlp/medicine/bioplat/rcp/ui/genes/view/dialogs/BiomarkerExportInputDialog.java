@@ -29,17 +29,17 @@ import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.domainLogic.framework.exceptions.GeneNotFoundByIdException;
 import edu.unlp.medicine.entity.gene.Gene;
 
-public class BiomarkerFromBiomarkerInputDialog extends Dialog {
+public class BiomarkerExportInputDialog extends Dialog {
 
 	private String separator = " ";
 
-	public BiomarkerFromBiomarkerInputDialog(Shell parentShell) {
+	public BiomarkerExportInputDialog(Shell parentShell) {
 		super(parentShell);
 		setBlockOnOpen(true);
 		setShellStyle(SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM);
 	}
 
-	public BiomarkerFromBiomarkerInputDialog() {
+	public BiomarkerExportInputDialog() {
 		this(PlatformUIUtils.findShell());
 	}
 
@@ -49,7 +49,7 @@ public class BiomarkerFromBiomarkerInputDialog extends Dialog {
 	 * @param genes
 	 * @return
 	 */
-	public BiomarkerFromBiomarkerInputDialog genes(List<Gene> genes) {
+	public BiomarkerExportInputDialog genes(List<Gene> genes) {
 		StringBuilder $value = new StringBuilder();
 		for (Gene gene : genes) {
 			$value.append(gene.getEntrezId() + "\n");
@@ -95,7 +95,7 @@ public class BiomarkerFromBiomarkerInputDialog extends Dialog {
 
 	private String value = "";
 
-	/*private String name = "noName";
+	private String name = "noName";
 	public String getName() {
 		return name;
 	}
@@ -108,31 +108,53 @@ public class BiomarkerFromBiomarkerInputDialog extends Dialog {
 	private String description = "";
 	public String getDescription() {
 		return description;
-	}*/
+	}
 
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite) super.createDialogArea(parent);
 		
-		/*GridData gridData = new GridData();
+		GridData gridData = new GridData();
 		gridData.horizontalAlignment=SWT.FILL;
 		gridData.grabExcessHorizontalSpace=true;
 		
 		new CLabel(result, SWT.BOLD).setText("Gene signature name:");
-		Text nameHolder = new Text(result, SWT.BORDER);
+		final Text nameHolder = new Text(result, SWT.BORDER);
 		nameHolder.setLayoutData(gridData);
 		nameHolder.setText(name);
+		nameHolder.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				name = nameHolder.getText();
+				
+			}
+		});
 		
 		new CLabel(result, SWT.BOLD).setText("Gene signature author:");
-		Text authorHolder = new Text(result, SWT.BORDER);
+		final Text authorHolder = new Text(result, SWT.BORDER);
 		authorHolder.setLayoutData(gridData);
 		authorHolder.setText(author);
-		
+		authorHolder.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				author = authorHolder.getText();
+			}
+		});
 		new CLabel(result, SWT.BOLD).setText("Gene signature description:");
-		Text descriptionHolder = new Text(result, SWT.BORDER);
+		final Text descriptionHolder = new Text(result, SWT.BORDER);
 		descriptionHolder.setLayoutData(gridData);
-		descriptionHolder.setText(description);*/
+		descriptionHolder.setText(description);
+		descriptionHolder.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				description = descriptionHolder.getText();
+				
+			}
+		});
 		
 		new CLabel(result, SWT.BOLD).setText("Genes:");
 		final Text text = new Text(result, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
@@ -146,7 +168,7 @@ public class BiomarkerFromBiomarkerInputDialog extends Dialog {
 				value = StringUtils.replace(value, "\r", " ").replace("\t", " ");
 			}
 		});
-		text.setText(value);
+		text.setText(value);		
 		return result;
 	}
 
