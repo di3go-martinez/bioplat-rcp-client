@@ -9,15 +9,18 @@ import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.entity.gene.Gene;
 
 
-public class GenerateBiomarkerFromBiomarkerCommand {
+public class GenerateBiomarkerExportCommand {
 	
 	private List<Gene> genesToCopy;
-	private String name = "noName";
+	private String name = "";
 	private String author = "";
 	private String description = "";
 	
-	public GenerateBiomarkerFromBiomarkerCommand(List<Gene> genesToCopy){
+	public GenerateBiomarkerExportCommand(List<Gene> genesToCopy,String name, String author, String description){
 		this.genesToCopy = genesToCopy;
+		this.name = name;
+		this.author = author;
+		this.description =  description;
 	}
 	
 	public void execute(){

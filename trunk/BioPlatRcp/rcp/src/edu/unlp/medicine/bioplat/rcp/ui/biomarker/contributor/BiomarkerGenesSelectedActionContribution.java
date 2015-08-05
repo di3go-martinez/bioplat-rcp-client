@@ -10,7 +10,7 @@ import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
 import edu.unlp.medicine.bioplat.rcp.editor.Constants;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.editors.contributors.AbstractActionContribution;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.FreeGeneInputActionContribution;
-import edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs.BiomarkerFromBiomarkerInputDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs.BiomarkerExportInputDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
@@ -22,22 +22,29 @@ public abstract class BiomarkerGenesSelectedActionContribution<T extends Abstrac
 	private static Logger logger = LoggerFactory.getLogger(FreeGeneInputActionContribution.class);
 
 	private static final List<Gene> EMPTY = Collections.emptyList();
+	private BiomarkerExportInputDialog agd ;
 	
 	@Override
 	public void run() {
 
 		// FIXME Chatcheo el nullpointer porque pasa a veces...
 		try {
-			final Holder<List<Gene>> holder = Holder.create(EMPTY);
+			final Holder<List<Gene>> holderGenes = Holder.create(EMPTY);
+			final Holder<String> holderName = Holder.create();
+			final Holder<String> holderAuthor = Holder.create();
+			final Holder<String> holderDescription = Holder.create();
 			
 
 			PlatformUIUtils.findDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
 
-					BiomarkerFromBiomarkerInputDialog agd = new BiomarkerFromBiomarkerInputDialog().genes(selectedGenes());
+					agd = new BiomarkerExportInputDialog().genes(selectedGenes());
 					if (agd.accepted()){
-						holder.hold(agd.genes());
+						holderGenes.hold(agd.genes());
+						holderName.hold(agd.getName());
+						holderAuthor.hold(agd.getAuthor());
+						holderDescription.hold(agd.getDescription());
 					}
 				}
 
@@ -48,9 +55,12 @@ public abstract class BiomarkerGenesSelectedActionContribution<T extends Abstrac
 
 			});
 
-			final List<Gene> genes = holder.value();
+			final List<Gene> genes = holderGenes.value();
+			final String name = holderName.value();
+			final String author = holderAuthor.value();
+			final String description = holderDescription.value();
 			if (!genes.isEmpty())
-				executeOn(genes);
+				executeOn(genes, name, author, description);
 			else
 				MessageManager.INSTANCE.add(Message.warn("You provide an empty gene list."));
 		} catch (NullPointerException npe) {
@@ -63,6 +73,6 @@ public abstract class BiomarkerGenesSelectedActionContribution<T extends Abstrac
 	 * 
 	 * @param genes
 	 */
-	protected abstract void executeOn(List<Gene> genes);
+	protected abstract void executeOn(List<Gene> genes,String name, String author, String description);
 	
 }
