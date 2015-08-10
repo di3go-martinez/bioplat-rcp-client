@@ -48,6 +48,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(30, 30).spacing(20, 20).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 //		Composite container = Widgets.createDefaultContainer(parent, 1);
 		
 		createLocalBiomarkersSelector(wizardPage, container, gdf, dbc, wmodel);

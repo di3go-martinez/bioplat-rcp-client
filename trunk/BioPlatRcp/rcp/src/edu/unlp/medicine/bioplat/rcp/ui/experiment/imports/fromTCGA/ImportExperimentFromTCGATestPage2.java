@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromTCGA;
 import java.util.ArrayList;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -13,6 +14,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
@@ -35,7 +37,6 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 		
 	}
 	
-
 	@Override
 	public Composite create(final WizardPage wizardPage, Composite parent, 
 			final DataBindingContext dbc, final WizardModel wmodel) {
@@ -44,19 +45,18 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 		this.wModel = wmodel;
 		
 		R4JStringDataMatrix matrix = TCGAApi.getInstance().get_studies();
-//		Composite container = Widgets.createDefaultContainer(parent, 1);
-		Composite container = new Composite(parent, SWT.NONE);
+		ScrolledComposite container = new ScrolledComposite(parent, SWT.V_SCROLL);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		createTable(container, matrix);
 		return container;
-		
 	}
-
 
 	private TableViewer createTable(Composite container, R4JStringDataMatrix input ){
 		tv = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
 		tv.setUseHashlookup(true);
-		tv.getTable().setSize(600, 600);
+
+		final Table table = tv.getTable();
 		
 		TableViewerColumn nameColumn = new TableViewerColumn(tv, SWT.NONE);
 		TableViewerColumn descriptionColumn = new TableViewerColumn(tv, SWT.NONE);
@@ -81,7 +81,9 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 			}
 		});
 		
-		final Table table = tv.getTable();
+		
+//		table.getVerticalBar().setVisible(true);
+		table.setSize(650, 600);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true); 
 		

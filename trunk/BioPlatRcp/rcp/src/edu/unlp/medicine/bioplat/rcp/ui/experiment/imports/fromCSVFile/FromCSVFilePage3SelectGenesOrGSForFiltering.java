@@ -95,7 +95,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 	}
 
 
-		private void createLocalBiomarkersSelector(final WizardPage wp, Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
+	private void createLocalBiomarkersSelector(final WizardPage wp, Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
 		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
 
 		
@@ -129,15 +129,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 			});
 		}
 		
-		
-		
-		
-
-		
 	}
-
-
-
 
 	@Override
 	public boolean hasResultPage() {

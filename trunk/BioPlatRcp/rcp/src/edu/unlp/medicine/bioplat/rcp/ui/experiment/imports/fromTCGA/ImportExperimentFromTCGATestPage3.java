@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromTCGA;
 import java.util.ArrayList;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -46,6 +47,7 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 //		Composite container = Widgets.createDefaultContainer(parent, 2);
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 10).spacing(5, 5).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		generateComboBoxes(container,wmodel);
 		
 		return container;
@@ -109,15 +111,11 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 		matrix = TCGAApi.getInstance().get_subsets_for_study( ((String[]) model.value(STUDY))[0] );
 		comboCaseName.setInput(matrixToArray(matrix));
 		
-		comboCaseName.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				model.set(PROFILE, (String[])((StructuredSelection) comboCaseName.getSelection()).getFirstElement() );
-				wPage.setPageComplete(isPageComplete(model));
-			}
-		});
+		matrix = TCGAApi.getInstance().get_mrna_profiles( ((String[]) model.value(STUDY))[0] );
+		comboGeneticProfile.setInput(matrixToArray(matrix));
 		
-		comboGeneticProfile.addSelectionChangedListener(new ISelectionChangedListener() {
+		
+		comboCaseName.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				model.set(CASENAME, (String[])((StructuredSelection) comboCaseName.getSelection()).getFirstElement() );
@@ -125,8 +123,14 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 			}
 		});
 		
-		matrix = TCGAApi.getInstance().get_mrna_profiles( ((String[]) model.value(STUDY))[0] );
-		comboGeneticProfile.setInput(matrixToArray(matrix));
+		comboGeneticProfile.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				model.set(PROFILE, (String[])((StructuredSelection) comboGeneticProfile.getSelection()).getFirstElement() );
+				wPage.setPageComplete(isPageComplete(model));
+			}
+		});
+		
 		comboCaseName.refresh();
 		comboGeneticProfile.refresh();
 		super.doOnEnter();
