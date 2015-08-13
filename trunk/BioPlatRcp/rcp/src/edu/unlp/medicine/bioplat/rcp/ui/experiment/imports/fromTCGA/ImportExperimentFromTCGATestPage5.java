@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +28,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 	public static String STUDY = "STUDY";
 	public static String PROFILE = "PROFILE";
 	public static String CASENAME = "CASENAME";
+	public static String ATTRIBUTES = "ATTRIBUTES";
 	private WizardModel model;
 	private org.eclipse.swt.widgets.List availableAttributesList;
 	private org.eclipse.swt.widgets.List selectedAttributesList;
@@ -79,6 +81,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				removeAttributesToList(availableAttributesList, availableAttributesList.getSelection());
 				selectedAttributesList.redraw();
 				availableAttributesList.redraw();
+				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
 			}
 			
@@ -94,6 +97,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				availableAttributesList.removeAll();
 				selectedAttributesList.redraw();
 				availableAttributesList.redraw();
+				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
 			}
 			
@@ -109,6 +113,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				removeAttributesToList(selectedAttributesList, selectedAttributesList.getSelection());
 				selectedAttributesList.redraw();
 				availableAttributesList.redraw();
+				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
 			}
 			
@@ -124,6 +129,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				selectedAttributesList.removeAll();
 				selectedAttributesList.redraw();
 				availableAttributesList.redraw();
+				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
 			}
 			
