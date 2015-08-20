@@ -416,7 +416,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate Gene Signature"
+            caption="Statistic Analysis"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyValidationTestActionContribution"
             groupId="03-Biomarker-validation"
             image="resources/icons/validateSurvComp.png"
