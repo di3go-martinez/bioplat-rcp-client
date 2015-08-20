@@ -62,10 +62,17 @@ public class StatisticalDataEditor extends AbstractEditorPart<Validation> {
 		container.getBody().setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
+		createExpandable(container, "Log Rank Test Chi-Squred (The same as Survival Curve Differences with rho = 0)", new LogRankTest(toolkit, model));
+		
+		createExpandable(container, "Concordance Index", new ConcordanceIndex(toolkit, model));
+		
+		createExpandable(container, "ROC", new ROC(toolkit, model));
+		
+		createExpandable(container, "Kaplan-Meier", new SurvivalCurves(toolkit, model));
 
-		createExpandable(container, "Survival Curves", new SurvivalCurves(toolkit, model));
-
-		createExpandable(container, "LogRankTestChiSqured", new LogRankTest(toolkit, model));
+		
+		
+		
 
 	}
 }

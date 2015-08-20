@@ -57,6 +57,8 @@ public class BiomarkerExperimentsHelper implements Observer {
 	private int exportColumnIndex;
 	private int viewClusterColIndex;
 	private int kaplanMeierColIndex;
+	private int viewOriginalExperimentIndex;
+	private int exportRScriptIndex;
 
 	/**
 	 * 
@@ -90,6 +92,22 @@ public class BiomarkerExperimentsHelper implements Observer {
 			TableEditor editor;
 			Button c;
 
+			editor = new TableEditor(table);
+			c = new Button(table, SWT.FLAT);
+			c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
+			c.addSelectionListener(openExperimentAppliedDialog(exp));
+			editor.grabHorizontal = true;
+			editor.setEditor(c, items[i], this.kaplanMeierColIndex);
+			
+			editor = new TableEditor(table);
+			c = new Button(table, SWT.FLAT);
+			c.setImage(PlatformUIUtils.findImage("clustering.png"));
+			c.addSelectionListener(openViewClusterDialog(exp
+					.getClusteringResult().getClustersOfEachSample()));
+			editor.grabHorizontal = true;
+			editor.setEditor(c, items[i], this.viewClusterColIndex);
+			
+			
 			try {
 				editor = new TableEditor(table);
 				c = new Button(table, SWT.FLAT);
@@ -97,20 +115,12 @@ public class BiomarkerExperimentsHelper implements Observer {
 						.findImage("Open original experiment.png"));
 				c.addSelectionListener(this.openCurrentExperiment(exp));
 				editor.grabHorizontal = true;
-				editor.setEditor(c, items[i], this.newBaseColumnIndex);
+				editor.setEditor(c, items[i], this.viewOriginalExperimentIndex);
 			} catch (ExperimentBuildingException e) {
 
 				e.printStackTrace();
 			}
 
-			editor = new TableEditor(table);
-			c = new Button(table, SWT.FLAT);
-			c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
-			c.addSelectionListener(openExperimentAppliedDialog(exp));
-			editor.grabHorizontal = true;
-			editor.setEditor(c, items[i], this.kaplanMeierColIndex);
-
-			
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils
@@ -126,35 +136,56 @@ public class BiomarkerExperimentsHelper implements Observer {
 			});
 			editor.grabHorizontal = true;
 			editor.setEditor(c, items[i], this.exportColumnIndex);
-
+			
+			
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
-			c.setImage(PlatformUIUtils.findImage("clustering.png"));
-			c.addSelectionListener(openViewClusterDialog(exp
-					.getClusteringResult().getClustersOfEachSample()));
+			c.setImage(PlatformUIUtils
+					.findImage("rlogo.png"));
+			c.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					//Revisar el tercer parametro. Chusmear new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
+					/*new MevWizard(exp.getValidationConfig()
+							.getExperimentToValidate(), false, false).blockOnOpen()
+							.open();*/
+				}
+			});
 			editor.grabHorizontal = true;
-			editor.setEditor(c, items[i], this.viewClusterColIndex);
+			editor.setEditor(c, items[i], this.exportRScriptIndex);
+			
+			
+			
 		}
 
 	}
 
 	private void initialize(Table table) {
 		if (this.mustinitialize) {
-
-			this.newBaseColumnIndex = table.getColumnCount();
-			createTableColumn(table, 140, "Open Original Experiment",
-					this.newBaseColumnIndex);
-
-			this.kaplanMeierColIndex = this.newBaseColumnIndex + 1;
-			createTableColumn(table, 100, "View Kaplan-Maier", this.kaplanMeierColIndex);
 			
-			this.exportColumnIndex = this.newBaseColumnIndex + 2;
-			createTableColumn(table, 180, "Export gene signature data matrix",
-					this.exportColumnIndex);
-
-			this.viewClusterColIndex = this.newBaseColumnIndex + 3;
-			createTableColumn(table, 95, "View used cluster",
+			this.newBaseColumnIndex = table.getColumnCount();
+			
+			this.kaplanMeierColIndex = this.newBaseColumnIndex;
+			createTableColumn(table, 120, "Statistic and Graphics", this.kaplanMeierColIndex);
+			
+			this.viewClusterColIndex = this.newBaseColumnIndex + 1;
+			createTableColumn(table, 110, "View Used Cluster",
 					this.viewClusterColIndex);
+
+			this.viewOriginalExperimentIndex = this.newBaseColumnIndex + 2;
+			createTableColumn(table, 160, "Open Original Experiment",
+					this.viewOriginalExperimentIndex);
+			
+			
+			this.exportColumnIndex = this.newBaseColumnIndex + 3;
+			createTableColumn(table, 200, "Export Gene Signature Data Matrix",
+					this.exportColumnIndex);
+			
+			this.exportRScriptIndex = this.newBaseColumnIndex + 4;
+			createTableColumn(table, 110, "Copy R Script",
+					this.exportRScriptIndex);
+			
+
 
 			// ok, ya inicializado
 			this.mustinitialize = false;
@@ -246,7 +277,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 					@Override
 					protected void configureShell(Shell newShell) {
 						super.configureShell(newShell);
-						newShell.setText("KAPLAN-MEIER");
+						newShell.setText("Statistic and Graphics");
 					}
 				};
 				dialog.create();

@@ -65,6 +65,7 @@ abstract class CompositeGenerator {
 	 * @param c
 	 * @param textToBeCopied
 	 */
+	@Deprecated
 	protected Button createCopyTextButton(Composite c, final String textToBeCopied) {
 		final Clipboard cb = new Clipboard(PlatformUIUtils.findDisplay());
 
