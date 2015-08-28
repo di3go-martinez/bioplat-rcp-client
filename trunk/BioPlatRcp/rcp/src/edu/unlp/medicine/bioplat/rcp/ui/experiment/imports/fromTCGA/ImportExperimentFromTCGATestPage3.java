@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromTCGA;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -36,7 +37,7 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage3(WizardModel wmodel) {
-		super("Get Studios");
+		super("Import from TCGA page 2 of 4");
 	}
 
 	@Override
@@ -94,6 +95,7 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	@Override
 	public void doOnEnter() {
 		
+		List<String[]> auxArray;
 		R4JStringDataMatrix matrix;
 		
 		//This is a validation that checks if the main study was changed. It's made to prevent 
@@ -131,6 +133,18 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 			}
 		});
 		
+		if (comboCaseName.getCombo().getItemCount() > 0){
+			comboCaseName.setSelection((StructuredSelection) new StructuredSelection(comboCaseName.getElementAt(0)) );
+		}
+		if (comboGeneticProfile.getCombo().getItemCount() > 0){
+			comboGeneticProfile.setSelection((StructuredSelection) new StructuredSelection(comboGeneticProfile.getElementAt(0)) );
+		} else {
+			auxArray = new ArrayList<String[]>();
+			auxArray.add(new String[] {"none","No genetic profile exists"});
+			comboGeneticProfile.setInput(auxArray);
+			comboGeneticProfile.setSelection((StructuredSelection) new StructuredSelection(comboGeneticProfile.getElementAt(0)),true );
+		}
+		
 		comboCaseName.refresh();
 		comboGeneticProfile.refresh();
 		super.doOnEnter();
@@ -152,16 +166,18 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	
 	@Override
 	public boolean isPageComplete(WizardModel model) {
-		if (comboCaseName.getCombo().getItemCount() > 0) {
+//		if (comboCaseName.getCombo().getItemCount() > 0) {
 			if (comboCaseName.getSelection().isEmpty()){
 				return false;
 			}
-		}
-		if (comboGeneticProfile.getCombo().getItemCount() > 0){
+//		}
+//		if (comboGeneticProfile.getCombo().getItemCount() > 0){
 			if (comboGeneticProfile.getSelection().isEmpty()){
 				return false;
+			} else if(((String[])((StructuredSelection)comboGeneticProfile.getSelection()).getFirstElement())[0].equals("none")){
+				return false;
 			}
-		}
+//		}
 		return true;
 	}
 }

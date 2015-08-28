@@ -315,6 +315,7 @@
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromTCGATest"
+        icon="resources/icons/TCGA-ICON.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromTCGATest"
         name="Import experiment from TCGA">
   </wizard>
@@ -717,6 +718,10 @@
       <action
             name="bPLFileBiomarkerImportIntroAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.BPLFileBiomarkerImportIntroAction">
+      </action>
+      <action
+            name="TCGAExperimentImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.TCGAExperimentImportIntroAction">
       </action>
    </extension>
    <extension

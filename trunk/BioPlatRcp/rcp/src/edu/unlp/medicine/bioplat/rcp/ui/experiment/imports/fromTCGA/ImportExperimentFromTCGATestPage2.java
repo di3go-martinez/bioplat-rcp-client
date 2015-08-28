@@ -33,7 +33,7 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage2(WizardModel wmodel) {
-		super("Get Studios");
+		super("Import from TCGA page 1 of 4");
 		
 	}
 	

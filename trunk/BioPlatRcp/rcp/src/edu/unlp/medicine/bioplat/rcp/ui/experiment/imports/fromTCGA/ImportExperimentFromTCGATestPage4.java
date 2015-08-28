@@ -36,7 +36,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage4(WizardModel wizardModel) {
-		super("Get Studios");
+		super("Import from TCGA page 3 of 4");
 	}
 	
 	
@@ -58,11 +58,9 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	}
 
 	private void createGSTextArea(final WizardModel wizardModel, Composite parent, final WizardPage wp) {
-//		GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the experiment\n", 9, false);
-		
+		GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the experiment\n", 9, false);
 		final Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-		
 		text.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -104,12 +102,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 		
 		if (openedBiomarkers.isEmpty()){
 			GUIUtils.addWrappedText(openedBiomarker, "\n\n\n\n                                There is no Gene Signature in your desktop.", 8, true);
-		}
-		
-		
-		else{
-			
-		
+		} else{
 			tr = TableBuilder.create(openedBiomarker).input(openedBiomarkers)
 					.addColumn(ColumnBuilder.create().property("name").title("Gene Signature name"))
 					.addColumn(ColumnBuilder.create().property("numberOfGenes").title("Number of genes"))
