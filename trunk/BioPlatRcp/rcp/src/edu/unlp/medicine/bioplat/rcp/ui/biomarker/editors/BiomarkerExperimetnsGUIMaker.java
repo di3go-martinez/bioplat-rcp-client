@@ -52,7 +52,7 @@ public class BiomarkerExperimetnsGUIMaker extends GuiMaker {
 	
 	private void createWorkAreaPart(Composite parent) {
 		TableReference tr = TableBuilder.create(parent).input(list)//
-				.hideSelectionColumn()//
+				//.hideSelectionColumn()//
 				.addColumn(ColumnBuilder.create().property("name").title("Experiment"))//
 				.addColumn(ColumnBuilder.create().property("validationResult.concordance_index_cindex").title("Concordance Index").width(150))
 				.addColumn(ColumnBuilder.create().property("validationResult.survdiff_pvalue").title("Log-Rank Test P-value").width(160))				
