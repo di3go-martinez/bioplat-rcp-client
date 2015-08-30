@@ -36,7 +36,7 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 			}
 		});
 		result.add(new EditorDescription(input, editor, "General"));		
-		result.add(new EditorDescription(input, new BiomarkerExperimentsEditor(false), "Validations"));
+		result.add(new EditorDescription(input, new BiomarkerExperimentsEditor(false), "Statistic Analysis"));
 		
 		// Estaría configurado en las preferences ahora
 		// result.add(new EditorDescription(input, new BrowserEditor() {
