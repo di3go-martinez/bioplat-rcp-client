@@ -37,8 +37,10 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
-	private double oldValue=0.0;
-	private double newValue=0.0;
+//	private double oldValue=0.0;
+//	private double newValue=0.0;
+	private String oldValue;
+	private String newValue;
 	private AbstractExperiment experiment;
 
 	public ChangeValueForOtherWizard(AbstractExperiment abstractExperiment) {
@@ -49,8 +51,8 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 	@Override
 	protected WizardModel createWizardModel() {
 		WizardModel wm = super.createWizardModel();
-		wm.add("oldValue", new WritableValue(0.0, Double.class));
-		wm.add("newValue", new WritableValue(0.0, Double.class));
+		wm.add("oldValue", new WritableValue("", String.class));
+		wm.add("newValue", new WritableValue("", String.class));
 		return wm;
 
 	}
@@ -92,19 +94,33 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		
 
-		
-		
-		
-		for (Sample s : experiment.getSamples())
-			for (Gene g : experiment.getGenes()) {
-				Double expr = experiment.getExpressionLevelForAGene(s, g);
-				if (expr == null || expr == oldValue) {
-					experiment.setExpressionLevelForAGene(s, g, (newValue));
-					addModification(s, g, oldValue, newValue);
+		try {
+			for (Sample s : experiment.getSamples())
+				for (Gene g : experiment.getGenes()) {
+					Double expr = experiment.getExpressionLevelForAGene(s, g);
+					if (expr == null || expr == Double.parseDouble(oldValue)) {
+						experiment.setExpressionLevelForAGene(s, g, Double.parseDouble(newValue));
+						addModification(s, g, Double.parseDouble(oldValue), Double.parseDouble(newValue));
 				}
 			}
+		} catch (Exception e) {
+			MessageManager.INSTANCE.add(Message.info("No expression data changed"));
+		}
+		
+		try {
+			for(Sample s : experiment.getSamples()){
+				for(String clinicalAttribute : experiment.getClinicalAttributeNames()){
+					if (experiment.getClinicalAttribute(s.getName(), clinicalAttribute).equalsIgnoreCase(oldValue)) {
+						experiment.setClinicalAttribute(s.getName(), clinicalAttribute, newValue);
+						experiment.getClinicalAttribute(s.getName(), clinicalAttribute);
+						MessageManager.INSTANCE.add(Message.info("The clinical attribute " +  oldValue + " in the sample " + s + " has changed. Old value: " + oldValue + ". New value: "+ newValue));
+					}
+				}
+			}
+		} catch (Exception e) {
+			//No deberia suceder...
+		}
 		return null;
 
 	}
@@ -113,8 +129,8 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected void configureParameters() {
-		oldValue = (Double)wizardModel().valueHolder("oldValue").getValue();
-		newValue = (Double)wizardModel().valueHolder("newValue").getValue();
+		oldValue = (String)wizardModel().valueHolder("oldValue").getValue();
+		newValue = (String)wizardModel().valueHolder("newValue").getValue();
 	}
 
 	@Override

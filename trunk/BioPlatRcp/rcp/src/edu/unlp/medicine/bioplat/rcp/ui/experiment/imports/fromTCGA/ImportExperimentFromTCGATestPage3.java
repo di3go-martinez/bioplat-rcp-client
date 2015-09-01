@@ -26,6 +26,7 @@ import edu.unlp.medicine.r4j.values.R4JStringDataMatrix;
 
 public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 
+	private static final String ATTRIBUTES = "ATTRIBUTES";
 	public static String STUDY = "STUDY";
 	public static String PROFILE = "PROFILE";
 	public static String CASENAME = "CASENAME";
@@ -178,6 +179,8 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 				return false;
 			}
 //		}
+		List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+		model.set(ATTRIBUTES, atributos.toArray(new String[0]));
 		return true;
 	}
 }
