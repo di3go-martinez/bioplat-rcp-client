@@ -731,6 +731,10 @@
             name="bPLFileBiomarkerImportIntroAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.BPLFileBiomarkerImportIntroAction">
       </action>
+      <action
+            name="TCGAExperimentImportIntroAction"
+            replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.TCGAExperimentImportIntroAction">
+      </action>
    </extension>
    <extension
          id="splashID"
