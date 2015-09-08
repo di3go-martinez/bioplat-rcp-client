@@ -33,13 +33,15 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage2(WizardModel wmodel) {
-		super("Import from TCGA page 1 of 4");
+		super("Select TCGA study (step 1 of 4)");
 		
 	}
 	
 	@Override
 	public Composite create(final WizardPage wizardPage, Composite parent, 
 			final DataBindingContext dbc, final WizardModel wmodel) {
+		
+		wizardPage.setDescription("Select an study from TCGA");
 		
 		this.wPage = wizardPage;
 		this.wModel = wmodel;

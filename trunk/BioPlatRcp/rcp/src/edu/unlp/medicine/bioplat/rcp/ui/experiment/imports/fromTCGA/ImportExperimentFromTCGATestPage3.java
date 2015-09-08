@@ -41,12 +41,13 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage3(WizardModel wmodel) {
-		super("Import from TCGA page 2 of 4");
+		super("Select Case subset and mRNA genetic profile (step 2 of 4)");
 	}
 
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent,
 			DataBindingContext dbc, WizardModel wmodel) {
+		wizardPage.setDescription("Select the case subset for the selected study, and the mRNA genetic profile");
 		model=wmodel;
 		wPage=wizardPage;
 //		Composite container = Widgets.createDefaultContainer(parent, 2);

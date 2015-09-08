@@ -22,7 +22,7 @@ import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 
 	public ImportExperimentFromTCGATestPage5(WizardModel wizardModel) {
-		super("Import from TCGA page 4 of 4");
+		super("Select Clinical data (step 4 of 4)");
 	}
 
 	public static String STUDY = "STUDY";
@@ -37,6 +37,7 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent,
 			DataBindingContext dbc, WizardModel wmodel) {
+		wizardPage.setDescription("Select the clinical attributes you would like to import. Remember that for doing survival analysis you need at leaste the time and event attributes.");
 		Composite container = new Composite(parent, SWT.FILL);
 		gd = new GridData(GridData.FILL);
 		gd.heightHint = 400;

@@ -38,7 +38,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	
 	
 	public ImportExperimentFromTCGATestPage4(WizardModel wizardModel) {
-		super("Import from TCGA page 3 of 4");
+		super("Select genes (step 3 of 4)");
 	}
 	
 	
@@ -46,7 +46,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent,
 			DataBindingContext dbc, WizardModel wmodel) {
-		
+		wizardPage.setDescription("Select the gene list you would like to import. You can do it selecting the genes of a gene signature (picking it from the GeneSignature list) or you can use the bottom panel for pasting the gene list."); 
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(30, 30).spacing(20, 20).create());

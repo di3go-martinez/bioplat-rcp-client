@@ -61,7 +61,7 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 
-		this.setWindowTitle("Import experiment from TCGA Tests");
+		this.setWindowTitle("Import experiment from TCGA (The Cancer Genome Atlas)");
 		
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
 		
@@ -110,11 +110,11 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 	
 	private GenericPage1ForIntroduction createIntroductionPage() {
 		
-		String inBlankBigTitle =  "Import experiment from TCG Api"; 
+		String inBlankBigTitle =  "Import an experiment from TCGA"; 
 
-		String inBlankSmallTitle =  "Import an experiment, from a text file containing expression data and clinical data";
-
-		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the experiment data in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\n\n If your experiment is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
+		String inBlankSmallTitle =  "Import an experiment (expression and clinical data) from TCGA: the most complete curated Cancer database";
+		
+		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the experiment data in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\nYou will start the import, selecting the TCGA study. TCGA offers different case lists for the same study (the ccall them sets, we call them case lists). For each case list, the offer many genetic profiles. In Bioplat, you will be able to select any of the mrna Profiles. In the third step you have to select the list of genes expression you would like to import (you can paste the list or you can use the gene list of a GeneSignature you are working with). Finally, you can select the clinical data you would like to import (by default, it imports everyone).";
 		
 		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
 	}
