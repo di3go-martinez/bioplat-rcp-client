@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromTCGA;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -26,6 +27,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
 
 public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
@@ -111,11 +113,22 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
-					wmodel.set(SELECTED_GENES, tr.selectedElements());
+					wmodel.set(SELECTED_GENES, getGenesAsVector(tr.selectedElements()) );
 					wp.setPageComplete(isPageComplete(wmodel));
 				}
 			});
 		}
+	}
+	
+	private String getGenesAsVector(List selectedBiomarkers){
+		
+		StringBuilder genes = new StringBuilder();
+		for (EditedBiomarker eb : (List<EditedBiomarker>) selectedBiomarkers){
+			genes.append(eb.getGenesAsList());
+		}
+		
+		return genes.toString();
+	
 	}
 	
 }
