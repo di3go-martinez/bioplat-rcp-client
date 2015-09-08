@@ -14,15 +14,16 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
-import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 import edu.unlp.medicine.r4j.values.R4JStringDataMatrix;
+import edu.unlp.medicine.utils.fileSystem.BioplatFileSystemUtils;
 
 public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 
@@ -35,6 +36,8 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	private WizardModel model;
 	private WizardPage wPage;
 	private String selectedStudy;
+	private boolean warningShown = true;
+	MessageBox messageBox;
 	
 	
 	public ImportExperimentFromTCGATestPage3(WizardModel wmodel) {
@@ -51,6 +54,7 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 10).spacing(5, 5).create());
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		generateComboBoxes(container,wmodel);
+		createNoAttributeWarning();
 		
 		return container;
 	}
@@ -122,6 +126,7 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				model.set(CASENAME, (String[])((StructuredSelection) comboCaseName.getSelection()).getFirstElement() );
+				warningShown = false;
 				wPage.setPageComplete(isPageComplete(model));
 			}
 		});
@@ -167,21 +172,30 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	
 	@Override
 	public boolean isPageComplete(WizardModel model) {
-//		if (comboCaseName.getCombo().getItemCount() > 0) {
-			if (comboCaseName.getSelection().isEmpty()){
-				return false;
-			}
-//		}
-//		if (comboGeneticProfile.getCombo().getItemCount() > 0){
-			if (comboGeneticProfile.getSelection().isEmpty()){
-				return false;
-			} else if(((String[])((StructuredSelection)comboGeneticProfile.getSelection()).getFirstElement())[0].equals("none")){
-				return false;
-			}
-//		}
+		if (comboCaseName.getSelection().isEmpty()){
+			return false;
+		}
+		
+		if (comboGeneticProfile.getSelection().isEmpty()){
+			return false;
+		} else if(((String[])((StructuredSelection)comboGeneticProfile.getSelection()).getFirstElement())[0].equals("none")){
+			return false;
+		}
+		
 		List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+		if (atributos.isEmpty() && !warningShown) {
+	        int buttonID = this.messageBox.open();
+	        warningShown = true;
+		}
+		
 		model.set(ATTRIBUTES, atributos.toArray(new String[0]));
 		return true;
+	}
+	
+	private void createNoAttributeWarning(){
+		messageBox = new MessageBox(PlatformUIUtils.findShell(), SWT.ICON_WARNING | SWT.OK);
+        messageBox.setText("Warning");
+        messageBox.setMessage("Selected case list contains no Clinical Data. Only experiment values will be imported.");
 	}
 }
 
