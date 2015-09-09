@@ -28,6 +28,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ScriptDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -142,15 +143,8 @@ public class BiomarkerExperimentsHelper implements Observer {
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils
 					.findImage("rlogo.png"));
-			c.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					//Revisar el tercer parametro. Chusmear new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
-					/*new MevWizard(exp.getValidationConfig()
-							.getExperimentToValidate(), false, false).blockOnOpen()
-							.open();*/
-				}
-			});
+			c.addSelectionListener(
+					openViewScriptDialog(exp.getScript()));
 			editor.grabHorizontal = true;
 			editor.setEditor(c, items[i], this.exportRScriptIndex);
 			
@@ -243,6 +237,20 @@ public class BiomarkerExperimentsHelper implements Observer {
 			}
 		};
 	}
+	
+	
+	
+	private SelectionListener openViewScriptDialog(
+			final String script) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new ScriptDialog(script).open();
+			}
+		};
+	}
+	
+	
 	
 	//Metodo para el muestreo de graficas de Kaplan-Meier
 	protected SelectionAdapter openExperimentAppliedDialog(final Validation exp) {
