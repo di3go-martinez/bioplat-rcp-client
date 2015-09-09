@@ -38,7 +38,7 @@ public class ConfigureClusterDialog extends Dialog {
 	private AbstractExperiment experiment;
 	private List<Data> data;
 	private TableReference tref;
-
+	
 	protected ConfigureClusterDialog(AbstractExperiment experiment) {
 		super(PlatformUIUtils.findShell());
 		this.experiment = experiment;
@@ -65,8 +65,9 @@ public class ConfigureClusterDialog extends Dialog {
 		final ColumnBuilder titleColumnBuilder = ColumnBuilder.create().editable(!readOnly()).property("groupid").title("Cluster ID");
 		final TableBuilder tableBuilder = TableBuilder.create(container).input(data)//
 				.hideSelectionColumn()//
-				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(200))//
+				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(150))
 				.addColumn(titleColumnBuilder);
+		generateClinicalDataColumns(tableBuilder);		
 		if (!readOnly())
 			tableBuilder.contextualMenuBuilder(menuBuilder());
 		tref = tableBuilder.build();
@@ -81,6 +82,15 @@ public class ConfigureClusterDialog extends Dialog {
 			}
 		});
 		return container;
+	}
+
+	private void generateClinicalDataColumns(TableBuilder tableBuilder) {
+		if(!this.data.isEmpty()){
+			List<String> attrs = data.get(0).sample.getClinicalAttributeNames();
+			for(String attr : attrs){
+				tableBuilder.addColumn(ColumnBuilder.create().property("sample.sampleClincalData.clinicalData['" + attr + "']").title(attr));
+			}
+		}
 	}
 
 	private boolean readOnly() {
@@ -143,10 +153,11 @@ public class ConfigureClusterDialog extends Dialog {
 		return result;
 
 	}
+	
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(400, 500);
+		return new Point(500, 500);
 	}
 
 	private void setGroups() {
@@ -159,6 +170,7 @@ public class ConfigureClusterDialog extends Dialog {
 	}
 
 	public static class Data {
+		
 		public Data(Sample s, String i) {
 			this.sample = s;
 			this.groupid = i;
@@ -187,9 +199,11 @@ public class ConfigureClusterDialog extends Dialog {
 		public void setSample(Sample sample) {
 			this.sample = sample;
 		}
-
+		
 		// TODO hacer que sea integer!!
 		private String groupid;
+			
+		
 	}
 
 }
