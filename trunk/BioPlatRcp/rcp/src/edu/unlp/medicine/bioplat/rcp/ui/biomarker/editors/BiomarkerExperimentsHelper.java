@@ -80,9 +80,10 @@ public class BiomarkerExperimentsHelper implements Observer {
 	public void refreshView() {
 		final List<Validation> eas = this.dataProvider.get();
 		TableReference tr = this.provider.tableReference();
-		tr.input(eas);
 		// FIXME Horrible esto... "tapar" en el ColumnBuilder...
 		Table table = tr.getTable();
+		removeAllFromTable(table);
+		tr.input(eas);
 		initialize(table);
 		// para cada item de agrega el table editor
 		// FIXME no es necesario pisar los que ya estÃ¡n creados...
@@ -153,6 +154,20 @@ public class BiomarkerExperimentsHelper implements Observer {
 		}
 
 	}
+
+	
+	// TODO: No me convence hacer esto
+	private void removeAllFromTable(Table table) {
+		Control[] controls = table.getChildren();
+		for(Control ctr : controls){
+			if(ctr != null){
+				ctr.dispose();	
+			}
+		}
+		table.removeAll();
+	}
+
+
 
 	private void initialize(Table table) {
 		if (this.mustinitialize) {
