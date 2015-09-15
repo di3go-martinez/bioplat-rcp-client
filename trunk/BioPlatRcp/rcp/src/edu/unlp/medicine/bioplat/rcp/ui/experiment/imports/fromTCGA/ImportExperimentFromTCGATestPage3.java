@@ -14,7 +14,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
@@ -50,22 +52,38 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 		wizardPage.setDescription("Select the case subset for the selected study, and the mRNA genetic profile");
 		model=wmodel;
 		wPage=wizardPage;
-//		Composite container = Widgets.createDefaultContainer(parent, 2);
+		
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 10).spacing(5, 5).create());
-		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
+		
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).spacing(5, 5).create());
+//		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		generateComboBoxes(container,wmodel);
 		createNoAttributeWarning();
 		
 		return container;
 	}
 
+	private GridData generateGridData(){
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment=SWT.CENTER;
+		gridData.grabExcessHorizontalSpace=true;
+		return gridData;
+	}
+	
 	private void generateComboBoxes(Composite container, WizardModel wmodel){
+		Composite group1 = new Group(container, SWT.CENTER);
+		group1.setLayoutData(generateGridData());
+		group1.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(5, 5).spacing(5, 5).create());
 		
-		Label labelCaseName = new Label(container, SWT.NONE);
-		comboCaseName = new ComboViewer(container, SWT.DROP_DOWN);
-		Label labelGeneticProfile = new Label(container, SWT.NONE);
-		comboGeneticProfile = new ComboViewer(container, SWT.DROP_DOWN);
+		Label labelCaseName = new Label(group1, SWT.NONE);
+		comboCaseName = new ComboViewer(group1, SWT.DROP_DOWN);
+		
+		Composite group2 = new Group(container, SWT.CENTER);
+		group2.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(5, 5).spacing(5, 5).create());
+		group2.setLayoutData(generateGridData()); 
+		
+		Label labelGeneticProfile = new Label(group2, SWT.NONE);
+		comboGeneticProfile = new ComboViewer(group2, SWT.DROP_DOWN);
 		
 		labelCaseName.setText("Case list name:");
 		labelGeneticProfile.setText("Genetic Profile:");
@@ -184,10 +202,6 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 		}
 		
 		List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
-		if (atributos.isEmpty() && !warningShown) {
-	        int buttonID = this.messageBox.open();
-	        warningShown = true;
-		}
 		
 		model.set(ATTRIBUTES, atributos.toArray(new String[0]));
 		return true;
@@ -198,5 +212,20 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
         messageBox.setText("Warning");
         messageBox.setMessage("Selected case list contains no Clinical Data. Only experiment values will be imported.");
 	}
+
+	/* (non-Javadoc)
+	 * @see edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor#doOnExit()
+	 */
+	@Override
+	public void doOnExit() {
+		
+		if (((String[]) model.value(ATTRIBUTES)).length == 0  && !warningShown) {
+	        this.messageBox.open();
+	        warningShown = true;
+		}
+		super.doOnExit();
+	}
+	
+	
 }
 

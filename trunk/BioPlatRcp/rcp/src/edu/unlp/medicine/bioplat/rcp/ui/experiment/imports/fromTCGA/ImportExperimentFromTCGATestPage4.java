@@ -47,14 +47,14 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	public Composite create(WizardPage wizardPage, Composite parent,
 			DataBindingContext dbc, WizardModel wmodel) {
 		wizardPage.setDescription("Select the gene list you would like to import. You can do it selecting the genes of a gene signature (picking it from the GeneSignature list) or you can use the bottom panel for pasting the gene list."); 
-		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		Composite container = new Composite(parent, SWT.NONE);
+
+		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
+		
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(30, 30).spacing(20, 20).create());
-		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
-//		Composite container = Widgets.createDefaultContainer(parent, 1);
+//		container.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		
 		createLocalBiomarkersSelector(wizardPage, container, gdf, dbc, wmodel);
-		
 		createGSTextArea(wmodel,container,wizardPage);
 		return container;
 	}
@@ -63,6 +63,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 		GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the experiment\n", 9, false);
 		final Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+//		text.setSize(text.getSize().x,150);
 		text.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -80,8 +81,6 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	private List<GeneSignature> translateBiomarkerIntoGS(
 			List<Biomarker> openedBiomarkers) {
 		
-		
-		
 		List<GeneSignature> result = new ArrayList<GeneSignature>();
 		if (openedBiomarkers!=null){
 			for (Biomarker biomarker : openedBiomarkers) {
@@ -92,25 +91,22 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	
 	private void createLocalBiomarkersSelector(final WizardPage wp, Composite container,GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
 		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
-
 		
-		GUIUtils.addWrappedText(container, "\n\n...You can filter the experiment picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the experiment\n", 9, false);
+		GUIUtils.addWrappedText(container, "\n...You can filter the experiment picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the experiment\n", 9, false);
 		
 		Group openedBiomarker = new Group(container, SWT.NONE);
 		openedBiomarker.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).create());
 		openedBiomarker.setLayoutData(gdf.create());
 		openedBiomarker.setText("Gene Signatures in your Bioplat desktop");
 
-		
 		if (openedBiomarkers.isEmpty()){
-			GUIUtils.addWrappedText(openedBiomarker, "\n\n\n\n                                There is no Gene Signature in your desktop.", 8, true);
+			GUIUtils.addWrappedText(openedBiomarker, "\n                                There is no Gene Signature in your desktop.", 8, true);
 		} else{
 			tr = TableBuilder.create(openedBiomarker).input(openedBiomarkers)
 					.addColumn(ColumnBuilder.create().property("name").title("Gene Signature name"))
 					.addColumn(ColumnBuilder.create().property("numberOfGenes").title("Number of genes"))
 					.build();
 			tr.addSelectionChangeListener(new ISelectionChangedListener() {
-
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
 					wmodel.set(SELECTED_GENES, getGenesAsVector(tr.selectedElements()) );
@@ -121,12 +117,10 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	}
 	
 	private String getGenesAsVector(List selectedBiomarkers){
-		
 		StringBuilder genes = new StringBuilder();
 		for (EditedBiomarker eb : (List<EditedBiomarker>) selectedBiomarkers){
 			genes.append(eb.getGenesAsList());
 		}
-		
 		return genes.toString();
 	
 	}

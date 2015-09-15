@@ -38,12 +38,14 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 	public Composite create(WizardPage wizardPage, Composite parent,
 			DataBindingContext dbc, WizardModel wmodel) {
 		wizardPage.setDescription("Select the clinical attributes you would like to import. Remember that for doing survival analysis you need at leaste the time and event attributes.");
-		Composite container = new Composite(parent, SWT.FILL);
+		
+		Composite container = new Composite(parent, SWT.NONE);
+		
 		gd = new GridData(GridData.FILL);
-		gd.heightHint = 400;
-		gd.widthHint = 400;
+		gd.heightHint =250;
+		gd.widthHint = 250;
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).margins(30, 30).spacing(20, 20).create());
-		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+//		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		this.model = wmodel;
 		generateAvailableAttributes(wmodel, container);
 		generateActionButtons(wmodel, container);
@@ -52,29 +54,30 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 	}
 	
 	private void generateAvailableAttributes(WizardModel wmodel, Composite container){
-		Group atributesGroup = new Group(container, SWT.FILL);
-		atributesGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
-		atributesGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		Group atributesGroup = new Group(container, SWT.FILL|SWT.CENTER);
+		atributesGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).spacing(5,5).create());
+		atributesGroup.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		atributesGroup.setText("Available clinical attributes");
-		this.availableAttributesList = new org.eclipse.swt.widgets.List(atributesGroup, SWT.MULTI);
+		this.availableAttributesList = new org.eclipse.swt.widgets.List(atributesGroup, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		this.availableAttributesList.setLayoutData(gd);
 	}
 	
 	private void generateSelectedAttributes(WizardModel wmodel, Composite container){
-		Group atributesGroup = new Group(container, SWT.FILL);
-		atributesGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
-		atributesGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		Group atributesGroup = new Group(container, SWT.FILL|SWT.CENTER);
+		atributesGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).spacing(5,5).create());
+		atributesGroup.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		atributesGroup.setText("Selected clinical attributes");
-		this.selectedAttributesList = new org.eclipse.swt.widgets.List(atributesGroup, SWT.MULTI);
+		this.selectedAttributesList = new org.eclipse.swt.widgets.List(atributesGroup, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		this.selectedAttributesList.setLayoutData(gd);
 	}
 
 	private void generateActionButtons(WizardModel wmodel, Composite container){
-		Composite actionButtons = new Composite(container, SWT.CENTER);
-		actionButtons.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).create());
+		Composite actionButtons = new Group(container, SWT.NONE);
+		actionButtons.setLayout(GridLayoutFactory.fillDefaults().margins(5, 5).create());
 		actionButtons.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		
 		Button addSelectedAttributes = new Button(actionButtons, SWT.PUSH);
+		addSelectedAttributes.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
 		addSelectedAttributes.setText("Select >");
 		addSelectedAttributes.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -83,14 +86,14 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				removeAttributesToList(availableAttributesList, availableAttributesList.getSelection());
 				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
-				changeSizeNOW();
+//				changeSizeNOW();
 			}
 			
 		});
 		
 		Button addAllAttributes = new Button(actionButtons, SWT.PUSH);
 		addAllAttributes.setText("Select All >>");
-		addAllAttributes.setSize(100, 20);
+		addAllAttributes.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
 		addAllAttributes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -98,14 +101,14 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				availableAttributesList.removeAll();
 				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
-				changeSizeNOW();
+//				changeSizeNOW();
 			}
 			
 		});
 		
 		Button removeSelectedAttributes = new Button(actionButtons, SWT.PUSH);
 		removeSelectedAttributes.setText("< Remove");
-		removeSelectedAttributes.setSize(100, 20);
+		removeSelectedAttributes.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
 		removeSelectedAttributes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -113,14 +116,14 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				removeAttributesToList(selectedAttributesList, selectedAttributesList.getSelection());
 				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
-				changeSizeNOW();
+//				changeSizeNOW();
 			}
 			
 		});
 		
 		Button removeAllAttributes = new Button(actionButtons, SWT.PUSH);
 		removeAllAttributes.setText("<< Remove All");
-		removeAllAttributes.setSize(100, 20);
+		removeAllAttributes.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
 		removeAllAttributes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -128,9 +131,8 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 				selectedAttributesList.removeAll();
 				model.set(ATTRIBUTES, selectedAttributesList.getItems());
 				super.widgetSelected(e);
-				changeSizeNOW();
+//				changeSizeNOW();
 			}
-			
 		});
 		
 		
@@ -142,16 +144,11 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 		setAttributesToList(selectedAttributesList, atributos);
 		setAttributesToList(availableAttributesList, new ArrayList<String>());
 		model.set(ATTRIBUTES, selectedAttributesList.getItems());
+		availableAttributesList.setSize(selectedAttributesList.getSize());
 		changeSizeNOW();
 		super.doOnEnter();
 	}
 
-//	private void addAttributesToList(org.eclipse.swt.widgets.List list, List<String> attributes){
-//		for (String attribute : attributes) {
-//			list.add(attribute);
-//		}
-//	}
-	
 	private void addAttributesToList(org.eclipse.swt.widgets.List list, String[] attributes){
 		for (int i = 0; i < attributes.length; i++) {
 			list.add(attributes[i]);
@@ -168,9 +165,6 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 		list.setItems((String[]) attributes.toArray(new String[0]) );
 	}
 	
-//	private void setAttributesToList(org.eclipse.swt.widgets.List list, String[] attributes) {
-//		list.setItems(attributes);
-//	}
 
 	private void changeSizeNOW() {
 		this.selectedAttributesList.getParent().getParent().layout(true, true);
