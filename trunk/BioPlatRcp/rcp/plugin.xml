@@ -396,7 +396,7 @@
 	        </selection>
       </actionContribution>
       <actionContribution
-            caption="Remove Experiment..."
+            caption="Remove selected statistic analysis..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveValidations"
             groupId="02-Biomarker-abm"
             image="resources/icons/removeItem.png"
