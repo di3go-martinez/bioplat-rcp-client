@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,8 +100,8 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 				@Override
 				public void run() {
 					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-//					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
-					
+					MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
+					PlatformUIUtils.openInformation("Experiment Succesfuly Imported", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
 				}
 			});
 		} catch (Exception e) {
