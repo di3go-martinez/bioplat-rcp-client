@@ -26,7 +26,7 @@ public class PagesDescriptors {
 	public static final String RFS_MONTHS = "RFS_Months";
 
 	// clave para el wizardModel que indica la lista de elementos seleccionados.
-	// Es un common value, no un IObservableValue...
+	// impl: Es un common value, no un IObservableValue...
 	public static final String SELECTED = "SELECTED";
 
 	public static final String ATTRIBUTE_TYPE = "ATTRIBUTE_TYPE";
@@ -113,7 +113,6 @@ public class PagesDescriptors {
 	}
 
 	private static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider, boolean forManualClustering, String title) {
-
 		return new ConfigurationWizardPageDescriptor(validationTestGUIProvider, title, forManualClustering);
 	}
 
