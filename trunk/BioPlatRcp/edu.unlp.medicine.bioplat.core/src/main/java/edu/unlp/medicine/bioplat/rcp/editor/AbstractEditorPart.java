@@ -258,7 +258,7 @@ public abstract class AbstractEditorPart<T extends AbstractEntity> extends Edito
 		if (obj == this) // quicktest
 			return true;
 
-		if (!(obj instanceof AbstractEditorInput)) // or obj is null
+		if (!(obj instanceof AbstractEditorPart)) // or obj is null
 			return false;
 
 		try {
