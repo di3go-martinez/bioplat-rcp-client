@@ -315,9 +315,9 @@
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromTCGATest"
-        icon="resources/icons/TCGA-ICON.png"
+        icon="resources/icons/cbioportalIco.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromTCGATest"
-        name="Import experiment from TCGA">
+        name="Import TCGA experiment from CBioportal">
   </wizard>
    </extension>
    <extension
@@ -335,18 +335,31 @@
       </page>
       <page
             class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
-            id="edu.medicine.bioplat.rcp.genes.general"
-            name="Genes">
+            id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.general"
+            name="Bioinformatic tools">
       </page>
       <page
-            category="edu.medicine.bioplat.rcp.genes.general"
+      		category="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes.individual"
+            name="For individual genes">
+      </page>
+      <page
+      		category="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.general"
+            class="edu.unlp.medicine.bioplat.rcp.ui.entities.preferences.DefaultEmptyPreferencesPage"
+            id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes.signatures"
+            name="For gene signatures">
+      </page>
+      <page
+            category="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes.individual"
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage"
-            id="edu.medicine.bioplat.rcp.genes.external"
+            id="edu.medicine.bioplat.rcp.genes.bioInformaticTools.genes.external"
             name="External Information">
       </page>
       <page
+      		category="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes.signatures"
             class="edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage"
-            id="edu.medicine.bioplat.rcp.preferences.general"
+            id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes."
             name="External Urls">
       </page>
    </extension>
