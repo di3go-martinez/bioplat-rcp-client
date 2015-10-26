@@ -96,12 +96,17 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 		try {
 			final Experiment e = result; // join
 			Display.getDefault().asyncExec(new Runnable() {
-
+				
 				@Override
 				public void run() {
 					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-					MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
-					PlatformUIUtils.openInformation("Experiment Succesfuly Imported", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
+					if (e.getGenes().isEmpty()) {
+						MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported with errors."));
+						PlatformUIUtils.openWarning("Experiment failed to Import", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was NOT succesfuly imported from TCGA. Some data may be missing.");
+					} else {
+						MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
+						PlatformUIUtils.openInformation("Experiment Succesfuly Imported", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
+					}
 				}
 			});
 		} catch (Exception e) {
