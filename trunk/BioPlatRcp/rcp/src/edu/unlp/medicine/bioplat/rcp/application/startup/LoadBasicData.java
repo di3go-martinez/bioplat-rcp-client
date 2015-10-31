@@ -14,7 +14,6 @@ public class LoadBasicData implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		if (true)return;
 		// Sale un diálogo que bloquea la pantalla de usuario hasta que se
 		// cargan todos los datos básicos
 
