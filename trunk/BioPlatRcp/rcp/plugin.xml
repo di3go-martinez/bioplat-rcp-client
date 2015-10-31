@@ -32,10 +32,6 @@
                   value="bioplat">
             </property>
             <property
-                  name="preferenceCustomization"
-                  value="preferences.ini">
-            </property>
-            <property
                   name="startupForegroundColor"
                   value="000000">
             </property>
@@ -361,6 +357,12 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage"
             id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes."
             name="External Urls">
+      </page>
+      <page
+            category="edu.unlp.medicine.bioplat.rcp.preferences.proxy.settings"
+            class="edu.unlp.medicine.bioplat.rcp.preferences.proxy.ProxySettingsPreferencePage"
+            id="edu.medicine.bioplat.rcp.proxy.settings"
+            name="Proxy Settings">
       </page>
    </extension>
    <extension

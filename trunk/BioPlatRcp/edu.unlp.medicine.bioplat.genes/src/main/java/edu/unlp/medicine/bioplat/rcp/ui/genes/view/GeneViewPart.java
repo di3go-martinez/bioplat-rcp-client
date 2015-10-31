@@ -86,20 +86,6 @@ public class GeneViewPart extends ViewPart {
             "Accept-Encoding: gzip,deflate,sdch",
             "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3" };
 	
-	final String s= "<html>"+
-            "<head>"+
-            "<title></title>"+
-            "</head>"+
-            "<body>"+
-            "<div id=\"newdiv\" align=\"center\">"+
-            "<img src=\"http://www.schultzlawoffice.com/img/loading/loading-x.gif\" />"+
-            "</div>"+
-            "</body>"+
-            "</html>" ;
-	
-
-	
-	
 	@Override
 	public void createPartControl(final Composite parent) {
 		
@@ -311,6 +297,19 @@ public class GeneViewPart extends ViewPart {
 		tabContainer.setSelection(0);
 	}
 
+
+	//FIXME el gif debería estar local
+	private static final String WAITING_HTML= "<html>"+
+            "<head>"+
+            "<title></title>"+
+            "</head>"+
+            "<body>"+
+            "<div id=\"newdiv\" align=\"center\">"+
+            "<img src=\"http://www.schultzlawoffice.com/img/loading/loading-x.gif\" />"+
+            "</div>"+
+            "</body>"+
+            "</html>" ;
+	
 	private void buildBrowsers(Gene gene, CTabFolder t) {
 
 		String urls = PlatformUtils.preferences(GenesPluginActivator.id()).get(ExternalGeneInformationPage.URLS, "");
@@ -331,7 +330,7 @@ public class GeneViewPart extends ViewPart {
 			
 			final Browser browserWaiting = new Browser(tabContainer, SWT.NONE); 
 			browserWaiting.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
-			browserWaiting.setText(s);
+			browserWaiting.setText(WAITING_HTML);
 			
 			
 			browsers.add(browser);

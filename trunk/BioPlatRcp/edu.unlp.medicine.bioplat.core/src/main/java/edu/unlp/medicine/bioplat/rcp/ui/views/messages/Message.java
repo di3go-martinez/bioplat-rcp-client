@@ -28,8 +28,8 @@ public class Message extends AbstractEntity implements Comparable<Message> {
 
 		private String image;
 
-		private MessageType(String name) {
-			image = name;
+		private MessageType(String image) {
+			this.image = image;
 		}
 
 		public String getIconName() {
