@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -33,7 +34,7 @@ public class MyHttpClient {
 	private int testConnection(){
 		String url = "http://www.google.com/search?q=httpClient";
 
-		HttpClient client = HttpClientBuilder.create().build();
+		HttpClient client = HttpClientBuilder.create().setProxy(new HttpHost("localhost", 9000)).build();
 		HttpGet request = new HttpGet(url);
 
 		// add request header
@@ -54,5 +55,9 @@ public class MyHttpClient {
 	
 	public boolean connectionAvailable(){
 		return testConnection()==200;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new MyHttpClient().connectionAvailable());
 	}
 }
