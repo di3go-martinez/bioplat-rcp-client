@@ -82,7 +82,7 @@ public class StartupRserve implements IStartup {
 							@Override
 							public String isValid(String newText) {
 								if (!check(newText))
-									return "la url ingresada debe tener la forma host:port";
+									return "The text must be proxyHost:port";
 								return null;// no error...
 							}
 
