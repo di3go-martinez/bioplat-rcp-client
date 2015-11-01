@@ -44,7 +44,7 @@ public class StartupRserve implements IStartup {
 				/**
 				 * It initialize the BioplatR4JServer.
 				 */
-				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.getInstance(checkConnectionProperties());
+				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.create(checkConnectionProperties());
 
 				if (bioplatR4JServer.isStarted()) {
 					if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size() == 0) {
@@ -66,7 +66,7 @@ public class StartupRserve implements IStartup {
 				if (!c.connectionAvailable())
 					return promptForProxy();
 				else
-					return new ConnectionProperties();// vacío-->conexión directa
+					return ConnectionProperties.NONE;
 			}
 
 			private ConnectionProperties promptForProxy() {
@@ -129,12 +129,11 @@ public class StartupRserve implements IStartup {
 			@Override
 			public void run() {
 				try {
-					// FIXME null en el getInstance no va!
-					BioplatR4JServer.getInstance(null).getServer().shutDown();
+					BioplatR4JServer.getInstance().getServer().shutDown();
 					BioplatFileSystemUtils.deleteImagesFolder();
 				} catch (R4JServerShutDownException e) {
 					logger.error("Problem shutting down the Rserve on port: "
-							+ BioplatR4JServer.getInstance(null).getServer().getPort());
+							+ BioplatR4JServer.getInstance().getServer().getPort());
 					e.printStackTrace();
 				}
 			}
