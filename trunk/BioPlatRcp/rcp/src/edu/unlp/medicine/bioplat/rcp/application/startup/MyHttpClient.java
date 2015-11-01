@@ -34,7 +34,7 @@ public class MyHttpClient {
 	private int testConnection(){
 		String url = "http://www.google.com/search?q=httpClient";
 
-		HttpClient client = HttpClientBuilder.create().setProxy(new HttpHost("localhost", 9000)).build();
+		HttpClient client = HttpClientBuilder.create()/* no toma el proxy con las variables del sistema?.setProxy(new HttpHost("localhost", 9000))*/.build();
 		HttpGet request = new HttpGet(url);
 
 		// add request header
