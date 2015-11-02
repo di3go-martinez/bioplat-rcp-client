@@ -1,10 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -34,7 +31,8 @@ public class MyHttpClient {
 	private int testConnection(){
 		String url = "http://www.google.com/search?q=httpClient";
 
-		HttpClient client = HttpClientBuilder.create()/* no toma el proxy con las variables del sistema?.setProxy(new HttpHost("localhost", 9000))*/.build();
+		//No tiene en cuenta las variables del sistema a propósito (http.proxyHost, etc.) ver javadoc
+		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);
 
 		// add request header
