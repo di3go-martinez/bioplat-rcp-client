@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -30,11 +32,15 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellData;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Sample;
@@ -55,7 +61,10 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 	private TableReference tr;
 	private List<ClinicalDataModel> gridModel;
 	private ComboViewer sorterSelectionAttribute;
+	private boolean editorOpen = true;
 
+	private ExecutorService exec = Executors.newFixedThreadPool(1);
+	
 	public ExperimentClinicalData(boolean updatableTitle) {
 		super(updatableTitle);
 	}
@@ -232,29 +241,102 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 	private List<ClinicalDataModel> makeModel(AbstractExperiment model) {
 		return ClinicalDataModel.create(model);
 	}
+	
+	private boolean isEditorOpen() {
+		return editorOpen;
+	}
+	
+	
+	@Override
+	public void dispose() {
+		editorOpen = false;
+		super.dispose();
+	}
 
 	@Override
 	protected Observer createModificationObserver() {
 
+		// TODO analizar si hace falta el lock ahora...
+		final Object lock = new Object();
+		final Holder<Boolean> changed = Holder.create(false);
+		// table view refresher
+		new Thread() {
+			@Override
+			public void run() {
+
+				while (isEditorOpen()) {
+					PlatformUIUtils.findDisplay().syncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							synchronized (lock) {
+								if (changed.value()) {
+									tr.input(gridModel);
+									changed.hold(false);
+								}
+							}
+						}
+					});
+					sleep();
+				}
+			}
+
+			private void sleep() {
+				try {
+					Thread.sleep(1000);// TODO hacer configurable (de quedar)
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
+
 		return new Observer() {
+
+			// uso para indicar que el autorefresh esta desactivado
+			private boolean logged = false;
+
+			// private int counter = 0;
 
 			@Override
 			public void update(Observable o, Object arg) {
-				// FIXME PARCHE PARA QUE SE BORREN LOS SAMPLES QUE SE BORRAN EN
-				// LA OTRA SOLAPA,
-				// TODO POSIBLE SOLUCIÓN, AGREGAR UN CHECKEO O VALIDACION DE LA
-				// TABLEREFENCE CON EL MODELO
+
+				if (!autorefresh()) {
+					warnAutoRefresh();
+					return;
+				}
+				logged = false;
+				
+				exec.submit(new Runnable() {
+
+					@Override
+					public void run() {
+						synchronized (lock) {
+							// FIXME no va más esto?.... cómo queda ahora la
+							// performance?....
+//							gridModel = ExpressionDataModel.checkGenes(gridModel, model());
+							changed.hold(true);
+						}
+
+					}
+				});
 
 				ExperimentEditor.checkColumns(tr, model());
 
-				if (gridModel.size() != model().getClinicalAttributeNames().size()) {
-					gridModel = makeModel(model());
-					tr.input(gridModel);
-					sorterSelectionAttribute.setInput(buildSorterSelectionAttributeInput());
-				}
-
 			}
 
+			private void warnAutoRefresh() {
+				if (!logged) {
+					final String msg = "The grid autorefreshing is disabled";
+					MessageManager.INSTANCE.add(Message.warn(msg));
+//					logger.warn(msg);
+					logged = true;
+				}
+			}
+
+			private boolean autorefresh() {
+				return ExperimentEditor.ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
+			}
 		};
 	}
 }
