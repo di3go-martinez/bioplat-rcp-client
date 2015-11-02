@@ -33,7 +33,8 @@ public class InitializeGenesUrlStartup implements IStartup {
 			String urls = StringUtils.join(defaults, '|');
 			PlatformUtils.preferences(GenesPluginActivator.id()).put(ExternalGeneInformationPage.URLS, urls);
 			// TODO acomodar mejor
-			ScopedPreferenceStore prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE, GenesPluginActivator.id());
+			ScopedPreferenceStore prefs = new ScopedPreferenceStore(ConfigurationScope.INSTANCE,
+					GenesPluginActivator.id());
 			try {
 				prefs.save();
 			} catch (IOException e1) {
@@ -64,7 +65,6 @@ public class InitializeGenesUrlStartup implements IStartup {
 				result.add(newUrl);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -73,7 +73,8 @@ public class InitializeGenesUrlStartup implements IStartup {
 
 	private static boolean checks(final String filepath) {
 		if (filepath == null) {
-			logger.warn("No está configurada la variable " + DEFAULT_GENES_URLS_FILE + ". No se inicializarán las urls por default en la vista de genes");
+			logger.warn("No está configurada la variable " + DEFAULT_GENES_URLS_FILE
+					+ ". No se inicializarán las urls por default en la vista de genes");
 			return false;
 		}
 		if (!new File(filepath).exists()) {
