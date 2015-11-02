@@ -76,7 +76,7 @@ public class StartupRserve implements IStartup {
 					@Override
 					public void run() {
 						InputDialog id = new InputDialog(null, "Bioplat Proxy Settings",
-								"We cannot connect to the Internet. Please configure a proxy to use", "host:port",
+								"We cannot connect to the Internet. Please configure a proxy to use", "proxyHost:port",
 								new IInputValidator() {
 
 							@Override
@@ -98,7 +98,7 @@ public class StartupRserve implements IStartup {
 						holder.hold(id.getValue());
 					}
 				});
-				String[] parts = holder.value().split(":");
+				String[] parts = holder.value().split(":");//acá llega ok, porque lo valida el diálogo!
 				String host = parts[0];
 				int port = Integer.valueOf(parts[1]);
 				return new ConnectionProperties(host, port);
