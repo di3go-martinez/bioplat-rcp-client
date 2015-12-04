@@ -37,7 +37,7 @@ import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 	
-	private static Logger logger = LoggerFactory.getLogger(ImportExperimentFromTCGATest.class);
+	private static final Logger logger = LoggerFactory.getLogger(ImportExperimentFromTCGATest.class);
 	public static String STUDY = "STUDY";
 	public static String PROFILE = "PROFILE";
 	public static String CASENAME = "CASENAME";
