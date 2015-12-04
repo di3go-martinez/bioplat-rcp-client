@@ -133,8 +133,9 @@ public class StartupRserve implements IStartup {
 					BioplatFileSystemUtils.deleteImagesFolder();
 				} catch (R4JServerShutDownException e) {
 					logger.error("Problem shutting down the Rserve on port: "
-							+ BioplatR4JServer.getInstance().getServer().getPort());
-					e.printStackTrace();
+							+ BioplatR4JServer.getInstance().getServer(),e);
+				} catch (Throwable e) {
+					logger.error("Error", e);
 				}
 			}
 		});
