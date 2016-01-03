@@ -33,7 +33,7 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	private IEditorPart activeEditor;
 
 	public AbstractActionContribution() {
-		PlatformUI.getWorkbench().addWindowListener(new IWindowListener() {
+		/*PlatformUI.getWorkbench().addWindowListener(new IWindowListener() {
 
 			@Override
 			public void windowOpened(IWorkbenchWindow window) {
@@ -59,7 +59,8 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 			private IEditorPart editor(IWorkbenchWindow window) {
 				return activeEditor = window.getActivePage().getActiveEditor();
 			}
-		});
+		});*/
+		
 	}
 
 	protected <T extends ISelection> T getSelection() {
@@ -77,6 +78,10 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	}
 
 	protected IEditorPart getCurrentEditor() {
+		// Fix necesario si no se ejecuta alguna accion para tomar el listener		
+		if(activeEditor == null){
+			activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		}
 		return activeEditor;
 	}
 
