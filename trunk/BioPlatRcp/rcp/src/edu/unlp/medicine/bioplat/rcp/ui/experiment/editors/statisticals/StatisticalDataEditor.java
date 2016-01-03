@@ -68,9 +68,11 @@ public class StatisticalDataEditor extends AbstractEditorPart<Validation> {
 		
 		createExpandable(container, "ROC", new ROC(toolkit, model));
 		
+		createExpandable(container, "Heatmap", new Heatmap(toolkit, model));
+		
 		createExpandable(container, "Kaplan-Meier", new SurvivalCurves(toolkit, model));
 		
-		createExpandable(container, "Heatmap", new Heatmap(toolkit, model));
+		
 
 		
 	}
