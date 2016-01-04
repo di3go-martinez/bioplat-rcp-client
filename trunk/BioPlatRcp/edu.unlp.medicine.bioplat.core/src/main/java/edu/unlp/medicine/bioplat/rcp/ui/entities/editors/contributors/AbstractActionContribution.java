@@ -6,10 +6,16 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPageListener;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -33,7 +39,16 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	private IEditorPart activeEditor;
 
 	public AbstractActionContribution() {
-		/*PlatformUI.getWorkbench().addWindowListener(new IWindowListener() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().addPostSelectionListener(new ISelectionListener() {
+			
+			@Override
+			public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+				activeEditor = part.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
+				
+			}
+		});
+		
+		/*addWindowListener(new IWindowListener() {
 
 			@Override
 			public void windowOpened(IWorkbenchWindow window) {
@@ -60,7 +75,6 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 				return activeEditor = window.getActivePage().getActiveEditor();
 			}
 		});*/
-		
 	}
 
 	protected <T extends ISelection> T getSelection() {
@@ -78,10 +92,6 @@ public abstract class AbstractActionContribution<T extends AbstractEntity> exten
 	}
 
 	protected IEditorPart getCurrentEditor() {
-		// Fix necesario si no se ejecuta alguna accion para tomar el listener		
-		if(activeEditor == null){
-			activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		}
 		return activeEditor;
 	}
 
