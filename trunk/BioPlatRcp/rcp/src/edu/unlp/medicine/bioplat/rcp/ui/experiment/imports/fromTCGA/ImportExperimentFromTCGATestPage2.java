@@ -2,6 +2,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.fromTCGA;
 
 import java.util.ArrayList;
 
+import org.bioplat.r4j.R4JCore.values.R4JStringDataMatrix;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -22,7 +23,6 @@ import org.eclipse.swt.widgets.Table;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
-import edu.unlp.medicine.r4j.values.R4JStringDataMatrix;
 
 public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 

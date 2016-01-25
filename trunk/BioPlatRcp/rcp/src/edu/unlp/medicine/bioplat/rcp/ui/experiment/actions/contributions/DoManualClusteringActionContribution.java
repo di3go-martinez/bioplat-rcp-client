@@ -17,12 +17,13 @@ import edu.unlp.medicine.entity.experiment.Experiment;
  * @author Diego Martínez
  * 
  */
+
 public abstract class DoManualClusteringActionContribution extends AbstractActionContribution<Experiment> {
 
 	@Override
 	public void run() {
 
-		if (model().hasClusteringInformation()) {
+		/*if (model().hasClusteringInformation()) {
 			// ValidationConfig4DoingCluster v =
 			// ValidationConfig4DoingCluster.withPrecalculatedCluster(new
 			// FromMemoryExperimentDescriptor(model()));
@@ -56,7 +57,8 @@ public abstract class DoManualClusteringActionContribution extends AbstractActio
 			MessageManager.INSTANCE.add(Message.warn(errorMsg));
 			PlatformUIUtils.openError("Experiment Validation", errorMsg);
 			
-		}
+		}*/
+		run0();
 
 	}
 

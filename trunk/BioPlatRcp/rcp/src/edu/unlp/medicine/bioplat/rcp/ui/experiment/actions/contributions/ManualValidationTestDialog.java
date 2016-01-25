@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
 import java.util.List;
@@ -36,11 +33,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-/**
- * @author Juan
- * 
- */
-public class ValidationTestDialog extends TitleAreaDialog {
+public class ManualValidationTestDialog extends TitleAreaDialog {
 
 	private Biomarker biomarker;
 	private ValidationConfigWizard experimentsWizard;
@@ -53,7 +46,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	 * @param biomarker
 	 * @param parentShell
 	 */
-	public ValidationTestDialog(Shell parentShell, Biomarker biomarker) {
+	public ManualValidationTestDialog(Shell parentShell, Biomarker biomarker) {
 		super(parentShell);
 		this.biomarker = biomarker;
 		this.experimentsWizard = this.createExperimentSelectorWizard();
@@ -126,7 +119,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		close();
-		final String mmsg = "Test validation";
+		final String mmsg = "Test manual validation";
 		// TODO migrar a EJob cuando este estÃ©
 		Job j = new Job(mmsg) {
 			@Override
@@ -157,7 +150,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 				if (count == experimentsWizard.commands2apply().size()) {
 					String msg = "All test validations ("
 							+ count
-							+ ") were  sucessfully executed. You can see the results on the gene signature 'Statistic Analysis' tab";
+							+ ") were  sucessfully executed. You can see the results on the gene signature 'Manual Statistic Analysis' tab";
 					PlatformUIUtils.openInformation("Log rank test validation",
 							msg);
 					MessageManager.INSTANCE.add(Message.info(msg));

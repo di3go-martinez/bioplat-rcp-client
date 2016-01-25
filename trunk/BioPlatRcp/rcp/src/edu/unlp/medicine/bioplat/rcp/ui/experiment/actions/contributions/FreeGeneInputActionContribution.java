@@ -28,7 +28,7 @@ public abstract class FreeGeneInputActionContribution<T extends AbstractEntity> 
 		// FIXME Chatcheo el nullpointer porque pasa a veces...
 		try {
 			final Holder<List<Gene>> holder = Holder.create(EMPTY);
-
+			
 			PlatformUIUtils.findDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {

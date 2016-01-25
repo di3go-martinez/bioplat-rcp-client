@@ -31,6 +31,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
+import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
@@ -147,7 +149,7 @@ public class LongRankTestHelper implements Observer {
 						editor = new TableEditor(table);
 						c = new Button(table, SWT.FLAT);
 						c.setImage(PlatformUIUtils.findImage("clustering.png"));
-						c.addSelectionListener(openViewClusterDialog(exp.getGroups()));
+						//c.addSelectionListener(openViewClusterDialog(exp.getGroups())); //TODO: DavidClustering
 						editor.grabHorizontal = true;
 						// editor.minimumHeight = 100;
 						editor.setEditor(c, items[i], viewClusterColIndex);
@@ -227,11 +229,11 @@ public class LongRankTestHelper implements Observer {
 
 	
 	
-	private SelectionListener openViewClusterDialog(final Map<Sample, Integer> groups) {
+	private SelectionListener openViewClusterDialog(final ClusteringResult groups) {
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				new ConfigureClusterDialog(groups).open();
+				//new ConfigureClusterDialog(groups.getClusterDataList()).open();
 			}
 		};
 	}

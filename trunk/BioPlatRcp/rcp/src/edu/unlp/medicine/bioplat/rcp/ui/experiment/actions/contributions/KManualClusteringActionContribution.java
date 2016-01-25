@@ -13,6 +13,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
+@Deprecated
 public class KManualClusteringActionContribution extends DoManualClusteringActionContribution {
 
 	@Override

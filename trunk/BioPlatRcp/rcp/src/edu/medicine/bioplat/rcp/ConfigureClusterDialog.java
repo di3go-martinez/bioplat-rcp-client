@@ -29,8 +29,11 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemContribution
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.Sample;
 
+//TODO: DavidClustering (Revisar si esta siendo llamada)
+@Deprecated
 public class ConfigureClusterDialog extends Dialog {
 
 	private AbstractExperiment experiment;
@@ -113,14 +116,23 @@ public class ConfigureClusterDialog extends Dialog {
 	private List<Data> createData() {
 		List<Data> result = Lists.newArrayList();
 
-		Map<Sample, Integer> groups = experiment.getGroups();
+		/*List<ClusterData> groups = experiment.getGroups().getClusterDataList();
 
-		if (groups != null && !groups.isEmpty())
-			for (Map.Entry<Sample, Integer> entry : groups.entrySet())
+		if (groups != null && !groups.isEmpty()){
+			for(ClusterData cd : groups){
+				//result.add(new Data(cd.getSample(),String.valueOf(cd.getGroupId())));
+			}
+		}else{
+			// TODO: DavidClustering ¿es necesario si se setea previamente?
+			for (Sample s : experiment.getSamples()){
+				result.add(new Data(s, "-1"));
+			}
+		}*/
+			/*for (Map.Entry<Sample, ClusterData> entry : groups.entrySet())
 				result.add(new Data(entry.getKey(), entry.getValue().toString()));
 		else
 			for (Sample s : experiment.getSamples())
-				result.add(new Data(s, "-1"));
+				result.add(new Data(s, "-1"));*/
 		return result;
 
 	}
@@ -131,10 +143,14 @@ public class ConfigureClusterDialog extends Dialog {
 	}
 
 	private void setGroups() {
-		Map<Sample, Integer> groups = Maps.newHashMap();
-		for (Data datum : data)
-			groups.put(datum.getSample(), new Integer(datum.getGroupid()));
-		experiment.setGroups(groups);
+		/*List<ClusterData> groups = Lists.newArrayList();
+		for (Data datum : data){
+			ClusterData cd = new ClusterData();
+			//cd.setSample(datum.getSample());
+			cd.setGroupId(Integer.parseInt(datum.getGroupid()));
+			groups.add(cd);
+		}
+		experiment.getGroups().setClusterDataList(groups); //experiment.setGroups(groups);*/
 	}
 
 	public static class Data {

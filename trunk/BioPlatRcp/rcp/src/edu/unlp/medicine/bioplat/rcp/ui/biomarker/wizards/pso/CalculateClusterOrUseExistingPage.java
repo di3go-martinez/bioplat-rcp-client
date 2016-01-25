@@ -53,9 +53,10 @@ public class CalculateClusterOrUseExistingPage extends WizardPageDescriptor {
 
 	@Override
 	public boolean allowContinueWizardSetup() {
-		List<AbstractExperiment> selected = wmodel.value(PagesDescriptors.SELECTED);
-		boolean okSelection = (selected.size() == 1 && !selected.get(0).getGroups().isEmpty());
-		useExistingCluster.setEnabled(okSelection);
+		//TODO: DavidClustering (No se utiliza esta clase al parecer)
+		/*List<AbstractExperiment> selected = wmodel.value(PagesDescriptors.SELECTED);
+		boolean okSelection = (selected.size() == 1 && !selected.get(0).getGroups().getClusterDataList().isEmpty());
+		useExistingCluster.setEnabled(okSelection);*/
 
 		Boolean b = wmodel.value(USE_EXISTING_CLUSTER);
 		return !b;

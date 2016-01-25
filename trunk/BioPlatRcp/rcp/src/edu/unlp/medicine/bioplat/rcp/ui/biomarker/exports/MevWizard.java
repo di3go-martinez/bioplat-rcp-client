@@ -25,6 +25,8 @@ import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentComm
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
+
+//TODO: DavidClustering (Se utiliza esta clase?)
 public class MevWizard extends AbstractWizard<Void> {
 	private static final String INCLUDE_EXPRESSION_DATA = "INCLUDE_EXPRESSION_DATA";
 	private static final String INCLUDE_HEADER = "INCLUDE_HEADER";
@@ -101,8 +103,9 @@ public class MevWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster);
-		command.execute();
+		//TODO: DavidClustering
+		/*ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster);
+		command.execute();*/
 		return null;
 	}
 

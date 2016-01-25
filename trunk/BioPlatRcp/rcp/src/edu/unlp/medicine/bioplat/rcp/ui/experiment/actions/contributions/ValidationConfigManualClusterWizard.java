@@ -23,6 +23,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.AbstractExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromMemoryExperimentDescriptor;
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.RClustererManualSetting;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -42,7 +43,8 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		 * FIXME sacar el cálculo del número de clusters de acá!!... TODO
 		 * refactorrrrr.
 		 */
-		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, new HashSet(experiment.getGroups().values()).size());
+		wizardModel().add(PagesDescriptors.NUMBER_OF_CLUSTERS, Integer.class, 0);
+		wizardModel().set(PagesDescriptors.SELECTED, experiment);
 		
 	}
 
@@ -96,7 +98,10 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 		//
 		// for (Integer clusters : calculateRange(numberOfClusters)) {
 
-		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result, attributeNameToValidation, secondAttributeNameToDoTheValidation, new RClustererManualSetting());
+		// Obtiene el cluster seteado por el usuario
+		ClusteringResult clusteringResult = wizardModel().value(PagesDescriptors.MANUAL_CLUSTERING);
+		
+		final ValidationConfig4DoingCluster validationConfig = ValidationConfig4DoingCluster.withPrecalculatedCluster(result, attributeNameToValidation, secondAttributeNameToDoTheValidation, new RClustererManualSetting(),clusteringResult);
 		validationConfig.setAttribtueNameToDoTheValidation(attributeNameToValidation);
 		validationConfig.setSecondAttribtueNameToDoTheValidation(secondAttributeNameToDoTheValidation);
 

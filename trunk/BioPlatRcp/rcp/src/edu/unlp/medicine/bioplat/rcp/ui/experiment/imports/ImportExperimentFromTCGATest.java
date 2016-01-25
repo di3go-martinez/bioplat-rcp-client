@@ -27,12 +27,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.domainLogic.framework.exceptions.GeneNotFoundByIdException;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.experimentDescriptor.FromTCGAExperimentDescriptor;
-import edu.unlp.medicine.entity.experiment.AbstractExperimentFactory;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.FromTCGAExperimentFactory;
-import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 import edu.unlp.medicine.entity.gene.Gene;
-import edu.unlp.medicine.r4j.values.R4JStringDataMatrix;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
 public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {

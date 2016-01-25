@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractEditorPart;
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BiomarkerExperimentsEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.BrowserEditorManager;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.LogRankTestExperimentExperimentsEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
@@ -22,7 +23,9 @@ import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform;
+import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.gene.Gene;
 
 public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
@@ -78,9 +81,17 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 			result.add(ed);
 
 		}
-
-		result.add(new EditorDescription(getEditorInput(), new SurvCompExperimentExperimentsEditor(false), "Concordance index validations"));
-		result.add(new EditorDescription(getEditorInput(), new LogRankTestExperimentExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
+		
+		
+		// david: Estos quedan deprecados
+		//result.add(new EditorDescription(getEditorInput(), new SurvCompExperimentExperimentsEditor(false), "Concordance index validations"));
+		//result.add(new EditorDescription(getEditorInput(), new LogRankTestExperimentExperimentsEditor(false), "Kaplan-Meier and Log-Rank validations"));
+		
+		// Genero un biomarker 
+		((Experiment)model()).getValidationManager().setBiomarker(Biomarker.getFakeBiomarker());
+		final IEditorInput input = EditorInputFactory.createDefaultEditorInput(((Experiment)model()).getValidationManager().getBiomarker());
+		result.add(new EditorDescription(input, new BiomarkerExperimentsEditor(false), "Statistic Analysis"));
+		
 
 		new BrowserEditorManager(ExternalURLInformationPage.APPLY_TO_EXPERIMENT) {
 			@Override

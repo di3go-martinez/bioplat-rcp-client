@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -27,14 +28,17 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
-import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ConfigureClusterDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ConfigureClusterDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ScriptDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.jobs.EJob;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
+import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.Sample;
@@ -104,8 +108,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils.findImage("clustering.png"));
-			c.addSelectionListener(openViewClusterDialog(exp
-					.getClusteringResult().getClustersOfEachSample()));
+			c.addSelectionListener(openViewClusterDialog(exp.getClusteringResult()));
 			editor.grabHorizontal = true;
 			editor.setEditor(c, items[i], this.viewClusterColIndex);
 			
@@ -244,11 +247,11 @@ public class BiomarkerExperimentsHelper implements Observer {
 	 * @return
 	 */
 	private SelectionListener openViewClusterDialog(
-			final Map<Sample, Integer> groups) {
+			final ClusteringResult clusteringResult) {
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				new ConfigureClusterDialog(groups).open();
+				new ConfigureClusterDialog(clusteringResult).open();
 			}
 		};
 	}

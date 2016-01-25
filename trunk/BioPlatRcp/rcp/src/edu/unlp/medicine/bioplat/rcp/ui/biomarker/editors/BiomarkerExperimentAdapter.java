@@ -3,11 +3,14 @@
  */
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
+import java.util.List;
 import java.util.Map;
 
 import edu.unlp.medicine.domainLogic.framework.BiologicalValue;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
 import edu.unlp.medicine.entity.experiment.Sample;
 
@@ -24,7 +27,7 @@ public class BiomarkerExperimentAdapter {
 	private Double survCompIndex;
 	private BiologicalValue significanceValue;
 	private AbstractExperiment experiment;
-	private Map<Sample, Integer> groups;
+	private List<ClusterData> groups;
 
 	/**
 	 * 
@@ -35,7 +38,7 @@ public class BiomarkerExperimentAdapter {
 		this.experimentName = appliedToAMetasignature.getName();
 		this.significanceValue = appliedToAMetasignature.getSignificanceValue();
 		this.experiment = appliedToAMetasignature.getOriginalExperiment();
-		this.groups = appliedToAMetasignature.getGroups();
+		//this.groups = appliedToAMetasignature.getGroups().getClusterDataList();
 		this.experiment = appliedToAMetasignature.getOriginalExperiment();
 		this.kaplanMaier = true;
 	}
@@ -70,7 +73,7 @@ public class BiomarkerExperimentAdapter {
 		return this.experiment;
 	}
 
-	public Map<Sample, Integer> getGroups() {
+	public List<ClusterData> getGroups() {
 		return this.groups;
 	}
 

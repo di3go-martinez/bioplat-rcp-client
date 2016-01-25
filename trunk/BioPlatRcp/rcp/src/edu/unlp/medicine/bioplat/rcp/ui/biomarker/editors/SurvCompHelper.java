@@ -167,7 +167,7 @@ public class SurvCompHelper implements Observer {
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				new ConfigureClusterDialog(result.getSurvCompValidationConfig().getGroups()).open();
+				//new ConfigureClusterDialog(result.getSurvCompValidationConfig().getGroups()).open(); TODO: DavidClustering tiene que ser un clusterResult
 			}
 		};
 	}

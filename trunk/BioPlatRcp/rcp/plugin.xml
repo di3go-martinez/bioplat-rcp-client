@@ -436,7 +436,7 @@
             caption="Validate Gene Signature using Kaplan-Meier and Log Rank Test (the sample cluster is done using the expression data of just the genes in the gene signature)"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyLogRankTestActionContribution"
             groupId="03-Biomarker-validation"
-            image="resources/icons/validate_new.png"
+            image="resources/icons/validateLogRank.png"
             onMenu="false"
             onToolbar="false">
          <selection
@@ -447,7 +447,7 @@
             caption="Statistic Analysis"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyValidationTestActionContribution"
             groupId="03-Biomarker-validation"
-            image="resources/icons/validate_new.png"
+            image="resources/icons/validateSurvComp.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -520,7 +520,7 @@
                class="edu.unlp.medicine.entity.experiment.Experiment">
          </selection>
       </actionContribution>
-      <actionContribution
+      <!--actionContribution
             caption="Configure Cluster..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.CalculateClusterActionContribution"
             groupId="04-Experiment"
@@ -529,7 +529,7 @@
             onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment"></selection>
-      </actionContribution>
+      </actionContribution-->
       
       
       <actionContribution
@@ -576,8 +576,9 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      <!-- Deprecado
        <actionContribution
-             caption="Validate experiment using Kaplan-Meier and Log Rank Test (cluster samples using groups configured on this experiment)"
+             caption="Validate experiment using Manual settings (cluster samples using groups configured on this experiment)"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KManualClusteringActionContribution"
              groupId="04-Experiment"
              image="resources/icons/validate_new.png"
@@ -587,6 +588,8 @@
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
+      -->
+      
        <actionContribution
              caption="Export experiment to text file"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentActionContribution"

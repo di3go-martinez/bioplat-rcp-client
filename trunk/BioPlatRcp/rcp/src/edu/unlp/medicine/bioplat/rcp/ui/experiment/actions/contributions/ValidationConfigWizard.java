@@ -77,7 +77,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	public int getWizardHeight() {
-		return 670;
+		return 770;
 	}
 
 	/**
@@ -146,6 +146,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 		String clusteringStrategy = wizardModel().value(PagesDescriptors.CLUSTERING_STRATEGY);
 		IClusterer clusterer = ClustererFactory.getInstance().getClusterer(clusteringStrategy);
+		ValidationClusterConfigurator.getInstance().configure(clusterer,wizardModel());
 
 		// It adds additional parameters for the validation. It will delegate on
 		// the validationTestGUIProvider
@@ -257,6 +258,11 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				.add(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
 				.add(PagesDescriptors.CLUSTERING_STRATEGY)//
+				.add(PagesDescriptors.PAM_METRIC)//
+				.add(PagesDescriptors.PAM_STANDARDIZED)//
+				.add(PagesDescriptors.KMEANS_ALGORITHM)//
+				.add(PagesDescriptors.KMEANS_ITER)//
+				.add(PagesDescriptors.KMEANSHCLUST_METRIC)//
 		;
 
 		WritableValue wv;

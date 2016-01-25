@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +19,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -29,25 +33,32 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemContribution;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.Sample;
 
+@Deprecated
 public class ConfigureClusterDialog extends Dialog {
 
 	// puede ser null
 	private AbstractExperiment experiment;
-	private List<Data> data;
+	//private List<Data> data;
 	private TableReference tref;
+	private List<Sample> data;
 	
+	
+	@Deprecated
 	protected ConfigureClusterDialog(AbstractExperiment experiment) {
 		super(PlatformUIUtils.findShell());
 		this.experiment = experiment;
-		data = createData(experiment);
+		data = experiment.getSamples();
+		//data = createData(experiment);
 	}
 
-	public ConfigureClusterDialog(Map<Sample, Integer> groups) {
+	public ConfigureClusterDialog(ClusteringResult clusteringResult) {
 		super(PlatformUIUtils.findShell());
-		data = createData(groups);
+		data = createData(clusteringResult);
 	}
 
 	@Override
@@ -59,18 +70,20 @@ public class ConfigureClusterDialog extends Dialog {
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite container = Widgets.createDefaultContainer(parent);
-
+		
 		// Label introdudctionLabel = new Label(parent, SWT.WRAP);
 		// introdudctionLabel.setText("Use shift and control for select multiple samples. Then, right click and use set cluster to assign a clusterID to all selected samples");
-		final ColumnBuilder titleColumnBuilder = ColumnBuilder.create().editable(!readOnly()).property("groupid").title("Cluster ID");
+		final ColumnBuilder titleColumnBuilder = ColumnBuilder.create().editable(!readOnly()).property("predefinedCluster.groupId").title("Cluster ID");
 		final TableBuilder tableBuilder = TableBuilder.create(container).input(data)//
 				.hideSelectionColumn()//
-				.addColumn(ColumnBuilder.create().property("sample").title("Sample").width(150))
+				.addColumn(ColumnBuilder.create().property("name").title("Sample").width(150))
 				.addColumn(titleColumnBuilder);
 		generateClinicalDataColumns(tableBuilder);		
 		if (!readOnly())
 			tableBuilder.contextualMenuBuilder(menuBuilder());
 		tref = tableBuilder.build();
+		if (readOnly())
+			generateClusterColors(tref);
 		Button ok = new Button(container, SWT.NONE);
 		ok.setText("OK");
 		ok.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
@@ -81,14 +94,27 @@ public class ConfigureClusterDialog extends Dialog {
 				close();
 			}
 		});
+		container.setSize(800, container.getSize().y);
 		return container;
 	}
 
+	private void generateClusterColors(TableReference tref2) {
+		Table table = tref2.getTable();
+		Color red = PlatformUIUtils.findDisplay().getSystemColor(SWT.COLOR_RED);
+	    Color blue = PlatformUIUtils.findDisplay().getSystemColor(SWT.COLOR_BLUE);
+		int columnCount = table.getColumnCount();
+		TableItem[] items = table.getItems();
+		for(TableItem item : items){
+				item.setBackground(2, blue);
+				
+		}
+	}
+
 	private void generateClinicalDataColumns(TableBuilder tableBuilder) {
-		if(!this.data.isEmpty()){
-			List<String> attrs = data.get(0).sample.getClinicalAttributeNames();
+		if(!this.experiment.getSamples().isEmpty()){
+			List<String> attrs = experiment.getSamples().get(0).getClinicalAttributeNames();
 			for(String attr : attrs){
-				tableBuilder.addColumn(ColumnBuilder.create().property("sample.sampleClincalData.clinicalData['" + attr + "']").title(attr));
+				tableBuilder.addColumn(ColumnBuilder.create().property("sampleClincalData.clinicalData['" + attr + "']").title(attr));
 			}
 		}
 	}
@@ -124,11 +150,11 @@ public class ConfigureClusterDialog extends Dialog {
 							return;
 
 						Integer clusterid = Ints.tryParse(id.getValue());
-						List<Data> sampleData = tref.selectedElements();
+						List<Sample> sampleData = tref.selectedElements();
 						if (sampleData.isEmpty())
 							sampleData = tref.focusedElements();
-						for (Data datum : sampleData)
-							datum.setGroupid(clusterid);
+						for (Sample datum : sampleData)
+							//datum.getPredefinedCluster().setGroupId(clusterid);
 
 						tref.refresh();
 					}
@@ -137,21 +163,35 @@ public class ConfigureClusterDialog extends Dialog {
 		};
 	}
 
-	private List<Data> createData(AbstractExperiment experiment) {
-		return createData(experiment.getGroups());
-	}
+//	private List<Data> createData(AbstractExperiment experiment) {
+//		return createData(experiment.getSamples());
+//	}
 
-	private List<Data> createData(Map<Sample, Integer> groups) {
-		List<Data> result = Lists.newArrayList();
-
-		if (groups != null && !groups.isEmpty())
-			for (Map.Entry<Sample, Integer> entry : groups.entrySet())
-				result.add(new Data(entry.getKey(), entry.getValue().toString()));
+	private List<Sample> createData(ClusteringResult clusteringResult) {
+		List<Sample> result = Lists.newArrayList();
+		if (clusteringResult != null && !clusteringResult.getClusterDataList().isEmpty()){
+			for(ClusterData cd : clusteringResult.getClusterDataList()){
+				//result.add(cd.getSample());
+			}
+		}
+		
+		/*if (groups != null && !groups.isEmpty())
+			for (Map.Entry<Sample, ClusterData> entry : groups.entrySet())
+				result.add(new Data(entry.getKey(), entry.getValue()));
 		else
 			for (Sample s : experiment.getSamples())
-				result.add(new Data(s, "-1"));
+				result.add(new Data(s, new ClusterData(-1)));*/
+		
+		/*if (groups != null && !groups.isEmpty()){
+			for (ClusterData entry : groups)
+				result.add(new Data(entry.getSample(), entry.getGroupId()));
+		}else {
+			for (Sample s : experiment.getSamples()){
+				result.add(new Data(s, new ClusterData(-1)));
+			}
+		}*/
+		
 		return result;
-
 	}
 	
 
@@ -163,46 +203,31 @@ public class ConfigureClusterDialog extends Dialog {
 	private void setGroups() {
 		if (readOnly())
 			return;
-		Map<Sample, Integer> groups = Maps.newHashMap();
+		/*Map<Sample, ClusterData> groups = Maps.newHashMap();
 		for (Data datum : data)
-			groups.put(datum.getSample(), new Integer(datum.getGroupid()));
-		experiment.setGroups(groups);
+			groups.put(datum.getSample(), datum.getGroupid());
+		experiment.setGroups(groups);*/
 	}
 
+	// TODO: DavidClustering ya no tiene sentido al parecer. FIXIT
 	public static class Data {
 		
-		public Data(Sample s, String i) {
-			this.sample = s;
-			this.groupid = i;
+		// TODO hacer que sea integer!!
+		private ClusterData groupid;
+		
+		public Data(ClusterData cd) {
+			this.groupid = cd;
 		}
 
-		// FIXME hacer que groupid sea un integer y no un string?
-		public void setGroupid(Integer clusterid) {
-			setGroupid(clusterid.toString());
-		}
-
-		private Sample sample;
-
-		public String getGroupid() {
+		//private Sample sample;
+		
+		public ClusterData getGroupid() {
 			return groupid;
 		}
 
-		@Deprecated
-		public void setGroupid(String groupid) {
+		public void setGroupid(ClusterData groupid) {
 			this.groupid = groupid;
 		}
-
-		public Sample getSample() {
-			return sample;
-		}
-
-		public void setSample(Sample sample) {
-			this.sample = sample;
-		}
-		
-		// TODO hacer que sea integer!!
-		private String groupid;
-			
 		
 	}
 

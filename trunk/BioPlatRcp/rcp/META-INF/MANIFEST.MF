@@ -12,18 +12,19 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.databinding.observable;visibility:=reexport,
  org.eclipse.ui.forms;visibility:=reexport,
  com.ibm.icu;visibility:=reexport,
- edu.medicine.bioplat.base.lib;visibility:=reexport,
  org.eclipse.ui.intro,
  org.eclipse.nebula.widgets.grid;visibility:=reexport,
  org.eclipse.nebula.widgets.gallery;bundle-version="0.5.3";visibility:=reexport,
  edu.unlp.medicine.bioplat.genes;visibility:=reexport,
- edu.unlp.medicine.bioplat.core
+ edu.unlp.medicine.bioplat.core,
+ edu.medicine.bioplat.base.lib;visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Activator: edu.unlp.medicine.bioplat.rcp.application.Activator
 Bundle-Localization: OSGI-INF/l10n/bundle
-Export-Package: edu.unlp.medicine.bioplat.rcp.application,
+Export-Package: edu.medicine.bioplat.rcp,
+ edu.unlp.medicine.bioplat.rcp.application,
  edu.unlp.medicine.bioplat.rcp.application.startup,
  edu.unlp.medicine.bioplat.rcp.intro,
  edu.unlp.medicine.bioplat.rcp.intro.actions,

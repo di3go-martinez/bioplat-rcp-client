@@ -30,7 +30,7 @@ public class CalculateClusterActionContribution extends AbstractActionContributi
 
 			@Override
 			public void run() {
-				new ConfigureClusterDialog(model()).open();
+				//new ConfigureClusterDialog(model()).open();
 			}
 		});
 

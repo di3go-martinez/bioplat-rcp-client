@@ -1,9 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.statisticals;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -11,18 +8,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
-import edu.unlp.medicine.bioplat.rcp.utils.ConvertByteImageUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
-import edu.unlp.medicine.domainLogic.framework.statistics.rIntegration.jri.RRunnerFromBioplatUsingR4J;
-import edu.unlp.medicine.r4j.exceptions.R4JScriptExecutionException;
 
 /**
  * 

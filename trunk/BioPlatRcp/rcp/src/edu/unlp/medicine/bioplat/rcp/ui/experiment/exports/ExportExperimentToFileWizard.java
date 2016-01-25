@@ -180,8 +180,8 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 	@Override
 	public boolean performFinish() {
 		String absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString();
-
-		new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString()), false, false).execute();
+		//TODO: DavidClustering
+		//new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString()), false, false).execute();
 											
 		
 		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));

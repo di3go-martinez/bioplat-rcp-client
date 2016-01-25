@@ -12,8 +12,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.internal.AbstractSelectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +33,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.MenuBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -37,7 +42,7 @@ import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.save.MetaSignatureMarshaller;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener, TableReferenceProvider {
+public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements ISelectionChangedListener, TableReferenceProvider, MouseListener {
 
 	private static Logger logger = LoggerFactory.getLogger(BiomarkerEditor.class);
 
@@ -109,16 +114,23 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		// TODO .hasRadioBehavior()
 		;
 		// .input(model().getGenes());
-
+		
+		//tb.contextualMenuBuilder(MenuBuilder.create)
+		
 		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("Gene EntrezID")//
 				.addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
 				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Gene alternative IDs (e.g EnsemblID)").width(350).hidden().resizable(false).fixed())//
 				.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")))//
 				.addColumn(ColumnBuilder.create().property("description").title("Gene Description").width(800));
 
+		
 		tr = tb.build();
 
 		tr.addSelectionChangeListener(this);
+		
+		// TODO no usar getTable, agregar a TableReference
+		tr.getTable().addMouseListener(this);
+		
 	}
 
 	protected CopyColumnTextMenuItemDescriptor createCopyColumn(boolean all) {
@@ -144,7 +156,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 
 			@Override
 			public void update(Observable o, Object arg) {
-				// tr.refresh();
+				//tr.refresh();
 				tr.input(null);
 			}
 		};
@@ -167,8 +179,14 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 			ass.setActivePart(this);
 		} catch (NullPointerException npe) {
 			logger.debug("Null pointer exception on selection changed");
-		}
+		}		
 	}
+	
+	
+	
+	
+	
+	
 
 	// TODO es hasta definir el save as.
 	@Override
@@ -185,6 +203,29 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	@Override
 	public TableReference tableReference() {
 		return tr;
+	}
+
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
+		if(e.button == 3){
+			final Menu menu = new Menu(tr.getTable());
+			MenuItem item = new MenuItem(menu, SWT.PUSH);
+			item.setText("Menu");
+			tr.getTable().setMenu(menu);
+		}
+		
 	}
 
 }
