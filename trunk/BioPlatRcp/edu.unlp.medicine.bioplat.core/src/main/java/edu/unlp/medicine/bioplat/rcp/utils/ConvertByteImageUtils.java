@@ -19,7 +19,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import edu.unlp.medicine.r4j.constants.OSDependentConstants;
-import edu.unlp.medicine.r4j.utils.FileSystemUtils;
 import edu.unlp.medicine.utils.fileSystem.BioplatFileSystemUtils;
 
 public class ConvertByteImageUtils {

@@ -26,7 +26,7 @@ public class PagesDescriptors {
 	public static final String RFS_MONTHS = "RFS_Months";
 
 	// clave para el wizardModel que indica la lista de elementos seleccionados.
-	// impl: Es un common value, no un IObservableValue...
+	// Es un common value, no un IObservableValue...
 	public static final String SELECTED = "SELECTED";
 
 	public static final String ATTRIBUTE_TYPE = "ATTRIBUTE_TYPE";
@@ -41,6 +41,23 @@ public class PagesDescriptors {
 	public static final String OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String OTHER_ATTRIBUTE_NAME_TO_VALIDATION = "OTHER_ATTRIBUTE_NAME_TO_VALIDATION";
 	public static final String CLUSTERING_STRATEGY = "CLUSTERING_STRATEGY";
+	public static final String MANUAL_CLUSTERING = "MANUAL_CLUSTERING"; 
+	
+	
+	//Pam parameters
+	public static final String PAM_METRIC = "PAM_METRIC";
+	public static final String PAM_STANDARDIZED = "PAM_STANDARDIZED";
+	
+	// Kmeans parameters
+	public static final String KMEANS_ALGORITHM = "KMEANS_ALGORITHM";
+	public static final String KMEANS_ITER = "KMEANS_ITER";
+	
+	// Kmeans pàrameters
+	public static final String KMEANSHCLUST_METRIC = "KMEANSHCLUST_ALGORITHM";
+	
+	
+	
+	
 	
 	@Deprecated
 	public static final String USE_EXISTING_CLUSTER = "USE_EXISTING_CLUSTER";

@@ -14,6 +14,8 @@ import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.STATISTICAL_TEST_VALUE;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.VALIDATION_TYPE;
 
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -36,11 +39,17 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
 
@@ -48,6 +57,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrat
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.significanceTest.AttributeTypeEnum;
@@ -55,16 +65,13 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validatio
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClustererFactory;
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.ClusterersEnum;
 import edu.unlp.medicine.domainLogic.framework.statistics.clusterers.RClustererManualSetting;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.experiment.Experiment;
 
 public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationWizardPageDescriptor.class);
 	private ValidationTestGUIProvider validationTestGUIProvider;
 	private boolean forManualClustering;
-
-	// TODO private boolean badClusterconfiguration = false;
-
-	// private Button useExistingCluster;
 
 	public ConfigurationWizardPageDescriptor(ValidationTestGUIProvider validationTestGUIProvider, String string, boolean forManualClustering) {
 		super(string);
@@ -77,12 +84,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		try {
 			GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
-			// Composite c = new ScrolledComposite(parent, SWT.V_SCROLL);
-			// c.setLayout(GridLayoutFactory.fillDefaults().create());
-			// c.setLayoutData(GridDataFactory.fillDefaults().grab(true,
-			// true).create());
 			Composite container = new Composite(parent, SWT.BORDER);
-			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 10).create());
+			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 0).create());
 
 			// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
 			createGroup4CLusteringInfo(container, gdf, dbc, wmodel, wp);
@@ -96,39 +99,6 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			return new Composite(parent, SWT.NONE);
 		}
 	}
-
-	// private void createGroup4ClusteringChoise(Composite container,
-	// GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel)
-	// {
-	// useExistingCluster = new Button(container, SWT.RADIO);
-	// useExistingCluster.setText("Use sample cluster configured on experiment");
-	//
-	// useExistingCluster.addSelectionListener(new SelectionAdapter() {
-	// @Override
-	// public void widgetSelected(SelectionEvent e) {
-	// for (Control c : clusterginGroup.getChildren())
-	// c.setEnabled(!useExistingCluster.getSelection());
-	// }
-	// });
-	//
-	// dbc.bindValue(SWTObservables.observeSelection(useExistingCluster),
-	// wmodel.valueHolder(USE_EXISTING_CLUSTER), null, null);
-	//
-	// Button calculateNewCluster = new Button(container, SWT.RADIO);
-	// calculateNewCluster.setText("Calculate new cluster");
-	//
-	// // dbc.bindValue(SWTObservables.observeSelection(b),
-	// // wmodel.valueHolder(USE_EXISTING_CLUSTER), new
-	// // UpdateValueStrategy() {
-	// // @Override
-	// // public Object convert(Object value) {
-	// // return false;
-	// // }
-	// // }, null);
-	//
-	// calculateNewCluster.setSelection(true);
-	//
-	// }
 
 	private void createGroup4AdditionalParameters(Composite container, GridDataFactory gdf, DataBindingContext dbc, WizardModel wmodel) {
 
@@ -145,19 +115,15 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	}
 
-	private void createGroup4CLusteringInfo(Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel, final WizardPage wp) {
+	
+	
+	private void createGroup4CLusteringInfo(final Composite container, GridDataFactory gdf, final DataBindingContext dbc, final WizardModel wmodel, final WizardPage wp) {
 
-		Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
+		final Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
 		clusterginGroup.setText("Clustering parameters");
 		clusterginGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
 		clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().margins(20, 10).create());
 		clusterginGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-
-		// Button check = new Button(result, SWT.CHECK);
-		// check.setText("Generate cluster and calculate biological value");
-		// dbc.bindValue(SWTObservables.observeSelection(check),
-		// wmodel.valueHolder(GENERATE_CLUSTER_CALCULATE_BIOLOGICAL_VALUE));
-		// check.setSelection(true);
 
 		new Label(clusterginGroup, SWT.NONE).setText("Number of clusters:");
 		final Text numberOfClusterText = new Text(clusterginGroup, SWT.BORDER);
@@ -169,33 +135,50 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 		if (!forManualClustering) {
 
-			// Label l = new Label(clusterginGroup, SWT.NONE);
-			// l.setText("\nTimes to repeat de k-means clustering (It keeps the best):");
-			// Text t2 = new Text(clusterginGroup, SWT.BORDER);
-			// dbc.bindValue(SWTObservables.observeText(t2, SWT.Modify),
-			// wmodel.valueHolder(TIMES_TO_REPEAT_CLUSTERING));
-
 			new Label(clusterginGroup, SWT.NONE).setText("\nClustering strategy");
-			// Composite groupForValidationAtt1 =
-			// getGroupFoRClusteringAttribute(clusterginGroup);
-			final ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginGroup, "Select the strategy to do your clustering.", ClustererFactory.getInstance().getClustererNames());
+			
+			// david: Mejorar como se carga el combo
+			List<String> names = ClustererFactory.getInstance().getClustererNames();
+			names.remove(ClusterersEnum.MANUAL_SETTING.getFriendlyName());
+			
+			
+			final ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginGroup, "Select the strategy to do your clustering.", names);
 			dbc.bindValue(ViewersObservables.observeSingleSelection(clusteringStrategy), wmodel.valueHolder(CLUSTERING_STRATEGY), UpdateStrategies.nonNull("Clustering strategy"), UpdateStrategies.nullStrategy());
 			clusteringStrategy.getCombo().setLayoutData(gdf.create());
 			final StructuredSelection defaultStrategySelection = new StructuredSelection(ClusterersEnum.PAM.getFriendlyName());
-			clusteringStrategy.setSelection(defaultStrategySelection);
+			
+			
+			final Group clusterParameters = new Group(clusterginGroup, SWT.SHADOW_OUT);
+			clusterParameters.setText("Strategy parameters");
+			clusterParameters.setFont(GUIUtils.getFontForGrouptTitle(container));
+			clusterParameters.setLayout(GridLayoutFactory.fillDefaults().margins(20, 10).create());
+			clusterParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			
+				
 			clusteringStrategy.addSelectionChangedListener(new ISelectionChangedListener() {
 
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
 					// es una lista porque en otros casos puede haber varios
 					// seleccionados, acá habría solo uno
-					Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
-
+					//Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
+					
+					
+					
+					// Realiza elimina todas las estrategias 
+					for(Control c : clusterParameters.getChildren()){
+						c.dispose();
+					}									
+					
 					ComboViewer csc = (ComboViewer) event.getSource();
 					String clusteringStrategyStr = (String) ((StructuredSelection) csc.getSelection()).getFirstElement();
-					if (clusteringStrategyStr.equals(RClustererManualSetting.getClustererName())) {
-
-						if (!exp.hasGotEnoughClustersForValidation()) {
+					
+					/*if (clusteringStrategyStr.equals(RClustererManualSetting.getClustererName())) {
+						clusterParameters.setText("Manual settings");
+						numberOfClusterText.setEnabled(false);
+						createManualSettings(clusterParameters,wmodel,wp);
+						
+						/*if (!exp.hasGotEnoughClustersForValidation()) {
 							// recambio la estategia, ya que la manual no es
 							// válida
 							clusteringStrategy.setSelection(defaultStrategySelection);
@@ -213,72 +196,53 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 								value = String.valueOf(exp.getNumberOfClusters());
 
 							wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, value);
-							numberOfClusterText.setEnabled(false);
-
 						}
 					} else {
 						// la estrategia no es manual, entonces activo el input
 						numberOfClusterText.setEnabled(true);
+					}*/
+										
+					
+					if (clusteringStrategyStr.equals(ClusterersEnum.KMEANS.getFriendlyName())) {
+						clusterParameters.setText("Kmeans parameters");
+						createKmeansParameters(clusterParameters,dbc,wmodel);
+						clusterParameters.setVisible(true);
 					}
+					
+					if (clusteringStrategyStr.equals(ClusterersEnum.KMEANS_WITH_HCLUST.getFriendlyName())) {
+						clusterParameters.setText("Kmeans Hclust parameters");
+						createKmeansHClustParameters(clusterParameters,dbc,wmodel);
+						clusterParameters.setVisible(true);
+					}
+					
+					if (clusteringStrategyStr.equals(ClusterersEnum.PAM.getFriendlyName())) {
+						clusterParameters.setText("PAM parameters");
+						createPamParameters(clusterParameters,dbc,wmodel);
+						clusterParameters.setVisible(true);
+					}
+					
+					
+					clusterParameters.layout(true);
 
 				}
 
-				/**
-				 * pone un mensaje en la página del wizard y luego de un
-				 * determinado tiempo lo borra
-				 * 
-				 * @param wp
-				 * @param message
-				 */
-				private void putmessage(final WizardPage wp, String message) {
-					MessageManager.INSTANCE.add(Message.warn(message));
-					wp.setMessage(message, IMessageProvider.WARNING);
-					new UIJob("") {
-
-						@Override
-						public IStatus runInUIThread(IProgressMonitor monitor) {
-							// limpio el mensaje
-							wp.setMessage(null);
-							return ValidationStatus.ok();
-						}
-					}.schedule(9000);
-				}
 			});
 			logger.trace("Clustering strategy created");
-
-			// GridData gdRepeat = gdf.grab(false, false).create();
-			// t2.setLayoutData(gdRepeat);
-			// logger.trace("Times to repeat... created");
+			
+			clusteringStrategy.setSelection(defaultStrategySelection);
+			
+		
+		}else{
+			createManualSettings(clusterginGroup,wmodel,wp);
 		}
-		// addValidationTypeAndStatissticaSigTestComponents(result, dbc,
-		// wmodel);
-
-		// hook para ejecutar el
-		// ComboViewer validationAttrName =
-		// Utils.newComboViewer(clusterginGroup,
-		// "\nValidation Attribute Name",
-		// "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab",
-		// Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence",
-		// "timeUntilEventOccured"));
-		// dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName),
-		// wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION),
-		// UpdateStrategies.nonNull("Attribute Name"),
-		// UpdateStrategies.nullStrategy());
-		// validationAttrName.getCombo().setLayoutData(gdf.create());
-		// validationAttrName.setSelection(new
-		// StructuredSelection(OS_MONTHS));
-		//
-
-		// Group clusterginGroup2 = new Group(container,
-		// SWT.SHADOW_OUT);
-		// clusterginGroup2.setLayout(GridLayoutFactory.fillDefaults().margins(20,
-		// 10).create());
-		// clusterginGroup2.setLayoutData(GridDataFactory.fillDefaults().grab(true,
-		// false).create());
-
+			
+		
+		//Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
+		
 		new Label(clusterginGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
 		Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);
 		ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
+		//ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName.getCombo().setLayoutData(gdf.create());
 		validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
@@ -291,6 +255,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		new Label(clusterginGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
 		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(clusterginGroup);
 		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_EVENT, RFS_EVENT, "Evento", OTHER));
+		//ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName2.getCombo().setLayoutData(gdf.create());
 		validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
@@ -299,6 +264,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		other2.setLayoutData(gd2);
 		dbc.bindValue(SWTObservables.observeText(other2, SWT.Modify), wmodel.valueHolder(OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION));
 		logger.trace("Status attribute name created");
+	
 	}
 
 	private Composite getGroupFoRClusteringAttribute(Composite parent) {
@@ -357,10 +323,181 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 				if (value.toString().matches("\\d+..\\d+") || value.toString().matches("\\d+")) {
 					return ValidationStatus.ok();
 				} else
-					return ValidationStatus.error("'" + value + "'" + " no es un rango o número valido");
+					return ValidationStatus.error("'" + value + "'" + " is not a valid range or a valid number");
+			}
+
+		});
+	}
+	
+	private UpdateValueStrategy notEmpty() {
+		return new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+
+			@Override
+			public IStatus validate(Object value) {
+				if (value.toString().trim().isEmpty()) {
+					return ValidationStatus.ok();
+				} else
+					return ValidationStatus.error("There's an empty field");
+			}
+
+		});
+	}
+	
+	private UpdateValueStrategy uvsIsNumber(final String label) {
+		return new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
+
+			@Override
+			public IStatus validate(Object value) {
+				if (value.toString().trim().matches("\\d+")) {
+					return ValidationStatus.ok();
+				} else
+					return ValidationStatus.error("Value in '" + label + "'" + " is not a valid number");
 			}
 
 		});
 	}
 
+	
+	
+	
+
+	private void createPamParameters(final Group clusterParameters,DataBindingContext dbc, final WizardModel wmodel) {
+		final Composite pamParameters = new Composite(clusterParameters, 0);
+		pamParameters.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).numColumns(2).create());
+		pamParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		
+		Label labelMetric = new Label(pamParameters, SWT.NONE);
+		labelMetric.setText("Metric:");
+		List<String> names = new ArrayList<String>();
+		names.add("euclidean"); names.add("manhattan"); 
+		final ComboViewer metricStrategy = Utils.newComboViewerWithoutLabel(pamParameters, "Metric", names);
+		dbc.bindValue(ViewersObservables.observeSingleSelection(metricStrategy), wmodel.valueHolder(PagesDescriptors.PAM_METRIC));
+		metricStrategy.setSelection(new StructuredSelection(names.get(0)));
+		
+		Button btnStand = new Button(pamParameters, SWT.CHECK);
+		btnStand.setText("Standardized");
+		dbc.bindValue(SWTObservables.observeSelection(btnStand), wmodel.valueHolder(PagesDescriptors.PAM_STANDARDIZED));
+		
+		
+				
+	}
+	
+	
+	private void createKmeansHClustParameters(final Group clusterParameters,DataBindingContext dbc, final WizardModel wmodel) {
+		final Composite kmeansHClustParameters = new Composite(clusterParameters, SWT.NONE);
+		kmeansHClustParameters.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).numColumns(2).create());
+		kmeansHClustParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		Label labelHClustIter = new Label(kmeansHClustParameters, SWT.NONE);
+		labelHClustIter.setText("Method:");
+		// Note: ward is ward.D1 in R, ward2 is ward.D2
+		List<String> names = new ArrayList<String>();
+		names.add("ward"); names.add("ward.D2");names.add("single");names.add("complete");names.add("average");
+		names.add("mcquitty");names.add("median") ;names.add("centroid");
+		final ComboViewer metricStrategy = Utils.newComboViewerWithoutLabel(kmeansHClustParameters, "Metric", names);
+		dbc.bindValue(ViewersObservables.observeSingleSelection(metricStrategy), wmodel.valueHolder(PagesDescriptors.KMEANSHCLUST_METRIC));
+		metricStrategy.setSelection(new StructuredSelection(names.get(0)));
+	}
+
+	private void createKmeansParameters(final Group clusterParameters,DataBindingContext dbc, final WizardModel wmodel) {
+		final Composite kmeansParameters = new Composite(clusterParameters, 0);
+		kmeansParameters.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).numColumns(2).create());
+		kmeansParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		
+		Label labelIter = new Label(kmeansParameters, SWT.NONE);
+		labelIter.setText("Iterations:");
+		final Text textIter = new Text(kmeansParameters, SWT.BORDER);
+		textIter.setTextLimit(5);
+		dbc.bindValue(SWTObservables.observeText(textIter,SWT.Modify), wmodel.valueHolder(PagesDescriptors.KMEANS_ITER),uvsIsNumber("Iterations"),UpdateStrategies.nullStrategy());
+		textIter.setText("1000 ");
+		
+		Label labelAlgo = new Label(kmeansParameters, SWT.NONE);
+		labelAlgo.setText("Algorithm:");
+		List<String> names = new ArrayList<String>();
+		names.add("Hartigan-Wong"); names.add("Lloyd"); names.add("Forgy"); names.add("MacQueen");
+		final ComboViewer algoStrategy = Utils.newComboViewerWithoutLabel(kmeansParameters, "Algorithm", names);
+		dbc.bindValue(ViewersObservables.observeSingleSelection(algoStrategy), wmodel.valueHolder(PagesDescriptors.KMEANS_ALGORITHM));
+		algoStrategy.setSelection(new StructuredSelection(names.get(0)));
+	}
+	
+
+	private void createManualSettings(final Group clusterginGroup, final WizardModel wmodel,final WizardPage wp) {
+		final Experiment exp = (Experiment) wmodel.value(PagesDescriptors.SELECTED);
+		
+		
+		
+		Button clusterButton = new Button(clusterginGroup,SWT.PUSH);
+		clusterButton.setImage(PlatformUIUtils.findImage("clustering.png"));
+		clusterButton.setToolTipText("Press button to configure cluster");
+		clusterButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ClusteringResult clusteringResult = null;
+				try{
+					clusteringResult = (ClusteringResult) wmodel.value(PagesDescriptors.MANUAL_CLUSTERING);
+				}catch(Exception ex){
+					logger.info("No cluster defined");
+				}
+				ConfigureClusterDialog ccd = new ConfigureClusterDialog(exp, clusteringResult);
+				ClusteringResult result = ccd.getClusteringResult();
+				wmodel.update(NUMBER_OF_CLUSTERS, result.getNumberOfClusters());
+				
+				if(Dialog.OK == ccd.open()){
+					wmodel.set(PagesDescriptors.MANUAL_CLUSTERING, result);
+					wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, result.getNumberOfClusters());
+					if(!result.isAllSamplesAssignedToCluster()){
+						putmessage(wp, "The experiment you have selected must have all the samples assigned to a cluster.");
+					}					
+					if(!result.hasGotEnoughClustersForValidation()){
+						putmessage(wp, "The experiment you have selected must have at least two clusters. Your experiment " + result.getExperiment().getName() + " have just " + result.getNumberOfClusters() + ". Please  set at least 2 clusters manually.");
+					}
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {}
+		});
+	}
+	
+	
+	
+	/**
+	 * pone un mensaje en la página del wizard y luego de un
+	 * determinado tiempo lo borra
+	 * 
+	 * @param wp
+	 * @param message
+	 */
+	private void putmessage(final WizardPage wp, String message) {
+		MessageManager.INSTANCE.add(Message.warn(message));
+		wp.setMessage(message, IMessageProvider.WARNING);
+		new UIJob("") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				// limpio el mensaje
+				wp.setMessage(null);
+				return ValidationStatus.ok();
+			}
+		}.schedule(9000);
+	}
+
+	@Override
+	public boolean isPageComplete(WizardModel wmodel) {
+		boolean isComplete = false;
+		if(this.forManualClustering){
+			try{
+				ClusteringResult cr = (ClusteringResult) wmodel.value(PagesDescriptors.MANUAL_CLUSTERING);
+				isComplete = cr.hasGotEnoughClustersForValidation();
+			}catch(Exception e){
+				isComplete = false;
+			}
+		}else{
+			isComplete = super.isPageComplete(wmodel); 
+		}
+		return isComplete;
+	}
+	
+	
+	
 }
