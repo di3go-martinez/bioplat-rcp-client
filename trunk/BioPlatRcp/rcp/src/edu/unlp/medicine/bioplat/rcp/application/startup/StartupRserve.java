@@ -37,8 +37,8 @@ public class StartupRserve implements IStartup {
 				 */
 				
 				//bioplatR4JServer = BioplatR4JServer.getInstance();
-				R4JConnection.getInstance();
 				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
+				R4JConnection.getInstance();
 				if (bioplatR4JServer.isStarted()){
 					return ValidationStatus.OK_STATUS;
 					/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {
