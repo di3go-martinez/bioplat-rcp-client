@@ -4,11 +4,9 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -34,14 +32,9 @@ import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEdit
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
-import edu.unlp.medicine.bioplat.rcp.utils.jobs.EJob;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
-import edu.unlp.medicine.entity.experiment.ClusterData;
-import edu.unlp.medicine.entity.experiment.Experiment;
-import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
-import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 
 /**

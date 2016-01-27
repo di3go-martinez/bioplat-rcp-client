@@ -41,7 +41,7 @@
       <actionContribution
             caption="Open Model on dialog"
             class="edu.unlp.medicine.bioplat.poc.DialogWithModelAction"
-            onMenu="true"
+            onMenu="false"
             onToolbar="false">
          <selection></selection>
       </actionContribution>

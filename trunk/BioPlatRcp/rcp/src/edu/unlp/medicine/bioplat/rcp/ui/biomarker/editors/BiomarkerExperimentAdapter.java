@@ -4,15 +4,12 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
 import java.util.List;
-import java.util.Map;
 
 import edu.unlp.medicine.domainLogic.framework.BiologicalValue;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.SurvCompValidationResult;
-import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.ClusterData;
 import edu.unlp.medicine.entity.experiment.ExperimentAppliedToAMetasignature;
-import edu.unlp.medicine.entity.experiment.Sample;
 
 /**
  * @author Juan
