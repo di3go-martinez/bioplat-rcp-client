@@ -247,13 +247,6 @@
 	     </description>
   </wizard>
     
-	<wizard
-       category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
-       class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportGeneSignatureFromBPLWizard"
-       icon="intro/contents/images/openFromBPL.png"
-       id="edu.medicine.bioplat.rcp.import.biomarker.fromBPLFile"
-       name="Open gene signature from .BPL (BioPlat) file ">
-         </wizard>
   <wizard
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
@@ -477,7 +470,7 @@
                 class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
        </actionContribution>
        <actionContribution
-             caption="Export Selected Genes as new Bioplat gene signature"
+             caption="Create new gene signature using seleccted genes"
              class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
              groupId="05-Biomarker-export"
              image="resources/icons/exportGene.png"
@@ -565,7 +558,7 @@
          </selection>
       </actionContribution>
         <actionContribution
-              caption="Create gene signature using selected genes"
+              caption="Create new gene signature using seleccted genes"
               class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
               groupId="05-Experiment-export"
               image="resources/icons/exportGene.png"

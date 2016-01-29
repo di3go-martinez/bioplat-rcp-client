@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -69,14 +70,14 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Gene Signature validation");
+		newShell.setText("Gene Signature Statistic Analysis");
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		this.setTitle("Statistic Analysis");
-		setMessage("In this dialog you can set up all the gene siganture validations you would like to do using log rank test. Each test validation, uses the expression and... clinical data of an experiment you pick up. The validation firstly clusters the samples using the expression data of just the genes in the Gene Signature, and then calculates Log Rank Test and Kaplan-Meier curves using the group assigned to each sample.");
-		
+		//setMessage("Add all the experiments you would like to use for validating statistically the prognstic value your gen signature has got over these data. You can add more than once the same experiment for considering different statistics configurations. Eaxh configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
+		setMessage("Add all the experiments you would like to use for validating statistically, the prognostic value that your gen signature has got over these data. You can... add more than once the same experiment for evaluating different statistics configurations. Each configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
@@ -86,7 +87,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 		//c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 		c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
 		
-		String help = "Help: In the table you can see the validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
+		String help = "Help: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
 		GUIUtils.addWrappedText(c, help, 8, true);
 
 		tr = TableBuilder
@@ -124,6 +125,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
 		Button add = new Button(c, SWT.NONE);
 		add.setText("+");
+		//add.setImage(new Image(c.getDisplay(), "resources/icons/plus.png"));
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

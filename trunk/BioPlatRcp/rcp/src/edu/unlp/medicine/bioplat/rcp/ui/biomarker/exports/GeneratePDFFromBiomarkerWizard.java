@@ -97,6 +97,7 @@ public class GeneratePDFFromBiomarkerWizard extends AbstractWizard<Void> impleme
 				new Label(c, SWT.NONE).setText("Folder: ");
 				TextWithSelectionButton ft = new DirectoryText(c);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
+				getModel().directory.setValue("");
 				getModel().filename.setValue("");
 
 				new CLabel(c, SWT.BOLD).setText("File name:");

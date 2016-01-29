@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -13,8 +14,10 @@ import org.eclipse.swt.widgets.Composite;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 
 public class PagesDescriptors {
@@ -90,14 +93,38 @@ public class PagesDescriptors {
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
-				wp.setDescription("Select the experiments for validating your Gene Signature.");
+				wp.setDescription("Select the Bioplat experiments Bioplat for validating your Gene Signature. ");
 
 				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
 
 				Composite container = new Composite(parent, SWT.BORDER);
+				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+				container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+				
+				
+				Composite c = Widgets.createDefaultContainer(container);
+				//c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+				c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+				
+				String help = "Help: The experiments in the list are tohse imported to Bioplat. If you have a file with the expression and clinical data or you have a .CEL file you can easily import them using the start menu. You can also use public data importing experiments from CBioportal. \n\n";
+				GUIUtils.addWrappedText(c, help, 8, true);
+
+				
+				
+				
 				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//
 						.addColumn(ColumnBuilder.create().title("Experiments in your Bioplat Desktop").width(500).property("name"))//
 						.build();
+
+				GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(c);
+				tr.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+
+				
+				//String help = "Help: Remember you have to import to Bioplat an experiment for using it for doing statistis analysis. You can use many of the available options for importing experiments. For acccess them go to start menu and then press GeneSingature/Experiments.\n\n";
+				//GUIUtils.addWrappedText(parent, help, 8, true);
+				
+
+				
 				tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
 					@Override

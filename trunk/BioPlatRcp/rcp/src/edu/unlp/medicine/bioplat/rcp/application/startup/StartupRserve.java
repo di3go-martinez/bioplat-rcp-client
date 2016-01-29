@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
+
 import org.bioplat.r4j.R4JClient.connections.ConnectionProperties;
 import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
 import org.bioplat.r4j.R4JClient.connections.R4JConnection;
@@ -37,8 +38,9 @@ public class StartupRserve implements IStartup {
 				 */
 				
 				//bioplatR4JServer = BioplatR4JServer.getInstance();
-				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
 				R4JConnection.getInstance();
+				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
+				
 				if (bioplatR4JServer.isStarted()){
 					return ValidationStatus.OK_STATUS;
 					/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {

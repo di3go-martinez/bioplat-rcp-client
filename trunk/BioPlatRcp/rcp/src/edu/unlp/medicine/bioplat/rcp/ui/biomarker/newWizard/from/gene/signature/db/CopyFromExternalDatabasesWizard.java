@@ -47,7 +47,7 @@ public class CopyFromExternalDatabasesWizard extends WizardPageDescriptor {
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		wizardPage.setTitle("Which gene Signature to copy?");
-		wizardPage.setDescription("It creates your own copy of Bioplat geneSignature, containing all the information of the original gene Signature");
+		wizardPage.setDescription("It creates your own copy of Bioplat geneSignature, containing all the information of the original gene Signature. You can use % as wildcard if you dont know the complete name");
 
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
