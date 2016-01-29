@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -88,7 +89,8 @@ public class LogRankTestDialog extends TitleAreaDialog {
 				.addColumn(ColumnBuilder.create().property("secondAttribtueNameToDoTheValidation").title("Event"))//
 
 				.input(data).build();
-
+		
+		
 		// Composite buttons = new Composite(c, SWT.BORDER);
 		// buttons.setLayout(GridLayoutFactory.fillDefaults().create());
 		// buttons.setLayoutData(GridDataFactory.fillDefaults().grab(true,

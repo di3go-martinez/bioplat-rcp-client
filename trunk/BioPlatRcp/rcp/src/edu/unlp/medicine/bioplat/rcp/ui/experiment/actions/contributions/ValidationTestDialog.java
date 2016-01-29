@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,6 +24,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.preferences.ExperimentGeneralPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
@@ -74,16 +76,21 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		this.setTitle("Statistic Analysis");
 		setMessage("In this dialog you can set up all the gene siganture validations you would like to do using log rank test. Each test validation, uses the expression and... clinical data of an experiment you pick up. The validation firstly clusters the samples using the expression data of just the genes in the Gene Signature, and then calculates Log Rank Test and Kaplan-Meier curves using the group assigned to each sample.");
+		
 		Composite container = (Composite) super.createDialogArea(parent);
-		Composite c = Widgets.createDefaultContainer(container);
-		c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1)
-				.margins(10, 10).create());
-
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		
+		
+		Composite c = Widgets.createDefaultContainer(parent);
+		//c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+		c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		
 		String help = "Help: In the table you can see the validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
 		GUIUtils.addWrappedText(c, help, 8, true);
 
 		tr = TableBuilder
-				.create(c)
+				.create(container)
 				.hideSelectionColumn()
 				.addColumn(
 						ColumnBuilder.create()
@@ -103,7 +110,10 @@ public class ValidationTestDialog extends TitleAreaDialog {
 										"secondAttribtueNameToDoTheValidation")
 								.title("Event")).input(data).build();
 
-		return container;
+		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(c);
+		tr.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		
+		return c;
 	}
 
 	@Override
