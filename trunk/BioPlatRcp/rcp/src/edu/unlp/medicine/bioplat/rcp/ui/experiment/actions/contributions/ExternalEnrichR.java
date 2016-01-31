@@ -21,6 +21,7 @@ public class ExternalEnrichR {
 			new FileWriter(f).append(html).flush();
 
 			openSystemBrowser("file:///" + f.getAbsolutePath());
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,7 +36,9 @@ public class ExternalEnrichR {
 			browser.openURL(new URL(url));
 			return browser;
 		} catch (Exception e) {
+			System.out.println(e);
 			return null;
+			
 		}
 	}
 

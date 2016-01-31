@@ -21,6 +21,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
@@ -37,6 +38,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.startup.InitializeGenesUrlStartup;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrl;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrlParser;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
@@ -105,6 +107,21 @@ public class GeneViewPart extends ViewPart {
 			}
 						
 		};
+		
+		//Composite c = Widgets.createDefaultContainer(parent);
+		//c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		//c.setLayoutData(GridDataFactory.fillDefaults().grab(true,false).create());
+		//String help = "Help: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
+		//GUIUtils.addWrappedText(parent, help, 10, true);
+		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		
+//		GridLayout gridLayout = new GridLayout(1,false) ;
+//		gridLayout.marginBottom=20;
+//		gridLayout.marginTop=20;
+
+		Label label = new Label(parent, SWT.WRAP);
+		label.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).indent(10, 20).create());
+		label.setText("This window shows information about the gene you select on any gene table (on your left side). In the first tab you will see general information about the gene; the other tabs shows information provided but other bioinformatic tools about this gene.\n\n");
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();

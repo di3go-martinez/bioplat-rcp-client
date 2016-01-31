@@ -17,6 +17,8 @@ public class EnrichActionContribution extends AbstractActionContribution<Biomark
 					new EnrichrDialog().openWith(model());
 				else
 					new ExternalEnrichR().openWith(model());
+				
+				
 			}
 		});
 	}

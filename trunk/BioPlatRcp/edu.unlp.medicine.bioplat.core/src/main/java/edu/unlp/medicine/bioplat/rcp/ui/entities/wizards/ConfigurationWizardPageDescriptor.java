@@ -84,12 +84,13 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		try {
 			GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
-			Composite container = new Composite(parent, SWT.BORDER);
-			container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 0).create());
+			Composite container = new Composite(parent, SWT.NONE);
+			container.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).margins(20, 20).create());
 
 			// createGroup4ClusteringChoise(container, gdf, dbc, wmodel);
+			
 			createGroup4CLusteringInfo(container, gdf, dbc, wmodel, wp);
-			createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
+			//createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
 
 			container.redraw();
 			container.pack(true);
@@ -122,7 +123,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		final Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
 		clusterginGroup.setText("Clustering parameters");
 		clusterginGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
-		clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().margins(20, 10).create());
+		clusterginGroup.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 10).margins(20, 20).create());
 		clusterginGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		new Label(clusterginGroup, SWT.NONE).setText("Number of clusters:");
@@ -135,20 +136,26 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 		if (!forManualClustering) {
 
-			new Label(clusterginGroup, SWT.NONE).setText("\nClustering strategy");
+			final Group clusterginStGroup = new Group(clusterginGroup, SWT.SHADOW_OUT);
+			clusterginStGroup.setText("Clustering strategy");
+			clusterginStGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
+			clusterginStGroup.setLayout(GridLayoutFactory.fillDefaults().margins(20, 20).create());
+			clusterginStGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+			
+			//new Label(clusterginStGroup, SWT.NONE).setText("\nClustering strategy");
 			
 			// david: Mejorar como se carga el combo
 			List<String> names = ClustererFactory.getInstance().getClustererNames();
 			names.remove(ClusterersEnum.MANUAL_SETTING.getFriendlyName());
 			
 			
-			final ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginGroup, "Select the strategy to do your clustering.", names);
+			final ComboViewer clusteringStrategy = Utils.newComboViewerWithoutLabel(clusterginStGroup, "Select the strategy to do your clustering.", names);
 			dbc.bindValue(ViewersObservables.observeSingleSelection(clusteringStrategy), wmodel.valueHolder(CLUSTERING_STRATEGY), UpdateStrategies.nonNull("Clustering strategy"), UpdateStrategies.nullStrategy());
 			clusteringStrategy.getCombo().setLayoutData(gdf.create());
 			final StructuredSelection defaultStrategySelection = new StructuredSelection(ClusterersEnum.PAM.getFriendlyName());
 			
 			
-			final Group clusterParameters = new Group(clusterginGroup, SWT.SHADOW_OUT);
+			final Group clusterParameters = new Group(clusterginStGroup, SWT.NONE);
 			clusterParameters.setText("Strategy parameters");
 			clusterParameters.setFont(GUIUtils.getFontForGrouptTitle(container));
 			clusterParameters.setLayout(GridLayoutFactory.fillDefaults().margins(20, 10).create());
@@ -388,7 +395,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		kmeansHClustParameters.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).numColumns(2).create());
 		kmeansHClustParameters.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		Label labelHClustIter = new Label(kmeansHClustParameters, SWT.NONE);
-		labelHClustIter.setText("Method:");
+		labelHClustIter.setText("Hclust Method:");
 		// Note: ward is ward.D1 in R, ward2 is ward.D2
 		List<String> names = new ArrayList<String>();
 		names.add("ward"); names.add("ward.D2");names.add("single");names.add("complete");names.add("average");

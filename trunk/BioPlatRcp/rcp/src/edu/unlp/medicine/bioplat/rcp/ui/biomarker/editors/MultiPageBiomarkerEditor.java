@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.editor.AbstractFormEditor;
 import edu.unlp.medicine.bioplat.rcp.editor.EditorDescription;
+import edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.preferences.ExternalURLInformationPage;
 import edu.unlp.medicine.bioplat.rcp.utils.EditorInputFactory;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -22,6 +25,13 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 
 	@Override
 	protected List<EditorDescription> createEditors() {
+		
+		try {
+			GeneViewPart view = (GeneViewPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("edu.medicine.bioplat.rcp.gene.view");
+		} catch (PartInitException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<EditorDescription> result = Lists.newArrayList();
 
 		final IEditorInput input = EditorInputFactory.createDefaultEditorInput(model());
@@ -53,6 +63,9 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 			}
 		}.createEditorBrowsers(result, input);
 
+		
+
+		
 		return result;
 	}
 

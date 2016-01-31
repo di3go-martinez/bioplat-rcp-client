@@ -155,6 +155,7 @@
          name="%progress.view.name">
    </view>
    <view
+         allowMultiple="true"
          class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart"
          icon="resources/icons/gene.gif"
          id="edu.medicine.bioplat.rcp.gene.view"
@@ -415,81 +416,6 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Remove selected statistic analysis..."
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveValidations"
-            groupId="02-Biomarker-validation"
-            image="resources/icons/remove-statistic.png"
-            onMenu="true"
-            onToolbar="false">
-         	<selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-            </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Optimize using Blind search Optimizer"
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
-            groupId="03-Biomarker-optimizer"
-            image="resources/icons/blindSearch.png"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Optimize using PSO"
-            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
-            groupId="03-Biomarker-optimizer"
-            image="resources/icons/pso.png"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-         </selection>
-      </actionContribution>
-      <actionContribution
-            caption="Enrichr"
-            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
-            groupId="04-Biomarker-enrich"
-            image="resources/icons/enrichr.png"
-            menu-separator="bbb"
-            onMenu="true"
-            onToolbar="false">
-         <selection
-               class="edu.unlp.medicine.entity.biomarker.Biomarker">
-         </selection>
-      </actionContribution>       
-       <actionContribution
-             caption="Export gene set to text file"
-             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
-             groupId="05-Biomarker-export"
-             image="resources/icons/export2.png"
-             onMenu="false"
-             onToolbar="true">
-          <selection
-                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-       </actionContribution>
-       <actionContribution
-             caption="Create new gene signature using seleccted genes"
-             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
-             groupId="05-Biomarker-export"
-             image="resources/icons/exportGene.png"
-             onMenu="true"
-             onToolbar="false">
-          <selection
-                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-       </actionContribution>
-       <actionContribution
-             caption="Export Gene Signature and statistic analysis to PDF"
-             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.GeneratePDFFromBiomarkerActionContribution"
-             groupId="05-Biomarker-export"
-             image="resources/icons/Reporte1.gif"
-             onMenu="true"
-             onToolbar="true">
-          <selection
-                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
-       </actionContribution>
-      <actionContribution
             caption="Filter genes on expression data"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
             groupId="01-Experiment"
@@ -597,6 +523,106 @@
             onToolbar="false">
          <selection
                class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Remove selected statistic analysis..."
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveValidations"
+            groupId="02-Biomarker-validation"
+            image="resources/icons/remove-statistic.png"
+            onMenu="true"
+            onToolbar="false">
+         	<selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+            </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using Blind search Optimizer"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BlindSearchOptimzerActionContribution"
+            groupId="03-Biomarker-optimizer"
+            image="resources/icons/blindSearch.png"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Optimize using PSO"
+            class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.PSOActionContribution"
+            groupId="03-Biomarker-optimizer"
+            image="resources/icons/pso.png"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Enrichr"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.EnrichActionContribution"
+            groupId="04-Biomarker-enrich"
+            image="resources/icons/enrichr.png"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>       
+       <actionContribution
+             caption="Export gene set to text file"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
+             groupId="05-Biomarker-export"
+             image="resources/icons/export2.png"
+             onMenu="false"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
+       <actionContribution
+             caption="Create new gene signature using seleccted genes"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.BiomarkerExportContribution"
+             groupId="05-Biomarker-export"
+             image="resources/icons/exportGene.png"
+             onMenu="true"
+             onToolbar="false">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
+       <actionContribution
+             caption="Export Gene Signature and statistic analysis to PDF"
+             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.GeneratePDFFromBiomarkerActionContribution"
+             groupId="05-Biomarker-export"
+             image="resources/icons/Reporte1.gif"
+             onMenu="true"
+             onToolbar="true">
+          <selection
+                class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+       </actionContribution>
+      <actionContribution
+            caption="Open gene view"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.OpenGeneViewAction"
+            groupId="06-Biomarker-geneview"
+            image="resources/icons/Info.png"
+            imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.biomarker.Biomarker">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Open gene view"
+            class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.OpenGeneViewAction"
+            groupId="06-Biomarker-geneview"
+            image="resources/icons/Info.png"
+            imagepath="resources/icons/checked.gif"
+            menu-separator="entidad"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>
       </actionContribution>
       <!--actionContribution
