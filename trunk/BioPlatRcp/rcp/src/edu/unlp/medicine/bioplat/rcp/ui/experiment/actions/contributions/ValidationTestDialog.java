@@ -70,12 +70,12 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Gene Signature Statistic Analysis");
+		newShell.setText("Gene Signature Statistic Analysis of your gene signature");
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		this.setTitle("Statistic Analysis");
+		this.setTitle("Survival Statistic Analysis");
 		//setMessage("Add all the experiments you would like to use for validating statistically the prognstic value your gen signature has got over these data. You can add more than once the same experiment for considering different statistics configurations. Eaxh configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
 		setMessage("Add all the experiments you would like to use for validating statistically, the prognostic value that your gen signature has got over these data. You can... add more than once the same experiment for evaluating different statistics configurations. Each configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
 		Composite container = (Composite) super.createDialogArea(parent);

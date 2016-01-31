@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -11,6 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public class GUIUtils {
 	
@@ -69,7 +71,23 @@ public class GUIUtils {
 		
 		
 	}
+
+	public static void setFont(Text label, int size, boolean italic) {
+		FontData[] fD = label.getFont().getFontData();
+		 fD[0].setHeight(size);
+		 if (italic) fD[0].setStyle(SWT.ITALIC);
+		 label.setFont( new Font(label.getParent().getDisplay(),fD[0]));
+		
+	}
 	
-	
+
+	public static void setFont(StyledText label, int size, boolean italic) {
+		FontData[] fD = label.getFont().getFontData();
+		 fD[0].setHeight(size);
+		 if (italic) fD[0].setStyle(SWT.ITALIC);
+		 label.setFont( new Font(label.getParent().getDisplay(),fD[0]));
+		
+	}
+
 	
 }

@@ -177,12 +177,6 @@
          restorable="false">
    </view>
    <view
-         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.TreeACResultViewPart"
-         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.tree.result.view"
-         name="Best Variations"
-         restorable="false">
-   </view>
-   <view
          allowMultiple="true"
          class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchResultViewPart"
          icon="resources/icons/blindSearch.png"
@@ -368,7 +362,7 @@
    <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
       <actionContribution
-            caption="Add Genes..."
+            caption="Add Genes to Gene Signature..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddGenesAC"
             groupId="01-Biomarker-abm"
             image="resources/icons/plus2.png"
@@ -381,7 +375,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Add Random Genes..."
+            caption="Add Random Genes to Gene Siganture..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddRandomGenesAction"
             groupId="01-Biomarker-abm"
             image="resources/icons/random.png"
@@ -394,7 +388,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Remove Genes..."
+            caption="Remove Genes to Gene Signature..."
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.actions.contributions.RemoveGenes"
             groupId="01-Biomarker-abm"
             image="resources/icons/removeItem2.png"
@@ -405,7 +399,7 @@
 	        </selection>
       </actionContribution>
       <actionContribution
-            caption="Statistic Analysis"
+            caption="Statistic Analysis for validating your gene Signature..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyValidationTestActionContribution"
             groupId="02-Biomarker-validation"
             image="resources/icons/statistic.png"
@@ -683,7 +677,7 @@
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
             
             id="edu.unlp.medicine.bioplat.rcp.intro"
-            label="Welcome"/>
+            label="Welcome Window"/>
       <introProductBinding
             introId="edu.unlp.medicine.bioplat.rcp.intro"
             productId="edu.medicine.bioplat.rcp.product">

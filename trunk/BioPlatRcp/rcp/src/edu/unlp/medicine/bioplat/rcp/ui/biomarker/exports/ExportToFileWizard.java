@@ -164,7 +164,7 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 				new Label(c, SWT.NONE).setText("Folder: ");
 				TextWithSelectionButton ft = new DirectoryText(c);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
-				getModel().directory.setValue("");
+				getModel().directory.setValue(System.getProperty("user.dir"));
 				getModel().filename.setValue("");
 
 				new CLabel(c, SWT.BOLD).setText("File name:");
@@ -207,13 +207,13 @@ public class ExportToFileWizard extends Wizard implements IExportWizard {
 					//doFinish(biomarker, parameters);
 					new ExportGenesToCSVFileCommand(biomarker, parameters, absoluteFilename, separator).execute();
 					hm.hold(Message.info("The gene signature information was exported succesfully to: " + absoluteFilename));
-					PlatformUIUtils.openInformation("Export experiment to File", "The gene signature information was exported succesfully to: " + absoluteFilename);
+					PlatformUIUtils.openInformation("Export Gene Signature to File", "The gene signature information was exported succesfully to: " + absoluteFilename);
 				}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			hm.hold(Message.error("There was an error during the export: ", e));
-			PlatformUIUtils.openError("Error", "There was an error during the export");
+			hm.hold(Message.error("There was an error during the experiment export : ", e));
+			PlatformUIUtils.openError("Error", "There was an error during the experiment export");
 			result = false;
 		}
 		MessageManager.INSTANCE.add(hm.value()).openView();

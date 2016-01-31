@@ -97,7 +97,7 @@ public class GeneratePDFFromBiomarkerWizard extends AbstractWizard<Void> impleme
 				new Label(c, SWT.NONE).setText("Folder: ");
 				TextWithSelectionButton ft = new DirectoryText(c);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
-				getModel().directory.setValue("");
+				getModel().directory.setValue(System.getProperty("user.dir"));
 				getModel().filename.setValue("");
 
 				new CLabel(c, SWT.BOLD).setText("File name:");
@@ -127,11 +127,16 @@ public class GeneratePDFFromBiomarkerWizard extends AbstractWizard<Void> impleme
 	}
 
 	@Override
+	public boolean logInTheMessageView() {
+		return false;
+	}
+	
+	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
 		properties.put("targetFile", absoluteFilename);
 
 		new GeneratePDFFromBiomarkerCommand(biomarker, properties).execute();
-		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
+		MessageManager.INSTANCE.add(Message.info("The Gene Signature " + biomarker.getName() + " and its statistics analysis, was succesfully exported to the file " + new File(absoluteFilename).getAbsoluteFile()));
 		
 		return null;
 	}

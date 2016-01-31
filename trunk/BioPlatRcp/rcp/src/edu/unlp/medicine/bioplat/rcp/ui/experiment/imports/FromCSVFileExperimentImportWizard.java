@@ -165,9 +165,17 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 				@Override
 				public void run() {
-					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
 					
+					if(e.getNumberOfGenes()==0){ 
+						MessageManager.INSTANCE.openView().add(Message.warn("The file \"" + filePath + "\" was imported but it does not seem to have the expected data and/or format. "));
+						PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+						PlatformUIUtils.openWarning("The file has got the expected data and format?", "It seems the input file has not got the expected data and/or expected format. Please check the imported experiment because it is hihgly probably that it doesnt have any useful information for validating. If so, please close it,check the file you have selected and do the import again.");
+					}
+					else{	
+					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
+					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+					}
+
 				}
 			});
 		} catch (Exception e) {

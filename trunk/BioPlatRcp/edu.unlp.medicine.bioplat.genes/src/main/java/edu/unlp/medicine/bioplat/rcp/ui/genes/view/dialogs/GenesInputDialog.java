@@ -9,6 +9,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -81,7 +83,7 @@ public class GenesInputDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Paste genes (EntrezID, EnsemblID or Gene name, separated by blank or enter)");
+		newShell.setText("Paste genes");
 
 	}
 
@@ -95,6 +97,13 @@ public class GenesInputDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite) super.createDialogArea(parent);
+		
+		 Text help = new Text(result, SWT.NONE);
+		 help.setText("You can use EntrezID, EnsemblID or Gene name, separated by blank or enter");
+		 GUIUtils.setFont(help, 10, true);
+
+		 help.setBackground(result.getBackground());
+		 help.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		final Text text = new Text(result, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -108,6 +117,7 @@ public class GenesInputDialog extends Dialog {
 			}
 		});
 		text.setText(value);
+		text.setFocus();
 		return result;
 	}
 

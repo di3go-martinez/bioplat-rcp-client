@@ -88,12 +88,12 @@ public class PagesDescriptors {
 	 */
 	// TODO agregar desde distintas fuentes, inSilico e archivo
 	public static WizardPageDescriptor experimentsWPD(ValidationTestGUIProvider validationTestGUIProvider) {
-		return new WizardPageDescriptor("Experiments for applying " + validationTestGUIProvider.getName()) {
+		return new WizardPageDescriptor("Select the experiment(s) you will use for doing stati	stic analysis of your gene signature") {
 
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
-				wp.setDescription("Select the Bioplat experiments Bioplat for validating your Gene Signature. ");
+				wp.setDescription("The expression and survival data of the experiments you select on this page, will be used for doing survival statistic analysis of your gene signature. ");
 
 				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
 
@@ -107,7 +107,7 @@ public class PagesDescriptors {
 				c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
 				
 				String help = "Help: The experiments in the list are tohse imported to Bioplat. If you have a file with the expression and clinical data or you have a .CEL file you can easily import them using the start menu. You can also use public data importing experiments from CBioportal. \n\n";
-				GUIUtils.addWrappedText(c, help, 8, true);
+				GUIUtils.addWrappedText(c, help, 9, true);
 
 				
 				
@@ -152,7 +152,7 @@ public class PagesDescriptors {
 
 	public static WizardPageDescriptor configurationPage(final ValidationTestGUIProvider validationTestGUIProvider) {
 		WizardPageDescriptor cpw = configurationPage(validationTestGUIProvider, false, validationTestGUIProvider.getName() + " configuration, using cluster based on expression data");
-		cpw.setDescription("Configure the 'Time' attribute and the 'Event' attribute for executing " + validationTestGUIProvider.getName() + ". The cluster will be calculated using the expression data of the experiment for the genes in the Gene Signature. So, you have to also configure the number of clusters you would like to use.");
+		cpw.setDescription("Configure the 'Time' attribute and the 'Event' attribute for executing the survival statistic analysis. The survival analysis will firstly cluster the samples using its expression data; So, you have to also configure the number of clusters, the cluster method and the cluster parameters.");
 		return cpw;
 	}
 
@@ -162,7 +162,7 @@ public class PagesDescriptors {
 
 	public static WizardPageDescriptor configurationPageForManualClustering(ValidationTestGUIProvider provider) {
 		WizardPageDescriptor cpw = configurationPage(provider, true, provider.getName() + " configuration, using preassigned experiment clusters");
-		cpw.setDescription("Configure the 'Time' attribute name and the 'Event' attribute name for executing " + provider.getName() + ". The algorithm will use the clusters you have defined in the experiment using the 'Configure cluster' operation");
+		cpw.setDescription("Configure the 'Time' attribute and the 'Event' attribute for executing the survival statistic analysis. The survival analysis will firstly cluster the samples using its expression data; So, you have to also configure the number of clusters, the cluster method and the cluster parameters.");
 		return cpw;
 	}
 }

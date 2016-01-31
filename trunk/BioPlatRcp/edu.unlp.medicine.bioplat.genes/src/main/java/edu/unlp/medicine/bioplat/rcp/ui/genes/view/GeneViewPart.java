@@ -15,6 +15,7 @@ import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -113,15 +114,18 @@ public class GeneViewPart extends ViewPart {
 		//c.setLayoutData(GridDataFactory.fillDefaults().grab(true,false).create());
 		//String help = "Help: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
 		//GUIUtils.addWrappedText(parent, help, 10, true);
-		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(10, 0).create());
 		
 //		GridLayout gridLayout = new GridLayout(1,false) ;
 //		gridLayout.marginBottom=20;
 //		gridLayout.marginTop=20;
-
-		Label label = new Label(parent, SWT.WRAP);
+		StyledText label = new StyledText(parent, SWT.WRAP );
+		//Label label = new Label(parent, SWT.WRAP );
+		label.setJustify(true);
+		label.setBackground(parent.getBackground());
 		label.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).indent(10, 20).create());
-		label.setText("This window shows information about the gene you select on any gene table (on your left side). In the first tab you will see general information about the gene; the other tabs shows information provided but other bioinformatic tools about this gene.\n\n");
+		label.setText("This window shows information when you click on a gene in any gene table (on your left side). In the first tab you will see general information about the gene; the other tabs shows information provided but other bioinformatic tools about this gene.");
+		GUIUtils.setFont(label, 9, true);
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();

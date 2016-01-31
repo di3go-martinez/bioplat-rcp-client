@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.exports;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -9,10 +10,12 @@ import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -32,11 +35,16 @@ import edu.unlp.medicine.bioplat.rcp.editor.ModelProvider;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.databinding.validators.RequiredValidator;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.Holder;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.DirectoryText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
+import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.ExportGenesToCSVFileCommand;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
+import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.r4j.constants.OSDependentConstants;
 
@@ -85,14 +93,14 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 
 	private class WizardModel {
 
-		IObservableValue includeClinicalData = new WritableValue(false, Boolean.class);
-		IObservableValue includeExpressionData = new WritableValue(false, Boolean.class);
-		IObservableValue includeHeader = new WritableValue(false, Boolean.class);
-		IObservableValue includeCluster = new WritableValue(false, Boolean.class);
+		final IObservableValue includeClinicalData = new WritableValue(false, Boolean.class);
+		final IObservableValue includeExpressionData = new WritableValue(false, Boolean.class);
+		final IObservableValue includeHeader = new WritableValue(false, Boolean.class);
+		final IObservableValue includeCluster = new WritableValue(false, Boolean.class);
 
-		IObservableValue filename = new WritableValue("experiment", String.class);
-		IObservableValue numericSeparator = new WritableValue(".", String.class);
-		IObservableValue columnSeparator = new WritableValue("\t", String.class);
+		final IObservableValue filename = new WritableValue("experiment", String.class);
+		final IObservableValue numericSeparator = new WritableValue(".", String.class);
+		final IObservableValue columnSeparator = new WritableValue("\t", String.class);
 
 		IObservableValue directory = new WritableValue(null, String.class);
 		{
@@ -110,7 +118,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 		}
 	}
 
-	private WizardModel model = new WizardModel();
+	private final WizardModel model = new WizardModel();
 
 	private WizardModel getModel() {
 		return model;
@@ -131,7 +139,7 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				new Label(c, SWT.NONE).setText("Folder: ");
 				TextWithSelectionButton ft = new DirectoryText(c);
 				dbc.bindValue(SWTObservables.observeText(ft.textControl(), SWT.Modify), getModel().directory);
-				getModel().filename.setValue("");
+				getModel().directory.setValue(System.getProperty("user.dir"));
 
 				new CLabel(c, SWT.BOLD).setText("File name:");
 				Text filenameHolder = new Text(c, SWT.BORDER);
@@ -179,13 +187,47 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 
 	@Override
 	public boolean performFinish() {
-		String absoluteFilename = this.getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + this.getModel().filename.getValue().toString();
-		//TODO: DavidClustering
-		//new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) this.getModel().includeClinicalData.getValue(), (Boolean) this.getModel().includeHeader.getValue(), (Boolean) this.getModel().includeExpressionData.getValue(), (Boolean) this.getModel().includeCluster.getValue(), convertSeparator(this.getModel().numericSeparator.getValue().toString()).charAt(0), convertSeparator(this.getModel().columnSeparator.getValue().toString()), false, false).execute();
-											
 		
-		MessageManager.INSTANCE.add(Message.info("The file " + new File(absoluteFilename).getAbsoluteFile() + " was succesfully exported."));
-		return true;
+		
+		
+		
+		boolean result = true;
+		final String separator = convertSeparator(getModel().columnSeparator.getValue().toString());
+		final String absoluteFilename = getModel().directory.getValue().toString() + OSDependentConstants.FILE_SEPARATOR + getModel().filename.getValue().toString();
+		final boolean includeClinicalData = (Boolean) model.includeClinicalData.getValue();
+		final boolean includeHeader = (Boolean) model.includeHeader.getValue();
+		final boolean includeExpressionData = (Boolean) model.includeExpressionData.getValue();
+		final boolean includeCluster = (Boolean) model.includeCluster.getValue();
+		final char numericSeparator = getModel().numericSeparator.getValue().toString().charAt(0);
+		final String columnSeparator = convertSeparator(getModel().columnSeparator.getValue().toString());
+		
+		final Holder<Message> hm = new Holder<Message>();
+		try {
+			
+			getContainer().run(true, false, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					//doFinish(biomarker, parameters);
+					//new ExportGenesToCSVFileCommand(biomarker, parameters, absoluteFilename, separator).execute();
+					//new ExportExperimentCommand(experiment, absoluteFilename, (Boolean) model.includeClinicalData.getValue(), (Boolean) model.includeHeader.getValue(), (Boolean) model.includeExpressionData.getValue(), (Boolean) getModel().includeCluster.getValue(), getModel().numericSeparator.getValue().toString().charAt(0), convertSeparator(getModel().columnSeparator.getValue().toString()), false, false, null).execute();
+					new ExportExperimentCommand(experiment, absoluteFilename, includeClinicalData, includeHeader, includeExpressionData, includeCluster, numericSeparator, columnSeparator, false, false, null).execute();
+																																																																						
+					
+					hm.hold(Message.info("The experiment was exported succesfully to: " + absoluteFilename));
+					PlatformUIUtils.openInformation("Export Experiment to File", "The experiment information was exported succesfully to: " + absoluteFilename);
+
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			hm.hold(Message.error("There was an error during the export: ", e));
+			PlatformUIUtils.openError("Error", "There was an error during the export");
+			result = false;
+		}
+		MessageManager.INSTANCE.add(hm.value()).openView();
+		return result;
+
+		
 	}
 
 	private String convertSeparator(String separator) {
@@ -202,3 +244,4 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 		
 	}
 }
+

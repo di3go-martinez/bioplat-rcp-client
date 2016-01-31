@@ -217,7 +217,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 					}
 					
 					if (clusteringStrategyStr.equals(ClusterersEnum.KMEANS_WITH_HCLUST.getFriendlyName())) {
-						clusterParameters.setText("Kmeans Hclust parameters");
+						clusterParameters.setText("Kmeans using as centers the hclust media groups");
 						createKmeansHClustParameters(clusterParameters,dbc,wmodel);
 						clusterParameters.setVisible(true);
 					}
@@ -245,9 +245,15 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			
 		
 		//Experiment exp = ((List<Experiment>) wmodel.value(PagesDescriptors.SELECTED)).get(0);
+		final Group survivalGroup = new Group(container, SWT.SHADOW_OUT);
+		survivalGroup.setText("Survival attributes");
+		survivalGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
+		survivalGroup.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 2).margins(10, 8).create());
+		survivalGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
 		
-		new Label(clusterginGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
-		Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(clusterginGroup);
+		new Label(survivalGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
+		Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(survivalGroup);
 		ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
 		//ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
@@ -259,8 +265,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		dbc.bindValue(SWTObservables.observeText(other, SWT.Modify), wmodel.valueHolder(OTHER_ATTRIBUTE_NAME_TO_VALIDATION));
 		logger.trace("Time attribute name created");
 
-		new Label(clusterginGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
-		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(clusterginGroup);
+		new Label(survivalGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
+		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(survivalGroup);
 		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_EVENT, RFS_EVENT, "Evento", OTHER));
 		//ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
