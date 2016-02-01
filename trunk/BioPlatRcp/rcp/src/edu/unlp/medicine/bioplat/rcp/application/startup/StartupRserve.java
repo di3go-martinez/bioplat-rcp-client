@@ -38,24 +38,29 @@ public class StartupRserve implements IStartup {
 				 */
 				
 				//bioplatR4JServer = BioplatR4JServer.getInstance();
-				R4JConnection.getInstance();
-				BioplatR4JServer bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
+				// Se debe mejorar 
+				BioplatR4JServer bioplatR4JServer = null;
+				IStatus validationStatus = ValidationStatus.OK_STATUS;
+				if("true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase())){
+					bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
 				
-				if (bioplatR4JServer.isStarted()){
-					return ValidationStatus.OK_STATUS;
-					/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {
-						String okMessage = "All the R libraries required by Bioplat were succesfully loaded";
-						MessageManager.INSTANCE.add(Message.info(okMessage));
+					if (bioplatR4JServer != null && bioplatR4JServer.isStarted()){
 						return ValidationStatus.OK_STATUS;
+						/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {
+							String okMessage = "All the R libraries required by Bioplat were succesfully loaded";
+							MessageManager.INSTANCE.add(Message.info(okMessage));
+							return ValidationStatus.OK_STATUS;
+						}
+						else return manageRequiredRLibsNotInstalled(bioplatR4JServer.getRequiredRLibrariesNotInstalled());*/
 					}
-					else return manageRequiredRLibsNotInstalled(bioplatR4JServer.getRequiredRLibrariesNotInstalled());*/
+					else{
+						String errorMessage = "The RServer could not be started. You can use Bioplat but you will not be able to execute any of the statistics operations";
+						MessageManager.INSTANCE.add(Message.error(errorMessage));
+						return ValidationStatus.error(errorMessage);
+					}
 				}
-				else{
-					String errorMessage = "The RServer could not be started. You can use Bioplat but you will not be able to execute any of the statistics operations";
-					MessageManager.INSTANCE.add(Message.error(errorMessage));
-					return ValidationStatus.error(errorMessage);
-				}
-				
+				//R4JConnection.getInstance();
+				return validationStatus;
 				
 			}
 
