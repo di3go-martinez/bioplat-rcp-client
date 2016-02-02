@@ -1,9 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
 
-import org.bioplat.r4j.R4JClient.connections.ConnectionProperties;
 import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
-import org.bioplat.r4j.R4JClient.connections.R4JConnection;
 import org.bioplat.r4j.R4JClient.exceptions.R4JServerShutDownException;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,8 +40,7 @@ public class StartupRserve implements IStartup {
 				BioplatR4JServer bioplatR4JServer = null;
 				IStatus validationStatus = ValidationStatus.OK_STATUS;
 				if("true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase())){
-					bioplatR4JServer = BioplatR4JServer.create(ConnectionProperties.NONE);
-				
+					bioplatR4JServer = BioplatR4JServer.create();
 					if (bioplatR4JServer != null && bioplatR4JServer.isStarted()){
 						return ValidationStatus.OK_STATUS;
 						/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {
