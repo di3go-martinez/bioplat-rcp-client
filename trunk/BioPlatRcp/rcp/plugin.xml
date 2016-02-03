@@ -677,7 +677,7 @@
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
             
             id="edu.unlp.medicine.bioplat.rcp.intro"
-            label="Welcome Window"/>
+            label="Welcome"/>
       <introProductBinding
             introId="edu.unlp.medicine.bioplat.rcp.intro"
             productId="edu.medicine.bioplat.rcp.product">

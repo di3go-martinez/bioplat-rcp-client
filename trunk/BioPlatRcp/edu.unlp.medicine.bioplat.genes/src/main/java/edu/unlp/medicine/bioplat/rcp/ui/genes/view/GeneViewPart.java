@@ -124,7 +124,7 @@ public class GeneViewPart extends ViewPart {
 		label.setJustify(true);
 		label.setBackground(parent.getBackground());
 		label.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, false).indent(10, 20).create());
-		label.setText("This window shows information when you click on a gene in any gene table (on your left side). In the first tab you will see general information about the gene; the other tabs shows information provided but other bioinformatic tools about this gene.");
+		label.setText("This window shows information when you click on a gene in any gene table (on your left side). In the first tab you will see general information about the gene; the other tabs shows information provided but other bioinformatic tools about this gene.\nYou can close it and then reopen it using the menu Window/views/Other.../Gene.");
 		GUIUtils.setFont(label, 9, true);
 		
 		IActionBars actionBars = getViewSite().getActionBars();

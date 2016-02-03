@@ -9,7 +9,10 @@ import com.google.common.collect.Lists;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
+import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.domainLogic.framework.exceptions.GeneSignatureNotFoundInPlatformException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.commandsForGettingNewBiomarker.NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase;
 import edu.unlp.medicine.utils.monitor.Monitor;
@@ -56,12 +59,20 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	@Override
 	protected Biomarker backgroundProcess(Monitor monitor) throws Exception {
-		return new NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase(database, geneSignatureNameOrId).execute();
+		try{
+			return new NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase(database, geneSignatureNameOrId).execute();
+		}
+		catch (GeneSignatureNotFoundInPlatformException e){
+			MessageManager.INSTANCE.add(Message.error(e.getMessage()));
+			throw e;
+		}
 	}
 
 	@Override
 	protected void doInUI(Biomarker result) throws Exception {
+		MessageManager.INSTANCE.add(Message.error("The biomarker " + result.getName().substring(8) + "from " + database + " was succesfully copied"));
 		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
+		
 	}
 
 	private String database;

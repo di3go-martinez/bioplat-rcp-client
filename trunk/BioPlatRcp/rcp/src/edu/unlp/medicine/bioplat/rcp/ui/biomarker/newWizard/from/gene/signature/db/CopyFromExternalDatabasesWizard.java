@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
@@ -41,20 +43,21 @@ public class CopyFromExternalDatabasesWizard extends WizardPageDescriptor {
 	static final String DATABASE = "DATABASE";
 	static final String GENE_SIGNATURE_OR_ID = "GENE_SIGNATURE_OR_ID";
 
+
 	
 	
 	
 	@Override
 	public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 		wizardPage.setTitle("Which gene Signature to copy?");
-		wizardPage.setDescription("It creates your own copy of Bioplat geneSignature, containing all the information of the original gene Signature. You can use % as wildcard if you dont know the complete name.");
+		wizardPage.setDescription("It creates a new Bioplat geneSignature as copy of an existing gene signature published in a secondary database: geneSigDB or MolSigDB. You can use % as wildcard if you dont know the complete gene signature name.");
 
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 
 
 		Composite group = new Group(parent, SWT.NONE);
 		group.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20,20).spacing(7, 20).create());
-
+		
 		ComboViewer cv = Utils.newComboViewer(group, "Database:", Arrays.asList(Constants.GENE_SIG_DB, Constants.MOL_SIG_DB));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(DATABASE));
 		cv.setSelection(new StructuredSelection(Constants.GENE_SIG_DB));
@@ -70,6 +73,8 @@ public class CopyFromExternalDatabasesWizard extends WizardPageDescriptor {
 		return group;
 	}
 
+	
+	
 	CopyFromExternalDatabasesWizard addParameters(WizardModel wmodel) {
 
 		wmodel.add(DATABASE);

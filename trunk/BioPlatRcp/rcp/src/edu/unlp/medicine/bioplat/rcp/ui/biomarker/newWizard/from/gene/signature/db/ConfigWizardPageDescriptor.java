@@ -12,12 +12,14 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.databinding.UpdateStrategies;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.wizards.Utils;
 import edu.unlp.medicine.domainLogic.framework.constants.Constants;
@@ -49,6 +51,8 @@ public class ConfigWizardPageDescriptor extends WizardPageDescriptor {
 		Composite container = new Composite(parent, SWT.BORDER);
 		container.setLayout(GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(2).create());
 
+	
+		
 		ComboViewer cv = Utils.newComboViewer(container, "Database:", Arrays.asList(Constants.GENE_SIG_DB, Constants.MOL_SIG_DB));
 		dbc.bindValue(ViewersObservables.observeSingleSelection(cv), wmodel.valueHolder(DATABASE));
 		cv.setSelection(new StructuredSelection(Constants.GENE_SIG_DB));
