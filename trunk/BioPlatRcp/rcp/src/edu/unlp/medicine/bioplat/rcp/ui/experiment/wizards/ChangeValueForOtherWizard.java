@@ -60,8 +60,16 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 		wm.add("newValue", new WritableValue("", String.class));
 		return wm;
 
-	}
+	}	
 
+	@Override
+		public boolean canFinish() {
+		
+		
+		return (!((String)wizardModel().valueHolder("oldValue").getValue()).equals("")) && !((String)wizardModel().valueHolder("newValue").getValue()).equals("");
+		
+		}
+	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
@@ -87,26 +95,31 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 				choice = new Button[2];
 
 				clinicalDataEnabled = experiment.getClinicalAttributeNames().size() > 0;
-				
+
 				choice[0] = new Button(c, SWT.RADIO);
 				choice[0].setSelection(true);
-				choice[0].setText("Replace expression data");
+				choice[0].setText("Replace clinical data");
 				choice[0].addSelectionListener(generateSelectionListener());
+				choice[0].setEnabled(clinicalDataEnabled);
+
 				
 				choice[1] = new Button(c, SWT.RADIO);
-//				choice[1].setSelection(false);
-				choice[1].setText("Replace clinical data");
+				//choice[1].setSelection(true);
+				choice[1].setText("Replace expression data");
 				choice[1].addSelectionListener(generateSelectionListener());
-				choice[1].setEnabled(clinicalDataEnabled);
+				
 				
 				
 				new CLabel(c, SWT.BOLD).setText("Select the attribute to replace: ");
 				combo = new Combo(c, SWT.READ_ONLY);
 				combo.setItems(experiment.getClinicalAttributeNames().toArray(new String[0]));
-				combo.setEnabled(false);
+				combo.setEnabled(true);
+				if (combo.getItemCount()>0) combo.select(0);
+				
 				combo.addSelectionListener(new SelectionAdapter() {
 					 public void widgetSelected(SelectionEvent e) {
 						 clinicalAttribute = combo.getText();
+						 
 					 }
 				});
 				
@@ -118,6 +131,8 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 		return result;
 	}
 
+	
+	
 	@Override
 	protected String getTaskName() {
 		return "Change a value for another in expression data...";
@@ -125,7 +140,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
-
+		
 		long totalvaluesChanged = 0L;
 		if (isClinicalData){
 			try {
@@ -157,6 +172,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 			}
 		}
 		PlatformUIUtils.openInformation("Finished replacing values", totalvaluesChanged+" values changed. Old value: "+oldValue+". New value: "+newValue);
+		
 		return null;
 	}
 

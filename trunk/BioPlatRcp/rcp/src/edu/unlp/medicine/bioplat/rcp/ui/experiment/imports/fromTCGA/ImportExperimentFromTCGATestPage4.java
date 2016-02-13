@@ -8,6 +8,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -30,6 +31,7 @@ import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.biomarker.EditedBiomarker;
 import edu.unlp.medicine.entity.biomarker.GeneSignature;
+import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 import edu.unlp.medicine.entity.gene.Gene;
 
 public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
@@ -41,10 +43,19 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	private Group openedBiomarker;
 	private Button allGenes;
 	private WizardModel wizardModel;
+	List<Biomarker> openedBiomarkers;
 	public ImportExperimentFromTCGATestPage4(WizardModel wizardModel) {
 		super("Select genes (step 3 of 4)");
+		openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
 	}
 	
+	@Override
+	public boolean isPageComplete(WizardModel model) {
+		boolean biomSelected = (tr!=null) && (tr.selectedElements().size()>0);
+		if ((!biomSelected) && (text.getText().equals(""))) return false;
+		else return true;
+	}
+
 	
 
 	@Override
@@ -59,6 +70,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 		
 		createLocalBiomarkersSelector(wizardPage, container, gdf, dbc, wmodel);
 		createGSTextArea(wmodel,container,wizardPage);
+		wmodel.set(SELECTED_GENES, new ArrayList<String>() );
 //		createChooseAllGenesArea(wmodel, container, wizardPage);
 		return container;
 	}
@@ -80,7 +92,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	}
 	
 	private void createLocalBiomarkersSelector(final WizardPage wp, Composite container,GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
-		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		
 		
 		GUIUtils.addWrappedText(container, "\n...You can filter the experiment picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the experiment\n", 9, false);
 		
