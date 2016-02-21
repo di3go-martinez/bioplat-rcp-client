@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.ValidationConfigPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchPage1Introduction;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
@@ -63,8 +64,22 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 	}
 
 	@Override
+	public int getWizardWidth() {
+
+		return 700;
+	}
+
+	@Override
+	public int getWizardHeight() {
+
+		return 600;
+	}
+
+	
+	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		final ArrayList<WizardPageDescriptor> pages = Lists.newArrayList();
+		pages.add(new PSOPage1Introduction());
 		pages.add(new GeneralPSOConfigurarion());
 		pages.add(new ValidationConfigPageDescriptor(biomarker, "Training", "It is required. This is the experiment used for calculate metrics and compare Gene Sigantures", TRAINING_VALIDATION_CONFIG, Activator.imageDescriptorFromPlugin("experiment-training.png").createImage()).disableClusterRange().setImageDescriptor(Activator.imageDescriptorFromPlugin("pso.png")));
 		pages.add(new ValidationConfigPageDescriptor(biomarker, "Testing", "If you set this dataset, it will be used for ordering the result. YOu should take the first one as the result of the algorithm.", TESTING_VALIDATION_CONFIG, Activator.imageDescriptorFromPlugin("experiment-testing.png").createImage()).optional().setImageDescriptor(Activator.imageDescriptorFromPlugin("pso.png")));

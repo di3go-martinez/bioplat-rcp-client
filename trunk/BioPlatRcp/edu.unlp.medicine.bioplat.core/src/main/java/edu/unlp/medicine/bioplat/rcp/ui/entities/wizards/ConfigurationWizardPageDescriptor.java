@@ -473,16 +473,24 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		if(this.forManualClustering){
 			try{
 				ClusteringResult cr = (ClusteringResult) wmodel.value(PagesDescriptors.MANUAL_CLUSTERING);
-				isComplete = cr.hasGotEnoughClustersForValidation();
+				isComplete = cr.hasGotEnoughClustersForValidation() && checkIfCombosAreSelected();
 			}catch(Exception e){
 				isComplete = false;
 			}
 		}else{
-			isComplete = super.isPageComplete(wmodel); 
+			isComplete = checkIfCombosAreSelected();
+			
+			//isComplete = super.isPageComplete(wmodel); 
 		}
 		return isComplete;
 	}
 	
+	private boolean checkIfCombosAreSelected() {
+		return wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION) != null &&
+				wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION) != null;
+		
+	}
+
 	@Override
 	public void doOnEnter() {
 		List<Experiment> experiments = wmodel.value(PagesDescriptors.SELECTED);
@@ -533,10 +541,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		logger.trace("Status attribute name created");
 		
 		container.redraw();
-		container.pack(true);
-		
-		
-		
+		container.pack(false);
 	}
 	
 }

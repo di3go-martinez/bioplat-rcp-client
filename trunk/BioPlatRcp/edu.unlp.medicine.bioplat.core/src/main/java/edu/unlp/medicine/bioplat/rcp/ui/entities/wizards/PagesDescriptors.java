@@ -92,7 +92,7 @@ public class PagesDescriptors {
 
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
-
+				
 				wp.setDescription("The expression and survival data of the experiments you select on this page, will be used for doing survival statistic analysis of your gene signature. ");
 
 				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
@@ -108,9 +108,6 @@ public class PagesDescriptors {
 				
 				String help = "Help: The experiments in the list are tohse imported to Bioplat. If you have a file with the expression and clinical data or you have a .CEL file you can easily import them using the start menu. You can also use public data importing experiments from CBioportal. \n\n";
 				GUIUtils.addWrappedText(c, help, 9, true);
-
-				
-				
 				
 				final TableReference tr = TableBuilder.create(container).input(editors).hideTableLines()//
 						.addColumn(ColumnBuilder.create().title("Experiments in your Bioplat Desktop").width(500).property("name"))//
@@ -131,13 +128,16 @@ public class PagesDescriptors {
 					public void selectionChanged(SelectionChangedEvent event) {
 						wmodel.set(SELECTED, tr.selectedElements());
 						wp.setPageComplete(isPageComplete(wmodel));
+						wp.isPageComplete();
 					}
 				});
-
+				
 				GridLayoutFactory.fillDefaults().margins(10, 10).applyTo(container);
+				
 				return container;
 			}
-
+			
+			
 			@Override
 			public boolean isPageComplete(WizardModel model) {
 				if (model == null)
@@ -147,6 +147,9 @@ public class PagesDescriptors {
 					return false;
 				return !l.isEmpty();
 			}
+			
+			
+			
 		};
 	}
 
@@ -165,4 +168,9 @@ public class PagesDescriptors {
 		cpw.setDescription("Configure the 'Time' attribute and the 'Event' attribute for executing the survival statistic analysis. The survival analysis will firstly cluster the samples using its expression data; So, you have to also configure the number of clusters, the cluster method and the cluster parameters.");
 		return cpw;
 	}
+	
+	
+
+	
+	
 }

@@ -1,4 +1,4 @@
-package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch;
+package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.DisposeEvent;
@@ -30,12 +30,12 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
  * @author diego martínez
  * 
  */
-public class BlindSearchPage1Introduction extends WizardPageDescriptor {
+public class PSOPage1Introduction extends WizardPageDescriptor {
 
-	private static Logger logger = LoggerFactory.getLogger(BlindSearchPage1Introduction.class);
+	private static Logger logger = LoggerFactory.getLogger(PSOPage1Introduction.class);
 	
-	public BlindSearchPage1Introduction() {
-		super("Look the best Gene Siganture using Blind Search");
+	public PSOPage1Introduction() {
+		super("Look the best Gene Siganture using PSO");
 	}
 
 	
@@ -43,7 +43,7 @@ public class BlindSearchPage1Introduction extends WizardPageDescriptor {
 	public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 		
 		wp.setDescription("Do you have a Gene Signature but you are not sure whether each gene provides information for prognostic? Here you are an optimizer.");
-		wp.setImageDescriptor(Activator.imageDescriptorFromPlugin("blindSearch-page.png"));
+		wp.setImageDescriptor(Activator.imageDescriptorFromPlugin("pso.png"));
 		Composite container = Widgets.createDefaultContainer(parent, 1);
 
 		createFiltersGroup(container, wp, parent, dbc, wmodel);
@@ -76,7 +76,7 @@ public class BlindSearchPage1Introduction extends WizardPageDescriptor {
 		introdudctionLabel.setFont( new Font(filterGroup.getDisplay(),fD[0]));
 		
 		
-		introdudctionLabel.setText("Many times you have a Gene Signature in hands, but you are not sure whether every proposed gene is useful for progonostic/prediction. This algorithm will look for the Gene Signature which maximizes the value for measuring prognostic/predictive value for a given Gene Signature in the whole space solution. Each element of this solution space is a different Gene Signature. \n\nWhich Gene Signatures are part of this solution space for a given GeneSignature GS1? Any Gene Signature as a result of removing a gene subset of GS1. For example, if you have the GeneSignature with genes AURKA, BCL2, BRG3 the solution space will have 6 different elements (Gene Signature): \n\tGene signature containing AURKA, BCL2 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing only AURKA \n\tGene signature containing only BRG3 \n\tGene signature containing only BCL2 \n\nThe metric for comparing the prognostic/prediction value of two gene signatures is concordance.index that is the probability that, for a pair of randomly chosen comparable samples, the sample with the higher risk prediction will experience an event before the other sample or belongs to a higher binary class. \nConcordance.index references: Harrel Jr, F. E. and Lee, K. L. and Mark, D. B. (1996) \"Tutorial in biostatistics: multivariable prognostic models: issues in developing models, evaluating assumptions and adequacy, and measuring and reducing error\", Statistics in Medicine, 15, pages 361–387. Pencina, M. J. and D’Agostino, R. B. (2004) \"Overall C as a measure of discrimination in survival analysis: model specific population value and confidence interval estimation\", Statistics in Medicine, 23, pages 2109–2123, 2004 ");
+		introdudctionLabel.setText("Many times you have a Gene Signature in hands, but you are not sure whether every proposed gene is useful for progonostic/prediction. This metaheuristic will look for the Gene Signature which maximizes the value for measuring prognostic/predictive value for a given Gene Signature in the whole space solution. Each element of this solution space is a different Gene Signature. The difference with blind search is that this metaheuristic reduces the space solution \n\nWhich Gene Signatures are part of this solution space for a given GeneSignature GS1? Any Gene Signature as a result of removing a gene subset of GS1. For example, if you have the GeneSignature with genes AURKA, BCL2, BRG3 the solution space will have 6 different elements (Gene Signature): \n\tGene signature containing AURKA, BCL2 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing AURKA BRG3 \n\tGene signature containing only AURKA \n\tGene signature containing only BRG3 \n\tGene signature containing only BCL2 \n\nThe metric for comparing the prognostic/prediction value of two gene signatures is concordance.index that is the probability that, for a pair of randomly chosen comparable samples, the sample with the higher risk prediction will experience an event before the other sample or belongs to a higher binary class. \nConcordance.index references: Harrel Jr, F. E. and Lee, K. L. and Mark, D. B. (1996) \"Tutorial in biostatistics: multivariable prognostic models: issues in developing models, evaluating assumptions and adequacy, and measuring and reducing error\", Statistics in Medicine, 15, pages 361–387. Pencina, M. J. and D’Agostino, R. B. (2004) \"Overall C as a measure of discrimination in survival analysis: model specific population value and confidence interval estimation\", Statistics in Medicine, 23, pages 2109–2123, 2004 ");
 		
 
 	}
