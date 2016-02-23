@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports;
 import java.io.File;
 import java.util.List;
 
+import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -123,7 +124,15 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 				fD[0].setStyle(SWT.ITALIC);
 				introdudctionLabel.setFont( new Font(group.getDisplay(),fD[0]));
 				
-
+				if(!R4JConfigurator.getInstance().isRLocal()){
+					this.setManualFlip(true);
+					this.setAllowFlip(false);
+					this.setAllowFinish(false);
+					wizardPage.setErrorMessage("Can not execute this kind of experiment on remote R server. Please switch to local R server.");
+				}
+				
+				
+				
 				return group;
 			}
 		};

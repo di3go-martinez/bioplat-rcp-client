@@ -129,6 +129,9 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean canFlipToNextPage() {
+					if(pageDescriptor.isManualFlip()){
+						return pageDescriptor.isAllowFlip();
+					}
 					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null) && pageDescriptor.allowContinueWizardSetup();
 				}
 				
@@ -144,6 +147,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 						pageDescriptor.doOnExit();
 					}
 				}
+				
+				
+				
+				
 				
 				// @Override
 				// public Shell getShell() {
@@ -269,15 +276,31 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	@Override
 	public boolean canFinish() {
+		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
+		if( wpd.isManualFlip()){
+			return wpd.isAllowFinish();
+		}
+		
 		for (IWizardPage page : getPages())
 			if (page.getErrorMessage() != null)
 				return false;
 
-		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
 		// TODO acomodar por si la páginas de resultados deciden si parar el
 		// curso del wizard
 		boolean resultPage = wpd == null;
 		return (!resultPage && !wpd.allowContinueWizardSetup()) || super.canFinish();
+	}
+	
+	
+	
+	
+	
+
+	@Override
+	public boolean performCancel() {
+		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
+		return wpd.performCancel(model);
+		
 	}
 
 	/**

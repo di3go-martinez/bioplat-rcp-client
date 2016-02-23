@@ -120,15 +120,19 @@ public class PagesDescriptors {
 				//String help = "Help: Remember you have to import to Bioplat an experiment for using it for doing statistis analysis. You can use many of the available options for importing experiments. For acccess them go to start menu and then press GeneSingature/Experiments.\n\n";
 				//GUIUtils.addWrappedText(parent, help, 8, true);
 				
-
 				
+				
+				setManualFlip(true);
+			
 				tr.addSelectionChangeListener(new ISelectionChangedListener() {
 
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
 						wmodel.set(SELECTED, tr.selectedElements());
-						wp.setPageComplete(isPageComplete(wmodel));
-						wp.isPageComplete();
+						setAllowFinish(false);
+						setAllowFlip(isPageComplete(wmodel)); 
+						wp.setPageComplete(true);
+						
 					}
 				});
 				
@@ -147,9 +151,19 @@ public class PagesDescriptors {
 					return false;
 				return !l.isEmpty();
 			}
+
+
+			@Override
+			public boolean performCancel(WizardModel model) {
+				model.set(SELECTED, null);
+				setAllowFlip(isPageComplete(model)); 
+				return super.performCancel(model);
+			}
 			
 			
 			
+			
+
 		};
 	}
 

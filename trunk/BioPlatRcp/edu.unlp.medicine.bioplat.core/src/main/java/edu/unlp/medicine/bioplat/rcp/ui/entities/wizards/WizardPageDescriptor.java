@@ -27,6 +27,14 @@ public abstract class WizardPageDescriptor {
 	private String title;
 	private ImageDescriptor imageDescriptor;
 	private String description;
+	
+	
+	//FIXME: david - mejorar esto para que sea mas transparente el pasar de pagina.
+	private boolean manualFlip;
+	private boolean allowFlip;
+	private boolean allowFinish;
+	//
+	
 
 	public WizardPageDescriptor(String name, String title, ImageDescriptor imageDescriptor) {
 		this.name = name;
@@ -163,9 +171,35 @@ public abstract class WizardPageDescriptor {
 	 * Este metodo se llamará UNICAMENTE al pasar a otra pagina, ya sea la proxima, o la anterior, 
 	 * pero no al cancelar
 	 */
-	public void doOnExit(){};
-	
+	public void doOnExit(){}
 
+	public boolean isManualFlip() {
+		return manualFlip;
+	}
+
+	public void setManualFlip(boolean manualFlip) {
+		this.manualFlip = manualFlip;
+	};
+	
+	public boolean isAllowFlip() {
+		return allowFlip;
+	}
+
+	public void setAllowFlip(boolean manualFlip) {
+		this.allowFlip = manualFlip;
+	}
+
+	public boolean isAllowFinish() {
+		return allowFinish;
+	}
+
+	public void setAllowFinish(boolean allowFinish) {
+		this.allowFinish = allowFinish;
+	}
+
+	public boolean performCancel(WizardModel wModel) {
+		return true;
+	};
 	
 	
 }

@@ -96,9 +96,9 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			
 			createGroup4CLusteringInfo(container, gdf, dbc, wmodel, wp);
 			//createGroup4AdditionalParameters(container, gdf, dbc, wmodel);
-
-			container.redraw();
-			container.pack(true);
+			
+			container.layout(true);
+			
 			return container;
 		} catch (Exception e) {
 			logger.error("Error creating Configuration Page", e);
@@ -509,8 +509,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		survivalGroup = new Group(container, SWT.SHADOW_OUT);
 		survivalGroup.setText("Survival attributes");
 		survivalGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
-		survivalGroup.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 2).margins(10, 8).create());
-		survivalGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		survivalGroup.setLayout(GridLayoutFactory.fillDefaults().margins(10, 8).create());
+		survivalGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 		
 		new Label(survivalGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
@@ -519,7 +519,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(survivalAttr.toArray()));
 		//ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
-		validationAttrName.getCombo().setLayoutData(gdf.create());
+		validationAttrName.getCombo().setLayoutData(gdf.grab(false, true).create());
 		//validationAttrName.setSelection(new StructuredSelection(OS_MONTHS));
 		/*Text other = new Text(groupForValidationAtt1, SWT.BORDER);
 		GridData gd = gdf.grab(true, false).create();
@@ -532,7 +532,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(survivalAttr.toArray()));
 		//ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
-		validationAttrName2.getCombo().setLayoutData(gdf.create());
+		validationAttrName2.getCombo().setLayoutData(gdf.grab(false, true).create());
 		//validationAttrName2.setSelection(new StructuredSelection(OS_EVENT));
 		/*Text other2 = new Text(groupForValidationAtt2, SWT.BORDER);
 		GridData gd2 = gdf.grab(true, false).create();
@@ -540,8 +540,9 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		dbc.bindValue(SWTObservables.observeText(other2, SWT.Modify), wmodel.valueHolder(OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION));*/
 		logger.trace("Status attribute name created");
 		
-		container.redraw();
-		container.pack(false);
+		container.layout(true, true);
+
+		
 	}
 	
 }
