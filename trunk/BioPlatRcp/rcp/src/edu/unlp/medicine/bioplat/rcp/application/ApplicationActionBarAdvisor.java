@@ -32,6 +32,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IContributionItem showViewMenuAction;
 	private IAction newWizard;
 	private IAction about;
+	private IAction checkConnection;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -55,6 +56,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		showViewMenuAction = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 
+		checkConnection = new CheckConnectionAction();
+		checkConnection.setText("Check Remote Server Connection");
+		checkConnection.setImageDescriptor(Activator.imageDescriptorFromPlugin("connection_x16.png"));
+		
 		about = new AboutAction();
 	}
 
@@ -76,11 +81,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		fileMenu.add(newWizard);
 
+//		fileMenu.add(checkConnection);
+		
 		// fileMenu.add(saveAction);
 		fileMenu.add(new Separator());
 		// fileMenu.add(importAction);
 		// fileMenu.add(exportAction);
-		fileMenu.add(new Separator());
+//		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 
 		MenuManager windowMenu = new MenuManager("&Window", "ventana.menu");
@@ -101,6 +108,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// top level additions
 		menuBar.add(fileMenu);
 
+		MenuManager connections = new MenuManager("&Check Connections", "ventana.menuConeccion");
+		connections.add(checkConnection);
+		
+		// Used to check connection between the client and the remote server
+		menuBar.add(connections);
+		
 		// utilizado por el contributerClass de los editores; "Operations Menu"
 		menuBar.add(new GroupMarker("entidad.additions"));
 		// MenuManager mm = new MenuManager("ABM");
@@ -115,6 +128,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		ToolBarManager tbm = new ToolBarManager(SWT.FLAT);
 		tbm.add(newWizard);
+//		tbm.add(checkConnection);
 		tbm.add(new GroupMarker("agroup"));
 		tbm.add(new Separator(MB_ADDITIONS));
 		coolBar.add(tbm);

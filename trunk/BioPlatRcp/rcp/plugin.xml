@@ -59,6 +59,9 @@
       <startup
             class="edu.unlp.medicine.bioplat.rcp.application.startup.StartupRserve">
       </startup>
+      <startup 
+      		class="edu.unlp.medicine.bioplat.rcp.application.startup.CheckConnectionToRemoteRServer">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -346,12 +349,12 @@
             id="edu.medicine.bioplat.rcp.preferences.bioInformaticTools.genes."
             name="External Urls">
       </page>
-      <page
+      <!--<page
             category="edu.unlp.medicine.bioplat.rcp.preferences.proxy.settings"
             class="edu.unlp.medicine.bioplat.rcp.preferences.proxy.ProxySettingsPreferencePage"
             id="edu.medicine.bioplat.rcp.proxy.settings"
             name="Proxy Settings">
-      </page>
+      </page>-->
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
