@@ -7,6 +7,7 @@ public class CopyFromExternalDatabaseIntroAction extends IntroAction {
 	@Override
 	protected boolean run0() {
 		return open(new FromImportedGeneSignatureWizard());
+		
 	}
 
 }

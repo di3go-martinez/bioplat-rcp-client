@@ -38,7 +38,7 @@ public class FromTabletMenuItemDescriptorProvider implements CopyTextMenuItemPro
 	public List<?> elements() {
 		if (all)
 			return tableRp.tableReference().elements();
-
+		
 		List<?> tableItems = tableRp.tableReference().selectedElements();
 		if (tableItems.isEmpty())
 			tableItems = tableRp.tableReference().focusedElements();

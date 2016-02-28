@@ -54,7 +54,7 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	@Override
 	protected String getTaskName() {
-		return "Copy of " + geneSignatureNameOrId + " from  "+ database + " ";
+		return "New Bioplat GeneSignature as a copy of " + geneSignatureNameOrId + " from  "+ database + " ";
 	}
 
 	@Override
@@ -63,18 +63,20 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 			return new NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase(database, geneSignatureNameOrId).execute();
 		}
 		catch (GeneSignatureNotFoundInPlatformException e){
-			MessageManager.INSTANCE.add(Message.error(e.getMessage()));
+			//MessageManager.INSTANCE.add(Message.error(e.getMessage()));
 			throw e;
 		}
 	}
 
 	@Override
 	protected void doInUI(Biomarker result) throws Exception {
-		MessageManager.INSTANCE.add(Message.error("The biomarker " + result.getName().substring(8) + "from " + database + " was succesfully copied"));
+		//MessageManager.INSTANCE.add(Message.info("The biomarker " + result.getName().substring(8) + "from " + database + " was succesfully copied"));
 		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
 		
 	}
 
+	
+	
 	private String database;
 	private String geneSignatureNameOrId;
 

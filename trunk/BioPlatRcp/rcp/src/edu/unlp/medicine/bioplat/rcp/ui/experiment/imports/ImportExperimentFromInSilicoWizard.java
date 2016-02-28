@@ -210,7 +210,12 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 								PlatformUIUtils.openEditor(e, ExperimentEditor.id());
 							}
 						});
-					} catch (Exception e) {
+					}catch (Exception e) {
+						if (e.getCause()  instanceof ExperimentBuildingException) {
+							String error = ((ExperimentBuildingException)e.getCause()).getShortMessage();
+							MessageManager.INSTANCE.add(Message.error(error));
+							return ValidationStatus.error(error.substring(error.indexOf("Possible")));
+						}
 						final String msg = "The experiment could not be imported from inSilicoDB.";
 						MessageManager.INSTANCE.add(Message.error(msg, e));
 						return ValidationStatus.error(msg, e);

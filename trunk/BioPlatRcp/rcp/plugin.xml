@@ -230,7 +230,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateEmptyBiomarkerWizard"
         icon="intro/contents/images/emptyBiomarker.jpg"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create empty gene signature">
+        name="Create a gene signature">
        <description>Create an empty gene signature</description>
 	</wizard>
   <wizard

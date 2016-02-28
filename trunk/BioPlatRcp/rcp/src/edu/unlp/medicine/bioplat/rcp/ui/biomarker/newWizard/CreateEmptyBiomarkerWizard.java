@@ -133,11 +133,11 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 
 	@Override
 	protected String getTaskName() {
-		return "Creation of " + name + "(new empty gene signature) ";
+		return "Creation of " + name + "(new gene signature. You can now, add genes using the + button.) ";
 	}
 
 	public CreateEmptyBiomarkerWizard(){
-		this.setWindowTitle("Create empty BioPlat gene signature");	
+		this.setWindowTitle("Create BioPlat gene signature");	
 	}
 	
 	
