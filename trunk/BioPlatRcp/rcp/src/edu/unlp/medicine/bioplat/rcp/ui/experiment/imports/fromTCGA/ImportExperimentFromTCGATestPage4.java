@@ -155,7 +155,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	
 	private String getGenesAsVector(List selectedBiomarkers){
 		StringBuilder genes = new StringBuilder();
-		for (EditedBiomarker eb : (List<EditedBiomarker>) selectedBiomarkers){
+		for (Biomarker eb : (List<Biomarker>) selectedBiomarkers){
 			genes.append(eb.getGenesAsList());
 		}
 		return genes.toString();
