@@ -200,9 +200,12 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 			return false;
 		}
 		
-		List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+		if(model.value(ATTRIBUTES) == null){
+			List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+			model.set(ATTRIBUTES, atributos.toArray(new String[0]));	
+		}
 		
-		model.set(ATTRIBUTES, atributos.toArray(new String[0]));
+		
 		return true;
 	}
 	
