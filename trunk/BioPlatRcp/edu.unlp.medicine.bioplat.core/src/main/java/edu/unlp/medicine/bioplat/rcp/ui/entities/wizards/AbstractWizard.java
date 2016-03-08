@@ -277,6 +277,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	@Override
 	public boolean canFinish() {
 		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
+		
+		if (wpd == null){
+			return true;
+		}
+		
 		if( wpd.isManualFlip()){
 			return wpd.isAllowFinish();
 		}
