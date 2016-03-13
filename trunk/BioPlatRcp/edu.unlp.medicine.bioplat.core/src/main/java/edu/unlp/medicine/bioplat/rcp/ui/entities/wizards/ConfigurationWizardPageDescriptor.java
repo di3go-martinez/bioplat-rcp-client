@@ -13,6 +13,7 @@ import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -516,7 +517,11 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		new Label(survivalGroup, SWT.NONE).setText("\n\"Time\" Attribute Name");
 		Composite groupForValidationAtt1 = getGroupFoRClusteringAttribute(survivalGroup);
 		//ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(OS_MONTHS, RFS_MONTHS, "recurrence", "timeUntilEventOccured", OTHER));
-		validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(survivalAttr.toArray()));
+		
+		List survivalAttrList = new ArrayList(survivalAttr);
+		Collections.sort(survivalAttrList);
+
+		validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", survivalAttrList);
 		//ComboViewer validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName.getCombo().setLayoutData(gdf.grab(true, true).create());
@@ -529,7 +534,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 		new Label(survivalGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
 		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(survivalGroup);
-		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", Arrays.asList(survivalAttr.toArray()));
+		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", survivalAttrList);
 		//ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab.", exp.getClinicalAttributeNames());
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName2.getCombo().setLayoutData(gdf.grab(true, true).create());

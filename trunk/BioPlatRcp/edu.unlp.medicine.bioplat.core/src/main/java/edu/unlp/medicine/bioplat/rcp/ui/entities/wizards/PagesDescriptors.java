@@ -88,7 +88,7 @@ public class PagesDescriptors {
 	 */
 	// TODO agregar desde distintas fuentes, inSilico e archivo
 	public static WizardPageDescriptor experimentsWPD(ValidationTestGUIProvider validationTestGUIProvider) {
-		return new WizardPageDescriptor("Select the experiment(s) you will use for doing stati	stic analysis of your gene signature") {
+		return new WizardPageDescriptor("Select the experiment(s) you will use for doing statistic analysis of your gene signature") {
 
 			@Override
 			public Composite create(final WizardPage wp, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
@@ -128,7 +128,7 @@ public class PagesDescriptors {
 
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
-						wmodel.set(SELECTED, tr.selectedElements());
+ 						wmodel.set(SELECTED, tr.selectedElements());
 						setAllowFinish(false);
 						setAllowFlip(isPageComplete(wmodel)); 
 						wp.setPageComplete(true);

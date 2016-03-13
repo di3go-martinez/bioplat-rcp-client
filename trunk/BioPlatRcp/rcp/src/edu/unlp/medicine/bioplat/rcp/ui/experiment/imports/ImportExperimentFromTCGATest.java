@@ -78,7 +78,7 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 
 	@Override
 	protected String getTaskName() {
-		return "Import experiment from TCGA test";
+		return "Import experiment from TCGA";
 	}
 
 	@Override

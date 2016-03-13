@@ -104,7 +104,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		Composite subcontainer = Widgets.createDefaultContainer(container);
 		subcontainer.setLayoutData(GridDataFactory.fillDefaults().span(4, 1).grab(true, true).create());
 		createTable(subcontainer);
-
+		
 	}
 
 	private void createTable(Composite parent) {
@@ -116,11 +116,16 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		// .input(model().getGenes());
 		
 		//tb.contextualMenuBuilder(MenuBuilder.create)
+		tb.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")).addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name", false), //
+				new ShowHideColumnMenuItemDescriptor(this, "Gene Alternative IDs (e.g EnsemblID)", "alternativeIds"), //
+				new ShowHideColumnMenuItemDescriptor(this, "Gene Description", "description"),//
+				new ShowHideColumnMenuItemDescriptor(this, "Gene Chromosome Location", "chromosomeLocation")))
+
 		
-		tb.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").title("Gene EntrezID")//
-				.addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Gene alternative IDs (e.g EnsemblID)", "alternativeIds")))//
-				.addColumn(ColumnBuilder.create().property("alternativeIds").title("Gene alternative IDs (e.g EnsemblID)").width(350).hidden().resizable(false).fixed())//
-				.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")))//
+				
+		.addColumn(ColumnBuilder.create().rightAligned().property("entrezId").centered().title("Gene EntrezID"))
+		.addColumn(ColumnBuilder.create().property("alternativeIds").title("Gene alternative IDs (e.g EnsemblID)").width(350).hidden().resizable(false).fixed())//
+				//.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")))//
 				.addColumn(ColumnBuilder.create().property("description").title("Gene Description").width(800));
 
 		
@@ -134,8 +139,8 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 	}
 
 	protected CopyColumnTextMenuItemDescriptor createCopyColumn(boolean all) {
-		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes (EntrezID)";
-		return new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, name, OgnlAccesor.createFor("entrezId")).includeAll(all)) {
+		final String name = "Copy " + ((all) ? "All" : "Selected") + " Genes (Gene Symbol)";
+		return new CopyColumnTextMenuItemDescriptor(new FromTabletMenuItemDescriptorProvider(this, name, OgnlAccesor.createFor("name")).includeAll(all)) {
 			// FIXME si se usa el default (\n) no copia bien los genes
 			// en la acción de agregado de genes: ver por qué y/o
 			// dejarlo así

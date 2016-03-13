@@ -52,6 +52,29 @@ public class GUIUtils {
 		return label;
 	}
 
+	
+	public static Label addBoldText(Composite container, String text, int size){
+		Label label = new Label(container, SWT.WRAP);
+		
+		GridData gridData = new GridData( GridData.GRAB_HORIZONTAL ) ;
+		gridData.grabExcessHorizontalSpace = true ;
+		gridData.horizontalAlignment = SWT.FILL;
+		gridData.verticalAlignment=SWT.FILL;
+		gridData.widthHint = 200;
+		gridData.horizontalSpan = 2;
+		//gridData.verticalSpan = 2;
+		label.setLayoutData( gridData ) ;
+		
+		FontData[] fD = label.getFont().getFontData();
+		fD[0].setHeight(size);
+		fD[0].setStyle(SWT.BOLD);
+		label.setFont( new Font(container.getDisplay(),fD[0]));
+		label.setText(text);
+		
+		return label;
+	}
+
+	
 	public static Font getFontForGrouptTitle(Composite container) {
 		Label label = new Label(container, SWT.WRAP);
 

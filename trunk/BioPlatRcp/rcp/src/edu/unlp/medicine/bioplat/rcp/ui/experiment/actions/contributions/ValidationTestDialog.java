@@ -76,22 +76,27 @@ public class ValidationTestDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		this.setTitle("Survival Statistic Analysis");
-		//setMessage("Add all the experiments you would like to use for validating statistically the prognstic value your gen signature has got over these data. You can add more than once the same experiment for considering different statistics configurations. Eaxh configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
 		setMessage("Add all the experiments you would like to use for validating statistically, the prognostic value that your gen signature has got over these data. You can... add more than once the same experiment for evaluating different statistics configurations. Each configuration will be a row in the table. For each configuration the statistically process will be the same: calculate the cluster considering expression data and then calculate all the statistics.");
+
+		
+		
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
-		container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
-		
-		
-		Composite c = Widgets.createDefaultContainer(parent);
-		//c.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
-		c.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
-		
-		String help = "Help: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n\n";
-		GUIUtils.addWrappedText(c, help, 8, true);
+		//container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		String help1 = "\nHelp: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n";
+		String help2 = "\nHelp2: The samples of validation experiment having incorrect values in time attribute or status attribute, will be taken off for validation.\n";
+		String help3 = "\nHelp3: Valid values for representing that the event has ocurred are: '0' or 'DECEASED' or 'Recurred/Progressed'. On the other side, valid values for representing that the event has non ocurred are '1' or 'LIVING' or 'DiseaseFree'. Dont care about lower or upper case. If the event attribute has got another  codification please use 'change value by other value' for doing the  replacement.\n";
+		String help=help1+help2+help3;
+		GUIUtils.addBoldText(container, help, 8);
 
+		Composite containerTabla = (Composite) super.createDialogArea(container);
+		containerTabla.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+		containerTabla.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
+		
+	
+		
 		tr = TableBuilder
-				.create(container)
+				.create(containerTabla)
 				.hideSelectionColumn()
 				.addColumn(
 						ColumnBuilder.create()
@@ -111,10 +116,10 @@ public class ValidationTestDialog extends TitleAreaDialog {
 										"secondAttribtueNameToDoTheValidation")
 								.title("Event")).input(data).build();
 
-		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(c);
+		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(containerTabla);
 		tr.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
 		
-		return c;
+		return container;
 	}
 
 	@Override
@@ -151,13 +156,20 @@ public class ValidationTestDialog extends TitleAreaDialog {
 					try {
 						command.execute();
 						count++;
+						//(ValidationsTestCommand)command.
+						//MessageManager.INSTANCE.add(Message.info(command. ""));
 					} catch (ClusteringException e) {
 						// Agrego el mensaje de error.
-						MessageManager.INSTANCE.add(Message.error(
-								e.getSpecificError() + ". Details: "
-										+ e.getGenericError(), e));
+						MessageManager.INSTANCE.add(Message.error(e.getSpecificError() + ". Details: " + e.getGenericError(), e));
 
-					} catch (Exception e) {
+					} 
+					catch (NumberFormatException e) {
+						String msg = "There are some values in the expression data matrix that are not valid numbers. Perhaps, blank values. Please use the \"change value by anothe value\" operation for changing them by valid numbers. Then do the statistc analysis again";
+						MessageManager.INSTANCE.add(Message.error(msg, e));
+						//PlatformUIUtils.openError("Log rank test validation error",	msg);
+						
+					}
+					catch (Exception e) {
 						MessageManager.INSTANCE
 								.add(Message
 										.error("Unexpected error applying test validation......",
@@ -174,14 +186,14 @@ public class ValidationTestDialog extends TitleAreaDialog {
 							msg);
 					MessageManager.INSTANCE.add(Message.info(msg));
 				}
-
+				
 				else {
 					PlatformUIUtils
 							.openWarning(
-									"LogRank test Validation",
-									" LogRank test validations succesfully executed: "
+									"Validation",
+									" Validations succesfully executed: "
 											+ count
-											+ ". \n LogRank test validations with error: "
+											+ ". \n Validations with error: "
 											+ (experimentsWizard
 													.commands2apply().size() - count)
 											+ ". \n For error details, see rows above in this the Message view.");

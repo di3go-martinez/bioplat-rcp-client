@@ -448,12 +448,12 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Change a value by other value on expression data"
+            caption="Change a value by other value"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
             groupId="02-Experiment-math"
             image="resources/icons/ChangeValue.png"
             onMenu="true"
-            onToolbar="false">
+            onToolbar="true">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>

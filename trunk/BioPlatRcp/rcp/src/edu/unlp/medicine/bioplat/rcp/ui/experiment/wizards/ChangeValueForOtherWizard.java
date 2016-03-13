@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -42,7 +43,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 	private String oldValue;
 	private String newValue;
 	private Button[] choice = null;
-	private boolean isClinicalData = false;
+	private boolean isClinicalData = true;
 	private String clinicalAttribute;
 	private boolean clinicalDataEnabled = true;
 	private Combo combo = null;
@@ -65,10 +66,16 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 	@Override
 		public boolean canFinish() {
 		
-		
-		return (!((String)wizardModel().valueHolder("oldValue").getValue()).equals("")) && !((String)wizardModel().valueHolder("newValue").getValue()).equals("");
+		return true;
+		//return (!((String)wizardModel().valueHolder("oldValue").getValue()).equals("")) && !((String)wizardModel().valueHolder("newValue").getValue()).equals("");
 		
 		}
+	
+	@Override
+	public int getWizardWidth() {
+
+		return 700;
+	}
 	
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
@@ -77,6 +84,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = Widgets.createDefaultContainer(parent);
+				
 				wizardPage.setDescription("It will change one value for other in the experiment expression data.");
 				
 				GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(c);
@@ -112,9 +120,14 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 				
 				new CLabel(c, SWT.BOLD).setText("Select the attribute to replace: ");
 				combo = new Combo(c, SWT.READ_ONLY);
-				combo.setItems(experiment.getClinicalAttributeNames().toArray(new String[0]));
+				List<String> clinicalAttNames = experiment.getClinicalAttributeNames();
+				Collections.sort(clinicalAttNames);
+				combo.setItems(clinicalAttNames.toArray(new String[0]));
 				combo.setEnabled(true);
-				if (combo.getItemCount()>0) combo.select(0);
+				if (combo.getItemCount()>0) {
+					combo.select(0);
+					clinicalAttribute=combo.getItem(0);
+				}
 				
 				combo.addSelectionListener(new SelectionAdapter() {
 					 public void widgetSelected(SelectionEvent e) {
@@ -135,7 +148,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 	
 	@Override
 	protected String getTaskName() {
-		return "Change a value for another in expression data...";
+		return "Change a value for another...";
 	}
 
 	@Override
@@ -146,7 +159,8 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 			try {
 				for(Sample s : experiment.getSamples()){
 //					for(String clinicalAttribute : experiment.getClinicalAttributeNames()){
-						if (experiment.getClinicalAttribute(s.getName(), clinicalAttribute).equalsIgnoreCase(oldValue)) {
+						String actualValue = experiment.getClinicalAttribute(s.getName(), clinicalAttribute);
+						if ( (actualValue!=null && actualValue.equalsIgnoreCase(oldValue)) || (actualValue==null && oldValue.equals(""))){
 							experiment.setClinicalAttribute(s.getName(), clinicalAttribute, newValue);
 							totalvaluesChanged++;
 							MessageManager.INSTANCE.add(Message.info("The clinical attribute " +  oldValue + " in the sample " + s + " has changed. Old value: " + oldValue + ". New value: "+ newValue));
@@ -161,7 +175,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 				for (Sample s : experiment.getSamples())
 					for (Gene g : experiment.getGenes()) {
 						Double expr = experiment.getExpressionLevelForAGene(s, g);
-						if (expr == null || expr == Double.parseDouble(oldValue)) {
+						if (expr == null || expr.equals(Double.parseDouble(oldValue))) {
 							experiment.setExpressionLevelForAGene(s, g, Double.parseDouble(newValue));
 							addModification(s, g, Double.parseDouble(oldValue), Double.parseDouble(newValue));
 							totalvaluesChanged++;

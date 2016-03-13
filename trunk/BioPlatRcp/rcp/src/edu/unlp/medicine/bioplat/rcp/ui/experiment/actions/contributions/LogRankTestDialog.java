@@ -157,7 +157,7 @@ public class LogRankTestDialog extends TitleAreaDialog {
 				}
 
 				else {
-					PlatformUIUtils.openWarning("LogRank test Validation", " LogRank test validations succesfully executed: " + count + ". \n LogRank test validations with error: " + (experimentsWizard.commands2apply().size() - count) + ". \n For error details, see rows above in this the Message view.");
+					PlatformUIUtils.openWarning("LogRank test Validation", " LogRank test validations succesfully executed: " + count + ". \n LogRank test validations with error: " + (experimentsWizard.commands2apply().size() - count) + ". \n For error details, see last row in the Message view (probably time attribute has got blank values).");
 
 				}
 				monitor.done();

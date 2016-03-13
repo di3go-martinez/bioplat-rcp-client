@@ -93,9 +93,9 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 
 	private class WizardModel {
 
-		final IObservableValue includeClinicalData = new WritableValue(false, Boolean.class);
-		final IObservableValue includeExpressionData = new WritableValue(false, Boolean.class);
-		final IObservableValue includeHeader = new WritableValue(false, Boolean.class);
+		final IObservableValue includeClinicalData = new WritableValue(true, Boolean.class);
+		final IObservableValue includeExpressionData = new WritableValue(true, Boolean.class);
+		final IObservableValue includeHeader = new WritableValue(true, Boolean.class);
 		final IObservableValue includeCluster = new WritableValue(false, Boolean.class);
 
 		final IObservableValue filename = new WritableValue("experiment", String.class);
@@ -162,17 +162,19 @@ public class ExportExperimentToFileWizard extends Wizard implements IExportWizar
 				new CLabel(c, SWT.BOLD).setText("Include expression data");
 				Button exprData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(exprData_cbholder), getModel().includeExpressionData);
-
+				
+				
 				// checkboxes
 				new CLabel(c, SWT.BOLD).setText("Include sample names (header)");
 				Button headerData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(headerData_cbholder), getModel().includeHeader);
-
+				
+				
 				// checkboxes
 				new CLabel(c, SWT.BOLD).setText("Include clinical data");
 				Button clinicalData_cbholder = new Button(c, SWT.CHECK);
 				dbc.bindValue(SWTObservables.observeSelection(clinicalData_cbholder), getModel().includeClinicalData);
-
+				
 				
 				
 				GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(c);
