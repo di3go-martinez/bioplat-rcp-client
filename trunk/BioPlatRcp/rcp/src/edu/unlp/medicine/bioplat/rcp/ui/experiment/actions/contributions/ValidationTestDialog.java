@@ -35,6 +35,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarkerCommand;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.StatusValidValues;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringException;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
@@ -84,13 +85,13 @@ public class ValidationTestDialog extends TitleAreaDialog {
 		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
 		//container.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
 		String help1 = "\nHelp: In the table you can see the statistic validations you have configured. For adding new configurations, you can use the \"+\" button at the bottom of the table\n";
-		String help2 = "\nHelp2: The samples of validation experiment having incorrect values in time attribute or status attribute, will be taken off for validation.\n";
-		String help3 = "\nHelp3: Valid values for representing that the event has ocurred are: '0' or 'DECEASED' or 'Recurred/Progressed'. On the other side, valid values for representing that the event has non ocurred are '1' or 'LIVING' or 'DiseaseFree'. Dont care about lower or upper case. If the event attribute has got another  codification please use 'change value by other value' for doing the  replacement.\n";
+		String help2 = "\nHelp 2: The samples of validation experiment having incorrect values in time attribute or status attribute, will be taken off for validation.\n";
+		String help3 = "\nHelp 3:" + StatusValidValues.getMessageForEventAttributeForGUI();
 		String help=help1+help2+help3;
 		GUIUtils.addBoldText(container, help, 8);
 
 		Composite containerTabla = (Composite) super.createDialogArea(container);
-		containerTabla.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
+		containerTabla.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 3).create());
 		containerTabla.setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
 		
 	
