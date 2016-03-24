@@ -136,7 +136,7 @@ public class LongRankTestHelper implements Observer {
 			c.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					new MevWizard(exp, isExperimentValidation, false).blockOnOpen().open();
+					new MevWizard(exp, isExperimentValidation, false, null).blockOnOpen().open(); 
 				}
 			});
 			editor.grabHorizontal = true;

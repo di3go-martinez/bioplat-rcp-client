@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
+import java.awt.FlowLayout;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.IShellProvider;
@@ -30,15 +32,19 @@ public class ScriptDialog extends Dialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("R Script");
+		//newShell.setText("R Scripts");
+		
+		
 	}
 
 	
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite container = Widgets.createDefaultContainer(parent);
-		Text t = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-	    t.setLayoutData(new GridData(GridData.FILL_BOTH));
+		container.getShell().setText("R Scripts for the experiment");
+		//container.getShell().setSize(parent.getDisplay().getBounds().width, parent.getDisplay().getBounds().height);
+		Text t = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
+		t.setLayoutData(new GridData(GridData.FILL_BOTH));
 	    t.setText(script);
 	    Button ok = new Button(container, SWT.NONE);
 		ok.setText("OK");
@@ -49,6 +55,7 @@ public class ScriptDialog extends Dialog{
 				close();
 			}
 		});
+		container.layout(true);
 		return container;
 	}
 }

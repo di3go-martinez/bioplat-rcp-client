@@ -22,6 +22,7 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
+import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
@@ -37,9 +38,12 @@ public class MevWizard extends AbstractWizard<Void> {
 	private AbstractExperiment experiment;
 	boolean isExperimentValidation;
 	boolean itUsesManualPredefinedCluster;
+	private ClusteringResult clusteringResult;
 	
-	public MevWizard(AbstractExperiment e, boolean isExperimentValidation, boolean itUsesManualPredefinedCluster) {
+	
+	public MevWizard(AbstractExperiment e, boolean isExperimentValidation, boolean itUsesManualPredefinedCluster, ClusteringResult clusteringResult) {
 		this.experiment = e;
+		this.clusteringResult =  clusteringResult;
 		this.setWindowTitle("Export");
 		this.isExperimentValidation = isExperimentValidation;
 		this.itUsesManualPredefinedCluster = itUsesManualPredefinedCluster;
@@ -104,8 +108,8 @@ public class MevWizard extends AbstractWizard<Void> {
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
 		//TODO: DavidClustering
-		/*ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster);
-		command.execute();*/
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster, null);
+		command.execute();
 		return null;
 	}
 

@@ -141,7 +141,7 @@ public class SurvCompHelper implements Observer {
 //							Biomarker.getFakeBiomarker(), survCompValidationResult.getSurvCompValidationConfig().getNumberOfClusters(), //
 //							new LogRankTestValidationConfig(survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster()), true);
 					boolean itUsesManualPredefinedCluster = survCompValidationResult.itUsesManualPredefinedCluster();
-					new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), isExperimentValidation,itUsesManualPredefinedCluster).blockOnOpen().open();
+					new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), isExperimentValidation,itUsesManualPredefinedCluster,survCompValidationResult.getSurvCompValidationConfig().getValidationConfig4DoingCluster().getClusteringResult()).blockOnOpen().open();
 				}
 			});
 			editor.grabHorizontal = true;

@@ -128,7 +128,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 				public void widgetSelected(SelectionEvent e) {
 					//Revisar el tercer parametro. Chusmear new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
 					new MevWizard(exp.getValidationConfig()
-							.getExperimentToValidate(), false, false).blockOnOpen()
+							.getExperimentToValidate(), false, false,exp.getValidationConfig().getValidationConfig4DoingCluster().getClusteringResult()).blockOnOpen()
 							.open();
 				}
 			});

@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.impl.conn.InMemoryDnsResolver;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -16,8 +17,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.UnmodifiableIterator;
+import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
 
 import edu.unlp.medicine.bioplat.rcp.config.StatisticConfigGUI;
+import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ValidationConfigWizard;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
@@ -38,6 +42,8 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	Image image4Button;
 	String type;
 	String description;
+	WizardModel model;
+	 WizardPage wizardPage;
 
 	/**
 	 * 
@@ -70,6 +76,9 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 	@Override
 	public Composite create(final WizardPage wizardPage, Composite parent, DataBindingContext dbc, final WizardModel wmodel) {
 
+		
+		this.model = wmodel;
+		this.wizardPage = wizardPage;
 		// Composite container = Widgets.createDefaultContainer(parent);
 		wizardPage.setDescription(description);
 
@@ -115,7 +124,6 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 			}
 
 			private void update(final ValidationConfig4DoingCluster config) {
-
 				if (!contentsCreated) {
 					// useExistingExperimentGroup =
 					// Widgets.createCheckBox(group,
@@ -180,5 +188,36 @@ public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 		disableClusterRanges = true;
 		return this;
 	}
+
+	@Override
+	public void doOnEnter() {
+		Integer rounds =  model.value(GeneralPSOConfigurarion.NUMBER_OF_ROUNDS);
+		Integer particles =  model.value(GeneralPSOConfigurarion.NUMBER_OF_PARTICLES);
+		Integer minimum = model.value(GeneralPSOConfigurarion.MINIMUM_NUMBER_OF_GENES);
+		if(rounds == null || particles == null || minimum == null){
+			this.wizardPage.setErrorMessage("Please compleate all the requiered fields (Number of Rounds, Number of Particles, Minimun number of Genes)");
+		}else{
+			if(rounds < 1 || particles < 1 || minimum < 1){
+				this.wizardPage.setErrorMessage("Non value can be zero or less");
+			}else{
+				// At least the 33% of the genes in the gene signature
+				if(minimum < Math.round(biomarker.getNumberOfGenes() / 3)){
+					this.wizardPage.setErrorMessage("Please increase the minimum number of genes for the gene signature.");
+				}else{
+					if(minimum > biomarker.getNumberOfGenes()){
+						this.wizardPage.setErrorMessage("Minimum number of genes are greater than number of genes in biomarker.");
+					}
+					this.wizardPage.setErrorMessage(null);
+				}		
+			}
+		}
+		
+		
+		
+		
+		
+	}
+	
+	
 
 }
