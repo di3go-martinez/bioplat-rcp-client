@@ -3,16 +3,11 @@ package edu.unlp.medicine.bioplat.rcp.ui.entities.wizards;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.ATTRIBUTE_NAME_TO_VALIDATION;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.CLUSTERING_STRATEGY;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.NUMBER_OF_CLUSTERS;
-import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.OS_EVENT;
-import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.OS_MONTHS;
-import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.OTHER;
-import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.RFS_EVENT;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.STATISTICAL_TEST_VALUE;
 import static edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.PagesDescriptors.VALIDATION_TYPE;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -495,7 +490,14 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 
 	@Override
 	public void doOnEnter() {
-		List<Experiment> experiments = wmodel.value(PagesDescriptors.SELECTED);
+		List<Experiment> experiments = null;
+		if(wmodel.value(PagesDescriptors.SELECTED) instanceof Experiment){
+			experiments = new ArrayList<Experiment>();
+			experiments.add((Experiment) wmodel.value(PagesDescriptors.SELECTED)); 
+		}else{
+			experiments = wmodel.value(PagesDescriptors.SELECTED);
+		}
+		
 		HashSet<String> survivalAttr = new HashSet<String>();
 		survivalAttr.addAll(experiments.get(0).getClinicalAttributeNames());
 		for(Experiment exp : experiments ){
