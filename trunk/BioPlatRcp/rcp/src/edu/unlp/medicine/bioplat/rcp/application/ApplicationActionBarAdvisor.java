@@ -108,7 +108,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// top level additions
 		menuBar.add(fileMenu);
 
-		MenuManager connections = new MenuManager("&Check Connections", "ventana.menuConeccion");
+		MenuManager connections = new MenuManager("&CheckConnections", "ventana.menuConeccion");
 		connections.add(checkConnection);
 		
 		// Used to check connection between the client and the remote server

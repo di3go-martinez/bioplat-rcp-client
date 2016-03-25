@@ -57,6 +57,8 @@ public class BiomarkerExperimentsHelper implements Observer {
 	private int kaplanMeierColIndex;
 	private int viewOriginalExperimentIndex;
 	private int exportRScriptIndex;
+	private int commentsIndex;
+	
 
 	/**
 	 * 
