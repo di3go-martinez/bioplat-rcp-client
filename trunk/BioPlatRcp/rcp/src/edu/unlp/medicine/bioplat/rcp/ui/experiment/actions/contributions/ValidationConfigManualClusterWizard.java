@@ -34,11 +34,20 @@ public abstract class ValidationConfigManualClusterWizard extends AbstractWizard
 	private Experiment experiment;
 	private List<OneBiomarkerCommand> commands2apply = Lists.newArrayList();
 
+	public int getWizardWidth(){
+		return 600;
+	}
+
+	public int getWizardHeight(){
+		return 700;
+	}
+
+	
 	public ValidationConfigManualClusterWizard(Experiment experiment, ValidationTestGUIProvider provider) {
 		this.experiment = experiment;
 		this.provider = provider;
 		provider.declareVariablesInWizardModel(wizardModel());
-		this.setWindowTitle("Validate experiment using " + provider.getName() + " and preassigned cluster");
+		this.setWindowTitle("Validate experiment setting manual cluster");
 		/*
 		 * FIXME sacar el cálculo del número de clusters de acá!!... TODO
 		 * refactorrrrr.

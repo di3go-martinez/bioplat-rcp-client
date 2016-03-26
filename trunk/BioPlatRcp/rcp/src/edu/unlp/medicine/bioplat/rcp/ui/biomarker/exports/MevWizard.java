@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -60,10 +61,14 @@ public class MevWizard extends AbstractWizard<Void> {
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				
 				wizardPage.setTitle("Export to text file, the experiment data used for this validation");
+				
 				Composite container = new Composite(parent, SWT.NONE);
+				container.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).margins(5, 3).create());
+				container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+				
 				wizardPage.setDescription("Export to text file the experiment data. It will export the expression data of genes contained in this biomarker and the clinical data");
 
-				GUIUtils.addWrappedText(container, "\n", 8, false);
+				//GUIUtils.addWrappedText(container, "\n", 8, false);
 				
 				new Label(container, SWT.NONE).setText("File: ");
 				TextWithSelectionButton ft = new FileText(container);
@@ -108,7 +113,7 @@ public class MevWizard extends AbstractWizard<Void> {
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
 		//TODO: DavidClustering
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster, null);
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster, clusteringResult);
 		command.execute();
 		return null;
 	}

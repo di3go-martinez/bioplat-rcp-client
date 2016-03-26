@@ -182,7 +182,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 	@Override
 	public boolean performFinish() {
 
-		MessageManager.INSTANCE.clear();
+		//MessageManager.INSTANCE.clear();
 
 		configureParamenters();
 

@@ -77,7 +77,7 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.MultiPageBiomarkerEditor"
             contributorClass="edu.unlp.medicine.bioplat.rcp.ui.biomarker.contributor.BiomarkerEditorActionBarContributor"
             default="false"
-            icon="resources/icons/biomarker.PNG"
+            icon="resources/icons/biomarker3.png"
             id="edu.unlp.medicine.biomarker.editor.multipage"
             name="%editor.name">
       </editor>
@@ -470,7 +470,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Validate experiment using Concordance index (cluster samples using groups configured on this experiment)"
+            caption="Statistic Analysis for validating this experiment setting clusters manually..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.SManualClusteringActionContribution"
             groupId="04-Experiment-statistic"
             image="resources/icons/validate_new.png"

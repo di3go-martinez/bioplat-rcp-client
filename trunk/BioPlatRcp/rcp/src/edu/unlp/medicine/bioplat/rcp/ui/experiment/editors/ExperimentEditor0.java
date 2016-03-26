@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,15 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.internal.AbstractSelectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +50,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellData;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
@@ -93,6 +101,32 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 		});
 
+		Composite compHelp = new Composite(container, SWT.NONE);
+		compHelp.setLayout(new GridLayout(1, false));
+		GridData gridData = GridDataFactory.fillDefaults().span(1, 2).create();
+		gridData.horizontalAlignment = GridData.CENTER;
+		compHelp.setLayoutData(gridData);
+		
+		final Button button = new Button(compHelp, SWT.PUSH);
+		GridData gridData2 = new GridData() ;
+		gridData.horizontalAlignment = GridData.CENTER;
+		//final Image image2 = new Image(PlatformUIUtils.findDisplay(), new ByteArrayInputStream(stream));
+		button.setImage(PlatformUIUtils.findImage("help.png"));
+		button.setLayoutData(gridData2);
+		button.setText("How can i do survival analysis?");
+        button.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event e) {
+              switch (e.type) {
+              case SWT.Selection:
+            	PlatformUIUtils.openInformation("How can i validate data of this experiment", "If you want to do survival analysis using cluster by expression data, you have to create a Gene Signature. For that, follow this sequence: 1-Click on the 'name' column of the table below  2-Select copy all genes 3-Go to start menu, select 'gene Signature/Experiments option 4-Select 'Create gene Signature'  5-Throw the validation over this new gene signature using 'Statistic analysis using your gene signature'. \nYou can also do the same selecting a subset of genes on the table below and using 'create gene signature using selected genes'. \n\nBut, if you are not interested in using expression data and you would like to set cluster manually, you can do it directly over this expeirment using the option 'Operation/Statistic Analysis for validating this experiment setting clusters manually...'");
+                break;
+              }
+            }
+          });
+        
+        //Label label=GUIUtils.addiItalicText4(c, "\nIf you want to do survival analysis on the data of this experiment, clustering by expression data, you have to create a Gene Signature. Please, follow this sequence: 1-Click on the 'name' column of the table below  2-Select copy all genes 3-Go to start menu, select 'gene Signature/Experiments option 4-Select 'Create gene Signature'  5-Throw the validation over this new gene signature using 'Statistic analysis using your gene signature'. You can also do the same selecting a subset of genes selecting genes and using 'create gene signature using selected genes'. \nBut, if you are not interested in using expression data and you would like to set cluster manually, you can do it directly over this expeirment using the option 'Operation/Statistic Analysis for validating this experiment setting clusters manually...'\n\n", 8);
+		
+		
 		TableBuilder tb = TableBuilder.create(container)//
 				.keyLimit(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES)//
 				.model(new AbstractEntity() {

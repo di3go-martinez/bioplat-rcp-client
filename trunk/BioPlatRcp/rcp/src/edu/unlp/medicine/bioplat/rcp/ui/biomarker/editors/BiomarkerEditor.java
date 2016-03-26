@@ -14,8 +14,16 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.internal.AbstractSelectionService;
@@ -35,6 +43,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.MenuBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
+import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
@@ -94,12 +104,52 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		// "originalNumberOfGenes").readOnly();
 		Widgets.createMultiTextWithLabel(container, Messages.BiomarkerEditor_description_label, model, "description");
 
-		// Widgets.createTextWithLabel(container,
-		// Messages.BiomarkerEditor_david_URL, model,
-		// "davidURLForFunctionalAnalysis").readOnly()//
-		// .setLayoutData(GridDataFactory.fillDefaults().span(3,
-		// 1).align(GridData.CENTER, GridData.FILL).grab(true, false).create())
-		;
+		//Label label = GUIUtils.addiItalicText(container, "\nHelp: You can use plus button on the toolbar for addding genes.\n\n", 8);
+		
+		
+		Composite compHelp = new Composite(container, SWT.NONE);
+		compHelp.setLayout(new GridLayout(2, false));
+		GridData gridData = GridDataFactory.fillDefaults().span(2, 2).create();
+		gridData.horizontalAlignment = GridData.CENTER;
+		compHelp.setLayoutData(gridData);
+		
+		final Button button = new Button(compHelp, SWT.PUSH);
+		GridData gridData2 = new GridData() ;
+		gridData.horizontalAlignment = GridData.CENTER;
+		button.setImage(PlatformUIUtils.findImage("help.png"));
+		button.setLayoutData(gridData2);
+		button.setText("How can i add genes?");
+        button.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event e) {
+              switch (e.type) {
+              case SWT.Selection:
+            	PlatformUIUtils.openInformation("How can i add genes", "You should use plus button on the toolbar. Then you can write them down or paste them. You can use Gene Symbol, Entrez id o ensemblId'");
+                break;
+              }
+            }
+          });
+
+
+		final Button button2 = new Button(compHelp, SWT.PUSH);
+		GridData gridData3 = new GridData() ;
+		gridData.horizontalAlignment = GridData.CENTER;
+		button2.setImage(PlatformUIUtils.findImage("help.png"));
+		button2.setLayoutData(gridData3);
+		button2.setText("How can i do survival analysis?");
+        button2.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event e) {
+              switch (e.type) {
+              case SWT.Selection:
+            	PlatformUIUtils.openInformation("How can i do survival analysis", "Select the menu option or button named 'Statistic analysis for validating your gene signature'");
+                break;
+              }
+            }
+          });
+
+        
+        
+		
+		
 
 		Composite subcontainer = Widgets.createDefaultContainer(container);
 		subcontainer.setLayoutData(GridDataFactory.fillDefaults().span(4, 1).grab(true, true).create());

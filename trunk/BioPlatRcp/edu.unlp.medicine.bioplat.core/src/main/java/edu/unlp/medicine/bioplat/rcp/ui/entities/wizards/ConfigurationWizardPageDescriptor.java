@@ -125,6 +125,9 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	
 	private void createGroup4CLusteringInfo(final Composite container, GridDataFactory gdf, final DataBindingContext dbc, final WizardModel wmodel, final WizardPage wp) {
 
+		GUIUtils.addiItalicText(container, "Help: You can use this option to do survival analysis on this experiment setting MANUALLY the clusters. If you would like to use cluster by expression data, create a gene signature with the subset of genes you are interested in and use this experiment to do valiation.\n\n\n", 8);
+		
+		
 		final Group clusterginGroup = new Group(container, SWT.SHADOW_OUT);
 		clusterginGroup.setText("Clustering parameters");
 		clusterginGroup.setFont(GUIUtils.getFontForGrouptTitle(container));

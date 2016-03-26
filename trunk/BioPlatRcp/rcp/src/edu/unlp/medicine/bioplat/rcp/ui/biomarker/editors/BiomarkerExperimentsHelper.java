@@ -112,7 +112,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 				editor = new TableEditor(table);
 				c = new Button(table, SWT.FLAT);
 				c.setImage(PlatformUIUtils
-						.findImage("Open original experiment.png"));
+						.findImage("experiment2.png"));
 				c.addSelectionListener(this.openCurrentExperiment(exp));
 				editor.grabHorizontal = true;
 				editor.setEditor(c, items[i], this.viewOriginalExperimentIndex);
@@ -124,14 +124,13 @@ public class BiomarkerExperimentsHelper implements Observer {
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils
-					.findImage("Export experiment used for validation.16.png"));
+					//.findImage("Export experiment used for validation.16.png"));
+					.findImage("exportLindo.png"));
 			c.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					//Revisar el tercer parametro. Chusmear new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
-					new MevWizard(exp.getValidationConfig()
-							.getExperimentToValidate(), false, false,exp.getValidationConfig().getValidationConfig4DoingCluster().getClusteringResult()).blockOnOpen()
-							.open();
+					new MevWizard(exp.getValidationConfig().getExperimentToValidate(), false, false,exp.getClusteringResult()).blockOnOpen().open();
 				}
 			});
 			editor.grabHorizontal = true;
@@ -180,7 +179,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 					this.viewClusterColIndex);
 
 			this.viewOriginalExperimentIndex = this.newBaseColumnIndex + 2;
-			createTableColumn(table, 160, "Open Original Experiment",
+			createTableColumn(table, 160, "Open validating Experiment",
 					this.viewOriginalExperimentIndex);
 			
 			
