@@ -62,7 +62,7 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 	@Override
 	public int getWizardHeight() {
 
-		return 600;
+		return 650;
 	}
 
 	@Override

@@ -72,7 +72,7 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 	@Override
 	public int getWizardHeight() {
 
-		return 600;
+		return 680;
 	}
 
 	

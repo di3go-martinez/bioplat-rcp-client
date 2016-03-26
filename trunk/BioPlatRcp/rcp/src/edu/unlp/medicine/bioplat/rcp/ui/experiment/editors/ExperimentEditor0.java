@@ -158,7 +158,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		for (Sample s : sampleToLoad)
 			tb.addColumn( //
 			ColumnBuilder.create().numeric().title(s.getName()) //
-					.property("data[" + index++ + "].value")//
+					.editable().property("data[" + index++ + "].value")//
 					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
 		tr = tb.build();
