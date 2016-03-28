@@ -92,6 +92,8 @@ public class MevWizard extends AbstractWizard<Void> {
 
 				
 				GridLayoutFactory.fillDefaults().numColumns(1).applyTo(container);
+				
+				container.layout(true);
 				return container;
 			}
 		};

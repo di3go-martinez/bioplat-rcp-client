@@ -140,10 +140,12 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		GridData gdClusters = gdf.grab(false, false).create();
 		numberOfClusterText.setLayoutData(gdClusters);
 		numberOfClusterText.setEnabled(!forManualClustering);
-		logger.trace("Number of clusters created");
-
+		
 		if (!forManualClustering) {
 
+			
+			
+			
 			final Group clusterginStGroup = new Group(clusterginGroup, SWT.SHADOW_OUT);
 			clusterginStGroup.setText("Clustering strategy");
 			clusterginStGroup.setFont(GUIUtils.getFontForGrouptTitle(container));
@@ -308,17 +310,21 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	}
 
 	private UpdateValueStrategy uvsNumberOfClusters() {
+		
 		return new UpdateValueStrategy().setBeforeSetValidator(new IValidator() {
-
 			@Override
 			public IStatus validate(Object value) {
-				if (value.toString().matches("\\d+..\\d+") || value.toString().matches("\\d+")) {
-					return ValidationStatus.ok();
-				} else
-					return ValidationStatus.error("'" + value + "'" + " is not a valid range or a valid number");
+					if (value.toString().matches("\\d+..\\d+") || value.toString().matches("\\d+")) {
+						if(forManualClustering && ((Integer)value < ClusteringResult.VALID_NUMBER_OF_CLUSTERS)){
+							return ValidationStatus.error("The experiment you have selected must have at least two clusters");
+						}
+						return ValidationStatus.ok();
+					} else {
+						return ValidationStatus.error("'" + value + "'" + " is not a valid range or a valid number");
+					}
 			}
-
 		});
+		
 	}
 	
 	private UpdateValueStrategy notEmpty() {
@@ -410,7 +416,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		final Experiment exp = (Experiment) wmodel.value(PagesDescriptors.SELECTED);
 		
 		
-		
+		GUIUtils.addBoldText(clusterginGroup, "All the samples must be assigned to a Cluster ",8);
 		Button clusterButton = new Button(clusterginGroup,SWT.PUSH);
 		clusterButton.setImage(PlatformUIUtils.findImage("clustering.png"));
 		clusterButton.setToolTipText("Press button to configure cluster");
@@ -431,18 +437,21 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 				if(Dialog.OK == ccd.open()){
 					wmodel.set(PagesDescriptors.MANUAL_CLUSTERING, result);
 					wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, result.getNumberOfClusters());
-					if(!result.isAllSamplesAssignedToCluster()){
-						putmessage(wp, "The experiment you have selected must have all the samples assigned to a cluster.");
-					}					
-					if(!result.hasGotEnoughClustersForValidation()){
-						putmessage(wp, "The experiment you have selected must have at least two clusters. Your experiment " + result.getExperiment().getName() + " have just " + result.getNumberOfClusters() + ". Please  set at least 2 clusters manually.");
-					}
+					/*if(!result.isAllSamplesAssignedToCluster()){
+						putmessageError(wp, "The experiment you have selected must have all the samples assigned to a cluster.");
+					}*/
+					//samplesNotClustered = !result.hasGotEnoughClustersForValidation();
+					 
+						
+					//	putmessageError(wp, "The experiment you have selected must have at least two clusters. Your experiment " + result.getExperiment().getName() + " have just " + result.getNumberOfClusters() + ". Please  set at least 2 clusters manually.");
 				}
 			}
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		});
+		
+		
 	}
 		
 	
@@ -466,6 +475,22 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 			}
 		}.schedule(9000);
 	}
+	
+	private void putmessageError(final WizardPage wp, String message) {
+		MessageManager.INSTANCE.add(Message.error(message));
+		wp.setMessage(message, IMessageProvider.ERROR);
+		new UIJob("") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				// limpio el mensaje
+				wp.setMessage(null);
+				return ValidationStatus.ok();
+			}
+		}.schedule(9000);
+	}
+	
+	
 
 	@Override
 	public boolean isPageComplete(WizardModel wmodel) {
@@ -473,7 +498,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		if(this.forManualClustering){
 			try{
 				ClusteringResult cr = (ClusteringResult) wmodel.value(PagesDescriptors.MANUAL_CLUSTERING);
-				isComplete = cr.hasGotEnoughClustersForValidation() && checkIfCombosAreSelected();
+				isComplete = cr.hasGotEnoughClustersForValidation() && checkIfCombosAreSelected() && cr.isAllSamplesAssignedToCluster();
 			}catch(Exception e){
 				isComplete = false;
 			}

@@ -27,6 +27,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.MevWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.DialogModel;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.ConfigureClusterDialog;
+import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ExecutionCommentsDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ScriptDialog;
 import edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.AppliedExperimentEditor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.Provider;
@@ -146,7 +147,14 @@ public class BiomarkerExperimentsHelper implements Observer {
 			editor.grabHorizontal = true;
 			editor.setEditor(c, items[i], this.exportRScriptIndex);
 			
-			
+			editor = new TableEditor(table);
+			c = new Button(table, SWT.FLAT);
+			c.setImage(PlatformUIUtils
+					.findImage("Info.png"));
+			c.addSelectionListener(
+					openViewExecutionCommentDialog(exp));
+			editor.grabHorizontal = true;
+			editor.setEditor(c, items[i], this.commentsIndex);
 			
 		}
 
@@ -191,7 +199,10 @@ public class BiomarkerExperimentsHelper implements Observer {
 			createTableColumn(table, 110, "Copy R Script",
 					this.exportRScriptIndex);
 			
-
+			this.commentsIndex = this.newBaseColumnIndex + 5;
+			createTableColumn(table, 110, "Execution Comments",
+					this.commentsIndex);
+			
 
 			// ok, ya inicializado
 			this.mustinitialize = false;
@@ -261,7 +272,15 @@ public class BiomarkerExperimentsHelper implements Observer {
 			}
 		};
 	}
-	
+
+	private SelectionListener openViewExecutionCommentDialog(final Validation exp) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new ExecutionCommentsDialog(exp).open();
+			}
+		};
+	}
 	
 	
 	//Metodo para el muestreo de graficas de Kaplan-Meier

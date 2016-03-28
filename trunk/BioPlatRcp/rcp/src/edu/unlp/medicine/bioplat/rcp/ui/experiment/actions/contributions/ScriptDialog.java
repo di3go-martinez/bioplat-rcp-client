@@ -1,10 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions;
 
-import java.awt.FlowLayout;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
