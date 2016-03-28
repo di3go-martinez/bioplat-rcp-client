@@ -113,7 +113,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 				editor = new TableEditor(table);
 				c = new Button(table, SWT.FLAT);
 				c.setImage(PlatformUIUtils
-						.findImage("experiment2.png"));
+						.findImage("experiment.png"));
 				c.addSelectionListener(this.openCurrentExperiment(exp));
 				editor.grabHorizontal = true;
 				editor.setEditor(c, items[i], this.viewOriginalExperimentIndex);
@@ -150,7 +150,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils
-					.findImage("Info.png"));
+					.findImage("info2.png"));
 			c.addSelectionListener(
 					openViewExecutionCommentDialog(exp));
 			editor.grabHorizontal = true;
@@ -200,7 +200,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 					this.exportRScriptIndex);
 			
 			this.commentsIndex = this.newBaseColumnIndex + 5;
-			createTableColumn(table, 110, "Execution Comments",
+			createTableColumn(table, 110, "Preprocessing info",
 					this.commentsIndex);
 			
 
