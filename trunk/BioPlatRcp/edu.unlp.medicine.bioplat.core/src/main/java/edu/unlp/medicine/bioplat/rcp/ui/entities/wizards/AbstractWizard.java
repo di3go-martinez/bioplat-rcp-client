@@ -303,8 +303,12 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	@Override
 	public boolean performCancel() {
-		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
-		return wpd.performCancel(model);
+		if ( map.get(getContainer().getCurrentPage())!= null) {
+			WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
+			return wpd.performCancel(model);
+		} else { 
+			return true;
+		}
 		
 	}
 
