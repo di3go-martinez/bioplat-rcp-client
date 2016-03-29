@@ -131,7 +131,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 	 * @return la cantidad de samples a cargar en la vista
 	 */
 	static int getSampleCountToLoad() {
-		return ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 20);
+		return ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 100);
 	}
 
 	// TODO sacar de acá

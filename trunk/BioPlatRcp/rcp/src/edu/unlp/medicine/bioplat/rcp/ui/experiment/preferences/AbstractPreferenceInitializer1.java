@@ -15,8 +15,8 @@ public class AbstractPreferenceInitializer1 extends AbstractPreferenceInitialize
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(Activator.id());
-		prefs.putInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 10);
-		prefs.putInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES, 1000);
+		prefs.putInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 100);
+		prefs.putInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_GENES, 300);
 		prefs.putBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 	}
 
