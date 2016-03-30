@@ -36,15 +36,15 @@ public class ExecutionCommentsDialog extends Dialog{
 		@Override
 		protected Control createContents(Composite parent) {
 			Composite container = Widgets.createDefaultContainer(parent);
-			container.getShell().setText("Preprocessing done over the experiment, before statistic analysis");
+			container.getShell().setText("Preprocessing done over the experiment");
 			//container.getShell().setSize(parent.getDisplay().getBounds().width, parent.getDisplay().getBounds().height);
 			Text t = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
 			t.setLayoutData(new GridData(GridData.FILL_BOTH));
 			StringBuilder sb = new StringBuilder("Information about the execution:");
-			StringBuilderUtils.appendAndNewLine(sb, "Samples remove by incorrect expression value: " + (validation.getValidationResult().getSamples_removed_expression_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_expression_error()));
-			StringBuilderUtils.appendAndNewLine(sb, "Samples remove by incorrect time value: " + (validation.getValidationResult().getSamples_removed_time_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_time_error()));
-			StringBuilderUtils.appendAndNewLine(sb, "Samples remove by incorrect event value: " + (validation.getValidationResult().getSamples_removed_event_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_event_error()));
-			StringBuilderUtils.appendAndNewLine(sb, "Genes remove by incorrect value: " + (validation.getValidationResult().getGenes_removed().isEmpty()?"none":validation.getValidationResult().getGenes_removed()));
+			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because all of its expression values are incorrect: " + (validation.getValidationResult().getSamples_removed_expression_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_expression_error()));
+			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because time attribute is incorrect: " + (validation.getValidationResult().getSamples_removed_time_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_time_error()));
+			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because event attribute is incorrect: " + (validation.getValidationResult().getSamples_removed_event_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_event_error()));
+			StringBuilderUtils.appendAndNewLine(sb, "Genes remove because it has at least one incorrect value: " + (validation.getValidationResult().getGenes_removed().isEmpty()?"none":validation.getValidationResult().getGenes_removed()));
 			t.setText(sb.toString());
 		    t.setEditable(false);
 			Button ok = new Button(container, SWT.NONE);
