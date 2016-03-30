@@ -36,7 +36,7 @@ public class ExecutionCommentsDialog extends Dialog{
 		@Override
 		protected Control createContents(Composite parent) {
 			Composite container = Widgets.createDefaultContainer(parent);
-			container.getShell().setText("Execution Comments");
+			container.getShell().setText("Preprocessing done over the experiment, before statistic analysis");
 			//container.getShell().setSize(parent.getDisplay().getBounds().width, parent.getDisplay().getBounds().height);
 			Text t = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
 			t.setLayoutData(new GridData(GridData.FILL_BOTH));
