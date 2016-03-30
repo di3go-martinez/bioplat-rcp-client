@@ -40,7 +40,7 @@ public class ExecutionCommentsDialog extends Dialog{
 			//container.getShell().setSize(parent.getDisplay().getBounds().width, parent.getDisplay().getBounds().height);
 			Text t = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
 			t.setLayoutData(new GridData(GridData.FILL_BOTH));
-			StringBuilder sb = new StringBuilder("Information about the execution:");
+			StringBuilder sb = new StringBuilder("Preprocessing done over the experiment to remove incorrect values:");
 			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because all of its expression values are incorrect: " + (validation.getValidationResult().getSamples_removed_expression_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_expression_error()));
 			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because time attribute is incorrect: " + (validation.getValidationResult().getSamples_removed_time_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_time_error()));
 			StringBuilderUtils.appendAndNewLine(sb, "Samples removed because event attribute is incorrect: " + (validation.getValidationResult().getSamples_removed_event_error().isEmpty()?"none":validation.getValidationResult().getSamples_removed_event_error()));
