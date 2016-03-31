@@ -18,12 +18,12 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
-import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.exportExperimentCommand.ExportExperimentCommand;
-import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClustering.ClusteringResult;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
+import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.rAPI.RValidationResult;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
@@ -39,12 +39,12 @@ public class MevWizard extends AbstractWizard<Void> {
 	private AbstractExperiment experiment;
 	boolean isExperimentValidation;
 	boolean itUsesManualPredefinedCluster;
-	private ClusteringResult clusteringResult;
+	private Validation validation;
 	
 	
-	public MevWizard(AbstractExperiment e, boolean isExperimentValidation, boolean itUsesManualPredefinedCluster, ClusteringResult clusteringResult) {
+	public MevWizard(AbstractExperiment e, boolean isExperimentValidation, boolean itUsesManualPredefinedCluster, Validation validation) {
 		this.experiment = e;
-		this.clusteringResult =  clusteringResult;
+		this.validation = validation;
 		this.setWindowTitle("Export");
 		this.isExperimentValidation = isExperimentValidation;
 		this.itUsesManualPredefinedCluster = itUsesManualPredefinedCluster;
@@ -115,7 +115,7 @@ public class MevWizard extends AbstractWizard<Void> {
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
 		//TODO: DavidClustering
-		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster, clusteringResult);
+		ExportExperimentCommand command = new ExportExperimentCommand(experiment, filename, includeClinicalData, includeHeader, includeExpressionData, includeCluster,'\t', "\t", isExperimentValidation, itUsesManualPredefinedCluster, validation);
 		command.execute();
 		return null;
 	}

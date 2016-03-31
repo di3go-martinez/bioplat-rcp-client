@@ -93,7 +93,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 			final Validation exp = eas.get(i);
 			TableEditor editor;
 			Button c;
-
+			
 			editor = new TableEditor(table);
 			c = new Button(table, SWT.FLAT);
 			c.setImage(PlatformUIUtils.findImage("View result details.16.png"));
@@ -131,7 +131,7 @@ public class BiomarkerExperimentsHelper implements Observer {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					//Revisar el tercer parametro. Chusmear new MevWizard(survCompValidationResult.getSurvCompValidationConfig().getExperimentToValidate(), true, survCompValidationResult.itUsesManualPredefinedCluster()).blockOnOpen().open();
-					new MevWizard(exp.getValidationConfig().getExperimentToValidate(), false, false,exp.getClusteringResult()).blockOnOpen().open();
+					new MevWizard(exp.getValidationConfig().getExperimentToValidate(), false, false,exp).blockOnOpen().open(); // V3 Cambiar para que obtenga solo el Validation 
 				}
 			});
 			editor.grabHorizontal = true;
