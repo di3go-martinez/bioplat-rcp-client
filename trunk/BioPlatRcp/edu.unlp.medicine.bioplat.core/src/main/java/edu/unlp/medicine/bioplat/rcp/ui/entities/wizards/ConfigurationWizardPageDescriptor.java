@@ -516,6 +516,25 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		
 	}
 
+	public boolean containsIgnoreCase(String str,List<String> list){
+	    for(String i : list){
+	        if(i.equalsIgnoreCase(str))
+	            return true;
+	    }
+	    return false;
+	}
+	
+	public HashSet<String> retainALlIgnoreCase(HashSet<String> col1,List<String> col2 ){
+		HashSet<String> res = new HashSet<String>();
+		for (String at1 : col1) {
+			if (containsIgnoreCase(at1, col2)){
+				res.add(at1);
+			}
+		}
+		return res;
+	}
+	
+		
 	@Override
 	public void doOnEnter() {
 		List<Experiment> experiments = null;
@@ -530,14 +549,14 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		survivalAttr.addAll(experiments.get(0).getClinicalAttributeNames());
 		for(Experiment exp : experiments ){
 			//survivalAttr.retainAll(exp.getClinicalAttributeNames());
-			survivalAttr.retainAll(exp.getClinicalAttributeNamesThatMayBeEvent());
+			survivalAttr = retainALlIgnoreCase(survivalAttr, exp.getClinicalAttributeNamesThatMayBeEvent());
 		}
 
 		HashSet<String> timeAttr = new HashSet<String>();
 		timeAttr.addAll(experiments.get(0).getClinicalAttributeNames());
 		for(Experiment exp : experiments ){
-			//survivalAttr.retainAll(exp.getClinicalAttributeNames());
-			timeAttr.retainAll(exp.getClinicalAttributeNamesThatMayBeMonth());
+			//timeAttr.retainAll(exp.getClinicalAttributeNamesThatMayBeMonth());
+			timeAttr = retainALlIgnoreCase(timeAttr, exp.getClinicalAttributeNamesThatMayBeMonth());
 		}
 
 		

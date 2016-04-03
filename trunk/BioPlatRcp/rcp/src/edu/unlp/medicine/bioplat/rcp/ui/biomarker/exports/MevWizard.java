@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.FileText;
 import edu.unlp.medicine.bioplat.rcp.widgets.TextWithSelectionButton;
@@ -102,15 +103,6 @@ public class MevWizard extends AbstractWizard<Void> {
 		return result;
 	}
 
-	@Override
-	protected String getTaskName() {
-		return "MeV";
-	}
-
-	@Override
-	protected void doInUI(Void result) throws Exception {
-
-	}
 
 	@Override
 	protected Void backgroundProcess(Monitor monitor) throws Exception {
@@ -123,6 +115,17 @@ public class MevWizard extends AbstractWizard<Void> {
 	private String filename;
 	private Boolean includeClinicalData, includeHeader, includeExpressionData, includeCluster;
 
+	@Override
+	protected String getTaskName() {
+		return "Export Gene Signature data matrix used for validation";
+	}
+
+	@Override
+	protected void doInUI(Void result) throws Exception {
+		PlatformUIUtils.openInformation("Export gene signature data matrix to file", "The gene signature data matrix was succesfully exported to: " + filename);
+	}
+
+	
 	@Override
 	protected void configureParameters() {
 		final WizardModel m = wizardModel();
