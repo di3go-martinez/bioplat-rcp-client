@@ -61,6 +61,13 @@ public class MultiPageBiomarkerEditor extends AbstractFormEditor<Biomarker> {
 			protected String getAllGenesAsList() {
 				return model().getGenesAsList();
 			}
+
+			@Override
+			protected String getAllGenesAsListWithPipes() {
+				return model().getGenesAsList().replace(",", "|");
+			}
+			
+			
 		}.createEditorBrowsers(result, input);
 
 		

@@ -47,6 +47,7 @@ public abstract class BrowserEditor extends AbstractEditorPart<AbstractEntity> {
 			@Override
 			public void update(Observable o, Object arg) {
 				String newUrl = resolveUrl();
+				newUrl = newUrl.trim();
 				if (!newUrl.equals(browser.getUrl())) {
 					browser.setUrl(newUrl);
 					url.setText(newUrl);

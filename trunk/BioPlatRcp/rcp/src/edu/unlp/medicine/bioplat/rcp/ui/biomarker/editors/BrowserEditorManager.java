@@ -75,7 +75,8 @@ public abstract class BrowserEditorManager {
 
 			@Override
 			protected String resolveUrl() {
-				return s[1].replace("{allGenes}", getAllGenesAsList());
+				s[1]= s[1].replace("{allGenes}", getAllGenesAsList());
+				return s[1].replace("{allGenesWithPipes}", getAllGenesAsListWithPipes());
 			}
 
 		}, title);
@@ -85,5 +86,10 @@ public abstract class BrowserEditorManager {
 	 * @return todos los entrezId de genes separados por ','
 	 */
 	protected abstract String getAllGenesAsList();
+	
+	/**
+	 * @return todos los entrezId de genes separados por ','
+	 */
+	protected abstract String getAllGenesAsListWithPipes();
 
 }

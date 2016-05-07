@@ -51,7 +51,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
 	public ChangeValueForOtherWizard(AbstractExperiment abstractExperiment) {
 		this.experiment = abstractExperiment;
-		this.setWindowTitle("Apply logarithm on expression data");
+		this.setWindowTitle("Change value for another value");
 	}
 
 	@Override

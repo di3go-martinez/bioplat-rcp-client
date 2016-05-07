@@ -106,6 +106,16 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 				}
 				return sb.toString();
 			}
+
+			@Override
+			protected String getAllGenesAsListWithPipes() {
+				List<Gene> genes = model().getGenes();
+				StringBuilder sb = new StringBuilder();
+				for (Gene gene : genes) {
+					sb.append(gene.getEntrezId()).append("|");
+				}
+				return sb.toString();
+			}
 		}.createEditorBrowsers(result, getEditorInput());
 
 		try {
