@@ -76,7 +76,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 			descriptors.add(createPage3ForSelecctingGenesOrGS());
 	
 				
-		this.setWindowTitle("Import experiment from .CSV file");
+		this.setWindowTitle("Import Dataset from .CSV file");
 		
 		
 		return descriptors;
@@ -93,11 +93,11 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 	private GenericPage1ForIntroduction createIntroductionPage() {
 		
-		String inBlankBigTitle =  "Import experiment from .CSV file"; 
+		String inBlankBigTitle =  "Import Dataset from .CSV file"; 
 
-		String inBlankSmallTitle =  "Import an experiment, from a text file containing expression data and clinical data";
+		String inBlankSmallTitle =  "Import an Dataset, from a text file containing expression data and clinical data";
 
-		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the experiment data in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\n\n If your experiment is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
+		String introductionText =  "A Dataset includes expression data and clinical data. A Dataset in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the dataset in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\n\n If your dataset is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
 		
 		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
 	}
@@ -116,7 +116,7 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	
 	@Override
 	protected String getTaskName() {
-		return "Import experiment from CSV file";
+		return "Import Dataset from CSV file";
 	}
 	
 	
@@ -169,10 +169,10 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 					if(e.getNumberOfGenes()==0){ 
 						MessageManager.INSTANCE.openView().add(Message.warn("The file \"" + filePath + "\" was imported but it does not seem to have the expected data and/or format. "));
 						PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-						PlatformUIUtils.openWarning("The file has got the expected data and format?", "It seems the input file has not got the expected data and/or expected format. Please check the imported experiment because it is hihgly probably that it doesnt have any useful information for validating. If so, please close it,check the file you have selected and do the import again.");
+						PlatformUIUtils.openWarning("The file has got the expected data and format?", "It seems the input file has not got the expected data and/or expected format. Please check the imported Dataset because it is hihgly probably that it doesnt have any useful information for validating. If so, please close it,check the file you have selected and do the import again.");
 					}
 					else{	
-					MessageManager.INSTANCE.openView().add(Message.info("Experiment from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
+					MessageManager.INSTANCE.openView().add(Message.info("Dataset from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
 					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
 					}
 

@@ -94,12 +94,12 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 	}
 
 	private WizardPage createFirstPage() {
-		return new WizardPage(PAGE_NAME, "Which experiment to import from In Silico?", null) {
+		return new WizardPage(PAGE_NAME, "Which dataset to import from In Silico?", null) {
 
 			@Override
 			public void createControl(Composite parent) {
 
-				this.setDescription("BioPlat will connect with InSilicoDB for importing the experiment you are asking for. Please specify the following information.");
+				this.setDescription("BioPlat will connect with InSilicoDB for importing the dataset you are asking for. Please specify the following information.");
 				
 				DataBindingContext dbc = new DataBindingContext();
 				WizardPageSupport.create(this, dbc);
@@ -153,7 +153,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 
 				
 				//Label for explaining the possible
-				String text2 = "\nGene Collapse Strategy: If the experiment has got probes instead of genes, a collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average...";
+				String text2 = "\nGene Collapse Strategy: If the dataset has got probes instead of genes, a collapse strategy will be applied automatically. The gene will be represented by the probe with the highest average...";
 				GUIUtils.addWrappedText(group, text2,8,true);
 				
 				
@@ -186,12 +186,12 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 
 		configureParamenters();
 
-		Job j = new Job("Import experiment " + gse + " from InSilicoDB") {
+		Job j = new Job("Import dataset " + gse + " from InSilicoDB") {
 
 			@Override
 			protected IStatus run(final IProgressMonitor progressMonitor) {
 				try {
-					progressMonitor.beginTask("Importing experiment " + gse + " from InSilicoDB", IProgressMonitor.UNKNOWN);
+					progressMonitor.beginTask("Importing dataset " + gse + " from InSilicoDB", IProgressMonitor.UNKNOWN);
 					Future<Experiment> holder = exec.submit(new Callable<Experiment>() {
 						@Override
 						public Experiment call() throws Exception {
@@ -216,14 +216,14 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 							MessageManager.INSTANCE.add(Message.error(error));
 							return ValidationStatus.error(error.substring(error.indexOf("Possible")));
 						}
-						final String msg = "The experiment could not be imported from inSilicoDB.";
+						final String msg = "The dataset could not be imported from inSilicoDB.";
 						MessageManager.INSTANCE.add(Message.error(msg, e));
 						return ValidationStatus.error(msg, e);
 					}
 					String importClinicalDataString="NO"; if (importClinicalData) importClinicalDataString="YES";
 					String normalizedString="NO"; if (normalized) normalizedString="YES";
 					
-					MessageManager.INSTANCE.add(Message.info("Experiment " + gse + " imported succesfully from inSilicoDB. Normalized(FRMA)? " + normalizedString + ". Clinical data Imported? " + importClinicalDataString + "."  ));
+					MessageManager.INSTANCE.add(Message.info("Dataset " + gse + " imported succesfully from inSilicoDB. Normalized(FRMA)? " + normalizedString + ". Clinical data Imported? " + importClinicalDataString + "."  ));
 					return ValidationStatus.ok();
 				} finally {
 					progressMonitor.done();
@@ -268,7 +268,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 		try {
 			experiment = importer.monitor(m).execute();
 		} catch (ExperimentBuildingException e) {
-			logger.error("Experiment Building Exception:", e);
+			logger.error("Dataset Building Exception:", e);
 			throw e;
 		}
 

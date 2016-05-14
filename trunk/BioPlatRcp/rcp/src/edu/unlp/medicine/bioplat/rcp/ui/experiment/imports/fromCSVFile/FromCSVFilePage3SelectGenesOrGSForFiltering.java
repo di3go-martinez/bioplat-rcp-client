@@ -54,7 +54,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 
 	@Override
 	public Composite create(WizardPage wp, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
-		wp.setDescription("If your experiment is too big and you dont need all the gene information, you should filter it using a gene List");
+		wp.setDescription("If your dataset is too big and you dont need all the gene information, you should filter it using a gene List");
 		GridDataFactory gdf = GridDataFactory.fillDefaults().grab(true, false);
 		
 		Composite container = new Composite(parent, SWT.NONE);
@@ -73,7 +73,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 			GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
 		
 			
-			GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the experiment\n", 9, false);
+			GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the dataset\n", 9, false);
 			
 			final Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 			text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -99,7 +99,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
 
 		
-		GUIUtils.addWrappedText(container, "\n\n...You can filter the experiment picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the experiment\n", 9, false);
+		GUIUtils.addWrappedText(container, "\n\n...You can filter the dataset picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the dataset\n", 9, false);
 		
 		Group openedBiomarker = new Group(container, SWT.NONE);
 		openedBiomarker.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).create());

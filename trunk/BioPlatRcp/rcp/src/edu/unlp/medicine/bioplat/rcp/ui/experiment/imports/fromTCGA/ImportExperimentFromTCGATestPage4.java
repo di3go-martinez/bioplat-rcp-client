@@ -94,7 +94,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	private void createLocalBiomarkersSelector(final WizardPage wp, Composite container,GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
 		
 		
-		GUIUtils.addWrappedText(container, "\n...You can filter the experiment picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the experiment\n", 9, false);
+		GUIUtils.addWrappedText(container, "\n...You can filter the dataset picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the dataset\n", 9, false);
 		
 		openedBiomarker = new Group(container, SWT.NONE);
 		openedBiomarker.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).create());
@@ -119,7 +119,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	}
 	
 	private void createGSTextArea(final WizardModel wizardModel, Composite parent, final WizardPage wp) {
-		GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the experiment\n", 9, false);
+		GUIUtils.addWrappedText(parent, "\n\n...Or you can paste the genes you want to keep from the dataset\n", 9, false);
 		text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 //		text.setSize(text.getSize().x,150);

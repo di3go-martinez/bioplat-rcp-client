@@ -59,7 +59,7 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 
-		this.setWindowTitle("Import experiment from TCGA (The Cancer Genome Atlas)");
+		this.setWindowTitle("Import Dataset from TCGA (The Cancer Genome Atlas)");
 		
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
 		
@@ -78,7 +78,7 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 
 	@Override
 	protected String getTaskName() {
-		return "Import experiment from TCGA";
+		return "Import Dataset from TCGA";
 	}
 
 	@Override
@@ -101,8 +101,8 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 						MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported with errors."));
 						PlatformUIUtils.openWarning("Experiment failed to Import", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was NOT succesfuly imported from TCGA. Some data may be missing.");
 					} else {
-						MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
-						PlatformUIUtils.openInformation("Experiment Succesfuly Imported", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
+						MessageManager.INSTANCE.openView().add(Message.info("Dataset \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
+						PlatformUIUtils.openInformation("Dataset Succesfuly Imported", "The Dataset " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
 					}
 				}
 			});
@@ -113,11 +113,11 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 	
 	private GenericPage1ForIntroduction createIntroductionPage() {
 		
-		String inBlankBigTitle =  "Import an experiment from TCGA"; 
+		String inBlankBigTitle =  "Import a dataset from TCGA"; 
 
-		String inBlankSmallTitle =  "Import an experiment (expression and clinical data) from TCGA: the most complete curated Cancer database";
+		String inBlankSmallTitle =  "Import a dataset (expression and clinical data) from TCGA: the most complete curated Cancer database";
 		
-		String introductionText =  "An experiment includes expression data and clinical data. An experiment in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the experiment data in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\nYou will start the import, selecting the TCGA study. TCGA offers different case lists for the same study (the ccall them sets, we call them case lists). For each case list, the offer many genetic profiles. In Bioplat, you will be able to select any of the mrna Profiles. In the third step you have to select the list of genes expression you would like to import (you can paste the list or you can use the gene list of a GeneSignature you are working with). Finally, you can select the clinical data you would like to import (by default, it imports everyone).";
+		String introductionText =  "A dataset includes expression data and clinical data. A dataset in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the Dataset in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\nYou will start the import, selecting the TCGA study. TCGA offers different case lists for the same study (the ccall them sets, we call them case lists). For each case list, the offer many genetic profiles. In Bioplat, you will be able to select any of the mrna Profiles. In the third step you have to select the list of genes expression you would like to import (you can paste the list or you can use the gene list of a GeneSignature you are working with). Finally, you can select the clinical data you would like to import (by default, it imports everyone).";
 		
 		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
 	}

@@ -36,7 +36,7 @@ public class AboutAction extends Action {
 
 				Composite container = Widgets.createDefaultContainer(parent);
 				Button b = new Button(container, SWT.FLAT);
-				b.setImage(PlatformUIUtils.findImage("about.png"));
+				b.setImage(PlatformUIUtils.findImage("About.png"));
 				b.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 				SelectionListener closeListener;

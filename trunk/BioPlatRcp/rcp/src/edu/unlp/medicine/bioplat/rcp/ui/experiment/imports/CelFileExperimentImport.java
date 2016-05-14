@@ -70,7 +70,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				
 				wizardPage.setTitle("Import your .CEL files to BioPlat");
-				wizardPage.setDescription("Import and normalize an experiment you have in your .CEL files. They will be useful for doing validation of your biomarkers.");
+				wizardPage.setDescription("Import and normalize an dataset you have in your .CEL files. They will be useful for doing validation of your biomarkers.");
 				
 				GridData gridData = new GridData();
 				gridData.horizontalAlignment=SWT.FILL;
@@ -128,7 +128,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 					this.setManualFlip(true);
 					this.setAllowFlip(false);
 					this.setAllowFinish(false);
-					wizardPage.setErrorMessage("Can not execute this kind of experiment on remote R server. Please switch to local R server.");
+					wizardPage.setErrorMessage("You can not import a dataset from .CEL using the distribution with remote R server. Please download the local R server distribution on www.cancergenomics.net.");
 				}
 				
 				
@@ -142,7 +142,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	@Override
 	protected String getTaskName() {
-		return "Import experiment from .CEL files (Folder:\" " + folderName + "\")";
+		return "Import dataset from .CEL files (Folder:\" " + folderName + "\")";
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 			experiment = importer.monitor(monitor).execute();
 		} catch (ExperimentBuildingException e) {
 			
-			logger.error("Experiment Building Exception:", e);
+			logger.error("Dataset Building Exception:", e);
 			throw e;
 		}
 
@@ -191,7 +191,7 @@ public class CelFileExperimentImport extends AbstractWizard<Experiment> {
 
 	
 	public CelFileExperimentImport(){
-		this.setWindowTitle("Import experiment from .CEL file");
+		this.setWindowTitle("Import Dataset from .CEL file");
 	}
 	
 	@Override
