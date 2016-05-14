@@ -85,7 +85,7 @@
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.editors.ExperimentEditor"
             contributorClass="edu.unlp.medicine.bioplat.rcp.ui.experiment.contributor.ExperimetEditorActionBarContributor"
             default="false"
-            icon="resources/icons/experiment.png"
+            icon="resources/icons/Dataset.png"
             id="bio.plat.experiment.editor"
             name="%experiment.editor.name">
       </editor>
@@ -237,9 +237,9 @@
         canFinishEarly="true"
         category="edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.CreateRandomBiomarkerWizard"
-        icon="resources/icons/random.png"
+        icon="resources/icons/RandomIcon.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.empty.new.wizard"
-        name="Create random gene signature">
+        name="Random gene signature">
 	     <description>
 	        Create a random gene signature
 	     </description>
@@ -252,7 +252,7 @@
         hasPages="true"
         icon="intro/contents/images/GenerateMetasignature.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.generate"
-        name="Generate metasignature">
+        name="Generate a metasignature">
      	<description>
         	Generate a gene signature from sigDB, MSigDB.
      	</description>
@@ -262,7 +262,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
         icon="intro/contents/images/GEO.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromFile"
-        name="Import experiment from text file">
+        name="Import from TXT GEO file">
         <description>
         	Import experiment from text file
      	</description>
@@ -273,7 +273,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.newWizard.from.gene.signature.db.FromImportedGeneSignatureWizard"
         icon="intro/contents/images/From_external_database.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.biomarker.new.wizard.from.gene.signature.db"
-        name="Import from external signature-database (GeneSigDB, MSigDB)">
+        name="Import from databases">
 	     <description>
 	        Create a new Gene Signature from the Genes Signatures in the Platform
 	     </description>
@@ -283,7 +283,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromInSilicoWizard"
         icon="intro/contents/images/InSilico.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromGSE"
-        name="Import experiment from InSilico using GSE">
+        name="Import from InSilico">
         <description>
         	Import experiment from InSilico using GSE
      	</description>
@@ -294,7 +294,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
         icon="intro/contents/images/import_experiment.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromCelFile"
-        name="Import experiment from .CEL File">
+        name="Processing Affymetrix data">
         <description>
         	Import experiment from .CEL File
      	</description>
@@ -304,7 +304,7 @@
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromTCGATest"
         icon="resources/icons/cbioportalIco.png"
         id="edu.medicine.bioplat.rcp.import.experiment.fromTCGATest"
-        name="Import TCGA experiment from CBioportal">
+        name="Import from TCGA project">
   </wizard>
    </extension>
    <extension
@@ -381,7 +381,7 @@
             caption="Add Random Genes to Gene Siganture..."
             class="edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions.AddRandomGenesAction"
             groupId="01-Biomarker-abm"
-            image="resources/icons/random.png"
+            image="resources/icons/RandomIcon.png"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
             onMenu="true"
@@ -405,7 +405,7 @@
             caption="Statistic Analysis for validating your gene Signature..."
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.ApplyValidationTestActionContribution"
             groupId="02-Biomarker-validation"
-            image="resources/icons/statistic.png"
+            image="resources/icons/Analysis.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -416,7 +416,7 @@
             caption="Filter genes on expression data"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.KeepOnlyContribution"
             groupId="01-Experiment"
-            image="resources/icons/KeepOnlyGenes.png"
+            image="resources/icons/Filtering.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -451,7 +451,7 @@
             caption="Change a value by other value"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.ChangeZerosToAction"
             groupId="02-Experiment-math"
-            image="resources/icons/ChangeValue.png"
+            image="resources/icons/ChangeValuer.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -462,7 +462,7 @@
             caption="Paste New Clinical Attribute from clipboard"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.AddClinicalAttributteAC"
             groupId="03-Experiment-clinical"
-            image="resources/icons/PasteClinicalData.png"
+            image="resources/icons/Paste.png"
             onMenu="true"
             onToolbar="true">
          <selection
@@ -495,7 +495,7 @@
              caption="Export experiment to text file"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentActionContribution"
              groupId="05-Experiment-export"
-             image="resources/icons/export2.png"
+             image="resources/icons/exportIcon.png"
              onMenu="true"
              onToolbar="true">
           <selection
@@ -570,7 +570,7 @@
              caption="Export gene set to text file"
              class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
              groupId="05-Biomarker-export"
-             image="resources/icons/export2.png"
+             image="resources/icons/exportIcon.png"
              onMenu="false"
              onToolbar="true">
           <selection
