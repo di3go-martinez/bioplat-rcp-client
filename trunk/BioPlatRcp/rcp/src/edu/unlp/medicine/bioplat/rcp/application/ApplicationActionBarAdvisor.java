@@ -49,7 +49,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		preferencesAction = doMake(ActionFactory.PREFERENCES, window);
 
 		newWizard = doMake(ActionFactory.NEW, window);
-		newWizard.setText("Gene Signatures/Experiments");
+		newWizard.setText("Gene Signatures/Datasets");
 		newWizard.setImageDescriptor(Activator.imageDescriptorFromPlugin("startButton.png"));
 
 		introAction = doMake(ActionFactory.INTRO, window);

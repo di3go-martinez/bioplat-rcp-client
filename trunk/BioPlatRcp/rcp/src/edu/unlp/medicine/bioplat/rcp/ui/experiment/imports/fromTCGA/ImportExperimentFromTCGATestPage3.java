@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 
 public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
@@ -201,8 +202,14 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 		}
 		
 		if(model.value(ATTRIBUTES) == null){
-			List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
-			model.set(ATTRIBUTES, atributos.toArray(new String[0]));	
+			try{
+				List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+				model.set(ATTRIBUTES, atributos.toArray(new String[0]));	
+			}catch(ExperimentBuildingException e){
+				createCDALError(((String[]) model.value(CASENAME))[0] );
+				messageBox.open();
+				return false;
+			}
 		}
 		
 		
@@ -214,6 +221,18 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
         messageBox.setText("Warning");
         messageBox.setMessage("Selected case list contains no Clinical Data. Only experiment values will be imported.");
 	}
+	
+	
+	/**
+	 * 
+	 */
+	private void createCDALError(String casename){
+		messageBox = new MessageBox(PlatformUIUtils.findShell(), SWT.ICON_ERROR | SWT.OK);
+        messageBox.setText("Error");
+        messageBox.setMessage("There are some problems with this dataset ("+ casename + ") in the TCGA database. Please, select another dataset.");
+	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor#doOnExit()

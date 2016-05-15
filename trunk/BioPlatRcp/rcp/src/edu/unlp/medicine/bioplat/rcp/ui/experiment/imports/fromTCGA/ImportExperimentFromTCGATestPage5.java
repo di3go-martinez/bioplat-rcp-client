@@ -14,9 +14,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.MessageBox;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
+import edu.unlp.medicine.entity.experiment.exception.ExperimentBuildingException;
 import edu.unlp.medicine.entity.experiment.tcga.api.TCGAApi;
 
 public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
@@ -140,7 +143,13 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 	
 	@Override
 	public void doOnEnter() {
-		List<String> atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+		List<String> atributos = null;
+		try{
+			atributos = TCGAApi.getInstance().get_clinical_data_attribute_names( ((String[]) model.value(CASENAME))[0] );
+		}catch(ExperimentBuildingException e){
+			createNoAttributeWarning().open();
+		}
+		
 		setAttributesToList(selectedAttributesList, atributos);
 		setAttributesToList(availableAttributesList, new ArrayList<String>());
 		model.set(ATTRIBUTES, selectedAttributesList.getItems());
@@ -149,6 +158,17 @@ public class ImportExperimentFromTCGATestPage5 extends WizardPageDescriptor {
 		super.doOnEnter();
 	}
 
+	
+	private MessageBox createNoAttributeWarning(){
+		MessageBox messageBox = new MessageBox(PlatformUIUtils.findShell(), SWT.ICON_WARNING | SWT.OK);
+        messageBox.setText("Warning");
+        messageBox.setMessage("Selected case list contains no Clinical Data. Only experiment values will be imported.");
+        return messageBox;
+        
+	}
+	
+	
+	
 	private void addAttributesToList(org.eclipse.swt.widgets.List list, String[] attributes){
 		for (int i = 0; i < attributes.length; i++) {
 			list.add(attributes[i]);
