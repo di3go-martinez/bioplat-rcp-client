@@ -99,7 +99,7 @@ public class ImportExperimentFromTCGATest  extends AbstractWizard<Experiment> {
 					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
 					if (e.getGenes().isEmpty()) {
 						MessageManager.INSTANCE.openView().add(Message.info("Experiment \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported with errors."));
-						PlatformUIUtils.openWarning("Experiment failed to Import", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was NOT succesfuly imported from TCGA. Some data may be missing.");
+						PlatformUIUtils.openWarning("Experiment failed to Import", "The Experiment " + ((String[])wizardModel().value(CASENAME))[0] + " was NOT succesfuly imported from TCGA. Some data may be missing. The frequently cause of this error is that none of the genes you provide is in the Dataset you are trying to import");
 					} else {
 						MessageManager.INSTANCE.openView().add(Message.info("Dataset \"" + ((String[])wizardModel().value(CASENAME))[0] + "\" was imported sucessfully."));
 						PlatformUIUtils.openInformation("Dataset Succesfuly Imported", "The Dataset " + ((String[])wizardModel().value(CASENAME))[0] + " was succesfuly imported from TCGA");
