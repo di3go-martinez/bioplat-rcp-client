@@ -252,13 +252,6 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		}else{
 			createManualSettings(clusterginGroup,wmodel,wp);
 		}
-			
-		
-	
-		
-		
-		
-	
 	}
 
 	private Composite getGroupFoRClusteringAttribute(Composite parent) {
@@ -606,7 +599,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		logger.trace("Status attribute name created");
 		GUIUtils.addBoldText(groupForValidationAtt2, StatusValidValues.getMessageForEventAttributeForGUI(),8);
 
-		container.layout(true, true);
+		//container.layout(true, true);
+		container.getShell().layout(true,true);
 
 		
 	}

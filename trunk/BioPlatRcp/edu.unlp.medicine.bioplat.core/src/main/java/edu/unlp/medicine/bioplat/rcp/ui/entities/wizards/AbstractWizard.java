@@ -193,6 +193,12 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			logger.trace("returning the next wizard page for " + next.getDescription());
 		else
 			logger.trace("No more pages");
+		
+		
+		//next.getControl().getParent().setSize(600, 650);
+		PlatformUIUtils.findDisplay().getActiveShell().layout(true, true);//redraw();//update();
+		
+		
 		return next;
 	}
 
