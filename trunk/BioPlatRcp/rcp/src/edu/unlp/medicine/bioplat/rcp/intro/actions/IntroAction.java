@@ -27,11 +27,15 @@ public abstract class IntroAction extends Action {
 	
 	@Override
 	public final void run() {
-		if (run0()) {
-			IWorkbenchPage page = PlatformUIUtils.activePage();
-			// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
-			// IWorkbenchPage.STATE_MINIMIZED);
-			page.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+		try {
+			if (run0()) {
+				IWorkbenchPage page = PlatformUIUtils.activePage();
+				// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
+				// IWorkbenchPage.STATE_MINIMIZED);
+				page.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+			}
+		} catch (Exception e) {
+			PlatformUIUtils.openError("ERROR", e.getMessage());
 		}
 	}
 

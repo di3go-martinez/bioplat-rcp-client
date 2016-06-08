@@ -1,5 +1,6 @@
 package edu.unlp.medicine.bioplat.rcp.application;
 
+import org.bioplat.r4j.R4JCore.exceptions.R4JCreatConnectionException;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -36,6 +38,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		Message m = Message.error("Error inesperado", exception);
 		MessageManager.INSTANCE.add(m);
 		logger.error("Error inesperado", exception);
+		if (exception instanceof R4JCreatConnectionException){
+			PlatformUIUtils.openError("ERROR", exception.getMessage());
+		}
 		super.eventLoopException(exception);
 	}
 }
