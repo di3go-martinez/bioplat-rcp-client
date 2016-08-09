@@ -99,15 +99,15 @@ public class ColumnBuilder {
 
 		// TODO No todas las columnas son ordenable, por ahora el orden está
 		// disponible en todas...
-		addHeadeMenuItemDescriptor(new ToggleSortColumnMenuItemDescriptor(this, viewer));
+//		addHeadeMenuItemDescriptor(new ToggleSortColumnMenuItemDescriptor(this, viewer));
 
 		TableViewerColumn tvc = createTableViewerColumn(viewer, title, width, index, alignStyle, resizable);
 
 		new MenuConfigurerByHeaderSelection(viewer).configure(tvc, this);
 
 		tvc.setLabelProvider(clp);
-		if (editingSupport != null && editable)
-			tvc.setEditingSupport(newInstance(editingSupport, viewer));
+//		if (editingSupport != null && editable)
+//			tvc.setEditingSupport(newInstance(editingSupport, viewer));
 
 		return new TableColumnRef(columnId, tvc);
 

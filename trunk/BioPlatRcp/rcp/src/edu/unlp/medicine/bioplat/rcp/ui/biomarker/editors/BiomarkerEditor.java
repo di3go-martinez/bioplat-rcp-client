@@ -166,7 +166,7 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker> implements IS
 		// .input(model().getGenes());
 		
 		//tb.contextualMenuBuilder(MenuBuilder.create)
-		tb.addColumn(ColumnBuilder.create().title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")).addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name", false), //
+		tb.addColumn(ColumnBuilder.create().property("name").title("Gene Name").centered().accesor(OgnlAccesor.createFor("name")).addHeadeMenuItemDescriptor(createCopyColumn(false), createCopyColumn(true)).addHeadeMenuItemDescriptor(new ShowHideColumnMenuItemDescriptor(this, "Name", "name", false), //
 				new ShowHideColumnMenuItemDescriptor(this, "Gene Alternative IDs (e.g EnsemblID)", "alternativeIds"), //
 				new ShowHideColumnMenuItemDescriptor(this, "Gene Description", "description"),//
 				new ShowHideColumnMenuItemDescriptor(this, "Gene Chromosome Location", "chromosomeLocation")))
