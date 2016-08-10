@@ -65,13 +65,6 @@ public class MenuConfigurerByHeaderSelection implements IMenuConfigurer {
 			@Override
 			public void handleEvent(Event e) {
 				Point pt = display.map(null, innerTable, new Point(e.x, e.y));
-				Rectangle clientArea = innerTable.getClientArea();
-				boolean header = clientArea.y <= pt.y && pt.y < (clientArea.y + innerTable.getHeaderHeight());
-				if (header){
-					innerTable.setMenu(tableHeaderPopup);
-				} else {
-					innerTable.setMenu(null);
-				}
 
 				final Menu menu = innerTable.getMenu();
 				if (menu != null) {
