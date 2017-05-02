@@ -222,7 +222,8 @@
     </category>
   <category
         id="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
-        name="%experiment.wizard.category.name">
+        name="Dataset"> <!--%experiment.wizard.category.name-->
+        
   </category>
  	<wizard
         canFinishEarly="true"
@@ -288,7 +289,8 @@
         	Import Dataset from InSilico using GSE
      	</description>
   </wizard>
-  
+
+<!--  
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.CelFileExperimentImport"
@@ -299,6 +301,8 @@
         	Import Dataset processing Affymetrix data
      	</description>
   </wizard>
+  -->
+  
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.ImportExperimentFromTCGATest"
@@ -499,7 +503,7 @@
              caption="Export experiment to text file"
              class="edu.unlp.medicine.bioplat.rcp.ui.experiment.exports.ExportExperimentActionContribution"
              groupId="05-Experiment-export"
-             image="resources/icons/exportIcon.png"
+             image="resources/icons/export2.png"
              onMenu="true"
              onToolbar="true">
           <selection
@@ -574,7 +578,7 @@
              caption="Export gene set to text file"
              class="edu.unlp.medicine.bioplat.rcp.ui.biomarker.exports.ExportGeneSignatureGeneInfoActionContribution"
              groupId="05-Biomarker-export"
-             image="resources/icons/exportIcon.png"
+             image="resources/icons/export2.png"
              onMenu="false"
              onToolbar="true">
           <selection

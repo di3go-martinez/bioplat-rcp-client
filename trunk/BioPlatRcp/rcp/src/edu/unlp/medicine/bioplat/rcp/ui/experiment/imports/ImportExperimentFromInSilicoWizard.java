@@ -90,7 +90,7 @@ public class ImportExperimentFromInSilicoWizard extends Wizard implements IImpor
 		wizardModel.add("importClinicalData", new WritableValue(false, Boolean.class));
 		wizardModel.add("normalized", new WritableValue(false, Boolean.class));
 		wizardModel.add("platform", new WritableValue(this.getFirstPlatform(), String.class));
-		return wizardModel.add("GSE", new WritableValue("GSE731", String.class));
+		return wizardModel.add("GSE", new WritableValue("GSE18842", String.class));
 	}
 
 	private WizardPage createFirstPage() {

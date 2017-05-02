@@ -98,7 +98,7 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 		IStructuredSelection selection;
 		
 		GridData gridData = new GridData();
-		gridData.horizontalAlignment=SWT.FILL;
+		gridData.horizontalAlignment=SWT.NONE;
 		gridData.grabExcessHorizontalSpace=true;
 
 				//this.setDescription("Import the experiment using a .CSV file following the GEO format. Take a look below at the file format template");
@@ -163,6 +163,7 @@ public class FromCSVFilePage2Main extends WizardPageDescriptor {
 				formatExampleGroupLD.horizontalAlignment = GridData.CENTER;
 				formatExampleGroupLD.horizontalSpan = 2;
 				formatExampleGroupLD.verticalIndent = 15;
+				formatExampleGroupLD.horizontalAlignment=SWT.NONE;
 				//formatExampleGroup.setLayoutData(formatExampleGroupLD);
 //				new Label(formatExampleGroup, SWT.NONE).setText("OS_Months	135.996	141.996	141.996\nOS_Event	0	0	0\nsampleId	GSM79364	GSM79114	GSM79115\n53	9.015745	8.249458	8.323728\n32	8.323749	8.677738	6.834595\n24	6.308628	6.744825	6.201588\n23	9.525107	9.090437	9.885698\n780	10.726804	10.544961	10.795536\n1130	6.284713	6.092771	6.086131\n");
 

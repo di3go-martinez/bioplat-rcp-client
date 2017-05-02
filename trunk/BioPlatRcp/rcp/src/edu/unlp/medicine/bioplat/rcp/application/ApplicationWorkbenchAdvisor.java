@@ -39,7 +39,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		MessageManager.INSTANCE.add(m);
 		logger.error("Error inesperado", exception);
 		if (exception instanceof R4JCreatConnectionException){
-			PlatformUIUtils.openError("ERROR", exception.getMessage());
+			PlatformUIUtils.openError("ERROR", "The operation can not be executed, because you have lost the connection with Bioplat Server. Please check your internet connection");
 		}
 		super.eventLoopException(exception);
 	}
