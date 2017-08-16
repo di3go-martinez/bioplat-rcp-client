@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.bioplat.r4j.R4JCore.values.R4JStringDataMatrix;
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -13,12 +11,19 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
@@ -64,9 +69,13 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 		return gridData;
 	}
 	private TableViewer createTable(Composite container, R4JStringDataMatrix input ){
+		
+		
 		tv = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
 		tv.setUseHashlookup(true);
 
+		createSearchText(tv);
+		
 		final Table table = tv.getTable();
 		
 		TableViewerColumn nameColumn = new TableViewerColumn(tv, SWT.NONE);
@@ -110,6 +119,46 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 		return tv;
 	}
 	
+	private void createSearchText(final TableViewer tviewer) {
+		final Text searchbox = new Text(tviewer.getTable().getParent()	, SWT.FLAT);
+		searchbox.setMessage("Filter...");
+		searchbox.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (searchbox.getText().isEmpty())
+					tviewer.resetFilters();
+				else 
+					tviewer.setFilters(createFilter(searchbox.getText()));
+			}
+
+			private ViewerFilter[] createFilter(String text) {
+				ViewerFilter[] result = new ViewerFilter[1];
+				result[0]=new ImportTCGATableFilter(text);
+				return result;
+			}
+		});
+		//facilidad para navegar la tabla con las teclas arriba/abajo luego de filtrar
+		searchbox.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//TODO buscar y usar las constantes...
+				if(e.keyCode == 16777218 || e.keyCode == 16777217) //arriba o abajo
+					tviewer.getTable().setFocus();
+				
+				e.doit=false;
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+			
+				
+			}
+		});
+		searchbox.moveAbove(tviewer.getTable());
+	}
+
 	private ArrayList<String[]> matrixToArray(R4JStringDataMatrix matrix){
 		ArrayList<String[]> arrayReturn = new ArrayList<String[]>();
 		for (String[] row : matrix.getData()){
