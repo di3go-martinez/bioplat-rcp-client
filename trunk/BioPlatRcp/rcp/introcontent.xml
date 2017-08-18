@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <introContent>
-    <page id="root" content="intro/contents/root.xhtml"/>
+    <page id="root" content="intro/contents/root.html"/>
     <page id="biomarker" content="intro/contents/biomarker.xhtml"/>
     <page id="experiment" content="intro/contents/experiment.xhtml"/>
 </introContent>
