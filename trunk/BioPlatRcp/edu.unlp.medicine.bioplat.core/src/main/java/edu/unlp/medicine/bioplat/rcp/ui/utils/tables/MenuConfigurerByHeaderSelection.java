@@ -52,7 +52,7 @@ public class MenuConfigurerByHeaderSelection implements IMenuConfigurer {
 			mid.createOn(tableHeaderPopup, tvc);
 
 		final TableColumn column = tvc.getColumn();
-		Table t = viewer.getTable();
+		/*Table t = viewer.getTable();
 		int index = t.indexOf(tvc.getColumn());
 		SelectionAdapter sa = columnBuilder.getSelectionSorterAdapter(viewer, tvc.getColumn(), index);
 		
@@ -64,7 +64,7 @@ public class MenuConfigurerByHeaderSelection implements IMenuConfigurer {
 			private Control[] cont = innerTable.getTabList();
 			@Override
 			public void handleEvent(Event e) {
-				Point pt = display.map(null, innerTable, new Point(e.x, e.y));
+				//Point pt = display.map(null, innerTable, new Point(e.x, e.y));
 
 				final Menu menu = innerTable.getMenu();
 				if (menu != null) {
@@ -83,6 +83,33 @@ public class MenuConfigurerByHeaderSelection implements IMenuConfigurer {
 						}
 					});
 				}
+			}
+		});*/
+		
+		column.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event e) {
+				innerTable.setMenu(tableHeaderPopup);
+				final Menu menu = innerTable.getMenu();
+				menu.setVisible(true);
+
+				// Agrego un listener para desasociar el menu, ya que sino al
+				// hacer click secundario se activa un menu que no corresponde
+				menu.addMenuListener(new MenuListener() {
+
+					@Override
+					public void menuShown(MenuEvent e) {
+
+					}
+
+					@Override
+					public void menuHidden(MenuEvent e) {
+						columnBuilder.reconfigureMenu();
+						menu.removeMenuListener(this);
+					}
+				});
+		
 			}
 		});
 
