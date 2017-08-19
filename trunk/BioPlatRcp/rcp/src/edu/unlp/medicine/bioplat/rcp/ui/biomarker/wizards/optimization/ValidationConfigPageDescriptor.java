@@ -28,9 +28,7 @@ import edu.unlp.medicine.domainLogic.framework.metasignatureCommands.OneBiomarke
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.ValidationConfig4DoingCluster;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 
-/**
- * @author Diego Martínez
- */
+
 public class ValidationConfigPageDescriptor extends WizardPageDescriptor {
 
 	protected Biomarker biomarker;
