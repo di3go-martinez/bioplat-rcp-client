@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
-public class DefaultExtensionLoaderRunnable implements ExtensionLoaderRunnable {
+public abstract class DefaultExtensionLoaderRunnable implements ExtensionLoaderRunnable {
 
 	@Override
 	public void handleException(Throwable e) {
@@ -17,11 +17,12 @@ public class DefaultExtensionLoaderRunnable implements ExtensionLoaderRunnable {
 	 */
 	@Override
 	public void run(List<IConfigurationElement> configs) throws Exception {
+		// TODO manejar mejor errores en la configuración de las extensiones. si
+		// tira error debería poder seguir con la siguiente configuración
 		for (IConfigurationElement iConfigurationElement : configs)
 			runOn(iConfigurationElement);
 	}
 
-	protected void runOn(IConfigurationElement celement) throws Exception {
-		System.out.println(celement);
-	}
+	protected abstract void runOn(IConfigurationElement celement) throws Exception ;
+	
 }
