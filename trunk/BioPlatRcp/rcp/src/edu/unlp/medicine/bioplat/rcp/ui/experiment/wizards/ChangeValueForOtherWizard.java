@@ -51,7 +51,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 
 	public ChangeValueForOtherWizard(AbstractExperiment abstractExperiment) {
 		this.experiment = abstractExperiment;
-		this.setWindowTitle("Change value for another value");
+		this.setWindowTitle("Change a value by other value");
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class ChangeValueForOtherWizard extends AbstractWizard<Void> {
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
-		WizardPageDescriptor wpd = new WizardPageDescriptor("Change a value for other value in the hole experiment") {
+		WizardPageDescriptor wpd = new WizardPageDescriptor("Change a value for other value in the whole experiment") {
 			@Override
 			public Composite create(WizardPage wizardPage, Composite parent, DataBindingContext dbc, WizardModel wmodel) {
 				Composite c = Widgets.createDefaultContainer(parent);
