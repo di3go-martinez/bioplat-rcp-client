@@ -27,23 +27,19 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  * @param <T>
  *            es el tipo del model
  */
-public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormEditor implements ModelProvider {
+public abstract class AbstractFormEditor<T extends AbstractEntity> extends FormEditor
+  implements ModelProvider<T> {
 
 	private List<EditorDescription> editors = Lists.newArrayList();
 
 	public AbstractFormEditor() {
-
+		
 	}
 
 	private void configureEditors() {
 		this.editors = Lists.newLinkedList(createEditors());
 	}
 
-	/**
-	 * Se puede hacer getEditorInput
-	 * 
-	 * @return
-	 */
 	protected abstract List<EditorDescription> createEditors();
 
 	@Override
