@@ -140,7 +140,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		GridData gdClusters = gdf.grab(false, false).create();
 		numberOfClusterText.setLayoutData(gdClusters);
 		numberOfClusterText.setEnabled(!forManualClustering);
-		
+		logger.trace("Number of clusters created");
+
 		if (!forManualClustering) {
 
 			
@@ -431,12 +432,12 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 					wmodel.set(PagesDescriptors.MANUAL_CLUSTERING, result);
 					wmodel.update(PagesDescriptors.NUMBER_OF_CLUSTERS, result.getNumberOfClusters());
 					/*if(!result.isAllSamplesAssignedToCluster()){
-						putmessageError(wp, "The experiment you have selected must have all the samples assigned to a cluster.");
-					}*/
-					//samplesNotClustered = !result.hasGotEnoughClustersForValidation();
-					 
-						
-					//	putmessageError(wp, "The experiment you have selected must have at least two clusters. Your experiment " + result.getExperiment().getName() + " have just " + result.getNumberOfClusters() + ". Please  set at least 2 clusters manually.");
+                    putmessageError(wp, "The experiment you have selected must have all the samples assigned to a cluster.");
+                    }*/
+                    //samplesNotClustered = !result.hasGotEnoughClustersForValidation();
+                 
+                    
+                //  putmessageError(wp, "The experiment you have selected must have at least two clusters. Your experiment " + result.getExperiment().getName() + " have just " + result.getNumberOfClusters() + ". Please  set at least 2 clusters manually.");
 				}
 			}
 			
@@ -469,19 +470,19 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		}.schedule(9000);
 	}
 	
-	private void putmessageError(final WizardPage wp, String message) {
-		MessageManager.INSTANCE.add(Message.error(message));
-		wp.setMessage(message, IMessageProvider.ERROR);
-		new UIJob("") {
+    private void putErrorMessage(final WizardPage wizardPage, String message) {
+      MessageManager.INSTANCE.add(Message.error(message));
+      wizardPage.setMessage(message, IMessageProvider.ERROR);
+      new UIJob("") {
 
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				// limpio el mensaje
-				wp.setMessage(null);
-				return ValidationStatus.ok();
-			}
-		}.schedule(9000);
-	}
+          @Override
+          public IStatus runInUIThread(IProgressMonitor monitor) {
+              // limpio el mensaje
+              wizardPage.setMessage(null);
+              return ValidationStatus.ok();
+          }
+      }.schedule(9000);
+  }
 	
 	
 
@@ -491,7 +492,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		if(this.forManualClustering){
 			try{
 				ClusteringResult cr = (ClusteringResult) wmodel.value(PagesDescriptors.MANUAL_CLUSTERING);
-				isComplete = cr.hasGotEnoughClustersForValidation() && checkIfCombosAreSelected() && cr.isAllSamplesAssignedToCluster();
+                isComplete = cr.hasGotEnoughClustersForValidation() && checkIfCombosAreSelected() && cr.isAllSamplesAssignedToCluster();
 			}catch(Exception e){
 				isComplete = false;
 			}
@@ -542,14 +543,14 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		survivalAttr.addAll(experiments.get(0).getClinicalAttributeNames());
 		for(Experiment exp : experiments ){
 			//survivalAttr.retainAll(exp.getClinicalAttributeNames());
-			survivalAttr = retainALlIgnoreCase(survivalAttr, exp.getClinicalAttributeNamesThatMayBeEvent());
+		  survivalAttr = retainALlIgnoreCase(survivalAttr, exp.getClinicalAttributeNamesThatMayBeEvent());
 		}
 
 		HashSet<String> timeAttr = new HashSet<String>();
 		timeAttr.addAll(experiments.get(0).getClinicalAttributeNames());
 		for(Experiment exp : experiments ){
-			//timeAttr.retainAll(exp.getClinicalAttributeNamesThatMayBeMonth());
-			timeAttr = retainALlIgnoreCase(timeAttr, exp.getClinicalAttributeNamesThatMayBeMonth());
+		//timeAttr.retainAll(exp.getClinicalAttributeNamesThatMayBeMonth());
+          timeAttr = retainALlIgnoreCase(timeAttr, exp.getClinicalAttributeNamesThatMayBeMonth());
 		}
 
 		
