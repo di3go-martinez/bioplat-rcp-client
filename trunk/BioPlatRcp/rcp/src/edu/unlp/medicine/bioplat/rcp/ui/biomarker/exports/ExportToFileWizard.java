@@ -50,10 +50,13 @@ import edu.unlp.medicine.r4j.constants.OSDependentConstants;
  * 
  * @author diego
  * 
+ *
+ * 
  */
+//TODO migrar al framework de wizard, para simplificar la implementación
 public class ExportToFileWizard extends Wizard implements IExportWizard {
 
-	Biomarker biomarker;
+	private Biomarker biomarker;
 	
 	final static String TAB = "Tab";
 	final static String COMMA = "Comma";
