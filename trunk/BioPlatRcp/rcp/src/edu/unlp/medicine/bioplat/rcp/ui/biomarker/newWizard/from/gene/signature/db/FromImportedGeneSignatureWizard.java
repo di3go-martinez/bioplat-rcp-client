@@ -28,21 +28,18 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 		this.setWindowTitle("Copy Gene Signature from external database (GeneSigDB, MolSigDB)");
 	}
 
-	
 	@Override
 	public int getWizardWidth() {
 		return 570;
-		
+
 	}
-	
-	
+
 	@Override
 	public int getWizardHeight() {
 		return 400;
-		
+
 	}
-	
-	
+
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> result = Lists.newArrayList();
@@ -54,29 +51,24 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	@Override
 	protected String getTaskName() {
-		return "New Bioplat GeneSignature as a copy of " + geneSignatureNameOrId + " from  "+ database + " ";
+		return "New Bioplat GeneSignature as a copy of " + geneSignatureNameOrId + " from  " + database + " ";
 	}
 
 	@Override
 	protected Biomarker backgroundProcess(Monitor monitor) throws Exception {
-		try{
-			return new NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase(database, geneSignatureNameOrId).execute();
-		}
-		catch (GeneSignatureNotFoundInPlatformException e){
-			//MessageManager.INSTANCE.add(Message.error(e.getMessage()));
-			throw e;
-		}
+		return new NewBiomarkerAsACopyGeneSignatureImportedFromExternalDatabase(database, geneSignatureNameOrId)
+				.execute();
 	}
 
 	@Override
 	protected void doInUI(Biomarker result) throws Exception {
-		//MessageManager.INSTANCE.add(Message.info("The biomarker " + result.getName().substring(8) + "from " + database + " was succesfully copied"));
+		// MessageManager.INSTANCE.add(Message.info("The biomarker " +
+		// result.getName().substring(8) + "from " + database + " was
+		// succesfully copied"));
 		PlatformUIUtils.openEditor(result, EditorsId.biomarkerEditorId());
-		
+
 	}
 
-	
-	
 	private String database;
 	private String geneSignatureNameOrId;
 
@@ -87,6 +79,4 @@ public class FromImportedGeneSignatureWizard extends AbstractWizard<Biomarker> i
 
 	}
 
-	
-	
 }
