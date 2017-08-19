@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
-
 import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
 import org.bioplat.r4j.R4JClient.exceptions.R4JServerShutDownException;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -20,8 +19,6 @@ public class StartupRserve implements IStartup {
 	// Logger Object
 	private static Logger logger = LoggerFactory.getLogger(StartupRserve.class);
 
-
-
 	@Override
 	public void earlyStartup() {
 
@@ -29,19 +26,20 @@ public class StartupRserve implements IStartup {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Initializing rServe (bridge between Bioplat and R) and checking R Libraries...", IProgressMonitor.UNKNOWN);
-				
+				monitor.beginTask("Initializing rServe (bridge between Bioplat and R) and checking R Libraries...",
+						IProgressMonitor.UNKNOWN);
+
 				/**
 				 * It initialize the BioplatR4JServer.
 				 */
-				
-				//bioplatR4JServer = BioplatR4JServer.getInstance();
-				// Se debe mejorar 
+
+				// bioplatR4JServer = BioplatR4JServer.getInstance();
+				// Se debe mejorar
 				BioplatR4JServer bioplatR4JServer = null;
 				IStatus validationStatus = ValidationStatus.OK_STATUS;
-				if("true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase())){
+				if (isRServerRunningLocal()) {
 					bioplatR4JServer = BioplatR4JServer.create();
-					if (bioplatR4JServer != null && bioplatR4JServer.isStarted()){
+					if (bioplatR4JServer != null && bioplatR4JServer.isStarted()) {
 						return ValidationStatus.OK_STATUS;
 						/*if (bioplatR4JServer.getRequiredRLibrariesNotInstalled().size()==0) {
 							String okMessage = "All the R libraries required by Bioplat were succesfully loaded";
@@ -56,9 +54,9 @@ public class StartupRserve implements IStartup {
 						return ValidationStatus.error(errorMessage);
 					}
 				}
-				//R4JConnection.getInstance();
+				// R4JConnection.getInstance();
 				return validationStatus;
-				
+
 			}
 
 			/*private IStatus manageRequiredRLibsNotInstalled(List<RLibrary> rLibs) {
@@ -82,13 +80,19 @@ public class StartupRserve implements IStartup {
 			@Override
 			public void run() {
 				try {
-					BioplatR4JServer.getInstance().getServer().shutDown();
+					if (isRServerRunningLocal())
+						BioplatR4JServer.getInstance().getServer().shutDown();
 					BioplatFileSystemUtils.deleteImagesFolder();
 				} catch (R4JServerShutDownException e) {
-					logger.error("Problem shutting down the Rserve on port: " + R4JConfigurator.getInstance().getPort());
+					logger.error(
+							"Problem shutting down the Rserve on port: " + R4JConfigurator.getInstance().getPort());
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+
+	private boolean isRServerRunningLocal() {
+		return "true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase());
 	}
 }
