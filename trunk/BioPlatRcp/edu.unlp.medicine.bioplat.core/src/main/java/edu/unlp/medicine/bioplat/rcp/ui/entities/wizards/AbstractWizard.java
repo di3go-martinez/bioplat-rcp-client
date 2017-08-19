@@ -67,6 +67,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	protected WizardModel wizardModel() {
 		return model;
 	}
+	
+	protected final <X> X value(String key){
+		return wizardModel().value(key);
+	}
 
 	/**
 	 * Inicializa el wizardmodel
@@ -124,7 +128,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean isPageComplete() {
-					return pageDescriptor.isPageComplete(/* this? */wizardModel());
+					return pageDescriptor.isPageComplete(wizardModel());
 				}
 
 				@Override
@@ -139,7 +143,6 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				
 				@Override
 				public void setVisible(boolean visible) {
-					// TODO Auto-generated method stub
 					super.setVisible(visible);
 					if (visible){
 						pageDescriptor.doOnEnter();
@@ -147,15 +150,6 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 						pageDescriptor.doOnExit();
 					}
 				}
-				
-				
-				
-				
-				
-				// @Override
-				// public Shell getShell() {
-				// return super.getShell();
-				// }
 
 			});
 
@@ -231,6 +225,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *         false si se canceló la operaciòn
 	 */
 	public boolean open() {
+	  //TODO llevar a:
+	  //init(PlatformUI.getWorkbench())
+	  //createWizardDialog().open()
+	  
 		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this) {
 			private boolean initialize = true;
 
@@ -524,7 +522,7 @@ class ResultPage extends WizardPage {
 	private AbstractWizard<?> w;
 
 	public ResultPage(AbstractWizard<?> w, WizardPageDescriptor pd) {
-		super("dummy page");
+		super("page for results");
 		this.pd = pd;
 		this.w = w;
 	}
@@ -550,4 +548,6 @@ class ResultPage extends WizardPage {
 	public boolean isPageComplete() {
 		return pd.isResultPageComplete(w.wizardModel());
 	}
+	
+	
 }
