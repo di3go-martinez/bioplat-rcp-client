@@ -13,4 +13,7 @@ public class DataBindingContextHolder {
 	static DataBindingContext dataBindingGlobalContext() {
 		return dbc;
 	}
+	
+	private DataBindingContextHolder() {
+    }
 }
