@@ -16,6 +16,13 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.entity.gene.Gene;
 
+
+/**
+ * Abre un browser integrado al cliente para mostrar el resultado de Enrichr
+ * @author diego
+ * @see EnrichActionContribution
+ *
+ */
 public class EnrichrDialog extends Dialog {
 
 	private Browser browser;
