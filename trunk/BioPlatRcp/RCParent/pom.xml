@@ -60,6 +60,7 @@
 		<!--module>../runtime</module -->
 		<module>../edu.unlp.medicine.bioplat.genes</module>
 		<module>../edu.unlp.medicine.bioplat.core</module>
+		<module>../org.bioplat.classifiers</module>
 	</modules>
 
 
