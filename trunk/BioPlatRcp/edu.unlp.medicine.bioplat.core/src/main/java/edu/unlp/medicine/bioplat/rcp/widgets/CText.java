@@ -29,8 +29,7 @@ import edu.unlp.medicine.entity.generic.AbstractEntity;
  * 
  * @see Widgets#createText(Composite, Object, String)
  * @author Diego Martínez
- * @version $Revision:$
- * @updatedBy $Author:$ on $Date:$
+ * @since 1.0
  */
 public class CText implements Widget {
 
