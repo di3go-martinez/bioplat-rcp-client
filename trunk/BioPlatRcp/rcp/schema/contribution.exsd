@@ -6,7 +6,7 @@
          <meta.schema plugin="edu.medicine.bioplat.rcp" id="editor.operation.contribution" name="Operaciones"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         Punto de extensión que permite agregar una operación a una entidad.
       </documentation>
    </annotation>
 
