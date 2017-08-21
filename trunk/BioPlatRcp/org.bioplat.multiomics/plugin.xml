@@ -21,7 +21,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.bioplat.multiomics.handler.OpenWebPort"
+            class="org.bioplat.multiomics.handler.OpenWebPortHandler"
             commandId="org.bioplat.multiomics.open-web-port">
       </handler>
    </extension>
