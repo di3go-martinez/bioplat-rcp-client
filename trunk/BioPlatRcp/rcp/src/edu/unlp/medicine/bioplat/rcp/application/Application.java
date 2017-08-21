@@ -4,11 +4,14 @@ import static org.eclipse.ui.PlatformUI.RETURN_OK;
 import static org.eclipse.ui.PlatformUI.RETURN_RESTART;
 import static org.eclipse.ui.PlatformUI.createAndRunWorkbench;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+
+import edu.unlp.medicine.bioplat.core.ApplicationParametersHolder;
 
 /**
  * This class controls all aspects of the application's execution
@@ -23,6 +26,8 @@ public class Application implements IApplication {
 	 */
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
+		
+		initializeCommandLineArguments();
 		
 		if(!System.getProperty("os.name").toLowerCase().contains("win")){
 			System.setProperty("org.eclipse.swt.browser.XULRunnerPath",  System.getProperty("user.dir") + "/xulrunner"); 
@@ -40,6 +45,10 @@ public class Application implements IApplication {
 			display.dispose();
 		}
 
+	}
+
+	private void initializeCommandLineArguments() {
+		ApplicationParametersHolder.initialize(Platform.getCommandLineArgs());
 	}
 
 	/*
