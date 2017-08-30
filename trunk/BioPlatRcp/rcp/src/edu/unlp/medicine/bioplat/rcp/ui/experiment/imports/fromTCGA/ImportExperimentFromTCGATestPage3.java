@@ -239,11 +239,14 @@ public class ImportExperimentFromTCGATestPage3 extends WizardPageDescriptor {
 	 */
 	@Override
 	public void doOnExit() {
-		
+	try {			
 		if (((String[]) model.value(ATTRIBUTES)).length == 0  && !warningShown) {
 	        this.messageBox.open();
 	        warningShown = true;
 		}
+	} catch (Exception e) {
+	//do nothing
+	}
 		super.doOnExit();
 	}
 	
