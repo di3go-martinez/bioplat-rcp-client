@@ -163,6 +163,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			}
 
 		}
+		
 	}
 
 	private boolean initialPage = true;
@@ -508,7 +509,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	}
 
 	private void addErrorMessageToMessageView(Throwable t) {
-		MessageManager.INSTANCE.add(Message.error(t.getMessage(), t));
+		logger.error("Ocurrió un error", t);
+		MessageManager.INSTANCE.add(Message.error(t.getMessage()));
 
 	}
 
