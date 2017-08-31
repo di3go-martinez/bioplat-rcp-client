@@ -27,7 +27,6 @@ import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
  * 
  * Descritor de página de wizard para los proveedores de genes signatures
  * 
- * @author diego martínez
  * 
  */
 public class BlindSearchPage1Introduction extends WizardPageDescriptor {
