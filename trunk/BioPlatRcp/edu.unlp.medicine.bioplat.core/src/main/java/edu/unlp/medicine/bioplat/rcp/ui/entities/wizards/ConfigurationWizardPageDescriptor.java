@@ -258,7 +258,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 	private Composite getGroupFoRClusteringAttribute(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(GridLayoutFactory.fillDefaults().equalWidth(false).numColumns(3).create());
-		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		return container;
 	}
 
@@ -587,18 +587,18 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		
 		validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", timeAttrList);
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
-		validationAttrName.getCombo().setLayoutData(gdf.grab(true, true).create());
+		validationAttrName.getCombo().setLayoutData(new GridData());
 		logger.trace("Time attribute name created");
-		GUIUtils.addBoldText(groupForValidationAtt1, "This attribute represents 'time until the event ocurred'. That is why, the list shows just the clinical attributes with number values.",8);
+		GUIUtils.addBoldText(groupForValidationAtt1, "This attribute represents 'time until the event ocurred'. That is why, the list shows just the clinical attributes with number values.",7);
 
 
 		new Label(survivalGroup, SWT.NONE).setText("\n\"Status\" Attribute Name");
 		Composite groupForValidationAtt2 = getGroupFoRClusteringAttribute(survivalGroup);
 		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", survivalAttrList);
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
-		validationAttrName2.getCombo().setLayoutData(gdf.grab(true, true).create());
+		validationAttrName2.getCombo().setLayoutData(new GridData());
 		logger.trace("Status attribute name created");
-		GUIUtils.addBoldText(groupForValidationAtt2, StatusValidValues.getMessageForEventAttributeForGUI(),8);
+		GUIUtils.addBoldText(groupForValidationAtt2, StatusValidValues.getMessageForEventAttributeForGUI(),7);
 
 		//container.layout(true, true);
 		container.getShell().layout(true,true);
