@@ -11,8 +11,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import edu.unlp.medicine.bioplat.core.ApplicationParametersHolder;
-
 /**
  * This class controls all aspects of the application's execution
  */
@@ -48,7 +46,7 @@ public class Application implements IApplication {
 	}
 
 	private void initializeCommandLineArguments() {
-		ApplicationParametersHolder.initialize(Platform.getCommandLineArgs());
+		edu.unlp.medicine.utils.parameters.ApplicationParametersHolder.initialize(Platform.getCommandLineArgs());
 	}
 
 	/*
