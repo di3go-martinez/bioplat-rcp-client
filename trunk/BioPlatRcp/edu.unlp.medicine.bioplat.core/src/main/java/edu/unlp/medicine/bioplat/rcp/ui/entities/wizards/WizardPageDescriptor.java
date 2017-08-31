@@ -162,6 +162,11 @@ public abstract class WizardPageDescriptor {
 		this.description = description;
 	}
 
+	@Beta
+	protected final void fireUpdateButtons(WizardPage wizardPage) {
+		wizardPage.getWizard().getContainer().updateButtons();
+		
+	}
 	/**
 	 * Éste metodo se llamará al hacerse visible la pagina (es decir, cuando ingresa)
 	 */
