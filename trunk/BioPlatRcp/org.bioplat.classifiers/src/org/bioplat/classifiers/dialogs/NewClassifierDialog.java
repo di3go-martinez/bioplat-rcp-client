@@ -10,6 +10,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,9 +21,11 @@ import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Maps;
 
+import edu.unlp.medicine.bioplat.core.preferences.AuthorPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.classifiers.ClassifierCreator;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
 import edu.unlp.medicine.entity.experiment.ClusterData;
@@ -46,13 +49,20 @@ public class NewClassifierDialog extends Dialog {
 	}
 
 	@Override
+	protected Point getInitialSize() {
+		return new Point(600, 500);
+	}
+
+	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		GridLayout layout = GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).margins(5, 5).spacing(2, 2)
-				.create();
-		container.setLayout(layout);
+		Composite container = Widgets.createDefaultContainer(parent, 2);
+		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+		GridLayoutFactory layoutf = GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).margins(10, 10)
+				.spacing(10, 10);
+		container.setLayout(layoutf.create());
 		new Label(container, SWT.SHADOW_ETCHED_IN).setText("Name: ");
-		Text t = new Text(container, SWT.FLAT);
+		Text t = new Text(container, SWT.BORDER);
+		t.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		t.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -64,11 +74,13 @@ public class NewClassifierDialog extends Dialog {
 		});
 
 		Group group = new Group(container, SWT.NONE);
-		group.setLayout(layout);
-		group.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		group.setLayout(layoutf.create());
+		group.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2, 1).create());
 		for (final ClusterData cluster : clusters()) {
 			new Label(group, SWT.BOLD).setText("Grupo " + cluster.getGroupId() + ": ");
-			new Text(group, SWT.FLAT).addModifyListener(new ModifyListener() {
+			t = new Text(group, SWT.FLAT);
+			t.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+			t.addModifyListener(new ModifyListener() {
 
 				@Override
 				public void modifyText(ModifyEvent e) {
@@ -92,7 +104,6 @@ public class NewClassifierDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		// TODO Auto-generated method stub
 		super.createButtonsForButtonBar(parent);
 		getButton(IDialogConstants.OK_ID).setEnabled(false);
 	}
@@ -105,9 +116,13 @@ public class NewClassifierDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		new ClassifierCreator().create(validation, classifierName, groupLabels);
+		new ClassifierCreator().create(validation, author(), classifierName, groupLabels);
 		MessageManager.INSTANCE.add(Message.info("Classifier " + classifierName + " created."));
 		super.okPressed();
+	}
+
+	private String author() {
+		return AuthorPreferencePage.author();
 	}
 
 }

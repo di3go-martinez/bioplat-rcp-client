@@ -5,13 +5,26 @@
 <extension
          point="edu.medicine.bioplat.rcp.editor.operation.contribution">
    <actionContribution
-         caption="Create Classifier From Gene Signature"
-         class="org.bioplat.classifiers.CreateClassifierFromBiomarker"
+         caption="Create Classifier From Validation"
+         class="org.bioplat.classifiers.actions.CreateClassifierFromBiomarker"
          onMenu="true"
          onToolbar="false">
       <selection
             class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
    </actionContribution>
+</extension>
+<extension
+      point="org.eclipse.ui.newWizards">
+   <category
+         id="org.bioplat.classifiers.new.wizard.root"
+         name="Classifiers">
+   </category>
+   <wizard
+         category="org.bioplat.classifiers.new.wizard.root"
+         class="org.bioplat.classifiers.newWizards.evaluation.EvaluateClassifierWizard"
+         id="org.bioplat.classifiers.new.wizard.evaluate"
+         name="Evaluate">
+   </wizard>
 </extension>
 
 </plugin>
