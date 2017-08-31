@@ -18,6 +18,7 @@ import org.eclipse.ui.INewWizard;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.core.preferences.AuthorPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
@@ -54,10 +55,14 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	
 	@Override
 	protected WizardModel createWizardModel() {
-		WizardModel wm = new WizardModel().add(NAME_K, new WritableValue("noName", String.class));
-		wm.add(AUTHOR, new WritableValue("", String.class));
+		WizardModel wm = new WizardModel().add(NAME_K, new WritableValue("NoName", String.class));
+		wm.add(AUTHOR, new WritableValue(author(), String.class));
 		wm.add(DESCRIPTION, new WritableValue("", String.class));
 		return wm;
+	}
+
+	private String author() {
+		return AuthorPreferencePage.author();
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class CreateEmptyBiomarkerWizard extends AbstractWizard<Biomarker> implem
 	}
 
 	private String name = "";
-	private String author = "";
+	private String author = author();
 	private String description = "";
 
 	@Override
