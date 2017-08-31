@@ -1,7 +1,7 @@
 package org.bioplat.multiomics;
 
 
-import static edu.unlp.medicine.bioplat.core.ApplicationParametersHolder.parameters;
+import static edu.unlp.medicine.utils.parameters.ApplicationParametersHolder.parameters;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
