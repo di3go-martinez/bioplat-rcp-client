@@ -92,7 +92,7 @@ public class GeneViewPart extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		
-		Action actionSearchAll = new Action("Search All", Activator.imageDescriptorFromPlugin("resources/icons/mundo.png")) {
+		Action actionRefreshAll = new Action("Refresh All", Activator.imageDescriptorFromPlugin("resources/icons/refresh.png")) {
 			
 			@Override
 			public void run() {
@@ -131,8 +131,8 @@ public class GeneViewPart extends ViewPart {
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
-		dropDownMenu.add(actionSearchAll);
-		toolBar.add(actionSearchAll);
+		dropDownMenu.add(actionRefreshAll);
+		toolBar.add(actionRefreshAll);
 		
 		getSelectionService().addSelectionListener(listener = new ISelectionListener() {
 
@@ -327,7 +327,7 @@ public class GeneViewPart extends ViewPart {
             "</head>"+
             "<body>"+
             "<div id=\"newdiv\" align=\"center\">"+
-            "<img src=\"http://www.schultzlawoffice.com/img/loading/loading-x.gif\" />"+
+            "<img src=\"https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif\" alt=\"Loading...\" />"+
             "</div>"+
             "</body>"+
             "</html>" ;
