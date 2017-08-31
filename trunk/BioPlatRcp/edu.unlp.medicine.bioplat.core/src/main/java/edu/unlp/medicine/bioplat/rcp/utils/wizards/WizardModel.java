@@ -80,7 +80,8 @@ public class WizardModel {
 		// TODO analizar de agregarlos por default (add(key))... igualmente
 		// tirar el warning... pros y constras
 		if (iObservableValue == null && value == null)
-			logger.warn("The holder for the key " + key + " is null");
+			if (logger.isDebugEnabled())
+				logger.warn("The holder for the key " + key + " is null");
 		return iObservableValue;
 	}
 
