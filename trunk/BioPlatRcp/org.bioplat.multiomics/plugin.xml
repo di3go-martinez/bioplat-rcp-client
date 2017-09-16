@@ -5,7 +5,6 @@
          point="org.eclipse.ui.views">
       <view
             class="org.bioplat.multiomics.MultiomicsWebPort"
-            icon="resources/www.png"
             id="org.bioplat.multiomics.web-port"
             name="MultiOmics"
             restorable="true">
