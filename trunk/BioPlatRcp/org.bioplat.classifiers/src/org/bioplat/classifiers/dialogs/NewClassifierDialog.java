@@ -3,15 +3,16 @@ package org.bioplat.classifiers.dialogs;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -25,6 +26,7 @@ import edu.unlp.medicine.bioplat.core.preferences.AuthorPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.jobs.EJob;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.framework.classifiers.ClassifierCreator;
 import edu.unlp.medicine.domainLogic.framework.metasignatureGeneration.validation.Validation;
@@ -55,6 +57,7 @@ public class NewClassifierDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		
 		Composite container = Widgets.createDefaultContainer(parent, 2);
 		container.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		GridLayoutFactory layoutf = GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).margins(10, 10)
@@ -116,8 +119,23 @@ public class NewClassifierDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		new ClassifierCreator().create(validation, author(), classifierName, groupLabels);
-		MessageManager.INSTANCE.add(Message.info("Classifier " + classifierName + " created."));
+
+		new EJob("Creating Classifier...") {
+
+			@Override
+			protected void doWork(IProgressMonitor monitor) {
+				try {
+					monitor.beginTask("Creating Classifier '"+classifierName+"'...", IProgressMonitor.UNKNOWN);
+					new ClassifierCreator().create(validation, author(), classifierName, groupLabels);
+					
+				} finally {
+					monitor.done();
+				}
+			}
+			protected void doOnCallBack() {
+				MessageManager.INSTANCE.add(Message.info("Classifier " + classifierName + " created."));
+			};
+		}.schedule();
 		super.okPressed();
 	}
 
