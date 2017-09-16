@@ -1,11 +1,14 @@
 package org.bioplat.classifiers.newWizards.evaluation;
 
-import static edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message.error;
 import static edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message.info;
 
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 
 import com.google.common.collect.Lists;
@@ -51,12 +54,25 @@ public class EvaluateClassifierWizard extends AbstractWizard<ClassifierExecution
 		return new EvaluateClassifier().evaluate(classifier, sample);
 	}
 
-	
-
 	@Override
-	protected void doInUI(ClassifierExecutionResult result) throws Exception {
+	protected void doInUI(final ClassifierExecutionResult result) throws Exception {
 		MessageManager.INSTANCE.add(info(result.message()));
+		Display.getCurrent().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				showResults(result);
+			}
+		});
 	}
+
+	private void showResults(ClassifierExecutionResult result) {
+		MessageBox dialog = new MessageBox(new Shell());
+		dialog.setMessage(result.message());
+		dialog.open();
+	}
+
+	
 
 	@Override
 	public int getWizardWidth() {
