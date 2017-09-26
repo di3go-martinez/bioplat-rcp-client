@@ -323,7 +323,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 			}
 
 			private boolean autorefresh() {
-				return ExperimentEditor.ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
+				return ExperimentEditor.preferences().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 			}
 		};
 	}
