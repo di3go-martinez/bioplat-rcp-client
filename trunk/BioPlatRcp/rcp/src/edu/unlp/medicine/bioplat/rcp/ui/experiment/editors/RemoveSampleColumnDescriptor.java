@@ -1,8 +1,12 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
+import static edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils.*;
+import static org.eclipse.jface.dialogs.MessageDialog.openConfirm;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +18,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.menues.MenuItemDescriptor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.RemoveSamplesCommand;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
+import edu.unlp.medicine.entity.experiment.Experiment;
+import edu.unlp.medicine.entity.experiment.Sample;
 
 public class RemoveSampleColumnDescriptor implements MenuItemDescriptor {
 
@@ -27,47 +33,58 @@ public class RemoveSampleColumnDescriptor implements MenuItemDescriptor {
 	public MenuContribution createOn(Menu menu, final TableViewerColumn column) {
 		final MenuItemContribution mic = MenuItemContribution.create(menu);
 		mic.text("Remove");
-		mic.image(PlatformUIUtils.findImage("removeItem.gif"));
-		mic.addSelectionListener(new SelectionAdapter() {
+		mic.image(findImage("removeItem.gif"));
+		mic.addSelectionListener(createRemoveSampleSelectionListener(column, mic));
+		experiment.addPropertyChangeListener(Experiment.SAMPLE_REMOVED, new PropertyChangeListener() {
+
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				String columnId = column.getColumn().getText();
-				if (MessageDialog.openConfirm(PlatformUIUtils.findShell(), "", "Do you really want to delete the sample " + columnId + "?")) {
-					// Borro del modelo
-					new RemoveSamplesCommand(experiment, Arrays.asList(columnId)).execute();
-
-					// "Borro" de la vista; SWT no proveé un mecanismo para
-					// borrar columnas
-					column.getColumn().setWidth(0);
-					column.getColumn().setResizable(false);
-
-					// reOrderColumns();
-
-					// saco este listener porque la columna ya no está más
-					mic.removeSelectionListener(this);
-				}
+			public void propertyChange(PropertyChangeEvent evt) {
+				Sample s = (Sample) evt.getOldValue();
+				if (s.getName().equals(sampleName(column)))
+					removeUIColumn(column);
 			}
 
 		});
 		return mic;
 	}
 
-	// private void reOrderColumns() {
-	// TODO Auto-generated method stub
-	// fixeo el order de las columnas mandando la borrada al
-	// final... con el cambio a CustomCellData es muy probable
-	// que no se necesite cambiar el orden....
-	// TableColumn deletedTableColumn = column.getColumn();
-	// Table t = deletedTableColumn.getParent();
-	// int columnOrder[] = t.getColumnOrder();
-	// int deletedColumnIndex = t.indexOf(deletedTableColumn);
-	// for (int i = deletedColumnIndex; i < columnOrder.length -
-	// 1; i++)
-	// columnOrder[i] = columnOrder[i + 1];
-	// columnOrder[columnOrder.length - 1] = deletedColumnIndex;
-	// t.setColumnOrder(columnOrder);
+	private String sampleName(final TableViewerColumn column) {
+		return column.getColumn().getText();
+	}
 
-	// }
+	private SelectionAdapter createRemoveSampleSelectionListener(final TableViewerColumn column,
+			final MenuItemContribution mic) {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String sampleId = sampleName(column);
+				if (remove(sampleId)) {
+					doRemove(column, sampleId);
+
+					// saco este listener porque la columna ya no está más
+					mic.removeSelectionListener(this);
+				}
+			}
+
+			private boolean remove(String sampleId) {
+				return openConfirm(PlatformUIUtils.findShell(), "",
+						"Do you really want to delete the sample " + sampleId + "?");
+			}
+
+		};
+	}
+
+	private void doRemove(final TableViewerColumn column, String sampleId) {
+		new RemoveSamplesCommand(experiment, Arrays.asList(sampleId)).execute();
+		removeUIColumn(column);
+	}
+
+	// "Borro" de la vista; SWT no proveé un mecanismo para
+	// borrar columnas
+	private void removeUIColumn(final TableViewerColumn column) {
+		column.getColumn().setWidth(0);
+		column.getColumn().setResizable(false);
+	}
 
 }

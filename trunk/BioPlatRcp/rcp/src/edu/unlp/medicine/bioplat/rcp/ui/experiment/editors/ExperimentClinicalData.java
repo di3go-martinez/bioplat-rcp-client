@@ -138,6 +138,8 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 	// TODO mejorar los parámetros pasados al método, que sean los datos no los
 	// widgets...
 	private void resort(final TableReference tr, ComboViewer cv, Button b) {
+		final int FIXED_COLUMNS = 3;
+		
 		Table t = tr.getTable();
 
 		// Coincide el orden de los atributos en las grillas, por eso se usa el
@@ -148,7 +150,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		TableItem ti = t.getItem(selectionIndex);
 		ClinicalDataModel cdm = (ClinicalDataModel) ti.getData();
 
-		final int samplesCount = Math.min(model().getSampleCount(), ExperimentEditor.getSampleCountToLoad());
+		final int samplesCount = Math.min(t.getColumnCount()- FIXED_COLUMNS, ExperimentEditor.getSampleCountToLoad());
 		// sorted es la colección donde quedarán los datos ordenados
 		CustomCellData[] sorted = Arrays.copyOfRange(cdm.getData(), 1, samplesCount + 1);
 		// original es como están los datos (des)ordenados actualmente
@@ -171,7 +173,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 		newOrder[2] = 2; // hay una columna fija oculta por un bug!! ver
 							// TableBuilder.create
 
-		final int FIXED_COLUMNS = 3;
+		
 
 		final List<CustomCellData> originalAsList = Arrays.asList(original);
 		// · voy buscando los elementos en orden de sorted, y poniendo
@@ -335,7 +337,7 @@ public class ExperimentClinicalData extends AbstractEditorPart<AbstractExperimen
 			}
 
 			private boolean autorefresh() {
-				return ExperimentEditor.ep().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
+				return ExperimentEditor.preferences().getBoolean(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_AUTO_REFRESH, true);
 			}
 		};
 	}
