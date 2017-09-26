@@ -119,7 +119,7 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 		}.createEditorBrowsers(result, getEditorInput());
 
 		try {
-			GeneViewPart view = (GeneViewPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("edu.medicine.bioplat.rcp.gene.view");
+			GeneViewPart view = (GeneViewPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(GeneViewPart.id());
 		} catch (PartInitException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -141,13 +141,13 @@ public class ExperimentEditor extends AbstractFormEditor<AbstractExperiment> {
 	 * @return la cantidad de samples a cargar en la vista
 	 */
 	static int getSampleCountToLoad() {
-		return ep().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 100);
+		return preferences().getInt(ExperimentGeneralPreferencePage.EXPERIMENT_GRID_MAX_SAMPLES, 100);
 	}
 
 	// TODO sacar de acá
 	private static IEclipsePreferences ep;
 
-	static IEclipsePreferences ep() {
+	static IEclipsePreferences preferences() {
 		if (ep == null)
 			ep = PlatformUtils.preferences();
 		return ep;
