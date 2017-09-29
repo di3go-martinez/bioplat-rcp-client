@@ -17,7 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Lists;
@@ -31,7 +30,6 @@ import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.domainLogic.ext.experimentCommands.logarithms.ENUM_LOGARITHM_BASE;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
-import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.utils.monitor.Monitor;

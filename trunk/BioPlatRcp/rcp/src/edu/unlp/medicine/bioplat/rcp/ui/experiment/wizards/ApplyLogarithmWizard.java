@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards;
 
-import java.awt.TextField;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Lists;
 
