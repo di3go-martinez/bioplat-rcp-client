@@ -34,51 +34,43 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(FromCSVFileExperimentImportWizard.class);
 
-	//Variables used in the wizard
-	List<GeneSignature> openedSelectedGeneSignatures =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
+	// Variables used in the wizard
+	List<GeneSignature> openedSelectedGeneSignatures = wizardModel()
+			.value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
 	String selectedGenes4Filtering;
 	String filePath;
 	String collapseStrategy;
 	int clinicalDataFirstLine;
 
-	
 	private String separator = " ";
-	
+
 	public FromCSVFileExperimentImportWizard() {
 		super();
-		
-		
+
 	}
-	
-	
+
 	@Override
 	public int getWizardHeight() {
-		
 		return 620;
 	}
-	
-	
+
 	@Override
 	public int getWizardWidth() {
-		
 		return 630;
 	}
-	
+
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		List<WizardPageDescriptor> descriptors = Lists.newArrayList();
-			
-			descriptors.add(createIntroductionPage());
-		
-			descriptors.add(createMainPage());
-		
-			//final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
-			descriptors.add(createPage3ForSelecctingGenesOrGS());
-	
-				
+
+		descriptors.add(createIntroductionPage());
+
+		descriptors.add(createMainPage());
+
+		descriptors.add(createPage3ForSelecctingGenesOrGS());
+
 		this.setWindowTitle("Import Dataset from .CSV file");
-		
-		
+
 		return descriptors;
 	}
 
@@ -87,76 +79,72 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	}
 
 	private WizardPageDescriptor createPage3ForSelecctingGenesOrGS() {
-		
-		return new FromCSVFilePage3SelectGenesOrGSForFiltering( wizardModel());
+
+		return new FromCSVFilePage3SelectGenesOrGSForFiltering(wizardModel());
 	}
 
 	private GenericPage1ForIntroduction createIntroductionPage() {
-		
-		String inBlankBigTitle =  "Import Dataset from .CSV file"; 
 
-		String inBlankSmallTitle =  "Import an Dataset, from a text file containing expression data and clinical data";
+		String inBlankBigTitle = "Import Dataset from .CSV file";
 
-		String introductionText =  "A Dataset includes expression data and clinical data. A Dataset in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the dataset in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\n\n If your dataset is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
-		
+		String inBlankSmallTitle = "Import an Dataset, from a text file containing expression data and clinical data";
+
+		String introductionText = "A Dataset includes expression data and clinical data. A Dataset in Bioplat can be used for validating Gene Signatures, for optimizing Gene Signatures (feature selection) or just for filtering and visualizing the dataset in a convenient way. You can also configure a group for each sample, to evaluate if different groups clinical data have got significantly statistic differences.\n\n If your dataset is too large, you should use the last page of this wizard for filtering the genes to import. You can do it pasting the gene list or selecting an opened Gene Signature.\n\nYou can select the collapsing strategy (media, median or variance). It will be used for picking up the gene row if there is more than one row for this gene.";
+
 		return new GenericPage1ForIntroduction(inBlankBigTitle, inBlankSmallTitle, introductionText);
 	}
-
 
 	private WizardPageDescriptor createValidationConfiguration() {
 		return null;
 	}
 
-	
 	@Override
 	public boolean logInTheMessageView() {
-	
+
 		return false;
 	}
-	
+
 	@Override
 	protected String getTaskName() {
 		return "Import Dataset from CSV file";
 	}
-	
-	
+
 	@Override
 	protected void configureParameters() {
-		
-		 List<Biomarker> openedBiomarkers =  wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
-		 openedSelectedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
-		 
-		 selectedGenes4Filtering = wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.SELECTED_GENES);
-		
-		 filePath = wizardModel().value(FromCSVFilePage2Main.FILE_PATH);
-		 collapseStrategy = wizardModel().value(FromCSVFilePage2Main.COLLAPSE_STRATEGY);
-		 
-		 //final String clinicalDataFirstLineString = wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
-		 clinicalDataFirstLine = wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
+
+		List<Biomarker> openedBiomarkers = wizardModel()
+				.value(FromCSVFilePage3SelectGenesOrGSForFiltering.OPENED_SELECTED_BIOMARKERS);
+		openedSelectedGeneSignatures = translateBiomarkerIntoGS(openedBiomarkers);
+
+		selectedGenes4Filtering = wizardModel().value(FromCSVFilePage3SelectGenesOrGSForFiltering.SELECTED_GENES);
+
+		filePath = wizardModel().value(FromCSVFilePage2Main.FILE_PATH);
+		collapseStrategy = wizardModel().value(FromCSVFilePage2Main.COLLAPSE_STRATEGY);
+
+		// final String clinicalDataFirstLineString =
+		// wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
+		clinicalDataFirstLine = wizardModel().value(FromCSVFilePage2Main.CLINICAL_FIRST_LINE);
 
 	}
-
 
 	@Override
 	protected Experiment backgroundProcess(Monitor m) throws Exception {
-		
-		FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1, clinicalDataFirstLine-2, clinicalDataFirstLine-1, clinicalDataFirstLine, "\t", collapseStrategy);
-		
-		if (openedSelectedGeneSignatures.size()>0){
-		
+
+		FromFileExperimentDescriptor fromFileExperimentDescriptor = new FromFileExperimentDescriptor(filePath, 1,
+				clinicalDataFirstLine - 2, clinicalDataFirstLine - 1, clinicalDataFirstLine, "\t", collapseStrategy);
+
+		if (openedSelectedGeneSignatures.size() > 0) {
+
 			java.util.List<Gene> genesToKeep = openedSelectedGeneSignatures.get(0).getGenes();
 			fromFileExperimentDescriptor.setGenesToKeep(genesToKeep);
-		}
-		else if (!selectedGenes4Filtering.equals("")){
+		} else if (!selectedGenes4Filtering.equals("")) {
 			fromFileExperimentDescriptor.setGenesToKeep(genes());
 		}
-		
+
 		return new FromFileExperimentFactory(fromFileExperimentDescriptor).monitor(m).createExperiment();
 
-		
 	}
-		
-		
+
 	@Override
 	protected void doInUI(Experiment result) {
 		try {
@@ -165,15 +153,20 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 				@Override
 				public void run() {
-					
-					if(e.getNumberOfGenes()==0){ 
-						MessageManager.INSTANCE.openView().add(Message.warn("The file \"" + filePath + "\" was imported but it does not seem to have the expected data and/or format. "));
+
+					if (e.getNumberOfGenes() == 0) {
+						MessageManager.INSTANCE.openView().add(Message.warn("The file \"" + filePath
+								+ "\" was imported but it does not seem to have the expected data and/or format. "));
 						PlatformUIUtils.openEditor(e, ExperimentEditor.id());
-						PlatformUIUtils.openWarning("The file has got the expected data and format?", "It seems the input file has not got the expected data and/or expected format. Please check the imported Dataset because it is hihgly probably that it doesnt have any useful information for validating. If so, please close it,check the file you have selected and do the import again.");
-					}
-					else{	
-					MessageManager.INSTANCE.openView().add(Message.info("Dataset from file \"" + filePath + "\" was imported sucessfully. Gene Expression lines read: " + e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: " + e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes() + " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
-					PlatformUIUtils.openEditor(e, ExperimentEditor.id());
+						PlatformUIUtils.openWarning("The file has got the expected data and format?",
+								"It seems the input file has not got the expected data and/or expected format. Please check the imported Dataset because it is hihgly probably that it doesnt have any useful information for validating. If so, please close it,check the file you have selected and do the import again.");
+					} else {
+						MessageManager.INSTANCE.openView().add(Message.info("Dataset from file \"" + filePath
+								+ "\" was imported sucessfully. Gene Expression lines read: "
+								+ e.getNumberOfExpressionLinesInTheOriginalFile() + ". Number of  genes imported: "
+								+ e.getNumberOfGenes() + ". Number of collapsed genes: " + e.getNumberOfCollapsedGenes()
+								+ " . Collapsing strategy: " + e.getCollapsedStrategyName() + ". "));
+						PlatformUIUtils.openEditor(e, ExperimentEditor.id());
 					}
 
 				}
@@ -189,23 +182,18 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 
 	}
 
-	
 	private String filter = "";
 
+	private List<GeneSignature> translateBiomarkerIntoGS(List<Biomarker> openedBiomarkers) {
 
-	private List<GeneSignature> translateBiomarkerIntoGS(
-			List<Biomarker> openedBiomarkers) {
-		
-		
-		
 		List<GeneSignature> result = new ArrayList<GeneSignature>();
-		if (openedBiomarkers!=null){
+		if (openedBiomarkers != null) {
 			for (Biomarker biomarker : openedBiomarkers) {
 				result.add(new GeneSignature(biomarker));
-		}}
+			}
+		}
 		return result;
 	}
-
 
 	public List<Gene> genes() {
 		List<Gene> result = Lists.newArrayList();
@@ -221,14 +209,14 @@ public class FromCSVFileExperimentImportWizard extends AbstractWizard<Experiment
 	}
 
 	public String[] getids() {
-		
+
 		String value = StringUtils.replace(selectedGenes4Filtering, "\r\n", " ");
-//		value = StringUtils.replace(selectedGenes4Filtering, "\r", " ");
-//		value = StringUtils.replace(selectedGenes4Filtering, "\n", " ");
+		// value = StringUtils.replace(selectedGenes4Filtering, "\r", " ");
+		// value = StringUtils.replace(selectedGenes4Filtering, "\n", " ");
 		value = StringUtils.replace(value, ",", " ");
 		value = StringUtils.replace(value, "\t", " ");
-		
+
 		return StringUtils.split(value, separator);
 	}
-	
+
 }
