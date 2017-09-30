@@ -45,7 +45,7 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 	public Composite create(final WizardPage wizardPage, Composite parent, DataBindingContext dbc,
 			final WizardModel wmodel) {
 		final Composite container = Widgets.createDefaultContainer(parent);
-	
+
 		final Label status = new Label(container, SWT.WRAP);
 		status.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		Button fromFileButton = new Button(container, SWT.FLAT);
@@ -60,8 +60,7 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 				"Where:\n" + 
 				"   - gene and expression are separeated by tab character\n" + 
 				"   - gene can be the gene id, an alternative gene id or the gene name", 8);
-		
-		
+
 		return container;
 	}
 
@@ -81,14 +80,13 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 				try {
 					wmodel.set(SAMPLE, processFile(samplefilename));
 					status.setText("Sample file " + samplefilename + " successfully processed!");
-				} 
-				catch (GeneNotFoundByIdException gnf) {
+				} catch (GeneNotFoundByIdException gnf) {
 					MessageManager.INSTANCE.add(Message.error(gnf.getMessage()));
-					status.setText("Sample file '"+samplefilename+"' contains not valid data.\n"+gnf.getMessage());
-				}
-				catch (InvalidExpression ie) {
+					status.setText(
+							"Sample file '" + samplefilename + "' contains not valid data.\n" + gnf.getMessage());
+				} catch (InvalidExpression ie) {
 					MessageManager.INSTANCE.add(Message.error(ie.getMessage()));
-					status.setText("Sample file '"+samplefilename+"' contains not valid data.\n"+ie.getMessage());
+					status.setText("Sample file '" + samplefilename + "' contains not valid data.\n" + ie.getMessage());
 				}
 
 				container.update();
@@ -107,6 +105,7 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 	/**
 	 * @return sample
 	 */
+	//TODO refactorizar que no se entiende nada...
 	private Map<Gene, Double> processFile(String samplefilename) {
 		final Map<Gene, Double> sample = Maps.newHashMap();
 		try {
@@ -116,12 +115,24 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 
 					@Override
 					public void accept(String line) {
-						String[] values = line.split("\t");
-						Gene gene = MetaPlat.getInstance().findGene(values[0].trim());
-						Double expression = Double.valueOf(values[1].trim());
+						String[] lineValues = line.split("\t");
+						Gene gene = readGene(lineValues[0]);
+						Double expression = readExpression(gene, lineValues[1]);
 						if (expression.isNaN() || expression.isInfinite())
 							throw new InvalidExpression(gene, expression);
 						sample.put(gene, expression);
+					}
+
+					private Gene readGene(String gene) {
+						return MetaPlat.getInstance().findGene(gene.trim());
+					}
+
+					private Double readExpression(Gene gene, String expression) {
+						try {
+							return Double.valueOf(expression.trim());
+						} catch (NumberFormatException nfe) {
+							throw new InvalidExpression(gene, expression);
+						}
 					}
 				});
 			} finally {
