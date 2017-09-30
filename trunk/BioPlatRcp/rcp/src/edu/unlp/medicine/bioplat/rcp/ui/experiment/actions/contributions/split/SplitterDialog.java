@@ -4,6 +4,7 @@ import static edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils.*;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -53,7 +54,9 @@ public class SplitterDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite) super.createDialogArea(parent);
-		//result.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		result.setLayout(GridLayoutFactory.fillDefaults().
+				margins(10, 10).
+				numColumns(2).equalWidth(false).create());
 		
 		createPercentageInput(TRAINNING, result);
 		createPercentageInput(TESTING, result);
@@ -67,12 +70,14 @@ public class SplitterDialog extends Dialog {
 	private Label info;
 	private void createInfoLabel(Composite result) {
 		info = new Label(result, SWT.BOLD);
+		info.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		info.setForeground(info.getDisplay().getSystemColor(SWT.COLOR_RED));
 	}
 
 	private void createPercentageInput(final String label, Composite result) {
 		new Label(result, SWT.NONE).setText(label);
 		Text percentInput = new Text(result, SWT.BORDER);
+		percentInput.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		percentInput.setText(values.get(label).toString());
 		percentInput.addModifyListener(new ModifyListener() {
 
@@ -142,6 +147,6 @@ public class SplitterDialog extends Dialog {
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(400, 401);
+		return new Point(400, 250);
 	}
 }
