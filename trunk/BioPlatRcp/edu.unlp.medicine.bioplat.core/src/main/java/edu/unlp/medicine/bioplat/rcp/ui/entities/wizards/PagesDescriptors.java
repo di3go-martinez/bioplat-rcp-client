@@ -95,7 +95,7 @@ public class PagesDescriptors {
 				
 				wp.setDescription("The expression and survival data of the experiments you select on this page, will be used for doing survival statistic analysis of your gene signature. ");
 
-				List<AbstractExperiment> editors = PlatformUIUtils.openedEditors(AbstractExperiment.class);
+				List<AbstractExperiment> editors = PlatformUIUtils.loadedModels(AbstractExperiment.class);
 
 				Composite container = new Composite(parent, SWT.BORDER);
 				container.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(10, 10).create());
