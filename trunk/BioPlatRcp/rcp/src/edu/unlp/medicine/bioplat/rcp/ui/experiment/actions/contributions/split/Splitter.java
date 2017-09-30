@@ -1,18 +1,14 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.split;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Streams;
 
 import edu.unlp.medicine.entity.arnmPlatform.ARNmPlatform;
 import edu.unlp.medicine.entity.experiment.AbstractExperiment;
@@ -24,21 +20,51 @@ import gnu.trove.map.hash.TObjectDoubleHashMap;
 //TODO tests y refactor (mejores abstracciones...)!
 public class Splitter {
 
-	private Double training = 33.0;
-	private Double testing = 33.0;
-	private Double validation = 34.0;
+	//TODO usar
+	private static enum stages{
+		training, testing, validation;
+	}
+	
+	//poner en un mapa y revisar los resolveAmountOfSamples
+	private Double trainingPercentage = 33.0;
+	private Double testingPercentage = 33.0;
+	private Double validationPercentage = 34.0;
+	private AbstractExperiment dataset;
 
-	boolean setup(Double training, Double testing, Double validation) {
-		this.training = training;
-		this.testing = testing;
-		this.validation = validation;
-		return training > 0 && training < 99 && (training + testing + validation) == 100.0;
+	
+    SplitterSetupResult setup(AbstractExperiment expertiment, Double trainingPercentage, Double testingPercentage, Double validationPercentage) {
+		this.dataset = expertiment;
+		this.trainingPercentage = trainingPercentage;
+		this.testingPercentage = testingPercentage;
+		this.validationPercentage = validationPercentage;
+		return validate();
 	}
 
-	List<Experiment> split(AbstractExperiment dataset) {
-		Long ctraining = resolveAmountOfSamples(dataset, training);
-		Long ctesting = resolveAmountOfSamples(dataset, testing) - 1;
-		Long cvalidation = resolveAmountOfSamples(dataset, validation);
+
+	private SplitterSetupResult validate() {
+		boolean percentageok= trainingPercentage > 0 && trainingPercentage < 99 && (trainingPercentage + testingPercentage + validationPercentage) == 100.0;
+		if (!percentageok)
+			return SplitterSetupResult.fail("Invalid porcentages. \nPorcentages remaining to assign is "+ remaining());
+	
+		
+		Long ctraining = resolveAmountOfSamples(dataset, trainingPercentage);
+		Long ctesting = resolveAmountOfSamples(dataset, testingPercentage);
+		Long cvalidation = resolveAmountOfSamples(dataset, validationPercentage);
+		//TODO validation o testing pueden ser 0, pero no a la vez
+		boolean atleastOneSample = ctraining > 0 && ctesting > 0 && cvalidation > 0;
+		
+		if (!atleastOneSample)
+			return SplitterSetupResult.fail("The current configuration is not a valid partition. \nDataset can not be empty");
+		
+		return SplitterSetupResult.ok();
+	}
+
+	List<Experiment> split() {
+		
+		//problemas de redondeo revisar que puede quedar la suma mayor al número de samples
+		Long ctraining = resolveAmountOfSamples(dataset, trainingPercentage);
+		Long ctesting = resolveAmountOfSamples(dataset, testingPercentage) ; 
+		Long cvalidation = resolveAmountOfSamples(dataset, validationPercentage);
 
 		List<Sample> samples = dataset.getSamples();
 		Collections.shuffle(samples);
@@ -128,8 +154,11 @@ public class Splitter {
 		}
 	}
 
-	public Double remaining() {
-		return 100 - (this.training + this.testing+this.validation);
+	//TODO en realidad se puede haber pasado del 100, da un número negativo
+	private Double remaining() {
+		return 100 - (this.trainingPercentage + this.testingPercentage+this.validationPercentage);
 	}
+
+	
 
 }
