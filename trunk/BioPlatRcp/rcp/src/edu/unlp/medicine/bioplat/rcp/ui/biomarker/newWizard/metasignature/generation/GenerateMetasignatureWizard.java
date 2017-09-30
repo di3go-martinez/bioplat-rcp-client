@@ -62,7 +62,7 @@ public class GenerateMetasignatureWizard extends AbstractWizard<MetaSignature> {
 			descriptors.add(createExternalGSDatabasesPage());
 			//There is no page for the selection of external geneSignatures because it is a resultPage of the Page2. This result page shows the GS which passed the filter and sets the SELECTED_SIGNATURES model whith this selection.    
 		
-			final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+			final List<Biomarker> openedBiomarkers = PlatformUIUtils.loadedModels(Biomarker.class);
 			if (!openedBiomarkers.isEmpty()) descriptors.add(createLocalGS());
 	
 			descriptors.add(createAlgorithmPage());

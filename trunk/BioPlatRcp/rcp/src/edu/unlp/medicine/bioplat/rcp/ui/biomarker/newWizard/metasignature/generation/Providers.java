@@ -71,7 +71,7 @@ public class Providers extends WizardPageDescriptor {
 
 		createSecondaryProvidersGroup(container, glf, gdf, dbc, wmodel);
 
-		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		final List<Biomarker> openedBiomarkers = PlatformUIUtils.loadedModels(Biomarker.class);
 		if (!openedBiomarkers.isEmpty()) {
 			Group openedBiomarker = new Group(container, SWT.NONE);
 			openedBiomarker.setLayout(glf.create());

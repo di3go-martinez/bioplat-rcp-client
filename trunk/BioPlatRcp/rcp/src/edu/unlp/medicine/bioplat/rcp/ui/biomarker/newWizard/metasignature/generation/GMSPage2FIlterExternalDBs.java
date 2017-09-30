@@ -365,7 +365,7 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 
 		if (elements.isEmpty()) return true;
 		
-		if (PlatformUIUtils.openedEditors(Biomarker.class).isEmpty()) {
+		if (PlatformUIUtils.loadedModels(Biomarker.class).isEmpty()) {
 
 			if (includeAll) {
 				// model.set(SELECTED_SIGNATURES, elements);

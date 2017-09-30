@@ -58,7 +58,7 @@ public class GMSPage3LocalGSs extends WizardPageDescriptor {
 
 	
 		private void createLocalBiomarkersSelector(final WizardPage wp, Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
-		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		final List<Biomarker> openedBiomarkers = PlatformUIUtils.loadedModels(Biomarker.class);
 		if (!openedBiomarkers.isEmpty()) {
 			Group openedBiomarker = new Group(container, SWT.NONE);
 			openedBiomarker.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).margins(20, 20).create());
