@@ -96,7 +96,7 @@ public class FromCSVFilePage3SelectGenesOrGSForFiltering extends WizardPageDescr
 
 
 	private void createLocalBiomarkersSelector(final WizardPage wp, Composite container, GridDataFactory gdf, DataBindingContext dbc, final WizardModel wmodel) {
-		final List<Biomarker> openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		final List<Biomarker> openedBiomarkers = PlatformUIUtils.loadedModels(Biomarker.class);
 
 		
 		GUIUtils.addWrappedText(container, "\n\n...You can filter the dataset picking up a Gene Signature from your Bioplat desktop. Its genes will be used for filtering the dataset\n", 9, false);
