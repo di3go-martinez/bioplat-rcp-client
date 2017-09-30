@@ -638,7 +638,7 @@
          </selection>
       </actionContribution>
       <actionContribution
-            caption="Split Dataset"
+            caption="Split Experiment"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.split.SplitDatasetOperation"
             onMenu="true"
             onToolbar="false">
