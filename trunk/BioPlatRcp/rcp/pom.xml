@@ -7,7 +7,7 @@
 		<maven>3.0</maven>
 	</prerequisites>
 
- 
+
 	<parent>
 		<groupId>bioplat</groupId>
 		<version>0.1.0-SNAPSHOT</version>
@@ -33,7 +33,8 @@
 
 
 	<build>
-	<sourceDirectory>${basedir}/src</sourceDirectory>
+		<sourceDirectory>${basedir}/src</sourceDirectory>
+		<!--TODO<testSourceDirectory>${basedir}/test</testSourceDirectory>-->
 		<resources>
 			<resource>
 				<directory>${basedir}/resources</directory>
@@ -128,7 +129,13 @@
 			<artifactId>edu.medicine.bioplat.base.lib</artifactId>
 			<version>1.2.0-SNAPSHOT</version>
 		</dependency>
-
-
+		<!--TODO<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>-->
 	</dependencies>
+
+
 </project>
