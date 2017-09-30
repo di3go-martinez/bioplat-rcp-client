@@ -46,7 +46,7 @@ public class ImportExperimentFromTCGATestPage4 extends WizardPageDescriptor {
 	List<Biomarker> openedBiomarkers;
 	public ImportExperimentFromTCGATestPage4(WizardModel wizardModel) {
 		super("Select genes (step 3 of 4)");
-		openedBiomarkers = PlatformUIUtils.openedEditors(Biomarker.class);
+		openedBiomarkers = PlatformUIUtils.loadedModels(Biomarker.class);
 	}
 	
 	@Override
