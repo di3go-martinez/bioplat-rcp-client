@@ -47,6 +47,10 @@
                   name="windowImages"
                   value="resources/icons/window/adn.16x16.png,resources/icons/window/adn.32x32.png,resources/icons/window/adn.48x48.png,resources/icons/window/adn.64x64.png,resources/icons/window/adn.128x128.png">
             </property>
+            <property
+                  name="preferenceCustomization"
+                  value="plugin_customization.ini">
+            </property>
          </product>
       </extension>
    <extension
@@ -627,6 +631,15 @@
             image="resources/icons/Info.png"
             imagepath="resources/icons/checked.gif"
             menu-separator="entidad"
+            onMenu="true"
+            onToolbar="false">
+         <selection
+               class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
+         </selection>
+      </actionContribution>
+      <actionContribution
+            caption="Split Dataset"
+            class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.split.SplitDatasetOperation"
             onMenu="true"
             onToolbar="false">
          <selection
