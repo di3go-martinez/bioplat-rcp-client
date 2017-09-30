@@ -179,8 +179,12 @@ public class PlatformUIUtils {
 		}
 	}
 
-	public static <T> List<T> openedEditors(Class<T> modelClass) {
-		List<T> editors = Lists.newArrayList();
+	/**
+	 * 
+	 * @return los modelos de los editores abiertos en la plataforma
+	 */
+	public static <T> List<T> loadedModels(Class<T> modelClass) {
+		List<T> models = Lists.newArrayList();
 		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
 			for (IWorkbenchPage page : window.getPages()) {
 				for (IEditorReference editor : page.getEditorReferences()) {
@@ -189,13 +193,13 @@ public class PlatformUIUtils {
 					if (ed instanceof ModelProvider) {
 						ModelProvider<?> mp = (ModelProvider<?>) ed;
 						if (modelClass.isAssignableFrom(mp.model().getClass()))
-							editors.add((T) mp.model());
+							models.add((T) mp.model());
 					}
 
 				}
 			}
 		}
-		return editors;
+		return models;
 	}
 
 	public static IWorkbench getWorkbench() {
