@@ -8,6 +8,7 @@
          caption="Create Classifier From Validation"
          class="org.bioplat.classifiers.actions.CreateClassifierFromBiomarker"
          onMenu="true"
+         image="resources/icons/classifier.png"
          onToolbar="false">
       <selection
             class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
@@ -28,7 +29,8 @@
          category="org.bioplat.classifiers.patients.root/org.bioplat.classifiers.new.wizard.root"
          class="org.bioplat.classifiers.newWizards.evaluation.EvaluateClassifierWizard"
          id="org.bioplat.classifiers.new.wizard.evaluate"
-         name="Evaluate using Classifier">
+         name="Evaluate using Classifier"
+         image="resources/icons/classifier.png">
    </wizard>
 </extension>
 
