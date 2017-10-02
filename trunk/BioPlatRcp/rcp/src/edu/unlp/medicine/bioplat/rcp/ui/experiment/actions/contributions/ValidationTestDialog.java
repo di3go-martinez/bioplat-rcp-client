@@ -155,10 +155,18 @@ public class ValidationTestDialog extends TitleAreaDialog {
 				for (OneBiomarkerCommand command : experimentsWizard
 						.commands2apply()) {
 					try {
-						command.execute();
-						count++;
-						//(ValidationsTestCommand)command.
-						//MessageManager.INSTANCE.add(Message.info(command. ""));
+						if (command.prevalidation()) {
+							command.execute();
+							count++;
+							//(ValidationsTestCommand)command.
+							//MessageManager.INSTANCE.add(Message.info(command. ""));
+
+						}
+						else {
+							//MDB 2017/01/10. If there are some problems with biomarker or experiment (for example no genes in common)
+							MessageManager.INSTANCE.add(Message.error("There are no genes in common between the gene signature and the Dataset expression data. It is not possible to do the validation" + ". Gene Signature: "  + command.getBiomarker().getName() + ". " + command.getInfoForError()));
+							
+						}
 					} catch (ClusteringException e) {
 						// Agrego el mensaje de error.
 						MessageManager.INSTANCE.add(Message.error(e.getSpecificError() + ". Details: " + e.getGenericError(), e));
