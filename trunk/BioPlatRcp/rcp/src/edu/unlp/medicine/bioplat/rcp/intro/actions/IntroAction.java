@@ -54,8 +54,9 @@ public abstract class IntroAction extends Action {
 	 */
 	protected boolean open(IWorkbenchWizard wizard) {
 		
-		if (wizard instanceof AbstractWizard)
-			return ((AbstractWizard) wizard).open();
+		//TODO revisar que el siguiente código sea el correcto y agregarlo...
+		//if (wizard instanceof AbstractWizard)
+		//	return ((AbstractWizard) wizard).open();
 		
 		WizardDialog d = new MyWizardDialog(PlatformUIUtils.findShell(), wizard);
 		//DialogForOpeningWizard d = new DialogForOpeningWizard(PlatformUIUtils.findShell(), wizard);

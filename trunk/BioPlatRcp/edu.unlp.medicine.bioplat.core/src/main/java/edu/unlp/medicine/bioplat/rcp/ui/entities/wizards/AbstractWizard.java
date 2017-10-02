@@ -263,18 +263,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
 
-		fixDialogSize();
-
 		return d.open() == Dialog.OK;
 
 	}
 
-	private void fixDialogSize() {
-		if (SystemUtils.IS_OS_WINDOWS) {
-			this.getShell().pack();
-			this.getShell().setMaximized(true);
-		}
-	}
+	
 
 	/**
 	 * inicializa el wizard sin selección actual
