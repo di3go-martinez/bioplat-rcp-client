@@ -77,7 +77,12 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 
 	@Override
 	public int getWizardHeight() {
-		return 770;
+		return 800;
+	}
+	
+	@Override
+	protected boolean maximized() {
+		return true;
 	}
 
 	/**
