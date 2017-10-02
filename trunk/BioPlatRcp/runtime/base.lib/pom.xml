@@ -21,10 +21,7 @@
 	<name>base lib</name>
 	<description>basic third libraries</description>
 	<inceptionYear>20111031</inceptionYear>
-	<!-- <parent> <groupId>bioplat</groupId> <artifactId>parent</artifactId> 
-		<version>0.0.2-SNAPSHOT</version> </parent> -->
-
-
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -50,12 +47,9 @@
 
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
 
-
 					</instructions>
 				</configuration>
 			</plugin>
-
-
 		</plugins>
 	</build>
 
@@ -64,7 +58,7 @@
 		<dependency>
 			<groupId>bioplat</groupId>
 			<artifactId>BioPlatModeloClienteRico</artifactId>
-			<version>6.0.2-beta.1</version>
+			<version>6.0.2-beta.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
