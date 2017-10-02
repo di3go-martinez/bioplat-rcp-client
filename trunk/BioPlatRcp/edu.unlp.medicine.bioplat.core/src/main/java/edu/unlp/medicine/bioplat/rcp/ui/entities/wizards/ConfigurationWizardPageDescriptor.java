@@ -587,6 +587,8 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		
 		validationAttrName = Utils.newComboViewerWithoutLabel(groupForValidationAtt1, "Attribute name over which the validation (hipotesis test) will be done. Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", timeAttrList);
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName), wmodel.valueHolder(ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Attribute Name"), UpdateStrategies.nullStrategy());
+		if (timeAttrList.contains("OS_MONTHS")) validationAttrName.setSelection(new StructuredSelection(timeAttrList.get(timeAttrList.indexOf("OS_MONTHS"))));
+
 		validationAttrName.getCombo().setLayoutData(new GridData());
 		logger.trace("Time attribute name created");
 		GUIUtils.addBoldText(groupForValidationAtt1, "This attribute represents 'time until the event ocurred'. That is why, the list shows just the clinical attributes with number values.",7);
@@ -597,6 +599,7 @@ public class ConfigurationWizardPageDescriptor extends WizardPageDescriptor {
 		ComboViewer validationAttrName2 = Utils.newComboViewerWithoutLabel(groupForValidationAtt2, "Status attribute name (just to complete if the type of validation is for \"event occured after time\" attribute). Pick up one appearing in the clinical tab. If it is not in the list, select 'other' for writing it in the text field.", survivalAttrList);
 		dbc.bindValue(ViewersObservables.observeSingleSelection(validationAttrName2), wmodel.valueHolder(SECOND_ATTRIBUTE_NAME_TO_VALIDATION), UpdateStrategies.nonNull("Second Attribute Name"), UpdateStrategies.nullStrategy());
 		validationAttrName2.getCombo().setLayoutData(new GridData());
+		if (survivalAttrList.contains("OS_STATUS")) validationAttrName2.setSelection(new StructuredSelection(survivalAttrList.get(survivalAttrList.indexOf("OS_STATUS"))));
 		logger.trace("Status attribute name created");
 		GUIUtils.addBoldText(groupForValidationAtt2, StatusValidValues.getMessageForEventAttributeForGUI(),7);
 
