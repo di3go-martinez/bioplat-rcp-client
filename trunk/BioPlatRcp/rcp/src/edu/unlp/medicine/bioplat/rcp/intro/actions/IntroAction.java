@@ -11,6 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.dialogs.ImportExportWizard;
 
+import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 
 /**
@@ -52,6 +53,10 @@ public abstract class IntroAction extends Action {
 	 * @return true si el wizard se cerró
 	 */
 	protected boolean open(IWorkbenchWizard wizard) {
+		
+		if (wizard instanceof AbstractWizard)
+			return ((AbstractWizard) wizard).open();
+		
 		WizardDialog d = new MyWizardDialog(PlatformUIUtils.findShell(), wizard);
 		//DialogForOpeningWizard d = new DialogForOpeningWizard(PlatformUIUtils.findShell(), wizard);
 

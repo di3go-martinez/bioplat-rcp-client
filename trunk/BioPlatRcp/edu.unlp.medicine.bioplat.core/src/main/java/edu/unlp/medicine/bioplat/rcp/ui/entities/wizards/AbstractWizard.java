@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,7 +27,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -67,8 +67,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	protected WizardModel wizardModel() {
 		return model;
 	}
-	
-	protected final <X> X value(String key){
+
+	protected final <X> X value(String key) {
 		return wizardModel().value(key);
 	}
 
@@ -99,7 +99,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		initialized = true;
 		IWizardPage page;
 		for (final WizardPageDescriptor pageDescriptor : createPagesDescriptors()) {
-			addPage(page = new WizardPage(pageDescriptor.getPageName(), pageDescriptor.getTitle(), pageDescriptor.getImageDescriptor()) {
+			addPage(page = new WizardPage(pageDescriptor.getPageName(), pageDescriptor.getTitle(),
+					pageDescriptor.getImageDescriptor()) {
 
 				@Override
 				public void createControl(Composite parent) {
@@ -133,18 +134,17 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 				@Override
 				public boolean canFlipToNextPage() {
-					if(pageDescriptor.isManualFlip()){
+					if (pageDescriptor.isManualFlip()) {
 						return pageDescriptor.isAllowFlip();
 					}
-					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null) && pageDescriptor.allowContinueWizardSetup();
+					return isPageComplete() && (pageDescriptor.hasResultPage() || getNextPage() != null)
+							&& pageDescriptor.allowContinueWizardSetup();
 				}
-				
-				
-				
+
 				@Override
 				public void setVisible(boolean visible) {
 					super.setVisible(visible);
-					if (visible){
+					if (visible) {
 						pageDescriptor.doOnEnter();
 					} else {
 						pageDescriptor.doOnExit();
@@ -163,7 +163,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			}
 
 		}
-		
+
 	}
 
 	private boolean initialPage = true;
@@ -188,12 +188,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 			logger.trace("returning the next wizard page for " + next.getDescription());
 		else
 			logger.trace("No more pages");
-		
-		
-		//next.getControl().getParent().setSize(600, 650);
-		PlatformUIUtils.findDisplay().getActiveShell().layout(true, true);//redraw();//update();
-		
-		
+
+		// next.getControl().getParent().setSize(600, 650);
+		PlatformUIUtils.findDisplay().getActiveShell().layout(true, true);// redraw();//update();
+
 		return next;
 	}
 
@@ -226,10 +224,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 *         false si se canceló la operaciòn
 	 */
 	public boolean open() {
-	  //TODO llevar a:
-	  //init(PlatformUI.getWorkbench())
-	  //createWizardDialog().open()
-	  
+		// TODO llevar a:
+		// init(PlatformUI.getWorkbench())
+		// createWizardDialog().open()
+
 		WizardDialog d = new WizardDialog(PlatformUIUtils.findShell(), this) {
 			private boolean initialize = true;
 
@@ -264,9 +262,18 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// TODO resolver con scrollbars
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
-		
+
+		fixDialogSize();
+
 		return d.open() == Dialog.OK;
-		
+
+	}
+
+	private void fixDialogSize() {
+		if (SystemUtils.IS_OS_WINDOWS) {
+			this.getShell().pack();
+			this.getShell().setMaximized(true);
+		}
 	}
 
 	/**
@@ -282,15 +289,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	@Override
 	public boolean canFinish() {
 		WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
-		
-		if (wpd == null){
+
+		if (wpd == null) {
 			return true;
 		}
-		
-		if( wpd.isManualFlip()){
+
+		if (wpd.isManualFlip()) {
 			return wpd.isAllowFinish();
 		}
-		
+
 		for (IWizardPage page : getPages())
 			if (page.getErrorMessage() != null)
 				return false;
@@ -300,21 +307,16 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		boolean resultPage = wpd == null;
 		return (!resultPage && !wpd.allowContinueWizardSetup()) || super.canFinish();
 	}
-	
-	
-	
-	
-	
 
 	@Override
 	public boolean performCancel() {
-		if ( map.get(getContainer().getCurrentPage())!= null) {
+		if (map.get(getContainer().getCurrentPage()) != null) {
 			WizardPageDescriptor wpd = map.get(getContainer().getCurrentPage());
 			return wpd.performCancel(model);
-		} else { 
+		} else {
 			return true;
 		}
-		
+
 	}
 
 	/**
@@ -379,10 +381,11 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 								addErrorMessageToMessageView(errorHolder.value());
 							} else {
 								doInUI(oo);
-								//IWorkbenchPage page = ;
+								// IWorkbenchPage page = ;
 								// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
 								// IWorkbenchPage.STATE_MINIMIZED);
-								PlatformUIUtils.activePage().hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+								PlatformUIUtils.activePage()
+										.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
 								addMessageToMessageView(oo);
 							}
 						} catch (Exception e) {
@@ -458,8 +461,8 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 * Permite configurar los parámetros dentro del Realm/ui-thread, el cual es
 	 * necesario para poder acceder a los valores del model.
 	 * 
-	 * @deprecated no va a ser más necesario cuando se haga el cambio de acceso
-	 *             en la clase#método WizardModel#value (solo resta habilitarlo,
+	 * @deprecated no va a ser más necesario cuando se haga el cambio de acceso en
+	 *             la clase#método WizardModel#value (solo resta habilitarlo,
 	 *             planificado para "largo plazo")
 	 */
 	// TODO revisar si se puede resolver dentro del WizardModel el acceso con el
@@ -478,15 +481,15 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	 * @see configureParameters()
 	 * 
 	 * @param monitor
-	 *            puede ser una barra de progreso donde se va indicando el esta
-	 *            del procesamiento
+	 *            puede ser una barra de progreso donde se va indicando el esta del
+	 *            procesamiento
 	 * @return
 	 */
 	protected abstract T backgroundProcess(Monitor monitor) throws Exception;
 
 	/**
-	 * Procesa dentro del ui-thread, permitiendo ejecutar código que interactúe
-	 * con este, es definitiva, con la vista. por ejemplo abrir un editor.
+	 * Procesa dentro del ui-thread, permitiendo ejecutar código que interactúe con
+	 * este, es definitiva, con la vista. por ejemplo abrir un editor.
 	 * 
 	 * @param result
 	 *            es el resultado de {@link #backgroundProcess(Monitor)}
@@ -550,6 +553,5 @@ class ResultPage extends WizardPage {
 	public boolean isPageComplete() {
 		return pd.isResultPageComplete(w.wizardModel());
 	}
-	
-	
+
 }
