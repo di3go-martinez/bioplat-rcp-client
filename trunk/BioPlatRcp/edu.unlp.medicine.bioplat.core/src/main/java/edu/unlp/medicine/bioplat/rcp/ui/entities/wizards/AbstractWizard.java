@@ -26,6 +26,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -263,10 +264,24 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		// d.setPageSize(400, 450);
 		// d.setMinimumPageSize(this.getMinimumWith(), 450);
 
+		if (maximized())
+			maximize(d);
+		
 		return d.open() == Dialog.OK;
 
 	}
 
+	private void maximize(WizardDialog d) {
+		Shell shell = d.getShell();
+		shell.pack();
+		shell.setMaximized(true);
+	}
+
+	protected boolean maximized() {
+		return false;
+	}
+	
+	
 	
 
 	/**
