@@ -120,7 +120,7 @@ public class ImportExperimentFromTCGATestPage2 extends WizardPageDescriptor {
 	}
 	
 	private void createSearchText(final TableViewer tviewer) {
-		final Text searchbox = new Text(tviewer.getTable().getParent()	, SWT.FLAT);
+		final Text searchbox = new Text(tviewer.getTable().getParent()	, SWT.BORDER);
 		searchbox.setMessage("Filter...");
 		searchbox.addModifyListener(new ModifyListener() {
 			
