@@ -116,10 +116,16 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 					setControl(control);
 
-					Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
-					getShell().setSize(size);
-					logger.trace("Shell size " + size);
+					fixSize();
 
+				}
+
+				private void fixSize() {
+					if (!maximized()) {
+						Point size = getShell().computeSize(getWizardWidth(), getWizardHeight());
+						getShell().setSize(size);
+						logger.trace("Shell size " + size);
+					}
 				}
 
 				private void fillDefaultsIfNecesary(Composite control) {
@@ -266,7 +272,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 		if (maximized())
 			maximize(d);
-		
+
 		return d.open() == Dialog.OK;
 
 	}
@@ -280,9 +286,6 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	protected boolean maximized() {
 		return false;
 	}
-	
-	
-	
 
 	/**
 	 * inicializa el wizard sin selección actual
