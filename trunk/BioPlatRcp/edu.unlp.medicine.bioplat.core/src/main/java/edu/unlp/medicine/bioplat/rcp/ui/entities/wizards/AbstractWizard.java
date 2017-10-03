@@ -196,8 +196,10 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 		else
 			logger.trace("No more pages");
 
-		// next.getControl().getParent().setSize(600, 650);
-		PlatformUIUtils.findDisplay().getActiveShell().layout(true, true);// redraw();//update();
+		// TODO determinar para qué está este código!
+		Shell activeShell = PlatformUIUtils.findDisplay().getActiveShell();
+		if (activeShell != null)
+			activeShell.layout(true, true);
 
 		return next;
 	}
