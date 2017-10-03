@@ -106,6 +106,8 @@ public class PSOWizard extends AbstractWizard<BiomarkerOptimizationResult> imple
 		PlatformUIUtils.openView(PSOResultViewPart.id());
 		PSOResultViewPart v = (PSOResultViewPart) PlatformUIUtils.findView(PSOResultViewPart.id());
 
+		v.setForTesting(null);
+		v.setForValidation(null);
 		v.setForTraining(forTraining.get(0));
 		if (forTesting != null && forTesting.size() > 0)
 			v.setForTesting(forTesting.get(0));
