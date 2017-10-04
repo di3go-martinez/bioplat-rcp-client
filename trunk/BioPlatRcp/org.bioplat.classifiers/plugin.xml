@@ -28,9 +28,10 @@
    <wizard
          category="org.bioplat.classifiers.patients.root/org.bioplat.classifiers.new.wizard.root"
          class="org.bioplat.classifiers.newWizards.evaluation.EvaluateClassifierWizard"
+         icon="resources/classifier.png"
          id="org.bioplat.classifiers.new.wizard.evaluate"
-         name="Evaluate using Classifier"
-         image="resources/icons/classifier.png">
+         image="resources/icons/classifier.png"
+         name="Evaluate using Classifier">
    </wizard>
 </extension>
 
