@@ -19,11 +19,17 @@ public class ImportTCGATableFilter extends ViewerFilter {
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		try {
-			// type -> String[3] -> name, description, extended description
+			// type -> String[3] >>> name, description, extended description
 			String[] row = (String[]) element;
-			return row[0].matches(searchString) || row[1].matches(searchString) || row[2].matches(searchString);
+			return matches(row[0]) || matches(row[1]) || matches(row[2]);
 		} catch (Exception e) {
 			return true;
 		}
+	}
+
+	private boolean matches(String value) {
+		String VALUE = value.toUpperCase();
+		String SEARCHSTRING = searchString.toUpperCase();
+		return VALUE.matches(SEARCHSTRING);
 	}
 }
