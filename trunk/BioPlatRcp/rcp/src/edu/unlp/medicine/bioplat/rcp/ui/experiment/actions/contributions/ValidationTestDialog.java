@@ -139,6 +139,12 @@ public class ValidationTestDialog extends TitleAreaDialog {
 			}
 		});
 		super.createButtonsForButtonBar(c);
+		maximizeDialog();
+	}
+
+	private void maximizeDialog() {
+		getShell().pack();
+		getShell().setMaximized(true);
 	}
 
 	@Override
