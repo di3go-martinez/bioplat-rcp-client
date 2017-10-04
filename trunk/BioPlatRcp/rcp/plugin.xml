@@ -637,7 +637,8 @@
             caption="Split Experiment"
             class="edu.unlp.medicine.bioplat.rcp.ui.experiment.actions.contributions.split.SplitDatasetOperation"
             onMenu="true"
-            onToolbar="false">
+            onToolbar="false"
+            image="resources/icons/split.png">
          <selection
                class="edu.unlp.medicine.entity.experiment.AbstractExperiment">
          </selection>

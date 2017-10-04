@@ -25,7 +25,6 @@
       startupMessageRect="7,252,445,20"
       startupForegroundColor="000000" />
    <launcher name="bioplat">
-      <solaris/>
       <win useIco="false">
          <bmp
             winSmallHigh="/edu.medicine.bioplat.rcp/resources/icons/window/adn.16x16.bmp"
@@ -47,6 +46,8 @@
       <plugin id="edu.unlp.medicine.bioplat.genes"/>
       <plugin id="edu.unlp.medicine.bioplat.poc"/>
       <plugin id="javax.servlet"/>
+      <plugin id="org.bioplat.classifiers"/>
+      <plugin id="org.bioplat.multiomics"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>
