@@ -95,7 +95,7 @@ public class TableBuilder implements TableConfigurer {
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true); // TODO configurable
 		table.setLinesVisible(viewTableLines);
-		configureHeightListeners(table);
+		//configureHeightListeners(table);
 		
 		
 		// viewer.setContentProvider(new ArrayContentProvider());
