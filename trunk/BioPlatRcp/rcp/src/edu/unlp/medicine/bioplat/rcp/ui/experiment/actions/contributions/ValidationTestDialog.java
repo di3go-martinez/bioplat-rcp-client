@@ -102,20 +102,20 @@ public class ValidationTestDialog extends TitleAreaDialog {
 				.addColumn(
 						ColumnBuilder.create()
 								.property("experimentToValidate.name")
-								.title("Experiment"))
+								.title("Dataset Name").width(700))
 				.addColumn(
 						ColumnBuilder.create().property("numberOfClusters")
 								.title("Clusters"))
 				.addColumn(
 						ColumnBuilder.create()
 								.property("attribtueNameToDoTheValidation")
-								.title("Validation Attributte Name"))
+								.title("Validation Attributte Name").width(400))
 				.addColumn(
 						ColumnBuilder
 								.create()
 								.property(
 										"secondAttribtueNameToDoTheValidation")
-								.title("Event")).input(data).build();
+								.title("Event attribute name").width(400)).input(data).build();
 
 		GridLayoutFactory.fillDefaults().margins(10, 10).numColumns(1).generateLayout(containerTabla);
 		tr.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true,true).create());
