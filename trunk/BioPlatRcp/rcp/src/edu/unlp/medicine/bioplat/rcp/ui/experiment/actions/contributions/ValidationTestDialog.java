@@ -105,7 +105,7 @@ public class ValidationTestDialog extends TitleAreaDialog {
 								.title("Dataset Name").width(700))
 				.addColumn(
 						ColumnBuilder.create().property("numberOfClusters")
-								.title("Clusters"))
+								.title("Number of Clusters").width(200))
 				.addColumn(
 						ColumnBuilder.create()
 								.property("attribtueNameToDoTheValidation")
