@@ -24,6 +24,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -93,7 +95,9 @@ public class TableBuilder implements TableConfigurer {
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true); // TODO configurable
 		table.setLinesVisible(viewTableLines);
-
+		configureHeightListeners(table);
+		
+		
 		// viewer.setContentProvider(new ArrayContentProvider());
 		// Make the selection available to other views
 		// getSite().setSelectionProvider(viewer);
@@ -103,6 +107,20 @@ public class TableBuilder implements TableConfigurer {
 		gridData.horizontalSpan = 1;
 		viewer.getControl().setLayoutData(gridData);
 
+	}
+    
+	/**
+	 * Configuro la altura para mejor visibilidad de las grillas
+	 */
+	private void configureHeightListeners(Table table) {
+		table.addListener(SWT.MeasureItem, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				event.height += 10;
+			}
+		});
+		
 	}
 
 	private Table getTable() {
