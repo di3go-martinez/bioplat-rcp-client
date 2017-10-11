@@ -170,14 +170,11 @@ public class TableBuilder implements TableConfigurer {
 
 	/**
 	 * Se recomienda usar model+propertyPath
-	 * 
-	 * @param input
-	 * @return
-	 * @deprecated Se recomienda usar model+propertyPath
+	 * De ser posible utilizar:  model+propertyPath
+	 * @param input list model a mostrar
 	 */
-	// TODO analizar "desdeprecar" e implementar como model(InternalList,
+	// TODO analizar de implementar como model(InternalList,
 	// "data")
-	@Deprecated
 	public <T> TableBuilder input(List<T> input) {
 		return input(input, Object.class);
 	}
