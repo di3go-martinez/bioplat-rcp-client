@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+<extension
+         point="edu.medicine.bioplat.rcp.editor.operation.contribution">
+   <actionContribution
+         caption="Create Classifier From Validation"
+         class="org.bioplat.classifiers.actions.CreateClassifierFromBiomarker"
+         onMenu="true"
+         image="resources/icons/classifier.png"
+         onToolbar="false">
+      <selection
+            class="edu.unlp.medicine.entity.biomarker.Biomarker"></selection>
+   </actionContribution>
+</extension>
+<extension
+      point="org.eclipse.ui.newWizards">
+   <category
+         id="org.bioplat.classifiers.patients.root"
+         name="Patients">
+   </category>
+   <category
+         id="org.bioplat.classifiers.new.wizard.root"
+         name="Classifiers"
+         parentCategory="org.bioplat.classifiers.patients.root">
+   </category>
+   <wizard
+         category="org.bioplat.classifiers.patients.root/org.bioplat.classifiers.new.wizard.root"
+         class="org.bioplat.classifiers.newWizards.evaluation.EvaluateClassifierWizard"
+         icon="resources/classifier.png"
+         id="org.bioplat.classifiers.new.wizard.evaluate"
+         image="resources/icons/classifier.png"
+         name="Evaluate using Classifier">
+   </wizard>
+</extension>
+
+</plugin>

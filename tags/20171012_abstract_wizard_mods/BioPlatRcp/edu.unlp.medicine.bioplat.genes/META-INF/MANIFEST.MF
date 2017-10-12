@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BioPlatRCP
+Bundle-SymbolicName: edu.unlp.medicine.bioplat.genes;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Require-Bundle: 
+ edu.medicine.bioplat.base.lib,
+ edu.unlp.medicine.bioplat.core
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
+Bundle-Localization: OSGI-INF/l10n/bundle
+Bundle-Activator: edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator
+Export-Package: edu.unlp.medicine.bioplat.rcp.ui.genes,
+ edu.unlp.medicine.bioplat.rcp.ui.genes.view,
+ edu.unlp.medicine.bioplat.rcp.ui.genes.view.acions,
+ edu.unlp.medicine.bioplat.rcp.ui.genes.view.dialogs,
+ edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser,
+ edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences
