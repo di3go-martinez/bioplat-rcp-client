@@ -1,6 +1,9 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud;
 
+import java.util.Set;
+
 import edu.unlp.medicine.entity.generic.AbstractEntity;
+import zinbig.bioplatcloud.api.dto.DatasetDTO;
 
 public class SearchModel extends AbstractEntity {
 
@@ -14,7 +17,7 @@ public class SearchModel extends AbstractEntity {
 	}
 
 	public String getKey() {
-		return value;
+		return value.trim();
 	}
 
 	public void setTag(String value) {
@@ -24,7 +27,15 @@ public class SearchModel extends AbstractEntity {
 	}
 	
 	public String getTag() {
-		return tagValue;
+		return tagValue.trim();
+	}
+
+	public boolean byName() {
+		return !getKey().isEmpty();
+	}
+	
+	public boolean byTag() {
+		return !getTag().isEmpty();
 	}
 
 }

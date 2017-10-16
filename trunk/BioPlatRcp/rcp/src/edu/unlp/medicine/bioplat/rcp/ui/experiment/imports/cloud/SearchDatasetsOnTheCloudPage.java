@@ -33,13 +33,12 @@ import zinbig.bioplatcloud.api.dto.DatasetDTO;
 //FIXME usar mejor las capacidades del AbstractWizard! actualizar documentación en dropbox
 public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
-	
 	private static final String FOUND_DATASETS = "FOUND_DATASETS";
 	static final String SELECTED_HEADERS_DATASETS = "SELECTED_DATASETS";
 	private SearchModel model;
 	private Label label;
 
-	public SearchDatasetsOnTheCloudPage( BioPlatCloudClient cloudclient) {
+	public SearchDatasetsOnTheCloudPage(BioPlatCloudClient cloudclient) {
 		super("Search datasets on the Cloud");
 		this.model = new SearchModel();
 		this.cloudclient = cloudclient;
@@ -76,8 +75,8 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 	@Override
 	public boolean isResultPageComplete(WizardModel wizardModel) {
-		List<?> selectedDatasets  = wizardModel.value(SELECTED_HEADERS_DATASETS);
-		return  selectedDatasets != null &&  !selectedDatasets.isEmpty();
+		List<?> selectedDatasets = wizardModel.value(SELECTED_HEADERS_DATASETS);
+		return selectedDatasets != null && !selectedDatasets.isEmpty();
 	}
 
 	@Override
@@ -90,9 +89,9 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 		final TableReference tref = TableBuilder.create(container).addColumn(ColumnBuilder.create().property("name"))
 				.input(Lists.newArrayList(findHeaderDatasets())).build();
-		
+
 		tref.addSelectionChangeListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				wizardModel.set(SELECTED_HEADERS_DATASETS, tref.selectedElements());
@@ -109,20 +108,26 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 		wizardModel.set(SearchDatasetsOnTheCloudPage.FOUND_DATASETS, result);
 	}
 
-	//FIXME proponer cambio de tipo de datos a HeaderDatasetDTO porque así es confuso para usarlo 
+	// FIXME proponer cambio de tipo de datos a HeaderDatasetDTO porque así es
+	// confuso para usarlo
 	private Set<DatasetDTO> findHeaderDatasets() {
 		try {
-			return Sets.union(cloudclient.findDatasetsHeadersForName(model.getKey()),
-					cloudclient.findDatasetsHeadersForTag(model.getTag()));
-			
+			return Sets.union(findByName(), findByTag());
 		} catch (Exception e) {
 			logger.error("Some error occurred searching the dataset '" + model.getKey() + "'", e);
 			return Collections.emptySet();
 		}
 	}
 
-	
-	
+	private Set<DatasetDTO> findByTag() throws Exception {
+		return model.byTag() ? cloudclient.findDatasetsHeadersForTag(model.getTag())
+				: Collections.<DatasetDTO>emptySet();
+	}
+
+	private Set<DatasetDTO> findByName() throws Exception {
+		return model.byName() ? cloudclient.findDatasetsHeadersForName(model.getKey())
+				: Collections.<DatasetDTO>emptySet();
+	}
 
 	private static final Logger logger = LoggerFactory.getLogger(SearchDatasetsOnTheCloudPage.class);
 	private BioPlatCloudClient cloudclient;
