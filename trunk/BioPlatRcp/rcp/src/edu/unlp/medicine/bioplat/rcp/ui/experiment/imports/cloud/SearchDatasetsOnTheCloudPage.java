@@ -3,9 +3,12 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -21,6 +24,7 @@ import com.google.common.collect.Sets;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
+import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
 import edu.unlp.medicine.bioplat.rcp.utils.wizards.WizardModel;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import zinbig.bioplatcloud.api.client.BioPlatCloudClient;
@@ -29,15 +33,16 @@ import zinbig.bioplatcloud.api.dto.DatasetDTO;
 //FIXME usar mejor las capacidades del AbstractWizard! actualizar documentación en dropbox
 public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
+	
 	private static final String FOUND_DATASETS = "FOUND_DATASETS";
-	static final String SELECTED_DATASETS = "SELECTED_DATASETS";
+	static final String SELECTED_HEADERS_DATASETS = "SELECTED_DATASETS";
 	private SearchModel model;
 	private Label label;
 
-	public SearchDatasetsOnTheCloudPage() {
+	public SearchDatasetsOnTheCloudPage( BioPlatCloudClient cloudclient) {
 		super("Search datasets on the Cloud");
 		this.model = new SearchModel();
-		this.cloudclient = new BioPlatCloudClient(url());
+		this.cloudclient = cloudclient;
 	}
 
 	@Override
@@ -71,7 +76,8 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 	@Override
 	public boolean isResultPageComplete(WizardModel wizardModel) {
-		return wizardModel.value(SELECTED_DATASETS) != null;
+		List<?> selectedDatasets  = wizardModel.value(SELECTED_HEADERS_DATASETS);
+		return  selectedDatasets != null &&  !selectedDatasets.isEmpty();
 	}
 
 	@Override
@@ -82,32 +88,41 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 		label = new Label(container, SWT.BOLD);
 
-		TableBuilder.create(container).addColumn(ColumnBuilder.create().property("name"))
-				.input(Lists.newArrayList(findDatasets())).build();
+		final TableReference tref = TableBuilder.create(container).addColumn(ColumnBuilder.create().property("name"))
+				.input(Lists.newArrayList(findHeaderDatasets())).build();
+		
+		tref.addSelectionChangeListener(new ISelectionChangedListener() {
+			
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				wizardModel.set(SELECTED_HEADERS_DATASETS, tref.selectedElements());
+				fireUpdateButtons(resultPage);
+			}
+		});
 
 	}
 
 	@Override
 	public void refreshResultPage(final WizardModel wizardModel, IWizard wizard) {
-		Set<DatasetDTO> result = findDatasets();
+		Set<DatasetDTO> result = findHeaderDatasets();
 		label.setText(result.size() + " dataset(s) found");
 		wizardModel.set(SearchDatasetsOnTheCloudPage.FOUND_DATASETS, result);
 	}
 
-	private Set<DatasetDTO> findDatasets() {
+	//FIXME proponer cambio de tipo de datos a HeaderDatasetDTO porque así es confuso para usarlo 
+	private Set<DatasetDTO> findHeaderDatasets() {
 		try {
 			return Sets.union(cloudclient.findDatasetsHeadersForName(model.getKey()),
 					cloudclient.findDatasetsHeadersForTag(model.getTag()));
+			
 		} catch (Exception e) {
 			logger.error("Some error occurred searching the dataset '" + model.getKey() + "'", e);
 			return Collections.emptySet();
 		}
 	}
 
-	// TODO agregar a ApplicationParametersHolder??
-	private String url() {
-		return System.getProperty("org.bioplat.cloud.url", "http://z-bioplat-cloud.herokuapp.com");
-	}
+	
+	
 
 	private static final Logger logger = LoggerFactory.getLogger(SearchDatasetsOnTheCloudPage.class);
 	private BioPlatCloudClient cloudclient;

@@ -7,9 +7,14 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import edu.unlp.medicine.domainLogic.framework.MetaPlat;
+import edu.unlp.medicine.domainLogic.framework.exceptions.GeneNotFoundByIdException;
 import edu.unlp.medicine.entity.experiment.Experiment;
 import edu.unlp.medicine.entity.experiment.Sample;
 import edu.unlp.medicine.entity.experiment.collapse.strategy.media.MediaCollapseStrategy;
@@ -56,7 +61,7 @@ public enum Experiments {
 
 			Sample samplemodel = new Sample(sampledto.getSampleID(), collapseStrategy());
 
-			for (Gene gene : genes(dataset))
+			for (Gene gene : genes(dataset, sampledto))
 				samplemodel.setGeneExpressionLevel(gene, findExpression(sampledto, gene));
 
 			samplesExpressionProfiles.put(samplemodel, samplemodel.collapseExpressionData());
@@ -65,16 +70,28 @@ public enum Experiments {
 	}
 
 	private Double findExpression(SampleDTO sampledto, Gene gene) {
-		Optional<Number> result = sampledto.expression(MolecularDataType.genome, gene.getName());
+		Optional<Number> result = sampledto.expression(MolecularDataType.mrna, gene.getName());
 		if (result.isPresent())
 			return result.get().doubleValue();
 		throw new RuntimeException("no value for gene " + gene.getName());
 	}
 
-	private Set<Gene> genes(DatasetDTO dataset) {
-		// TODO dataset.genes(), usarlo directo y borrar este método
-		return Collections.emptySet();
+	private Set<Gene> genes(DatasetDTO dataset, SampleDTO sampledto) {
+		Set<Gene> genes  = Sets.newHashSet();
+		Map<String, Number> expressions =  sampledto.getMolecularsData().get(MolecularDataType.mrna);
+		//TODO confirmar que es el genename
+		for (String genename: expressions.keySet()) {
+			try {
+				genes.add(MetaPlat.getInstance().getGeneByName(genename));
+			} catch (GeneNotFoundByIdException re) {
+				logger.error("Gene not found", re);
+			}
+		}
+		return genes;
+		
 	}
+	
+	private static final Logger logger = LoggerFactory.getLogger(Experiments.class);
 
 	// TODO parametrizar
 	private MediaCollapseStrategy collapseStrategy() {
