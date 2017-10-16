@@ -3,6 +3,7 @@ package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,6 +19,9 @@ import zinbig.bioplatcloud.api.MolecularDataType;
 import zinbig.bioplatcloud.api.dto.DatasetDTO;
 import zinbig.bioplatcloud.api.dto.SampleDTO;
 
+/**
+ * @see #createExperiment(DatasetDTO)
+ */
 public enum Experiments {
 
 	factory;
@@ -25,14 +29,24 @@ public enum Experiments {
 	public Experiment createExperiment(final DatasetDTO dataset) {
 		final Map<Sample, TObjectDoubleHashMap<Gene>> samplesExpressionProfiles = samplesExpressionProfiles(dataset);
 
-		// TODO llevar este loop al constructor de experimentos y simplificar sus
-		// parámetros
+		// TODO llevar este loop al constructor de experimentos y simplificar sus parámetros
 		final Map<String, Sample> samples = Maps.newHashMap();
 		for (Sample sample : samplesExpressionProfiles.keySet())
 			samples.put(sample.getName(), sample);// TODO confirmar si el nombre es la clave del mapa que espera el
 													// constructor
 
-		return new Experiment(dataset.getName(), dataset.getAuthor(), null, null, samples, samplesExpressionProfiles);
+		Experiment e = new Experiment(dataset.getName(), dataset.getAuthor(), null, null, samples,
+				samplesExpressionProfiles);
+
+		setClinicalAttributes(e, dataset);
+
+		return e;
+	}
+
+	private void setClinicalAttributes(Experiment e, DatasetDTO dataset) {
+		for (SampleDTO sample : dataset.getAllSamples())
+			for (Entry<String, String> cd : sample.getClinicalData().entrySet())
+				e.setClinicalAttribute(sample.getSampleID(), cd.getKey(), cd.getValue());
 	}
 
 	private Map<Sample, TObjectDoubleHashMap<Gene>> samplesExpressionProfiles(final DatasetDTO dataset) {
