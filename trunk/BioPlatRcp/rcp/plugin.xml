@@ -263,6 +263,7 @@
         canFinishEarly="false"
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud.ImportDatasetFromCloudWizard"
+        icon="rcp/resources/icons/cloud.png"
         id="edu.unlp.medicine.bioplat.rcp.ui.dataset.from.cloud.new.wizard"
         name="Import From Bioplat Cloud">
 	     <description>
