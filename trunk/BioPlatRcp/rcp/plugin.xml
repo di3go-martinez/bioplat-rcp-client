@@ -258,6 +258,18 @@
         	Generate a gene signature from sigDB, MSigDB.
      	</description>
   </wizard>
+  
+  <wizard
+        canFinishEarly="false"
+        category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
+        class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud.ImportDatasetFromCloudWizard"
+        id="edu.unlp.medicine.bioplat.rcp.ui.dataset.from.cloud.new.wizard"
+        name="Import From Bioplat Cloud">
+	     <description>
+	        Import Dataset from Bioplat Cloud
+	     </description>
+  </wizard>
+  
   <wizard
         category="edu.unlp.medicine.bioplat.rcp.ui.experiment.wizards.root"
         class="edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.FromCSVFileExperimentImportWizard"
