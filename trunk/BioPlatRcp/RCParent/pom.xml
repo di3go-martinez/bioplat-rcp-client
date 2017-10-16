@@ -57,7 +57,7 @@
 		<module>../rcp</module>
 		<module>../platform</module>
 		<module>../edu.unlp.medicine.bioplat.poc</module>
-		<!--module>../runtime</module -->
+		<module>../runtime</module>
 		<module>../edu.unlp.medicine.bioplat.genes</module>
 		<module>../edu.unlp.medicine.bioplat.core</module>
 		<module>../org.bioplat.classifiers</module>
