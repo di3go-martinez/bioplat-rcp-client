@@ -175,6 +175,13 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 
 	private boolean initialPage = true;
 
+	/**
+	 * @deprecated parche. ver por qué está initialPage...
+	 */
+	protected void skipFirstPageInitialization() {
+		this.initialPage = false;
+	}
+	
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 
