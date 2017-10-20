@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors.nls.Messages;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
@@ -33,7 +32,7 @@ public class ImportDatasetFromCloudWizard extends AbstractWizard<Set<Experiment>
 
 	// TODO agregar a ApplicationParametersHolder??
 	private String url() {
-		return System.getProperty("org.bioplat.cloud.url", "http://z-bioplat-cloud.herokuapp.com");
+		return System.getProperty("org.bioplat.cloud.url", "http://z-bioplat-cloud-prod.herokuapp.com");
 	}
 
 	@Override
