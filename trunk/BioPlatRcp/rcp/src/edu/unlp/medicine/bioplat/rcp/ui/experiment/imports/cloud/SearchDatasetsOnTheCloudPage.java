@@ -1,5 +1,8 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.imports.cloud;
 
+import static com.google.common.collect.ImmutableList.copyOf;
+import static edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.*;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
@@ -87,8 +90,11 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 		label = new Label(container, SWT.BOLD);
 
-		final TableReference tref = TableBuilder.create(container).addColumn(ColumnBuilder.create().property("name"))
-				.input(Lists.newArrayList(findHeaderDatasets())).build();
+		tref = tableBuilder(container)
+				.addColumn(ColumnBuilder.create().property("name").title("Dataset"))
+				.addColumn(ColumnBuilder.create().property("tags").title("Tags"))
+				.addColumn(ColumnBuilder.create().property("samplesCount").title("Samples"))
+				.input(copyOf((findHeaderDatasets()))).build();
 
 		tref.addSelectionChangeListener(new ISelectionChangedListener() {
 
@@ -106,6 +112,7 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 		Set<DatasetDTO> result = findHeaderDatasets();
 		label.setText(result.size() + " dataset(s) found");
 		wizardModel.set(SearchDatasetsOnTheCloudPage.FOUND_DATASETS, result);
+		tref.input(copyOf(result));
 	}
 
 	// FIXME proponer cambio de tipo de datos a HeaderDatasetDTO porque así es
@@ -131,5 +138,6 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 
 	private static final Logger logger = LoggerFactory.getLogger(SearchDatasetsOnTheCloudPage.class);
 	private BioPlatCloudClient cloudclient;
+	private TableReference tref;
 
 }
