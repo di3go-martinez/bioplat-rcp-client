@@ -127,6 +127,13 @@ public class TableBuilder implements TableConfigurer {
 		return viewer.getTable();
 	}
 
+	public static TableBuilder tableBuilder(Composite container) {
+		return create(container);
+	}
+	
+	/**
+	 * @deprecated honoring tableBuilder & import static
+	 */
 	public static TableBuilder create(Composite container) {
 		return new TableBuilder(container, false)//
 				// FIXME porqué el addColumn con esa columna dummy... porque hay
