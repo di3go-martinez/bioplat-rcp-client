@@ -546,6 +546,7 @@ class ResultPage extends WizardPage {
 
 	public ResultPage(AbstractWizard<?> w, WizardPageDescriptor pd) {
 		super("page for results");
+		setTitle(pd.getTitle() + " Results");
 		this.pd = pd;
 		this.w = w;
 	}
