@@ -1,9 +1,11 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization;
 
+import static edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -31,9 +33,9 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 	private List<Biomarker> betters;
 	private TableReference tref;
 
-	private ValidationConfig4DoingCluster forTesting;
 	private ValidationConfig4DoingCluster forTraining;
-	private ValidationConfig4DoingCluster forValidation;
+	private Optional<ValidationConfig4DoingCluster> forTesting = Optional.empty();
+	private Optional<ValidationConfig4DoingCluster> forValidation = Optional.empty();
 
 	private BlindSearchOptimizerCommand command;
 
@@ -41,10 +43,8 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 	@Override
 	public void createPartControl(Composite parent) {
-
 		this.parent = parent;
 		createContents(parent);
-
 	}
 
 	private void createContents(Composite parent) {
@@ -58,7 +58,12 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 			@Override
 			public void build(Menu menu) {
 				Image openImage = PlatformUIUtils.findImage("openSelection.gif");
-				MenuItemContribution.create(menu).image(openImage).text("Open Selection").addSelectionListener(new SelectionAdapter() {
+				MenuItemContribution.create(menu).image(openImage).text("Open Selection")
+						.addSelectionListener(createOpenSelectionListener());
+			}
+
+			private SelectionAdapter createOpenSelectionListener() {
+				return new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						// intenta abrir los seleccionados o si no hay
@@ -69,7 +74,7 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 						for (Biomarker b : biomarkers)
 							PlatformUIUtils.openEditor(b, EditorsId.biomarkerEditorId());
 					}
-				});
+				};
 			}
 		};
 	}
@@ -80,7 +85,7 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 	}
 
-	Composite actualContainer;
+	private Composite actualContainer;
 
 	public void setResultToShow(List<Biomarker> result) {
 		createTable(result);
@@ -95,11 +100,10 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 		actualContainer = container;
 
-		TableBuilder tableBuilder = TableBuilder.create(container).input(betters).//
+		TableBuilder tableBuilder = tableBuilder(container).input(betters).//
 				addColumn(ColumnBuilder.create().property("name").title("Gene Signature name").width(200)).//
 				addColumn(ColumnBuilder.create().numeric().property("numberOfGenes").title("Number of Genes"));//
-		// tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[0].significanceValue.pvalue").title("Training set result").width(200));//
-
+		
 		addTrainingColumn(tableBuilder);
 		addTestingColumn(tableBuilder);
 		addValidationColumn(tableBuilder);
@@ -107,11 +111,13 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 		// if
 		// (betters.get(0).getValidationManager().getLogRankTestValidationResults().size()
 		// >=2)
-		// tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing set result").width(200));//
+		// tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[1].significanceValue.pvalue").title("Testing
+		// set result").width(200));//
 		// if
 		// (betters.get(0).getValidationManager().getLogRankTestValidationResults().size()
 		// >=3)
-		// tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation set result").width(200));//
+		// tableBuilder.addColumn(ColumnBuilder.create().numeric().property("validationManager.logRankTestValidationResults[2].significanceValue.pvalue").title("Validation
+		// set result").width(200));//
 		// .addColumn(ColumnBuilder.create().numeric().property("significanceValue.pvalue").title("p-value"))//
 
 		tref = tableBuilder.contextualMenuBuilder(createMenuBuilder()).build();
@@ -124,25 +130,16 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(180);
 
-		if (forValidation != null) {
+		columnBuilder.accesor(new ReadOnlyAccesor() {
 
-			// columnBuilder.labelprovider(new ColumnLabelProvider() {
-			// @Override
-			// public String getText(Object biomarker) {
-			// return
-			// String.valueOf(StatisticConfig.getBiomarkerFitness((Biomarker)
-			// biomarker, forValidation));
-			// }
-			//
-			// });
-			columnBuilder.accesor(new ReadOnlyAccesor() {
-
-				@Override
-				public Object get(Object element) {
-					return StatisticConfig.getBiomarkerFitness((Biomarker) element, forValidation);
-				}
-			});
-		}
+			@Override
+			public Object get(Object element) {
+				if (forValidation.isPresent())
+					return StatisticConfig.getBiomarkerFitness((Biomarker) element, forValidation.get());
+				else
+					return "N/A";
+			}
+		});
 
 		tableBuilder.addColumn(columnBuilder);
 
@@ -152,25 +149,16 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 		String title = "Testing (" + StatisticConfig.getDescription() + ")";
 		ColumnBuilder columnBuilder = ColumnBuilder.create().numeric().title(title).width(180);
 
-		if (forTesting != null) {
+		columnBuilder.accesor(new ReadOnlyAccesor() {
 
-			columnBuilder.accesor(new ReadOnlyAccesor() {
-
-				@Override
-				public Object get(Object biomarker) {
-					return StatisticConfig.getBiomarkerFitness((Biomarker) biomarker, forTesting);
-				}
-			});
-			// columnBuilder.labelprovider(new ColumnLabelProvider() {
-			// @Override
-			// public String getText(Object biomarker) {
-			// return
-			// String.valueOf(StatisticConfig.getBiomarkerFitness((Biomarker)
-			// biomarker, forTesting));
-			// }
-			//
-			// });
-		}
+			@Override
+			public Object get(Object biomarker) {
+				if (forTesting.isPresent())
+					return StatisticConfig.getBiomarkerFitness((Biomarker) biomarker, forTesting.get());
+				else
+					return "N/A";
+			}
+		});
 
 		tableBuilder.addColumn(columnBuilder);
 
@@ -178,54 +166,31 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 
 	private void addTrainingColumn(TableBuilder tableBuilder) {
 		String title = "Training (" + StatisticConfig.getDescription() + ")";
-		tableBuilder.addColumn(ColumnBuilder.create().numeric().title(title).width(180)
-		// .labelprovider(new ColumnLabelProvider() {
-		// @Override
-		// public String getText(Object biomarker) {
-		// return String.valueOf(StatisticConfig.getBiomarkerFitness((Biomarker)
-		// biomarker, forTraining));
-		// }
-		// })
-				.accesor(new ReadOnlyAccesor() {
+		tableBuilder.addColumn(ColumnBuilder.create().numeric().title(title).width(180).accesor(new ReadOnlyAccesor() {
 
-					@Override
-					public Object get(Object element) {
-						return StatisticConfig.getBiomarkerFitness((Biomarker) element, forTraining);
-					}
-				}));
+			@Override
+			public Object get(Object element) {
+				return StatisticConfig.getBiomarkerFitness((Biomarker) element, forTraining);
+			}
+		}));
 
 	}
 
-	public ValidationConfig4DoingCluster getForTesting() {
-		return forTesting;
-	}
-
+	
 	public void setForTesting(ValidationConfig4DoingCluster forTesting) {
-		this.forTesting = forTesting;
+		this.forTesting = Optional.ofNullable(forTesting);
 	}
 
-	public ValidationConfig4DoingCluster getForTraining() {
-		return forTraining;
-	}
 
 	public void setForTraining(ValidationConfig4DoingCluster forTraining) {
 		this.forTraining = forTraining;
 	}
 
-	public ValidationConfig4DoingCluster getForValidation() {
-		return forValidation;
-	}
+	
 
 	public void setForValidation(ValidationConfig4DoingCluster forValidation) {
-		this.forValidation = forValidation;
+		this.forValidation = Optional.ofNullable(forValidation);
 	}
-
-	//
-	// @Override
-	// public void selectionChanged(SelectionChangedEvent event) {
-	// System.out.println("LLEGOOOOOOS");
-	//
-	// }
 
 	public BlindSearchOptimizerCommand getCommand() {
 		return command;
@@ -236,19 +201,6 @@ public class GenericOptimizationResultViewPart extends ViewPart implements Obser
 		// TODO Auto-generated method stub
 
 	}
-
-	// public void setCommand(BlindSearchOptimizerCommand command) {
-	// command.addPropertyChangeListener(new PropertyChangeListener() {
-	//
-	// @Override
-	// public void propertyChange(PropertyChangeEvent evt) {
-	// System.out.println("SIIIIIIII");
-	//
-	// }
-	// });
-	// this.command = command;
-	// }
-	//
 
 	public void updateResults(List<Biomarker> betters) {
 		tref.input(betters);
