@@ -124,7 +124,7 @@ public class Filters extends WizardPageDescriptor {
 		return container;
 	}
 
-	public Filters addParameters(WizardModel wizardModel) {
+	private Filters addParameters(WizardModel wizardModel) {
 		wizardModel.add(Filters.ORGANISM)//
 				.add(KEYWORD_ON_NAME, new WritableValue("", String.class))//
 				.add(SIGNATURES_ID_OF_NAMES)//
