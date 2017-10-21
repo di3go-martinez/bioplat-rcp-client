@@ -84,7 +84,8 @@ public class TableBuilder implements TableConfigurer {
 		// SWT.VIRTUAL tira error cuando se quiere editar un item.... ver
 		// javadoc de TableViewer...
 		// implementar el ILazyContentProvider
-		int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER;
+		int style = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER | SWT.COLOR_TITLE_BACKGROUND;
+
 		if (virtual)
 			style |= SWT.VIRTUAL;
 
