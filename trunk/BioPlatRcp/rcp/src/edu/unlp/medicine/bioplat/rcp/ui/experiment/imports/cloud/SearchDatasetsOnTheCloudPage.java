@@ -93,7 +93,7 @@ public class SearchDatasetsOnTheCloudPage extends WizardPageDescriptor {
 		tref = tableBuilder(container)
 				.addColumn(ColumnBuilder.create().property("name").title("Dataset"))
 				.addColumn(ColumnBuilder.create().property("tags").title("Tags"))
-				.addColumn(ColumnBuilder.create().property("samplesCount").title("Samples"))
+				//TODO en modo lazy no viene la cantidad de samples que tiene el dataset. Definir. .addColumn(ColumnBuilder.create().property("samplesCount").title("Samples"))
 				.input(copyOf((findHeaderDatasets()))).build();
 
 		tref.addSelectionChangeListener(new ISelectionChangedListener() {
