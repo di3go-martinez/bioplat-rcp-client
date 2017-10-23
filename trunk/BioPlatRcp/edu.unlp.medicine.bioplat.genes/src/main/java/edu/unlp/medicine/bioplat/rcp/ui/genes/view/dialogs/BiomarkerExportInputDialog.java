@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -20,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.core.preferences.AuthorPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
@@ -100,7 +100,7 @@ public class BiomarkerExportInputDialog extends Dialog {
 		return name;
 	}
 
-	private String author = "";
+	private String author = AuthorPreferencePage.author();
 	public String getAuthor() {
 		return author;
 	}
