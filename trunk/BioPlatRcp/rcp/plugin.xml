@@ -785,7 +785,12 @@
             name="TCGAExperimentImportIntroAction"
             replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.TCGAExperimentImportIntroAction">
       </action>
+      <action
+      		name="importDatasetFromBioplatCloud"
+      		replaces="runAction?pluginId=edu.medicine.bioplat.rcp&amp;class=edu.unlp.medicine.bioplat.rcp.intro.actions.ImportDatasetFromBioplatCloud" />
+      
    </extension>
+   
    <extension
          id="splashID"
          point="org.eclipse.ui.splashHandlers">
