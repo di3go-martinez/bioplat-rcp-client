@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ognl.Ognl;
-import ognl.OgnlException;
-
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -44,6 +42,8 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.Accesor;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
 import edu.unlp.medicine.entity.gene.Gene;
 import edu.unlp.medicine.entity.generic.AbstractEntity;
+import ognl.Ognl;
+import ognl.OgnlException;
 
 public class TableBuilder implements TableConfigurer {
 
@@ -96,7 +96,7 @@ public class TableBuilder implements TableConfigurer {
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true); // TODO configurable
 		table.setLinesVisible(viewTableLines);
-		//configureHeightListeners(table);
+		configureHeightListeners(table);
 		
 		
 		// viewer.setContentProvider(new ArrayContentProvider());
@@ -114,6 +114,12 @@ public class TableBuilder implements TableConfigurer {
 	 * Configuro la altura para mejor visibilidad de las grillas
 	 */
 	private void configureHeightListeners(Table table) {
+		if (SystemUtils.IS_OS_LINUX)
+			configureForLinux(table);
+	}
+
+	//No funciona en windows...
+	private void configureForLinux(Table table) {
 		table.addListener(SWT.MeasureItem, new Listener() {
 			
 			@Override
@@ -121,7 +127,6 @@ public class TableBuilder implements TableConfigurer {
 				event.height += 10;
 			}
 		});
-		
 	}
 
 	private Table getTable() {
