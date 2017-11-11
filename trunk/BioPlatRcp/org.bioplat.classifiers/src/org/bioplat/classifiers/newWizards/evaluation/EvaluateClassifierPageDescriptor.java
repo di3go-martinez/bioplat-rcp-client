@@ -89,12 +89,16 @@ public class EvaluateClassifierPageDescriptor extends WizardPageDescriptor {
 					status.setText("Sample file '" + samplefilename + "' contains not valid data.\n" + ie.getMessage());
 				}
 
-				container.update();
-
-				EvaluateClassifierPageDescriptor.this.fireUpdateButtons(wizardPage);
+				updateView(wizardPage, container);
 			}
 
+
 		};
+	}
+
+	private void updateView(final WizardPage wizardPage, final Composite container) {
+		container.update();
+		EvaluateClassifierPageDescriptor.this.fireUpdateButtons(wizardPage);
 	}
 
 	@Override
