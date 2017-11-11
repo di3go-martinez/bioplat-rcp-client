@@ -28,9 +28,7 @@ import edu.unlp.medicine.domainLogic.framework.statistics.hierarchichalClusterin
 import edu.unlp.medicine.entity.biomarker.Biomarker;
 import edu.unlp.medicine.utils.monitor.Monitor;
 
-/**
- * @author Diego Martínez
- */
+
 public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> implements Observer {
 
 	public static final String TESTING_VALIDATION_CONFIG = "TESTING_VALIDATION_CONFIG";
@@ -70,6 +68,7 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 		return ValidationConfigWizard.getMutexRule();
 	}
 
+
 	@Override
 	protected List<WizardPageDescriptor> createPagesDescriptors() {
 		final ArrayList<WizardPageDescriptor> pages = Lists.newArrayList();
@@ -102,15 +101,6 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 	@Override
 	protected BlindSearchResult backgroundProcess(Monitor monitor) throws Exception {
 
-		// create dialog with ok and cancel button and info icon
-		// MessageBox dialog = new MessageBox(, SWT.ICON_QUESTION | SWT.OK|
-		// SWT.CANCEL);
-		// dialog.setText("My info");
-		// dialog.setMessage("Do you really want to do this?");
-		//
-		//
-		// int returnCode = dialog.open();
-
 		blindSearchCommand = new BlindSearchOptimizerCommand(biomarker, new HashMap<String, String>());
 		blindSearchCommand.setNumberOfGenesToRemoveFrom(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSTo + 1);
 		blindSearchCommand.setNumberOfGenesToRemoveTo(biomarker.getNumberOfGenes() - numberOfGenesForResultingGSFrom);
@@ -132,8 +122,6 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 		if (forTesting != null)
 			blindSearchCommand.setValidationConfig4Clustering4Testing(forTesting.get(0));
 
-		// blindSearchCommand.execute();
-
 		try {
 			blindSearchCommand.monitor(monitor).execute();
 		} catch (ClusteringException e) {
@@ -143,7 +131,6 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 			this.setErrorMessage(errorMsg);
 			throw e;
 		}
-
 		return blindSearchCommand.getBlindSearchResult();
 
 	}
@@ -190,11 +177,11 @@ public class BLindSearchWizard extends AbstractWizard<BlindSearchResult> impleme
 		BlindSearchResultViewPart v = (BlindSearchResultViewPart) PlatformUIUtils.findView(BlindSearchResultViewPart.id());
 
 		v.setResultToShow(result.getBetters());
-		// v.setCommand(blindSearchCommand);
 
 		if (result.getWarnings().size() > 0) {
 			String warningMsg = "Blind Search on " + biomarker.getName() + " has finished but there were some warnings. You can see results on 'Blind Search Result' view but please read carefully the warning details in the message view, before analyzing the result";
-			MessageDialog.openWarning(PlatformUIUtils.findShell(), "Blind search Has finished with warnings", warningMsg);
+			MessageDialog.openWarning(PlatformUIUtils.findShell(), "Blind Search has finished with warnings",
+					warningMsg);
 			MessageManager.INSTANCE.add(Message.warn(warningMsg));
 		} else {
 
