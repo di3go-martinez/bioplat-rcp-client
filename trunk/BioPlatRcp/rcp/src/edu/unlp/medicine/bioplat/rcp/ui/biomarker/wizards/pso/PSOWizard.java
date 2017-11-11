@@ -18,7 +18,6 @@ import com.google.common.collect.Lists;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.ValidationConfigPageDescriptor;
-import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.optimization.blindSearch.BlindSearchPage1Introduction;
 import edu.unlp.medicine.bioplat.rcp.ui.biomarker.wizards.pso.page.descriptors.GeneralPSOConfigurarion;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
