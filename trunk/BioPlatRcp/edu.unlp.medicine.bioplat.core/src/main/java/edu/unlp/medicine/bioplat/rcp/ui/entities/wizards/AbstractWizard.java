@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -178,6 +177,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 	/**
 	 * @deprecated parche. ver por qué está initialPage...
 	 */
+	@Deprecated
 	protected void skipFirstPageInitialization() {
 		this.initialPage = false;
 	}
@@ -378,16 +378,16 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 				// TODO revisar mejor lo del error holder y lo de status...
 				final Holder<Throwable> errorHolder = Holder.create(null);
 				// IStatus status = ValidationStatus.ok();
-				T o = null;
+				T result = null;
 
 				try {
-					o = holder.get(); // threads' join
+					result = holder.get(); // threads' join
 				} catch (Exception e) {
 					Throwable t = (e.getCause() != null) ? e.getCause() : e;
 					errorHolder.hold(t);
 				}
 
-				final T oo = o;
+				final T finalresult = result;
 				PlatformUIUtils.findDisplay().syncExec(new Runnable() {
 
 					@Override
@@ -398,13 +398,13 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 								doInUIError(errorHolder.value());
 								addErrorMessageToMessageView(errorHolder.value());
 							} else {
-								doInUI(oo);
+								doInUI(finalresult);
 								// IWorkbenchPage page = ;
 								// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
 								// IWorkbenchPage.STATE_MINIMIZED);
 								PlatformUIUtils.activePage()
 										.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
-								addMessageToMessageView(oo);
+								addMessageToMessageView(finalresult);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -419,23 +419,6 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 					return ValidationStatus.error(errorHolder.value().getMessage(), errorHolder.value());
 			}
 
-			// private IStatus processBioplatException(BioplatException
-			// bioplatE) {
-			// IStatus status = bioplatE.isWarning() ?
-			// ValidationStatus.warning(getErrorMessage().getText()):ValidationStatus.error(getErrorMessage().getText(),
-			// bioplatE);
-			// return status;
-			//
-			// }
-			//
-			// private void setErrorOnMessageView(Throwable t){
-			// //Si no setearon error desde afuera seteo uno por defecto
-			// if (getErrorMessage()==null)
-			// setErrorMessage(Message.error(defaultErrorMsg(t), t));
-			// MessageManager.INSTANCE.add(getErrorMessage());
-			// }
-			//
-			//
 			private String defaultErrorMsg(Throwable t) {
 				String msg = "Error executing the operation:  " + getTaskName();
 				if (t.getMessage() != null && !t.getMessage().equals(""))
