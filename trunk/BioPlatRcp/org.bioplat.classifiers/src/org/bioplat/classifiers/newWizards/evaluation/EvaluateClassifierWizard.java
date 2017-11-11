@@ -5,7 +5,6 @@ import static edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message.info;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
