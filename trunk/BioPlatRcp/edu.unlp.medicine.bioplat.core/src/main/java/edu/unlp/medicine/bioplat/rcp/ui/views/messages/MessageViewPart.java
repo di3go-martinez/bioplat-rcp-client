@@ -54,7 +54,8 @@ public class MessageViewPart extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		Action actionClean = new Action("Clear Messages", Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
+		Action actionClean = new Action("Clear Messages",
+				Activator.imageDescriptorFromPlugin("resources/icons/clear.png")) {
 
 			@Override
 			public void run() {
@@ -62,15 +63,16 @@ public class MessageViewPart extends ViewPart {
 				refresh();
 			}
 		};
-		
-		Action actionExport = new Action("Export Messages", Activator.imageDescriptorFromPlugin("resources/icons/export2.png")) {
+
+		Action actionExport = new Action("Export Messages",
+				Activator.imageDescriptorFromPlugin("resources/icons/export2.png")) {
 
 			@Override
 			public void run() {
 				saveDialog(tr);
 			}
 		};
-		
+
 		IActionBars actionBars = getViewSite().getActionBars();
 		IMenuManager dropDownMenu = actionBars.getMenuManager();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
@@ -78,8 +80,6 @@ public class MessageViewPart extends ViewPart {
 		toolBar.add(actionClean);
 		dropDownMenu.add(actionExport);
 		toolBar.add(actionExport);
-		
-			
 
 		Composite c = new Composite(parent, SWT.BORDER);
 		TableBuilder tb = TableBuilder.create(c)//
@@ -96,20 +96,21 @@ public class MessageViewPart extends ViewPart {
 						return PlatformUI.getWorkbench().getSharedImages().getImage(msgtype);
 					}
 				})) //
-				.addColumn(ColumnBuilder.create().title("Created at").property("createdAt").transformer(new AbstractDataTransformer<Date, String>() {
-					private final DateFormat df = DateFormat.getInstance();
+				.addColumn(ColumnBuilder.create().title("Created at").property("createdAt")
+						.transformer(new AbstractDataTransformer<Date, String>() {
+							private final DateFormat df = DateFormat.getInstance();
 
-					@Override
-					public String doTransform(Date fecha) {
-						return df.format(fecha);
-					}
-				})) //
+							@Override
+							public String doTransform(Date fecha) {
+								return df.format(fecha);
+							}
+						})) //
 				.addColumn(ColumnBuilder.create().title("Message").property("text").width(1000)) //
 				.input(MessageManager.INSTANCE.getMessages()).contextualMenuBuilder(createMenuBuilder());
 
 		tr = tb.build();
 
-		//TODO tr.sort("createdAt", SWT.DOWN);
+		// TODO tr.sort("createdAt", SWT.DOWN);
 
 		GridLayoutFactory.fillDefaults().generateLayout(c);
 	}
@@ -120,23 +121,25 @@ public class MessageViewPart extends ViewPart {
 			@Override
 			public void build(Menu menu) {
 				Image openImage = PlatformUIUtils.findImage("openSelection.gif");
-				MenuItemContribution.create(menu).image(openImage).text("Open Selection").addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Message message = (Message) tr.focusedElements().get(0);
-						openDialog(message);
-					}
+				MenuItemContribution.create(menu).image(openImage).text("Open Selection")
+						.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								Message message = (Message) tr.focusedElements().get(0);
+								openDialog(message);
+							}
 
-				});
+						});
 				// Exportador
 				Image exportImage = PlatformUIUtils.findImage("export2.png");
-				MenuItemContribution.create(menu).image(exportImage).text("Export Messages").addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-							saveDialog(tr);
-							
-					   }
-				});
+				MenuItemContribution.create(menu).image(exportImage).text("Export Messages")
+						.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								saveDialog(tr);
+
+							}
+						});
 			}
 		};
 	}
@@ -151,36 +154,44 @@ public class MessageViewPart extends ViewPart {
 	}
 
 	public void focusAtLastLine() {
-		// tr.getTable().select(tr.getTable().getItemCount());
+		PlatformUIUtils.findDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				tr.getTable().select(tr.getTable().getItemCount() - 1);
+				tr.getTable().deselectAll();
+			}
+		});
 
 	}
 
 	private void openDialog(Message message) {
 		MessageDialog.open(message.getType().kindForDialog(), null, "BioPlat", message.getText(), SWT.NONE);
 	}
-	
-	private void saveDialog(TableReference tr){
+
+	private void saveDialog(TableReference tr) {
 		FileDialog fd = new FileDialog(PlatformUIUtils.findShell(), SWT.SAVE);
 		fd.setText("Export");
-        fd.setFilterPath(System.getProperty("user.home"));
-        fd.setFilterExtensions(new String[]{ "*.txt","*.log","*.*" });
-        String selected = fd.open();
-		if(selected != null && !selected.isEmpty()){
-			File file = new File(selected); 
+		fd.setFilterPath(System.getProperty("user.home"));
+		fd.setFilterExtensions(new String[] { "*.txt", "*.log", "*.*" });
+		String selected = fd.open();
+		if (selected != null && !selected.isEmpty()) {
+			File file = new File(selected);
 			try {
-			FileWriter fileWriter = new FileWriter(file);
-			for(TableItem ti : tr.getTable().getItems()){
-				fileWriter.write(ti.getText(2) + "\t" + ti.getText(3) + "\n");
-			}
-			fileWriter.flush();
-			fileWriter.close();
-			MessageDialog.open(MessageDialog.INFORMATION, null, "BioPlat", "Messages were exported successfully.", SWT.NONE);
-			MessageManager.INSTANCE.add(Message.info("Messages were exported successfully."));
+				FileWriter fileWriter = new FileWriter(file);
+				for (TableItem ti : tr.getTable().getItems()) {
+					fileWriter.write(ti.getText(2) + "\t" + ti.getText(3) + "\n");
+				}
+				fileWriter.flush();
+				fileWriter.close();
+				MessageDialog.open(MessageDialog.INFORMATION, null, "BioPlat", "Messages were exported successfully.",
+						SWT.NONE);
+				MessageManager.INSTANCE.add(Message.info("Messages were exported successfully."));
 			} catch (IOException e) {
 				MessageDialog.open(MessageDialog.ERROR, null, "BioPlat", "Error when trying to export.", SWT.NONE);
-				MessageManager.INSTANCE.add(Message.error(e.getMessage()));				
-			}	
+				MessageManager.INSTANCE.add(Message.error(e.getMessage()));
+			}
 		}
 	}
-	
+
 }
