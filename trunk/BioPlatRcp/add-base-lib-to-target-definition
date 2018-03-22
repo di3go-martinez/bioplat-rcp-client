@@ -29,6 +29,8 @@ placeholder_mark="<!-- base-lib-placeholder -->"
 if cat $target | grep "$placeholder_mark" > /dev/null; then
    replace "$placeholder_mark" "$target_location" "$target"
    echo $target
+   mv $orig{,.bkp}
+   mv $target $orig
 else
   echo "No está el placeholder '$placeholder_mark' en $target (->$orig)"
 fi
