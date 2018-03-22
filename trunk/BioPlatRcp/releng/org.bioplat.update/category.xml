@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.bioplat.feature_1.0.0.qualifier.jar" id="org.bioplat.feature" version="1.0.0.qualifier">
+      <category name="bioplat"/>
+   </feature>
+   <category-def name="bioplat" label="Bioplat"/>
+</site>
