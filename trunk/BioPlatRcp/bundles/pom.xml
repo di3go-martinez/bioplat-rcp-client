@@ -1,0 +1,25 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.bioplat</groupId>
+	<artifactId>org.bioplat.bundles</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.bioplat</groupId>
+		<artifactId>org.bioplat.root</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+
+	<!-- the plugins/bundles! -->
+	<modules>
+		<module>rcp</module>
+		<module>edu.unlp.medicine.bioplat.core</module>
+		<module>edu.unlp.medicine.bioplat.genes</module>
+		<module>org.bioplat.classifiers</module>
+		<module>org.bioplat.multiomics</module>
+	</modules>
+</project>
+
