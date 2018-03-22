@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+
+#FIXME definir una variable del estilo ECLIPSE_HOME
+#chequeo si existe el archivo eclipse, asumo que es una distribución de eclipse
+[ -e eclipse  ] || echo "Este script se ejecuta desde el directorio de Eclipse. copiar este $0 y p2-repo" && exit 1
+
+set -e
+set -u
+
+#install latest base-lib
+(cd ~/projects/rcp-from-scratch/in.house.root/bundles/runtime/base.lib/ && mvn install)
+
+
+launcher=plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar
+target_repository=file:$(pwd)/p2-repo/target/repository
+base_lib_jar=~/.m2/repository/bioplat/edu.medicine.bioplat.base.lib/1.2.0-in.house-SNAPSHOT/edu.medicine.bioplat.base.lib-1.2.0-in.house-SNAPSHOT.jar
+
+source="/tmp/source"
+mkdir -p $source/plugins
+
+cp $base_lib_jar $source/plugins
+
+rm -rf $target_repository
+
+java -jar $launcher \
+  -data /tmp/ws1 \
+  -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
+  -metadataRepository $target_repository \
+  -artifactRepository $target_repository \
+  -source $source \
+  -compress \
+  -publishArtifacts
+
+category_file="file:$(pwd)/category.xml"
+java -jar $launcher \
+  -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
+  -data /tmp/wscategorypublisherwsa \
+  -metadataRepository $target_repository \
+  -categoryDefinition $category_file
+
+
+(cd p2-repo && mvn jetty:run)
+

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+
+artifactId=edu.medicine.bioplat.base.lib
+
+version=$(curl --silent http://localhost:8080/site/artifacts.jar | zcat | grep "id='$artifactId'" | cut -d= -f4 | cut -d\' -f2 )
+
+
+target_location=$(cat << _EOF
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit"> 
+<unit id="edu.medicine.bioplat.base.lib" version="$version"/> 
+<repository location="http://localhost:8080/site/"/>
+</location>
+_EOF
+)
+
+orig="releng/in.house.target/in.house.target.target"
+target=/tmp/$RANDOM
+cp $orig $target
+
+
+
+function replace {
+    sed -i "s/$(echo $1 | sed -e 's/\([[\/.*]\|\]\)/\\&/g')/$(echo $2 | sed -e 's/[\/&]/\\&/g')/g" $3
+}
+
+
+placeholder_mark="<!-- base-lib-placeholder -->"
+if cat $target | grep "$placeholder_mark" > /dev/null; then
+   replace "$placeholder_mark" "$target_location" "$target"
+   echo $target
+else
+  echo "No está el placeholder '$placeholder_mark' en $target (->$orig)"
+fi
+
