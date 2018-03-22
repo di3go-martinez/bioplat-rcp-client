@@ -1,0 +1,22 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bioplat</groupId>
+    <artifactId>org.bioplat.tests</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <parent>
+      <groupId>org.bioplat</groupId>
+        <artifactId>org.bioplat.root</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+<!-- TODO plugin tests -->
+    <!--modules>
+        <module>com.vogella.tycho.plugin1.tests</module>
+	      <module>com.vogella.tycho.rcp.tests</module-->
+  <!--	<module>com.vogella.tycho.rcp.it.tests</module> -->
+    <!--/modules-->
+</project>
+
