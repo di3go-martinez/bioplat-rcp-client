@@ -41,7 +41,6 @@
 
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="in.house.app"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.xml"/>
