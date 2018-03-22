@@ -27,12 +27,6 @@ public class Application implements IApplication {
 		
 		initializeCommandLineArguments();
 		
-		if(!System.getProperty("os.name").toLowerCase().contains("win")){
-			System.setProperty("org.eclipse.swt.browser.XULRunnerPath",  System.getProperty("user.dir") + "/xulrunner"); 
-			System.setProperty("org.eclipse.swt.browser.DefaultType", "mozilla");
-		}
-		
-		
 		Display display = PlatformUI.createDisplay();
 		try {
 			int returnCode = RETURN_OK;
