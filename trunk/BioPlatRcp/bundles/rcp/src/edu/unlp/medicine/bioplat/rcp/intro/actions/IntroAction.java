@@ -5,6 +5,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -33,7 +34,7 @@ public abstract class IntroAction extends Action {
 				IWorkbenchPage page = PlatformUIUtils.activePage();
 				// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
 				// IWorkbenchPage.STATE_MINIMIZED);
-				page.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+				page.hideView((IViewPart)PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
 			}
 		} catch (Exception e) {
 			PlatformUIUtils.openError("ERROR", e.getMessage());

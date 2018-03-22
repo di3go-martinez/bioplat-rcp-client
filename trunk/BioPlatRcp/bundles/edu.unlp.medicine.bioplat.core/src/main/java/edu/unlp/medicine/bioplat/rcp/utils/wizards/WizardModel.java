@@ -45,6 +45,10 @@ public class WizardModel {
 			return (T) ov.getValue();// TODO ensureDoingInRealm(ov);
 		return (T) commonValues.get(key);
 	}
+	
+	public Boolean booleanValue(String key) {
+		return value(key);
+	}
 
 	//TODO
 	private <T> T ensureDoingInRealm(final IObservableValue ov) {
@@ -135,7 +139,7 @@ public class WizardModel {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Wizard Model {  ");
 		for (String key : keys())
-			sb.append(key).append(" => ").append(value(key)).append(", ");
+			sb.append(key).append(" => ").append((Object)value(key)).append(", ");
 		sb.replace(sb.length() - 2, sb.length(), " }");
 		return sb.toString();
 

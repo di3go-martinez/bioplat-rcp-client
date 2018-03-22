@@ -387,9 +387,9 @@ public class GMSPage2FIlterExternalDBs extends WizardPageDescriptor implements T
 		if (isAnySecondaryAvailable(model)) {
 			ProviderFromSecondaryDBImportedInBioplat provider = new ProviderFromSecondaryDBImportedInBioplat();
 			List<String> dbs = Lists.newArrayList();
-			if (model.value(GENESIGDB))
+			if (model.booleanValue(GENESIGDB))
 				dbs.add(Constants.GENE_SIG_DB);
-			if (model.value(MSIGDB))
+			if (model.booleanValue(MSIGDB))
 				dbs.add(Constants.MOL_SIG_DB);
 			provider.setExternalDatabaseNames(dbs);
 			provider.setOrganism(model.value(GMSPage2FIlterExternalDBs.ORGANISM).toString());

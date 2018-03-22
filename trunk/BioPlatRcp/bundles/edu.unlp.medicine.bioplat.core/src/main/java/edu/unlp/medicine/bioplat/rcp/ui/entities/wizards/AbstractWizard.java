@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
@@ -403,7 +404,7 @@ public abstract class AbstractWizard<T> extends Wizard implements IWorkbenchWiza
 								// page.setPartState(page.findViewReference("org.eclipse.ui.internal.introview"),
 								// IWorkbenchPage.STATE_MINIMIZED);
 								PlatformUIUtils.activePage()
-										.hideView(PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
+										.hideView((IViewPart)PlatformUIUtils.findView("org.eclipse.ui.internal.introview"));
 								addMessageToMessageView(finalresult);
 							}
 						} catch (Exception e) {
