@@ -3,6 +3,7 @@
 
 <product name="Bioplat Product" uid="in.house.app.product" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -32,6 +33,8 @@
             winLargeHigh="/edu.medicine.bioplat.rcp/resources/icons/window/adn.48x48.bmp"/>
       </win>
    </launcher>
+
+   <intro introId="edu.unlp.medicine.bioplat.rcp.intro"/>
 
    <vm>
    </vm>
