@@ -14,7 +14,7 @@ target_location=$(cat << _EOF
 _EOF
 )
 
-orig="releng/in.house.target/in.house.target.target"
+orig="releng/org.bioplat.target/org.bioplat.target.target"
 target=/tmp/$RANDOM
 cp $orig $target
 
