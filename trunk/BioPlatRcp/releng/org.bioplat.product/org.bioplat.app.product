@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Bioplat Product" uid="in.house.app.product" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Bioplat Product" uid="org.bioplat.app.product" id="edu.medicine.bioplat.rcp.product" application="edu.medicine.bioplat.rcp.id1" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
 
    <configIni use="default">
