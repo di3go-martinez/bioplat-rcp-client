@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
+set -u
+
+site=http://localhost:8080/site/artifacts.jar
 
 artifactId=edu.medicine.bioplat.base.lib
 
-version=$(curl --silent http://localhost:8080/site/artifacts.jar | zcat | grep "id='$artifactId'" | cut -d= -f4 | cut -d\' -f2 )
+curl --silent http://localhost:8080/site/artifacts.jar |zcat >& /dev/null 
+if [ $? = 1 ];then
+  echo No se encontró el repositorio p2 en $site 
+  exit -10
+fi
 
+version=$(curl --silent $site | zcat | grep "id='$artifactId'" | cut -d= -f4 | cut -d\' -f2 )
 
 target_location=$(cat << _EOF
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit"> 
@@ -28,9 +36,9 @@ function replace {
 placeholder_mark="<!-- base-lib-placeholder -->"
 if cat $target | grep "$placeholder_mark" > /dev/null; then
    replace "$placeholder_mark" "$target_location" "$target"
-   echo $target
    mv $orig{,.bkp}
    mv $target $orig
+   echo $orig modificado. Bioplat base lib $version configurado
 else
   echo "No está el placeholder '$placeholder_mark' en $target (->$orig)"
 fi
