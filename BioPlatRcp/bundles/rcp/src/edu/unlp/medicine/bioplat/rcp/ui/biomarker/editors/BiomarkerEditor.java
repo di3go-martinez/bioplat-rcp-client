@@ -1,6 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.ui.biomarker.editors;
 
-import static edu.unlp.medicine.bioplat.rcp.widgets.Widgets.*;
+import static edu.unlp.medicine.bioplat.rcp.widgets.Widgets.createTextWithLabel;
+
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -15,19 +16,15 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.internal.AbstractSelectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,16 +39,17 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.Models;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.accesors.OgnlAccesor;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.ColumnBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder;
-import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableBuilder.MenuBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.TableReference;
-import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.events.GeneChangeEvent;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationTextEvent;
 import edu.unlp.medicine.domainLogic.ext.metasignatureCommands.save.MetaSignatureMarshaller;
 import edu.unlp.medicine.entity.biomarker.Biomarker;
+import edu.unlp.medicine.entity.gene.Gene;
 
 public class BiomarkerEditor extends AbstractEditorPart<Biomarker>
     implements ISelectionChangedListener, TableReferenceProvider, MouseListener {
@@ -231,18 +229,9 @@ public class BiomarkerEditor extends AbstractEditorPart<Biomarker>
     return ImmutableMap.of((Object) Constants.GENES, element, Constants.SELECTED_GENES, element1);
   }
 
-  @SuppressWarnings("restriction")
   @Override
   public void selectionChanged(SelectionChangedEvent event) {
-    // FIXME sacar el downcast, avisar a de una manera prolija
-    try {
-      AbstractSelectionService ass =
-          (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
-      ass.setActivePart(null);
-      ass.setActivePart(this);
-    } catch (NullPointerException npe) {
-      logger.debug("Null pointer exception on selection changed");
-    }
+	  PlatformUtils.eventbus.instance.post(new GeneChangeEvent((Gene) event.getStructuredSelection().getFirstElement()));
   }
 
 
