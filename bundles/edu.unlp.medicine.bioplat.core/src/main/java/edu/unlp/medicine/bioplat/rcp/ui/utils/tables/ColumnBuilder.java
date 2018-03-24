@@ -407,4 +407,9 @@ public class ColumnBuilder {
 		fixed().hidden().resizable(false);
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return this.getClass() + " -> "+ title;
+	}
 }
