@@ -182,22 +182,28 @@ public abstract class WizardPageDescriptor {
 		return manualFlip;
 	}
 
+
+	@Deprecated 
 	public void setManualFlip(boolean manualFlip) {
 		this.manualFlip = manualFlip;
 	};
 	
+	@Deprecated
 	public boolean isAllowFlip() {
 		return allowFlip;
 	}
 
+	@Deprecated
 	public void setAllowFlip(boolean manualFlip) {
 		this.allowFlip = manualFlip;
 	}
 
+	@Deprecated
 	public boolean isAllowFinish() {
 		return allowFinish;
 	}
 
+	@Deprecated
 	public void setAllowFinish(boolean allowFinish) {
 		this.allowFinish = allowFinish;
 	}
