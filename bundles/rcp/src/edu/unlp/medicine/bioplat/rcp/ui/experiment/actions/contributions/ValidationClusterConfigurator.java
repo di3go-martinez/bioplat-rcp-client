@@ -27,7 +27,7 @@ public class ValidationClusterConfigurator {
 		}else if(clusterer instanceof RClustererPAM){
 			RClustererPAM concreteCluster = (RClustererPAM)clusterer;
 			concreteCluster.setMetric((String)model.value(PagesDescriptors.PAM_METRIC));
-			concreteCluster.setStandarized(Boolean.valueOf(String.valueOf(model.value(PagesDescriptors.PAM_STANDARDIZED))));
+			concreteCluster.setStandarized(model.booleanValue(PagesDescriptors.PAM_STANDARDIZED));
 		}else if(clusterer instanceof RClustererKmeansHClust){
 			RClustererKmeansHClust concreteCluster = (RClustererKmeansHClust)clusterer;
 			concreteCluster.setMetric((String)model.value(PagesDescriptors.KMEANSHCLUST_METRIC));
