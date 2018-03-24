@@ -159,4 +159,9 @@ public class WizardModel {
 		values.put(key, writableValue);
 
 	}
+
+	public WizardModel add(String key, Boolean initialValue) {
+		add(key, new WritableValue<Boolean>(initialValue, Boolean.class));
+		return this;
+	}
 }
