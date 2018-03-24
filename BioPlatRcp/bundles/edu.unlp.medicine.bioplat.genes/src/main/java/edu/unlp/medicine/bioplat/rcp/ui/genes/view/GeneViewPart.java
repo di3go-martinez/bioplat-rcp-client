@@ -22,14 +22,16 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Lists;
+import com.google.common.eventbus.Subscribe;
 
 import edu.unlp.medicine.bioplat.core.Activator;
 import edu.unlp.medicine.bioplat.rcp.core.selections.MultipleSelection;
@@ -41,6 +43,7 @@ import edu.unlp.medicine.bioplat.rcp.ui.genes.view.parser.GeneUrlParser;
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.preferences.ExternalGeneInformationPage;
 import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.events.GeneChangeEvent;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.entity.gene.Gene;
@@ -60,6 +63,8 @@ public class GeneViewPart extends ViewPart {
 		return "edu.medicine.bioplat.rcp.gene.view";
 	}
 
+	
+	
 	// problema con las páginas que quedan cacheadas, por ejemplo no carga el
 	// estilo para la página cacheada...
 	// private Cache<String, String> genBrowserCache =
@@ -89,8 +94,16 @@ public class GeneViewPart extends ViewPart {
             "Accept-Encoding: gzip,deflate,sdch",
             "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3" };
 	
+	
+	@Override
+	public void init(IViewSite site) throws PartInitException {
+		super.init(site);
+		PlatformUtils.eventbus.instance.register(this);
+	}
+	
 	@Override
 	public void createPartControl(final Composite parent) {
+		this.parent = parent;
 		
 		Action actionRefreshAll = new Action("Refresh All", Activator.imageDescriptorFromPlugin("resources/icons/refresh.png")) {
 			
@@ -185,6 +198,7 @@ public class GeneViewPart extends ViewPart {
                for(Browser browser : browsers){
             	   browser.stop();
                }
+               PlatformUtils.eventbus.instance.unregister(GeneViewPart.this);
             }
         });
 		
@@ -252,7 +266,7 @@ public class GeneViewPart extends ViewPart {
 			browsers.get(i - 1).stop();
 			browsers.get(i - 1).setText("",false);
 			tabContainer.getItem(i).setControl(browsersWaiting.get(i - 1));
-			browsers.get(i - 1).setUrl("");
+			browsers.get(i - 1).setUrl("about:blank");
 			Browser.clearSessions();
 			
 		}
@@ -387,8 +401,11 @@ public class GeneViewPart extends ViewPart {
 	@Override
 	public void setFocus() {}
 	
+	private Composite parent;
 	
-	
-	
+	@Subscribe
+	public void listener(GeneChangeEvent event) {
+		updateComposite(parent, event.gene());
+	}	
 
 }

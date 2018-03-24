@@ -1,6 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.ui.experiment.editors;
 
-import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,16 +16,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.internal.AbstractSelectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +46,10 @@ import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellData;
 import edu.unlp.medicine.bioplat.rcp.ui.utils.tables.cells.CustomCellDataBuilder;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
-import edu.unlp.medicine.bioplat.rcp.utils.GUIUtils;
 import edu.unlp.medicine.bioplat.rcp.utils.Holder;
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.PlatformUtils;
+import edu.unlp.medicine.bioplat.rcp.utils.events.GeneChangeEvent;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widget;
 import edu.unlp.medicine.bioplat.rcp.widgets.Widgets;
 import edu.unlp.medicine.bioplat.rcp.widgets.listeners.ModificationListener;
@@ -158,7 +155,7 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 		for (Sample s : sampleToLoad)
 			tb.addColumn( //
 			ColumnBuilder.create().numeric().title(s.getName()) //
-					.editable().property("data[" + index++ + "].value")//
+					.editable(false).property("data[" + index++ + "].value")//
 					.addHeadeMenuItemDescriptor(new RemoveSampleColumnDescriptor(model())));
 
 		tr = tb.build();
@@ -181,11 +178,8 @@ class ExperimentEditor0 extends AbstractEditorPart<AbstractExperiment> implement
 
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		// FIXME sacar el downcast, avisar a de una manera prolija
-		// TODO Para qué era esto....???
-		AbstractSelectionService ass = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
-		ass.setActivePart(null);
-		ass.setActivePart(this);
+		Gene gene = ((ExpressionDataModel) event.getStructuredSelection().getFirstElement()).findGene();
+		PlatformUtils.eventbus.instance.post(new GeneChangeEvent(gene ));
 	}
 
 	private List<Sample> resolveSamplesToLoad() {
