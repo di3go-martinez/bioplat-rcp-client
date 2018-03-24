@@ -1,7 +1,5 @@
 package edu.unlp.medicine.bioplat.rcp.application.startup;
 
-import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
-import org.bioplat.r4j.R4JClient.exceptions.R4JServerShutDownException;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -10,10 +8,10 @@ import org.eclipse.ui.IStartup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.unlp.medicine.bioplat.rcp.application.ApplicationWorkbenchWindowAdvisor;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.Message;
 import edu.unlp.medicine.bioplat.rcp.ui.views.messages.MessageManager;
 import edu.unlp.medicine.r4jServer.BioplatR4JServer;
-import edu.unlp.medicine.utils.fileSystem.BioplatFileSystemUtils;
 
 public class StartupRserve implements IStartup {
 	// Logger Object
@@ -37,7 +35,7 @@ public class StartupRserve implements IStartup {
 				// Se debe mejorar
 				BioplatR4JServer bioplatR4JServer = null;
 				IStatus validationStatus = ValidationStatus.OK_STATUS;
-				if (isRServerRunningLocal()) {
+				if (ApplicationWorkbenchWindowAdvisor.isRServerRunningLocal()) {
 					bioplatR4JServer = BioplatR4JServer.create();
 					if (bioplatR4JServer != null && bioplatR4JServer.isStarted()) {
 						return ValidationStatus.OK_STATUS;
@@ -75,24 +73,8 @@ public class StartupRserve implements IStartup {
 
 		}.schedule();
 
-		// Agrego un listener para cuando se baje la aplicación se ejecute
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				try {
-					if (isRServerRunningLocal())
-						BioplatR4JServer.getInstance().getServer().shutDown();
-					BioplatFileSystemUtils.deleteImagesFolder();
-				} catch (R4JServerShutDownException e) {
-					logger.error(
-							"Problem shutting down the Rserve on port: " + R4JConfigurator.getInstance().getPort());
-					e.printStackTrace();
-				}
-			}
-		});
+		
 	}
 
-	private boolean isRServerRunningLocal() {
-		return "true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase());
-	}
+	
 }

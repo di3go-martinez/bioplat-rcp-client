@@ -1,5 +1,7 @@
 package edu.unlp.medicine.bioplat.rcp.application;
 
+import org.bioplat.r4j.R4JClient.connections.R4JConfigurator;
+import org.bioplat.r4j.R4JClient.exceptions.R4JServerShutDownException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.MessageBox;
@@ -11,8 +13,12 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.internal.IPreferenceConstants;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.unlp.medicine.bioplat.rcp.utils.PlatformUIUtils;
+import edu.unlp.medicine.r4jServer.BioplatR4JServer;
+import edu.unlp.medicine.utils.fileSystem.BioplatFileSystemUtils;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -61,5 +67,25 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		return (messageBox.open() == SWT.YES);
 	}
 	
+	
+	@Override
+	public void postWindowClose() {
+		try {
+			if (isRServerRunningLocal())
+				BioplatR4JServer.getInstance().getServer().shutDown();
+			BioplatFileSystemUtils.deleteImagesFolder();
+		} catch (R4JServerShutDownException e) {
+			logger.error(
+					"Problem shutting down the Rserve on port: " + R4JConfigurator.getInstance().getPort(), e);
+		}
+		super.postWindowClose();
+	}
+	
+	
+	public static  boolean isRServerRunningLocal() {
+		return "true".equals(R4JConfigurator.getInstance().getLocal().toLowerCase());
+	}
+	
+	private Logger logger = LoggerFactory.getLogger(ApplicationWorkbenchWindowAdvisor.class);
 	
 }
