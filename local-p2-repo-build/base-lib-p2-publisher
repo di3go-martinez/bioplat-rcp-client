@@ -3,13 +3,13 @@
 
 #FIXME definir una variable del estilo ECLIPSE_HOME
 #chequeo si existe el archivo eclipse, asumo que es una distribución de eclipse
-[ -e eclipse  ] || echo "Este script se ejecuta desde el directorio de Eclipse. copiar este $0 y p2-repo" && exit 1
+[ -e eclipse  ] || (echo "Este script se ejecuta desde el directorio de Eclipse. copiar este $0 y p2-repo" && exit 1)
 
 set -e
 set -u
 
 #install latest base-lib
-(cd ~/projects/bioplat/bioplat04/trunk/BioPlatRcp/bundles/runtime/base.lib/ && mvn install)
+(cd ${1:-"~/projects/bioplat/bioplat04/trunk/BioPlatRcp/bundles/runtime/base.lib/"} && mvn install)
 
 
 launcher=plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar
