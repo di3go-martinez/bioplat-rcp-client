@@ -38,7 +38,7 @@ if cat $target | grep "$placeholder_mark" > /dev/null; then
    replace "$placeholder_mark" "$target_location" "$target"
    mv $orig{,.bkp}
    mv $target $orig
-   echo $orig modificado. Bioplat base lib $version configurado
+   echo "$orig modificado. Bioplat base lib $version configurado. (este archivo no no se comitea)"
 else
   echo "No está el placeholder '$placeholder_mark' en $target (->$orig)"
 fi
