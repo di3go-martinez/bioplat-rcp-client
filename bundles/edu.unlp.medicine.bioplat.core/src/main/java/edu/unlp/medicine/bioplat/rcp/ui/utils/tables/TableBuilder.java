@@ -388,6 +388,8 @@ public class TableBuilder implements TableConfigurer {
 			@Override
 			public void addSelectionChangeListener(ISelectionChangedListener listener) {
 				viewerlisteners.add(listener);
+				//FIXME registro listener normalmente. pero el listener es invocado en ROW_SELECT_COLUMN. Esto ocasiona en los wizards una doble invocación
+				viewer.addSelectionChangedListener(listener);
 			}
 
 			@Override
