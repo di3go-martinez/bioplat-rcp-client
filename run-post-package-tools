@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+
+version=${1?"Falta la versión de Bioplat a empaquetar"}
+
+cp -r ../post-package-tools releng/org.bioplat.product/target/products/
+
+cd releng/org.bioplat.product/target/products/
+
+cp *win32* post-package-tools/windows
+( 
+cd post-package-tools/windows/
+./post-package-windows.sh $version
+)
+
+
+cp *linux* post-package-tools/linux
+(
+cd post-package-tools/linux/
+./post-package-linux.sh $version
+)
+
+
