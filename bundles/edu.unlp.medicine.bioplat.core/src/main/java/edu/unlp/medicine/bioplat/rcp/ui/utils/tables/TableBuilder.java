@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -61,7 +63,10 @@ public class TableBuilder implements TableConfigurer {
 				selectedElements.add(element);
 			else
 				selectedElements.remove(element);
+			fireSelectionChanged();
 		}
+
+		
 
 		@Override
 		public Object get(Object element) {
@@ -71,6 +76,13 @@ public class TableBuilder implements TableConfigurer {
 
 	private TableViewer viewer;
 	private List<ISelectionChangedListener> viewerlisteners = Lists.newArrayList();
+	
+	private void fireSelectionChanged() {
+		viewerlisteners.stream().forEach(  l -> {
+			l.selectionChanged(new SelectionChangedEvent(viewer, new StructuredSelection(TableBuilder.this.selectedElements)));
+		});
+		
+	}
 
 	// TODO revisar.... usar input resolver?
 	private List<?> input = Lists.newArrayList();
@@ -376,7 +388,6 @@ public class TableBuilder implements TableConfigurer {
 			@Override
 			public void addSelectionChangeListener(ISelectionChangedListener listener) {
 				viewerlisteners.add(listener);
-				viewer.addSelectionChangedListener(listener);
 			}
 
 			@Override
