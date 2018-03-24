@@ -261,10 +261,10 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				.add(PagesDescriptors.SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_SECOND_ATTRIBUTE_NAME_TO_VALIDATION)//
 				.add(PagesDescriptors.OTHER_ATTRIBUTE_NAME_TO_VALIDATION)//
-				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, new WritableValue(false, Boolean.class))//
+				.add(PagesDescriptors.REMOVE_GENES_IN_GENE_SIGNATURE, false)//
 				.add(PagesDescriptors.CLUSTERING_STRATEGY)//
 				.add(PagesDescriptors.PAM_METRIC)//
-				.add(PagesDescriptors.PAM_STANDARDIZED)//
+				.add(PagesDescriptors.PAM_STANDARDIZED, false)//
 				.add(PagesDescriptors.KMEANS_ALGORITHM)//
 				.add(PagesDescriptors.KMEANS_ITER)//
 				.add(PagesDescriptors.KMEANSHCLUST_METRIC)//
