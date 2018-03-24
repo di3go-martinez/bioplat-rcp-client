@@ -59,9 +59,13 @@ public abstract class AbstractEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor createCellEditor() {
-		ce = new TextCellEditor(getViewer().getTable(), SWT.NONE);
+		ce = createCellEditor0();
 		ce.setValidator(createCellEditorValidator());
 		return ce;
+	}
+
+	protected CellEditor createCellEditor0() {
+		return new TextCellEditor(getViewer().getTable(), SWT.NONE);
 	}
 
 	/**
