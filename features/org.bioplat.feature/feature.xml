@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <includes
+         id="org.eclipse.minimal"
+         version="0.0.0"/>
+
    <plugin
          id="edu.medicine.bioplat.base.lib"
          download-size="0"
