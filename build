@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+version=${1?"Indicar la versión de bioplat a generar"}
+
+mvn clean package && 
+./run-post-package-tools $version && \
+mvn --offline clean
