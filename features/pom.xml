@@ -12,6 +12,7 @@
     </parent>
 
     <modules>
+    	<module>org.eclipse.minimal</module>
         <module>org.bioplat.feature</module>
     </modules>
 </project>
