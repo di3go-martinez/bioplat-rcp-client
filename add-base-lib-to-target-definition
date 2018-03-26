@@ -7,7 +7,7 @@ site=http://localhost:8080/site/artifacts.jar
 artifactId=edu.medicine.bioplat.base.lib
 
 curl --silent http://localhost:8080/site/artifacts.jar |zcat >& /dev/null 
-if [ $? = 1 ];then
+if [ $? != 0 ];then
   echo No se encontró el repositorio p2 en $site 
   exit -10
 fi
