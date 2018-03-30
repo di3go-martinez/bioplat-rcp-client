@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.bioplat.rcp.tests;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: org.bioplat.rcp.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.swtbot.go;bundle-version="2.6.0",
+ edu.medicine.bioplat.base.lib;bundle-version="1.3.0"
