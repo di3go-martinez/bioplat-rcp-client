@@ -12,7 +12,7 @@
     </parent>
 
     <modules>
-    	<module>org.eclipse.rcp.extras</module>
+    	  <module>org.eclipse.rcp.extras</module>
         <module>org.bioplat.feature</module>
     </modules>
 </project>

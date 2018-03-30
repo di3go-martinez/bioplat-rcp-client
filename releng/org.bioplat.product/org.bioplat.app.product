@@ -106,11 +106,11 @@
 
    <features>
       <feature id="org.bioplat.feature" version="1.0.0.qualifier"/>
-      <feature id="org.eclipse.minimal"/>
       <feature id="org.eclipse.rcp" version="4.7.3.v20180301-0715"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.emf.common"/>
       <feature id="org.eclipse.e4.rcp"/>
+      <feature id="org.eclipse.rcp.extras"/>
    </features>
 
    <configurations>
