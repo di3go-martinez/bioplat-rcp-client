@@ -22,4 +22,8 @@ cd post-package-tools/linux/
 ./post-package-linux.sh $version
 )
 
-
+cp *mac* post-package-tools/mac/
+(
+cd post-package-tools/mac/
+./post-package-mac.sh $version
+)
