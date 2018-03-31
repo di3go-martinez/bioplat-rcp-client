@@ -41,5 +41,6 @@ if cat $target | grep "$placeholder_mark" > /dev/null; then
    echo "$orig modificado. Bioplat base lib $version configurado. (este archivo no no se comitea)"
 else
   echo "No está el placeholder '$placeholder_mark' en $target (->$orig)"
+  exit 1
 fi
 
