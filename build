@@ -4,12 +4,13 @@ version=${1?"Indicar la versión de bioplat a generar"}
 
 
 
-(echo "Publicando repo p2 con base lib" && cd eclipse-minimal && ./base-lib-p2-publisher > /dev/null &)
+(echo -n "Publicando repo p2 con base lib" && cd eclipse-minimal && ./base-lib-p2-publisher > /dev/null &)
 
 while ! curl --silent http://localhost:8080/site/artifacts.jar > /dev/null ;do
   echo -n "."
   sleep 10s
 done
+echo ""
 
 ./add-base-lib-to-target-definition && \
 mvn clean package && 
