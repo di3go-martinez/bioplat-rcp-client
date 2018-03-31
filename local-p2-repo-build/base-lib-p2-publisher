@@ -40,5 +40,7 @@ java -jar $launcher \
   -categoryDefinition $category_file
 
 
-(cd p2-repo && mvn jetty:run)
+cd p2-repo 
+mvn jetty:run &
+echo $! > jetty.pid
 
