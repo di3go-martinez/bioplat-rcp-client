@@ -164,4 +164,8 @@ public class WizardModel {
 		add(key, new WritableValue<Boolean>(initialValue, Boolean.class));
 		return this;
 	}
+
+	public Integer integerValue(String key) {
+		return value(key);
+	}
 }
