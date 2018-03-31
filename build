@@ -2,6 +2,19 @@
 
 version=${1?"Indicar la versión de bioplat a generar"}
 
+
+
+(echo "Publicando repo p2 con base lib" && cd eclipse-minimal && ./base-lib-p2-publisher > /dev/null &)
+
+while ! curl --silent http://localhost:8080/site/artifacts.jar > /dev/null ;do
+  echo -n "."
+  sleep 10s
+done
+
+./add-base-lib-to-target-definition && \
 mvn clean package && 
 ./run-post-package-tools $version && \
 mvn --offline clean
+
+kill $(cat eclipse-minimal/p2-repo/jetty.pid)
+
