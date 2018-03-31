@@ -9,7 +9,7 @@ set -e
 set -u
 
 #install latest base-lib
-(cd ${1:-"~/projects/bioplat/bioplat04/trunk/BioPlatRcp/bundles/runtime/base.lib/"} && mvn install)
+(cd ${1:-"../bundles/runtime/base.lib"} && mvn install)
 
 
 launcher=plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar
