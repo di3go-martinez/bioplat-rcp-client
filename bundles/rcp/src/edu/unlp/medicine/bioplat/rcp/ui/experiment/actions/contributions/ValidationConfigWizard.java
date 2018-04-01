@@ -208,7 +208,7 @@ public abstract class ValidationConfigWizard extends AbstractWizard<List<Abstrac
 				return wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS);
 			}
 		} else {
-			cluster = String.valueOf(wizardModel().value(PagesDescriptors.NUMBER_OF_CLUSTERS));
+			cluster = String.valueOf(wizardModel().integerValue(PagesDescriptors.NUMBER_OF_CLUSTERS));
 		}
 		return String.valueOf(cluster);
 	}
