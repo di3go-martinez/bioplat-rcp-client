@@ -24,7 +24,7 @@
 		<module>edu.unlp.medicine.bioplat.genes</module>
 		<module>org.bioplat.classifiers</module>
 		<module>org.bioplat.multiomics</module>
-    	<module>runtime/base.lib</module>
+    <module>base.lib</module>
 	</modules>
 </project>
 

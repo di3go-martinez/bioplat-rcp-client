@@ -8,18 +8,21 @@
 set -e
 set -u
 
-#install latest base-lib
-(cd ${1:-"../bundles/runtime/base.lib"} && mvn install)
+#latest base-lib
+base_lib_module="../bundles/base.lib"
+(cd $base_lib_module && mvn verify package)
+#se genera un solo bundle/jar, el que corresponde
+base_lib_jar=$base_lib_module/target/*.jar
 
 
 launcher=plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar
 target_repository=file:$(pwd)/p2-repo/target/repository
-base_lib_jar=~/.m2/repository/bioplat/edu.medicine.bioplat.base.lib/1.3.0-SNAPSHOT/edu.medicine.bioplat.base.lib-1.3.0-SNAPSHOT.jar
 
-source="/tmp/source"
-mkdir -p $source/plugins
+repo_source="/tmp/source~$RANDOM"
+#se requiere que el bundle esté dentro del directorio plugins
+mkdir -p $repo_source/plugins
 
-cp $base_lib_jar $source/plugins
+cp $base_lib_jar $repo_source/plugins
 
 rm -rf $target_repository
 
@@ -28,7 +31,7 @@ java -jar $launcher \
   -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
   -metadataRepository $target_repository \
   -artifactRepository $target_repository \
-  -source $source \
+  -source $repo_source \
   -compress \
   -publishArtifacts
 
