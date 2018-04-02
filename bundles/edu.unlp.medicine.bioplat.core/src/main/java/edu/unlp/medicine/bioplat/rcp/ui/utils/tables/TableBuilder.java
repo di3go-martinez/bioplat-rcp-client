@@ -79,7 +79,7 @@ public class TableBuilder implements TableConfigurer {
 	
 	private void fireSelectionChanged() {
 		viewerlisteners.stream().forEach(  l -> {
-			l.selectionChanged(new SelectionChangedEvent(viewer, new StructuredSelection(TableBuilder.this.selectedElements)));
+			l.selectionChanged(new SelectionChangedEvent(viewer, new StructuredSelection(ImmutableList.copyOf(TableBuilder.this.selectedElements))));
 		});
 		
 	}
