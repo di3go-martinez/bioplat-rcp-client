@@ -8,9 +8,9 @@ git_info(){
   info=$(git describe --exact-match --tags $(git log -n1 --pretty='%h') 2>/dev/null)
   if [ $? != 0   ];then
     #si no hay tag uso el commit id y la fecha
-    date=$(git rev-parse --short HEAD)
+    date=$(date +%Y%m%d)
     commit_id=$(git rev-parse --short HEAD)
-    info="$date-$commit_id"
+    info="$date~$commit_id"
   fi
   echo $info
 }
@@ -21,8 +21,7 @@ if [ -z "$version"  ];then
   echo "calculated version -> $version"
 fi
 
-exit 
-(echo -n "Publicando repo p2 con base lib" && cd eclipse-minimal && ./base-lib-p2-publisher)
+(echo -n "Publicando repo p2 con base lib" && cd eclipse-minimal && ./base-lib-p2-publisher >/dev/null &)
 
 while ! curl --silent http://localhost:8080/site/artifacts.jar > /dev/null ;do
   echo -n "."
