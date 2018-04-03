@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+
+	<!-- parent> <groupId>bioplat</groupId> <version>2.1.0-SNAPSHOT</version> 
+		<artifactId>runtime</artifactId> </parent -->
+
+	<groupId>bioplat</groupId>
+	<artifactId>edu.medicine.bioplat.base.lib</artifactId>
+	<packaging>bundle</packaging>
+	<version>1.3.2-SNAPSHOT</version>
+	<name>base lib</name>
+	<description>basic third libraries</description>
+	<inceptionYear>20111031</inceptionYear>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+		<osgi-version-qualifier>${maven.build.timestamp}</osgi-version-qualifier>
+		<maven-bundle-plugin.version>3.5.0</maven-bundle-plugin.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<!-- TODO revisar cuales de las siguientes intructions son necesarias ahora -->
+					<instructions>
+						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+						<Embed-Directory>lib</Embed-Directory>
+						<_exportcontents>*</_exportcontents>
+						<Import-Package>!*</Import-Package>
+						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>${maven-bundle-plugin.version}</version>
+					<extensions>true</extensions>
+					<configuration>
+						<!-- TODO revisar cuales de las siguientes intructions son necesarias ahora (los Bundle* están ok) -->
+						<instructions>
+							<Embed-Transitive>true</Embed-Transitive>
+							<_failok>true</_failok>
+							<_nouses>true</_nouses>
+							<_nodefaultversion>true</_nodefaultversion>
+
+							<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+							<Bundle-Version>$(replace;${project.version};SNAPSHOT;${osgi-version-qualifier})</Bundle-Version>
+							<Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+							<Bundle-Name>${project.artifactId}</Bundle-Name>
+							<Bundle-Vendor>${project.groupId}</Bundle-Vendor>
+							<Bundle-ClassPath>{maven-dependencies}</Bundle-ClassPath>
+						</instructions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>bioplat</groupId>
+			<artifactId>BioPlatModeloClienteRico</artifactId>
+			<version>6.0.2-beta.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<!-- Es necesario para que funcione m2e-tycho org.apache.felix:maven-bundle-plugin -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zinbig</groupId>
+			<artifactId>bioplat-cloud-client</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<properties>
+				<osgi-version-qualifier>qualifier</osgi-version-qualifier>
+			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.felix</groupId>
+							<artifactId>maven-bundle-plugin</artifactId>
+							<configuration>
+								<!-- PDE does not honour custom manifest location -->
+								<manifestLocation>META-INF</manifestLocation>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>apache-snapshots</id>
+			<url>https://repository.apache.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>bioplat-release-candidates</id>
+			<url>http://192.155.227.67:8081/nexus/content/repositories/bioplat-release-candidates/</url>
+		</repository>
+	</repositories>
+</project>
