@@ -20,6 +20,7 @@ import org.eclipse.ui.INewWizard;
 
 import com.google.common.collect.Lists;
 
+import edu.unlp.medicine.bioplat.core.preferences.AuthorPreferencePage;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.EditorsId;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.AbstractWizard;
 import edu.unlp.medicine.bioplat.rcp.ui.entities.wizards.WizardPageDescriptor;
@@ -60,7 +61,7 @@ public class CreateRandomBiomarkerWizard extends AbstractWizard<Biomarker> imple
 	@Override
 	protected WizardModel createWizardModel() {
 		WizardModel wm = new WizardModel().add(NAME_K, new WritableValue("noName", String.class));
-		wm.add(AUTHOR, new WritableValue("", String.class));
+		wm.add(AUTHOR, new WritableValue(AuthorPreferencePage.author(), String.class));
 		wm.add(DESCRIPTION, new WritableValue("", String.class));
 		wm.add(NUMBER_OF_GENES_TO_ADD, new WritableValue(10, Integer.class));
 		return wm;
