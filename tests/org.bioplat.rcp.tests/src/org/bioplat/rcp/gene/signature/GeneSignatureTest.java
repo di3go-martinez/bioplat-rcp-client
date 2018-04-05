@@ -2,19 +2,17 @@ package org.bioplat.rcp.gene.signature;
 
 import static org.junit.Assert.assertTrue;
 
+import org.bioplat.rcp.conditions.Conditions;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.unlp.medicine.bioplat.rcp.ui.genes.view.GeneViewPart;
-import edu.unlp.medicine.domainLogic.framework.MetaPlat;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class GeneSignatureTest {
@@ -24,8 +22,7 @@ public class GeneSignatureTest {
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		bot = new SWTWorkbenchBot();
-		bot.waitUntil(initialized());
-
+		bot.waitUntil(Conditions.initialized());
 	}
 
 	@Test
@@ -73,25 +70,6 @@ public class GeneSignatureTest {
 
 	}
 
-	private static ICondition initialized() {
-		return new ICondition() {
-
-			@Override
-			public boolean test() throws Exception {
-				MetaPlat.getInstance();
-				return true;
-			}
-
-			@Override
-			public void init(SWTBot bot) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public String getFailureMessage() {
-				return "No se pudo inicializar correctamente la app";
-			}
-		};
-	}
+	
 
 }
