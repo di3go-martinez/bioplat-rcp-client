@@ -27,7 +27,7 @@ cp $base_lib_jar $repo_source/plugins
 rm -rf $target_repository
 
 java -jar $launcher \
-  -data /tmp/ws1 \
+  -data /tmp/ws-$RANDOM \
   -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
   -metadataRepository $target_repository \
   -artifactRepository $target_repository \
@@ -38,7 +38,7 @@ java -jar $launcher \
 category_file="file:$(pwd)/category.xml"
 java -jar $launcher \
   -application org.eclipse.equinox.p2.publisher.CategoryPublisher \
-  -data /tmp/wscategorypublisherwsa \
+  -data /tmp/ws-$RANDOM \
   -metadataRepository $target_repository \
   -categoryDefinition $category_file
 
