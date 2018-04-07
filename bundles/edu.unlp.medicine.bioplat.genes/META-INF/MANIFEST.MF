@@ -7,7 +7,7 @@ Require-Bundle:
  edu.medicine.bioplat.base.lib,
  edu.unlp.medicine.bioplat.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Bundle-Localization: OSGI-INF/l10n/bundle
 Bundle-Activator: edu.unlp.medicine.bioplat.rcp.ui.genes.GenesPluginActivator
