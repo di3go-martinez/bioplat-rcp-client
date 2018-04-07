@@ -1,0 +1,4 @@
+[submodule "bioplat-rcp-integration"]
+	path = bioplat-rcp-integration
+	url = http://192.155.227.67:10080/Bioplat/bioplat-rcp-integration
+	branch = master
