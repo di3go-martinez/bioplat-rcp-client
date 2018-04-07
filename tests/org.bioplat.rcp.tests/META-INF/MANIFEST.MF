@@ -7,4 +7,5 @@ Automatic-Module-Name: org.bioplat.rcp.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.swtbot.go;bundle-version="2.6.0",
  edu.medicine.bioplat.base.lib;bundle-version="1.3.0",
- edu.unlp.medicine.bioplat.genes;bundle-version="0.0.1"
+ edu.unlp.medicine.bioplat.genes;bundle-version="0.0.1",
+ edu.unlp.medicine.bioplat.core;bundle-version="0.0.1"
